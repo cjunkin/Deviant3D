@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Font/Typori_Reg.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Scn/Text/Text3DMaterial.tres" type="Material" id=2]
+
+[sub_resource type="DynamicFont" id=2]
+size = 256
+
+[sub_resource type="QuadMesh" id=1]
+size = Vector2( 3, 3 )
+
+[node name="Text" type="Spatial"]
+
+[node name="Viewport" type="Viewport" parent="."]
+size = Vector2( 1024, 1024 )
+transparent_bg = true
+handle_input_locally = false
+disable_3d = true
+usage = 0
+render_target_v_flip = true
+gui_disable_input = true
+gui_snap_controls_to_pixels = false
+
+[node name="Label" type="Label" parent="Viewport"]
+margin_left = 256.0
+margin_right = 695.0
+margin_bottom = 308.0
+rect_pivot_offset = Vector2( 128, 16 )
+custom_fonts/font = ExtResource( 1 )
+text = "√3"
+align = 1
+
+[node name="Label2" type="Label" parent="Viewport"]
+margin_left = 256.0
+margin_top = 256.0
+margin_right = 695.0
+margin_bottom = 875.0
+custom_fonts/font = SubResource( 2 )
+text = "2"
+align = 1
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+mesh = SubResource( 1 )
+material/0 = ExtResource( 2 )
