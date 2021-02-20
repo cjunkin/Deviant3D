@@ -29,6 +29,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scn/Projectile.gd"
 }, {
+"base": "Camera",
+"class": "ShakeCamera",
+"language": "GDScript",
+"path": "res://addons/camera_shake/shake_camera.gd"
+}, {
 "base": "Spatial",
 "class": "Text",
 "language": "GDScript",
@@ -39,19 +44,26 @@ _global_script_class_icons={
 "Game": "",
 "Player": "",
 "Projectile": "",
+"ShakeCamera": "",
 "Text": ""
 }
 
 [application]
 
 config/name="3DThingy"
-run/main_scene="res://Scn/Game.tscn"
+run/main_scene="res://Scn/MainMenu.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
 Global="*res://Global.gd"
 Math="*res://Math.gd"
+Network="*res://Network.gd"
+
+[display]
+
+window/size/width=1280
+window/size/height=720
 
 [input]
 
@@ -103,7 +115,14 @@ switch_view={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":88,"unicode":0,"echo":false,"script":null)
  ]
 }
+aim={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":2,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
 
 [rendering]
 
+quality/driver/fallback_to_gles2=true
+vram_compression/import_etc=true
 environment/default_environment="res://default_env.tres"

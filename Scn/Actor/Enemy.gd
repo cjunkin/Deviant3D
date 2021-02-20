@@ -10,7 +10,11 @@ export var friction := .125
 
 func _ready():
 	add_to_group("Enemy")
-	target = get_parent().get_node("Player")
+	set_physics_process(false)
+
+func set_target(t) -> void:
+	target = t
+	set_physics_process(true)
 
 func _physics_process(delta: float) -> void:
 #	vel = translation.direction_to(target.global_transform.origin)

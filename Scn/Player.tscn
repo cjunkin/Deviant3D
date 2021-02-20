@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scn/Player.gd" type="Script" id=1]
 [ext_resource path="res://Shader/flexible_toon.shader" type="Shader" id=2]
+[ext_resource path="res://Scn/Fx/Sound/Sfx.tscn" type="PackedScene" id=3]
 
 [sub_resource type="CapsuleShape" id=1]
 
@@ -37,14 +38,31 @@ transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, 0
 mesh = SubResource( 2 )
 material = SubResource( 3 )
 
+[node name="Firetime" type="Timer" parent="."]
+process_mode = 0
+wait_time = 0.15
+one_shot = true
+
 [node name="Tween" type="Tween" parent="."]
 
 [node name="CamHelp" type="Spatial" parent="."]
 
-[node name="CSGBox" type="CSGBox" parent="CamHelp"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.656585, 0.321125, -0.770453 )
+[node name="Gun" type="CSGBox" parent="CamHelp"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.35, -0.75 )
 width = 0.2
 height = 0.2
 
-[node name="Muzzle" type="Position3D" parent="CamHelp"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.671834, 0.331477, -1.84129 )
+[node name="Sfx" parent="CamHelp/Gun" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, -0.35, 0.75 )
+pitch_scale = 0.01
+max_distance = 1000.0
+bus = "Sfx"
+
+[node name="Muzzle" type="Position3D" parent="CamHelp/Gun"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1 )
+
+[node name="Timer" type="Timer" parent="."]
+process_mode = 0
+wait_time = 10.0
+autostart = true
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
