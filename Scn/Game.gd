@@ -3,7 +3,7 @@ extends Spatial
 
 const num_projectiles := 96
 const num_explosions := 32
-#const num_laser_shots := 8
+#const num_laser_audio := 8
 
 export (PackedScene) var player_s := preload("res://Scn/Player/Player.tscn")
 export (PackedScene) var proj_s := preload("res://Scn/Projectile.tscn")

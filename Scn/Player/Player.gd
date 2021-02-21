@@ -76,6 +76,8 @@ func _physics_process(delta: float) -> void:
 		if Input.is_action_pressed("fire") and Firetime.is_stopped():
 			rpc("f") # fire
 			Cam.stress = 0.25
+		else:
+			$CamHelp/Gun/Muzzle/OmniLight.visible = false
 
 	vel += acc
 	
@@ -115,6 +117,7 @@ remotesync func f() -> void:
 	Sfx.pitch_scale = rand_range(.85, 1.15)
 	Sfx.play()
 	Firetime.start()
+	$CamHelp/Gun/Muzzle/OmniLight.visible = true
 
 # Jump
 remotesync func j() -> void:

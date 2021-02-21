@@ -61,9 +61,12 @@ bus = "Sfx"
 [node name="Muzzle" type="Position3D" parent="CamHelp/Gun"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1 )
 
+[node name="OmniLight" type="OmniLight" parent="CamHelp/Gun/Muzzle"]
+visible = false
+shadow_enabled = true
+
 [node name="Sync" type="Timer" parent="."]
 process_mode = 0
 wait_time = 4.0
 autostart = true
-[connection signal="timeout" from="Sync" to="." method="_on_Timer_timeout"]
 [connection signal="timeout" from="Sync" to="." method="_on_Sync_timeout"]

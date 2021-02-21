@@ -1,6 +1,6 @@
 extends Node
 
-const PORT = 8070
+const PORT := 8070
 var players := {}
 
 func host() -> void:
@@ -36,17 +36,16 @@ remotesync func register(id: int) -> void:
 		get_node("/root/Game").spawn(id)
 
 remotesync func unregister(id: int) -> void:
-	if id in players:
+	if players.erase(id):
 		# if player is there
-		players.erase(id)
 		get_node("/root/Game").get_node(str(id)).queue_free()
 
 func player_connected(id: int) -> void:
 	for pid in players:
-		get_node("/root/Game").rpc_id(id, "spawn", pid)
 		# spawn all other players on our new guy
-	rpc("register", id)
+		get_node("/root/Game").rpc_id(id, "spawn", pid)
 	# spawn him on everyone else
+	rpc("register", id)
 
 func player_disconnected(id: int) -> void:
 	rpc("unregister", id)
