@@ -25,8 +25,6 @@ var repr := {
 
 
 
-	
-
 func choose_angle():
 	randomize()
 	var denom := angles[randi() % 2]

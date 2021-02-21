@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Scn/MainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Theme/MainMenuTheme.tres" type="Theme" id=2]
+[ext_resource path="res://Scn/Spinner/Spinner.tscn" type="PackedScene" id=5]
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
@@ -12,18 +13,38 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Label" type="Label" parent="."]
+margin_left = 342.24
+margin_top = 159.806
+margin_right = 933.24
+margin_bottom = 198.806
+text = "THE SIMP-LEST NETWURKING YULL EVER C"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Host" type="Button" parent="."]
-margin_left = 207.889
-margin_top = 223.446
-margin_right = 455.889
-margin_bottom = 325.446
+margin_left = 205.061
+margin_top = 299.814
+margin_right = 453.061
+margin_bottom = 401.814
 text = "Host"
 
 [node name="Join" type="Button" parent="."]
-margin_left = 803.308
-margin_top = 240.397
-margin_right = 1051.31
-margin_bottom = 342.397
+margin_left = 804.969
+margin_top = 302.173
+margin_right = 1052.97
+margin_bottom = 404.173
 text = "Join"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Spinner" parent="." instance=ExtResource( 5 )]
+visible = false
+margin_left = -4.28589
+margin_top = 146.932
+margin_right = 71.7141
+margin_bottom = 222.932
 [connection signal="button_up" from="Host" to="." method="_on_Host_button_up"]
 [connection signal="button_up" from="Join" to="." method="_on_Join_button_up"]

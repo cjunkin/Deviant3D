@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Scn/Game.gd" type="Script" id=1]
 [ext_resource path="res://Boxes.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Scn/Actor/Enemy.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scn/Actor/Enemy/Enemy.tscn" type="PackedScene" id=3]
 
 [sub_resource type="SpatialMaterial" id=1]
 flags_vertex_lighting = true
@@ -52,7 +52,3 @@ shadow_color = Color( 0.6, 0.6, 0.6, 1 )
 
 [node name="Enemy" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.307, 16.5107, 10.0221 )
-
-[node name="TopDownCam" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 4.14905, 42.7399, -1.38317 )
-current = true

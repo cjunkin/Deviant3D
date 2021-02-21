@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Scn/Player.gd" type="Script" id=1]
-[ext_resource path="res://Shader/flexible_toon.shader" type="Shader" id=2]
+[ext_resource path="res://Shader/flexible_toon.shader" type="Shader" id=1]
+[ext_resource path="res://Scn/Player/Player.gd" type="Script" id=2]
 [ext_resource path="res://Scn/Fx/Sound/Sfx.tscn" type="PackedScene" id=3]
 
 [sub_resource type="CapsuleShape" id=1]
@@ -10,7 +10,7 @@
 radial_segments = 16
 
 [sub_resource type="ShaderMaterial" id=3]
-shader = ExtResource( 2 )
+shader = ExtResource( 1 )
 shader_param/albedo = Color( 0.360784, 0.627451, 1, 1 )
 shader_param/clamp_diffuse_to_max = false
 shader_param/cuts = 2
@@ -27,7 +27,7 @@ shader_param/use_ramp = false
 
 [node name="Player" type="KinematicBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.61101, 0 )
-script = ExtResource( 1 )
+script = ExtResource( 2 )
 
 [node name="Hitbox" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, 0 )
@@ -61,8 +61,9 @@ bus = "Sfx"
 [node name="Muzzle" type="Position3D" parent="CamHelp/Gun"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1 )
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Sync" type="Timer" parent="."]
 process_mode = 0
-wait_time = 10.0
+wait_time = 4.0
 autostart = true
-[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+[connection signal="timeout" from="Sync" to="." method="_on_Timer_timeout"]
+[connection signal="timeout" from="Sync" to="." method="_on_Sync_timeout"]

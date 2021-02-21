@@ -8,7 +8,7 @@ var grav := 30
 var acc := Vector3()
 export var friction := .125
 
-func _ready():
+func _ready() -> void:
 	add_to_group("Enemy")
 	set_physics_process(false)
 

@@ -1,0 +1,5 @@
+[gd_scene format=2]
+
+[node name="TopDownCam" type="Camera"]
+transform = Transform( 1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 4.14905, 42.7399, -1.38317 )
+current = true
