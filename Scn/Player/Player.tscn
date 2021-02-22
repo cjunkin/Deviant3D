@@ -4,9 +4,9 @@
 [ext_resource path="res://Scn/Player/Player.gd" type="Script" id=2]
 [ext_resource path="res://Scn/Fx/Sound/Sfx.tscn" type="PackedScene" id=3]
 
-[sub_resource type="CapsuleShape" id=1]
+[sub_resource type="CapsuleShape" id=4]
 
-[sub_resource type="CapsuleMesh" id=2]
+[sub_resource type="CapsuleMesh" id=5]
 radial_segments = 16
 
 [sub_resource type="ShaderMaterial" id=3]
@@ -31,11 +31,11 @@ script = ExtResource( 2 )
 
 [node name="Hitbox" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, 0 )
-shape = SubResource( 1 )
+shape = SubResource( 4 )
 
 [node name="CSGMesh" type="CSGMesh" parent="."]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, 0 )
-mesh = SubResource( 2 )
+mesh = SubResource( 5 )
 material = SubResource( 3 )
 
 [node name="Firetime" type="Timer" parent="."]

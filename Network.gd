@@ -16,7 +16,9 @@ func host() -> void:
 	get_tree().connect("network_peer_disconnected", self, "player_disconnected")
 	
 	# Load game
-	get_tree().change_scene("res://Scn/Game.tscn")
+	var world = load("res://Scn/Game.tscn").instance()
+	get_tree().get_root().add_child(world)
+	get_node("/root/MainMenu").hide()
 
 func join() -> void:
 	# Standard
