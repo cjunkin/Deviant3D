@@ -37,17 +37,17 @@ remotesync func register(id: int) -> void:
 		players[id] = 0
 		get_node("/root/Game").spawn(id)
 
-remotesync func unregister(id: int) -> void:
-	if players.erase(id):
-		# if player is there
-		get_node("/root/Game").get_node(str(id)).queue_free()
-
 func player_connected(id: int) -> void:
 	for pid in players:
 		# spawn all other players on our new guy
 		get_node("/root/Game").rpc_id(id, "spawn", pid)
 	# spawn him on everyone else
 	rpc("register", id)
+
+remotesync func unregister(id: int) -> void:
+	if players.erase(id):
+		# if player is there
+		get_node("/root/Game").get_node(str(id)).queue_free()
 
 func player_disconnected(id: int) -> void:
 	rpc("unregister", id)

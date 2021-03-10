@@ -1,7 +1,8 @@
 [gd_scene load_steps=3 format=2]
 
 [sub_resource type="SpatialMaterial" id=1]
-albedo_color = Color( 0, 1, 0.25098, 1 )
+albedo_color = Color( 0.0862745, 0.772549, 0.258824, 1 )
+roughness = 0.25
 
 [sub_resource type="BoxShape" id=2]
 
