@@ -1,31 +1,28 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Scn/Game.gd" type="Script" id=1]
-[ext_resource path="res://Boxes.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scn/Actor/Enemy/Enemy.tscn" type="PackedScene" id=3]
 [ext_resource path="res://BetterWorldEnvironment.tres" type="Environment" id=4]
 [ext_resource path="res://Scn/Sunlight.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Material/PNG/Light/texture_13.png" type="Texture" id=6]
 [ext_resource path="res://DEBUG/Wall8.gd" type="Script" id=7]
 
-[sub_resource type="BoxShape" id=1]
-
 [sub_resource type="SpatialMaterial" id=2]
-flags_vertex_lighting = true
-flags_world_triplanar = true
-albedo_color = Color( 0.670588, 0.101961, 0.101961, 1 )
-albedo_texture = ExtResource( 6 )
-roughness = 0.75
-uv1_scale = Vector3( 0.1, 0.1, 0.1 )
-uv1_triplanar = true
-uv2_triplanar_sharpness = 0.784584
-
-[sub_resource type="SpatialMaterial" id=3]
 flags_vertex_lighting = true
 flags_world_triplanar = true
 albedo_color = Color( 0.403922, 0.14902, 0.572549, 1 )
 albedo_texture = ExtResource( 6 )
 roughness = 0.6
+uv1_scale = Vector3( 0.1, 0.1, 0.1 )
+uv1_triplanar = true
+uv2_triplanar_sharpness = 0.784584
+
+[sub_resource type="SpatialMaterial" id=1]
+flags_vertex_lighting = true
+flags_world_triplanar = true
+albedo_color = Color( 0.670588, 0.101961, 0.101961, 1 )
+albedo_texture = ExtResource( 6 )
+roughness = 0.75
 uv1_scale = Vector3( 0.1, 0.1, 0.1 )
 uv1_triplanar = true
 uv2_triplanar_sharpness = 0.784584
@@ -36,44 +33,12 @@ script = ExtResource( 1 )
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource( 4 )
 
-[node name="RigidBody" type="RigidBody" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 18, 0 )
-
-[node name="CollisionShape" type="CollisionShape" parent="RigidBody"]
-shape = SubResource( 1 )
-
-[node name="CSGBox" type="CSGBox" parent="RigidBody"]
-
-[node name="HingeJoint" type="HingeJoint" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 24, 6 )
-nodes/node_a = NodePath("../RigidBody")
-nodes/node_b = NodePath("../Enemy")
-
-[node name="CSGSphere" type="CSGSphere" parent="HingeJoint"]
-radius = 0.25
-
-[node name="Ground" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.81981, 0 )
-use_collision = true
-width = 400.0
-height = 1.0
-depth = 1000.0
-material = SubResource( 2 )
-
-[node name="Pit" type="CSGBox" parent="Ground"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.81981, -3 )
-operation = 2
-width = 8.0
-height = 4.0
-depth = 16.0
-material = SubResource( 3 )
-
 [node name="Wall2" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1, -12 )
 use_collision = true
 width = 4.0
 height = 10.0
-material = SubResource( 3 )
+material = SubResource( 2 )
 
 [node name="Wall" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -14 )
@@ -81,7 +46,7 @@ use_collision = true
 width = 8.0
 height = 20.0
 depth = 6.0
-material = SubResource( 3 )
+material = SubResource( 2 )
 
 [node name="Wall3" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -71, 0, -40 )
@@ -89,23 +54,23 @@ use_collision = true
 width = 8.0
 height = 20.0
 depth = 6.0
-material = SubResource( 3 )
+material = SubResource( 2 )
 
 [node name="Wall10" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -42, 0, -14 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -42, 36, -14 )
 use_collision = true
 width = 17.1375
-height = 20.0
-depth = 4.0
-material = SubResource( 3 )
+height = 118.0
+depth = 8.0
+material = SubResource( 2 )
 
 [node name="Wall11" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -90, 0, 23 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -90, 12, 23 )
 use_collision = true
-width = 4.0
+width = 18.0
 height = 20.0
 depth = 18.0
-material = SubResource( 3 )
+material = SubResource( 2 )
 
 [node name="Wall9" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -20 )
@@ -113,37 +78,38 @@ use_collision = true
 width = 8.0
 height = 8.0
 depth = 6.0
-material = SubResource( 3 )
+material = SubResource( 2 )
 
 [node name="Wall4" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 0, -28 )
 use_collision = true
 height = 62.0
-depth = 180.0
-material = SubResource( 3 )
+depth = 38.0
+material = SubResource( 2 )
 
 [node name="Wall5" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -147, 0, -28 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -121, 12, -28 )
 use_collision = true
+width = 24.0
 height = 62.0
-depth = 178.0
-material = SubResource( 3 )
+depth = 28.0
+material = SubResource( 2 )
 
 [node name="Wall6" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -54, 0, 58 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -54, 19, 58 )
 use_collision = true
-width = 190.0
+width = 10.0
 height = 62.0
 depth = 4.0
-material = SubResource( 3 )
+material = SubResource( 2 )
 
 [node name="Wall7" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -54, 0, -117 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -54, 20, -117 )
 use_collision = true
-width = 190.0
+width = 12.0
 height = 62.0
 depth = 4.0
-material = SubResource( 3 )
+material = SubResource( 2 )
 
 [node name="GrappleLedge" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 14, -3 )
@@ -151,17 +117,7 @@ use_collision = true
 width = 10.0
 height = 1.0
 depth = 1.0
-material = SubResource( 3 )
-
-[node name="Boxes" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 18.0235, 43.1042 )
-
-[node name="Sunlight" parent="." instance=ExtResource( 5 )]
-shadow_enabled = false
-directional_shadow_mode = 0
-
-[node name="Enemy" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.307, 16.5107, 10.0221 )
+material = SubResource( 2 )
 
 [node name="Wall8" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 13, -3 )
@@ -169,5 +125,20 @@ use_collision = true
 width = 1.0
 height = 1.0
 depth = 1.0
-material = SubResource( 3 )
+material = SubResource( 2 )
 script = ExtResource( 7 )
+
+[node name="Ground" type="CSGBox" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.81981, 0 )
+use_collision = true
+width = 400.0
+height = 1.0
+depth = 1000.0
+material = SubResource( 1 )
+
+[node name="Sunlight" parent="." instance=ExtResource( 5 )]
+shadow_enabled = false
+directional_shadow_mode = 0
+
+[node name="Enemy" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.307, 16.5107, 10.0221 )

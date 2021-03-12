@@ -5,7 +5,7 @@ const num_projectiles := 32
 const num_explosions := 32
 #const num_laser_audio := 8
 
-export (PackedScene) var player_s := preload("res://Scn/Player/Player.tscn")
+export (PackedScene) var player_s := preload("res://Scn/Actor/Player/Player.tscn")
 export (PackedScene) var proj_s := preload("res://Scn/Projectile.tscn")
 export (PackedScene) var exp_s := preload("res://Scn/Fx/Explosion.tscn")
 

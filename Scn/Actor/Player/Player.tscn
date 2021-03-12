@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Shader/flexible_toon.shader" type="Shader" id=1]
-[ext_resource path="res://Scn/Player/Player.gd" type="Script" id=2]
+[ext_resource path="res://Scn/Actor/Player/Player.gd" type="Script" id=2]
 [ext_resource path="res://Scn/Fx/Sound/Sfx.tscn" type="PackedScene" id=3]
+[ext_resource path="res://icon.png" type="Texture" id=4]
 
 [sub_resource type="CapsuleShape" id=1]
 
@@ -67,10 +68,39 @@ shadow_enabled = true
 
 [node name="RayCast" type="RayCast" parent="CamHelp/Gun/Muzzle"]
 enabled = true
-cast_to = Vector3( 0, 0, -200 )
+cast_to = Vector3( 0, 0, -400 )
 
 [node name="Sync" type="Timer" parent="."]
 process_mode = 0
 wait_time = 4.0
 autostart = true
+
+[node name="Sight" type="Control" parent="."]
+margin_left = -33.234
+margin_top = -34.6482
+margin_right = 6.76599
+margin_bottom = 5.35176
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sight" type="TextureRect" parent="Sight"]
+margin_left = -33.0
+margin_top = -33.0
+margin_right = 31.0
+margin_bottom = 31.0
+rect_scale = Vector2( 0.1, 0.1 )
+rect_pivot_offset = Vector2( 32, 32 )
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OnWall" type="RayCast" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -0.937505 )
+cast_to = Vector3( 0, 0, -0.5 )
+
+[node name="Ledge" type="RayCast" parent="OnWall"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5 )
+cast_to = Vector3( 0, 2, 0 )
 [connection signal="timeout" from="Sync" to="." method="_on_Sync_timeout"]

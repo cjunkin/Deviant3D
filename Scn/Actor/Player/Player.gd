@@ -36,7 +36,7 @@ func _ready() -> void:
 			Cam = get_node("ARVROrigin")
 		# Send over sync
 		$Sync.start(0)
-		DebugOverlay.draw.add_vector(self, "vel", 1, 4, Color(0,1,0, 0.5))
+#		DebugOverlay.draw.add_vector(self, "vel", 1, 4, Color(0,1,0, 0.5))
 		DebugOverlay.draw.add_vector(self, "grapple_aim", 1, 4, Color(0,1,1, 0.5))
 #		DebugOverlay.draw.add_vector(self, "global_transform:basis:x", 1, 4, Color(1,1,1, 0.5))
 		
@@ -76,7 +76,9 @@ remote var not_grappling := true
 var grapple_vel : Vector3 = Vector3.ZERO
 var grapple_aim := Vector3.ZERO
 var grapple_len := 0.0
-const MAX_GRAPPLE_SPEED := 3.5
+const MAX_GRAPPLE_SPEED := 3
+
+onready var sight := $Sight
 
 func _physics_process(_delta: float) -> void:
 	# collision with boxes
@@ -120,6 +122,10 @@ func _physics_process(_delta: float) -> void:
 			vel += grapple_vel
 			grapple_aim = grapple_pos - global_transform.origin
 			not_grappling = false
+			if abs((grapple_pos - global_transform.origin).length_squared()) < 64:
+				vel *= .95
+			else:
+				vel *= .999
 			
 #		elif Input.is_action_pressed("grapple"):
 #			pass
@@ -137,8 +143,7 @@ func _physics_process(_delta: float) -> void:
 	# apply gravity
 	vel += (int(not_grappling)) * Vector3.DOWN * grav
 	vel += a
-	if !not_grappling and abs((grapple_pos - global_transform.origin).length_squared()) < 64:
-		vel *= .95
+
 	vel = move_and_slide(vel, Vector3.UP, false, 4, .75, false)
 
 
@@ -163,11 +168,17 @@ func _physics_process(_delta: float) -> void:
 			# friction along x, z (not up/down)
 			vel.x = lerp(vel.x, 0, friction)
 			vel.z = lerp(vel.z, 0, friction)
+		else:
+			vel.x *= .95
+			vel.z *= .95
 	else:
 		a *= .125
 
-#		vel.x = lerp(vel.x, 0, friction/60)
-#		vel.z = lerp(vel.z, 0, friction/60)
+#		vel.x = lerp(vel.x, 0, friction)
+#		vel.z = lerp(vel.z, 0, friction)
+	sight.rect_position.x = 10000
+	if Raycast.is_colliding():
+		sight.rect_position = Cam.unproject_position(Raycast.get_collision_point())
 
 func _on_Sync_timeout():
 	rpc("syn", translation, rotation.y, CamHelp.rotation.x)
