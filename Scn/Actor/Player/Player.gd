@@ -46,6 +46,8 @@ func _ready() -> void:
 		rpc_id(get_network_master(), "req_syn")
 	translation = Vector3(7, 16, -14)
 
+var fps := false
+
 func _input(event: InputEvent) -> void:
 	# Look
 	if event is InputEventMouseMotion: # Rotate Camera
@@ -64,8 +66,12 @@ func _input(event: InputEvent) -> void:
 		TweenN.start()
 	# Switch between TPS and FPS
 	if event.is_action_pressed("switch_view"):
-		Cam.translation = Vector3(0, 1, 0)
-		# TODO: switch back to TPS
+		if fps:
+			Cam.translation = Vector3(3.75, 1.5, 9)
+		else:
+			Cam.translation = Vector3(0, 1, 0)
+		fps = !fps
+		# TODO: improve logic of switching
 	# Quit
 	if event.is_action_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -75,10 +81,11 @@ remote var not_grappling := true
 
 var grapple_vel : Vector3 = Vector3.ZERO
 var grapple_aim := Vector3.ZERO
-var grapple_len := 0.0
 const MAX_GRAPPLE_SPEED := 3
 
 onready var sight := $Sight
+
+
 
 func _physics_process(_delta: float) -> void:
 	# collision with boxes
@@ -107,34 +114,12 @@ func _physics_process(_delta: float) -> void:
 		if Input.is_action_just_pressed("grapple"):
 			if Raycast.get_collider():
 				grapple_pos = Raycast.get_collision_point()
-				grapple_len = (grapple_pos - global_transform.origin).length()
 				not_grappling = false
-		elif Input.is_action_pressed("grapple"): # and Input.is_action_pressed("aim")
-#			get_parent().set_hinge(self)
-			var new_grapple_len = (grapple_pos - global_transform.origin).length()
-#			vel += (grapple_len - new_grapple_len)
-			
-			grapple_vel = (global_transform.origin - grapple_pos) / new_grapple_len * min(0, (1 - new_grapple_len) * 2)
-			if grapple_vel.length() > MAX_GRAPPLE_SPEED:
-				grapple_vel = grapple_vel.normalized() * MAX_GRAPPLE_SPEED
-#			grapple_vel.y = max(grapple_vel.y, grav * .8)
-#			vel = lerp(vel, Vector3.ZERO, .01)
-			vel += grapple_vel
-			grapple_aim = grapple_pos - global_transform.origin
-			not_grappling = false
-			if abs((grapple_pos - global_transform.origin).length_squared()) < 64:
-				vel *= .95
-			else:
-				vel *= .999
-			
-#		elif Input.is_action_pressed("grapple"):
-#			pass
-#			grapple_aim = grapple_pos - global_transform.origin
-#			grapple_vel = (grapple_aim.cross(global_transform.basis.x)).normalized()
-#			vel += (grapple_aim.cross(global_transform.basis.x)).normalized()
-#			not_grappling = false
+				rpc("gp", grapple_pos)
 		elif Input.is_action_just_released("grapple"):
 			not_grappling = true
+			rset("not_grappling", true)
+
 		# Zoom
 		elif Input.is_action_just_pressed("aim"):
 			TweenN.interpolate_property(Cam, "fov", Cam.fov, int(Cam.fov) % 70 + 35, .25, Tween.TRANS_CIRC)
@@ -145,16 +130,25 @@ func _physics_process(_delta: float) -> void:
 	vel += a
 
 	vel = move_and_slide(vel, Vector3.UP, false, 4, .75, false)
-
-
-#		translation += (grapple_pos - global_transform.origin).normalized() * (grapple_len - (grapple_pos - global_transform.origin).length())
-
+	if !not_grappling:
+		grapple_aim = grapple_pos - global_transform.origin
+		
+		var new_grapple_len = (grapple_pos - global_transform.origin).length()
+		grapple_vel = (global_transform.origin - grapple_pos) / new_grapple_len * min(0, (1 - new_grapple_len) * 2)
+		if grapple_vel.length() > MAX_GRAPPLE_SPEED:
+			grapple_vel = grapple_vel.normalized() * MAX_GRAPPLE_SPEED
+		vel += grapple_vel
+		not_grappling = false
+		if abs((grapple_pos - global_transform.origin).length_squared()) < 64:
+			vel *= .95
+		else:
+			vel *= .999
 	# jumping
 	if is_on_floor():
-		a = (Input.get_action_strength("sprint") + 1) * speed * (transform.basis.z * (Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")) + transform.basis.x * (Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"))).normalized()
 		a.y = 0
 		vel.y = 0
 		if is_network_master():
+			a = (Input.get_action_strength("sprint") + 1) * speed * (transform.basis.z * (Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")) + transform.basis.x * (Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"))).normalized()
 			if Input.get_action_strength("jump"):
 				rpc("j") # jump
 			# Movement
@@ -182,6 +176,13 @@ func _physics_process(_delta: float) -> void:
 
 func _on_Sync_timeout():
 	rpc("syn", translation, rotation.y, CamHelp.rotation.x)
+
+
+
+# Set grapple hook position
+remote func gp(pos):
+	grapple_pos = pos
+	not_grappling = false
 
 # Fire
 remotesync func f() -> void:

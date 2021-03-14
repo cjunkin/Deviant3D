@@ -26,6 +26,10 @@ func _ready()->void:
 		var e : Particles = exp_s.instance()
 		explosions.append(e)
 		add_child(e)
+	$Enemy.set_target(players[0])
+	$Enemy2.set_target(players[0])
+	$Enemy3.set_target(players[0])
+	$Enemy4.set_target(players[0])
 
 func set_hinge(body):
 	var h: HingeJoint = $HingeJoint
