@@ -4,7 +4,7 @@ const PORT := 8070
 var players := {}
 
 func host() -> void:
-	Global.hosted = true
+	G.hosted = true
 	
 	# Standard
 	var peer = NetworkedMultiplayerENet.new()

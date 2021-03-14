@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Scn/Game.gd" type="Script" id=1]
 [ext_resource path="res://Material/PNG/Dark/texture_13.png" type="Texture" id=2]
 [ext_resource path="res://Scn/Actor/Enemy/Enemy.tscn" type="PackedScene" id=3]
 [ext_resource path="res://BetterWorldEnvironment.tres" type="Environment" id=4]
 [ext_resource path="res://Scn/Sunlight.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scn/Env.gd" type="Script" id=6]
 
 [sub_resource type="SpatialMaterial" id=1]
 flags_vertex_lighting = true
@@ -28,8 +29,13 @@ uv2_triplanar_sharpness = 0.784584
 [node name="Game" type="Spatial"]
 script = ExtResource( 1 )
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="Sunlight" parent="." instance=ExtResource( 5 )]
+directional_shadow_mode = 0
+
+[node name="Env" type="WorldEnvironment" parent="."]
 environment = ExtResource( 4 )
+script = ExtResource( 6 )
+Sunlight = NodePath("../Sunlight")
 
 [node name="Wall2" type="CSGBox" parent="."]
 transform = Transform( 0.467087, 0.415518, -0.780496, -0.827628, 0.516147, -0.220508, 0.311225, 0.748958, 0.58498, -6, 42, 64 )
@@ -126,9 +132,6 @@ width = 400.0
 height = 1.0
 depth = 600.0
 material = SubResource( 2 )
-
-[node name="Sunlight" parent="." instance=ExtResource( 5 )]
-directional_shadow_mode = 0
 
 [node name="Enemy" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.307, 21.5107, 10.0221 )

@@ -16,9 +16,9 @@ var exp_i : int = 0
 var players: Array = []
 
 func _ready()->void:
-	if Global.hosted:
+	if G.hosted:
 		Network.register(get_tree().get_network_unique_id())
-	Global.game = self
+	G.game = self
 	for __ in range(num_projectiles):
 		var p : Projectile = proj_s.instance()
 		projectiles.append(p)

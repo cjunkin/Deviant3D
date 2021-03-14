@@ -75,6 +75,8 @@ func _input(event: InputEvent) -> void:
 	# Quit
 	if event.is_action_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	if event.is_action_pressed("fullscreen"):
+		OS.window_fullscreen = !OS.window_fullscreen
 
 var grapple_pos := Vector3.ZERO
 remote var not_grappling := true
@@ -186,9 +188,9 @@ remote func gp(pos):
 
 # Fire
 remotesync func f() -> void:
-	Global.game.proj_i = (Global.game.proj_i + 1) % Global.game.num_projectiles
-	var p : Projectile = Global.game.projectiles[Global.game.proj_i]
-	Global.game.add_child(p)
+	G.game.proj_i = (G.game.proj_i + 1) % G.game.num_projectiles
+	var p : Projectile = G.game.projectiles[G.game.proj_i]
+	G.game.add_child(p)
 	p.global_transform = Muzzle.global_transform
 	p.monitoring = true
 	p.visible = true
