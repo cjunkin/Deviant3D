@@ -47,7 +47,7 @@ func _physics_process(delta: float) -> void:
 # MULTIPLAYER STUFF --------------------------------------------
 
 remote func spawn(id: int) -> void:
-	var p: Player = player_s.instance()
+	var p: Spatial = player_s.instance()
 	p.name = str(id)
 	p.set_network_master(id, true)
 	add_child(p)

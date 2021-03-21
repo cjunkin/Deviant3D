@@ -4,9 +4,7 @@
 [ext_resource path="res://Scn/Actor/Player/Player.gd" type="Script" id=2]
 [ext_resource path="res://Scn/Fx/Sound/Sfx.tscn" type="PackedScene" id=3]
 [ext_resource path="res://icon.png" type="Texture" id=4]
-[ext_resource path="res://Sfx/weapon/laser01.wav" type="AudioStream" id=5]
-
-[sub_resource type="CapsuleShape" id=1]
+[ext_resource path="res://addons/LineRenderer/LineRenderer.tscn" type="PackedScene" id=5]
 
 [sub_resource type="CapsuleMesh" id=2]
 radial_segments = 16
@@ -27,48 +25,70 @@ shader_param/rim_width = 8.0
 shader_param/rim_color = Color( 1, 1, 1, 1 )
 shader_param/use_ramp = false
 
+[sub_resource type="CapsuleShape" id=1]
+
 [node name="Player" type="KinematicBody"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.61101, 0 )
 script = ExtResource( 2 )
+
+[node name="PMesh" type="Spatial" parent="."]
+
+[node name="CamHelp" type="Spatial" parent="PMesh"]
+transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, 0, 0, 0 )
+
+[node name="Gun" type="CSGBox" parent="PMesh/CamHelp"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.35, -0.75 )
+width = 0.2
+height = 0.2
+
+[node name="Sfx" parent="PMesh/CamHelp/Gun" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.02007 )
+max_db = 2.0
+bus = "Sfx"
+
+[node name="Muzzle" type="Position3D" parent="PMesh/CamHelp/Gun"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1 )
+
+[node name="OmniLight" type="OmniLight" parent="PMesh/CamHelp/Gun/Muzzle"]
+visible = false
+shadow_enabled = true
+
+[node name="GrappleCast" type="RayCast" parent="PMesh/CamHelp/Gun/Muzzle"]
+enabled = true
+cast_to = Vector3( 0, 0, -400 )
+
+[node name="Mesh" type="CSGMesh" parent="PMesh"]
+transform = Transform( 0.999848, 0.0174524, -7.62868e-10, 0, -4.37114e-08, -1, -0.0174524, 0.999848, -4.37047e-08, 0, 0, 0 )
+mesh = SubResource( 2 )
+material = SubResource( 3 )
+
+[node name="OnWall" type="RayCast" parent="PMesh"]
+transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, -2.96242e-09, 1, -0.937505 )
+cast_to = Vector3( 0, 0, -0.5 )
+
+[node name="Ledge" type="RayCast" parent="PMesh/OnWall"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5 )
+cast_to = Vector3( 0, 2, 0 )
+
+[node name="Left" type="RayCast" parent="PMesh"]
+transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, -1.005, -2.0909e-09, 9.31323e-09 )
+enabled = true
+cast_to = Vector3( -0.25, 0, 0 )
+
+[node name="Right" type="RayCast" parent="PMesh"]
+transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, 1.005, 2.0909e-09, -9.31323e-09 )
+enabled = true
+cast_to = Vector3( 0.25, 0, 0 )
 
 [node name="Hitbox" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
 shape = SubResource( 1 )
 
-[node name="CSGMesh" type="CSGMesh" parent="."]
-transform = Transform( 0.999848, 0.0174524, -2.84336e-09, 0, -1.62921e-07, -1, -0.0174524, 0.999848, -1.62896e-07, 0, 0, 0 )
-mesh = SubResource( 2 )
-material = SubResource( 3 )
-
-[node name="Firetime" type="Timer" parent="."]
+[node name="ROF" type="Timer" parent="."]
 process_mode = 0
 wait_time = 0.15
 one_shot = true
 
 [node name="Tween" type="Tween" parent="."]
-
-[node name="CamHelp" type="Spatial" parent="."]
-
-[node name="Gun" type="CSGBox" parent="CamHelp"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.35, -0.75 )
-width = 0.2
-height = 0.2
-
-[node name="Sfx" type="AudioStreamPlayer" parent="CamHelp/Gun" instance=ExtResource( 3 )]
-stream = ExtResource( 5 )
-volume_db = -24.0
-bus = "Sfx"
-
-[node name="Muzzle" type="Position3D" parent="CamHelp/Gun"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1 )
-
-[node name="OmniLight" type="OmniLight" parent="CamHelp/Gun/Muzzle"]
-visible = false
-shadow_enabled = true
-
-[node name="RayCast" type="RayCast" parent="CamHelp/Gun/Muzzle"]
-enabled = true
-cast_to = Vector3( 0, 0, -400 )
 
 [node name="Sync" type="Timer" parent="."]
 process_mode = 0
@@ -96,11 +116,15 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="OnWall" type="RayCast" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -0.937505 )
-cast_to = Vector3( 0, 0, -0.5 )
+[node name="FlipTime" type="Timer" parent="."]
+process_mode = 0
+one_shot = true
 
-[node name="Ledge" type="RayCast" parent="OnWall"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5 )
-cast_to = Vector3( 0, 2, 0 )
+[node name="Line" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.02375, 2.02893, 3.61047 )
+startThickness = 0.1
+endThickness = 0.1
+drawCaps = false
+drawCorners = false
+scaleTexture = false
 [connection signal="timeout" from="Sync" to="." method="_on_Sync_timeout"]

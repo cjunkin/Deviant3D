@@ -3,24 +3,35 @@ extends KinematicBody
 
 remote var a := Vector3.ZERO # acceleration
 var vel := Vector3.ZERO
+var fps := false # whether we're in FPS or TPS mode
 
-export var grav := 64 / 60
-export var jump := 32
-export var friction := .125
-export var speed : float = 1000 * friction / 60
+# Sensitivity
+var SENS_Y := -.002
+var SENS_X := -.002
+
+export var grav : float= 64 / 60
+export var jump : float = grav * 32
+export var friction : float = .825
+export var speed : float = 4 * friction
 
 #var cam_views : PoolVector3Array = [Vector3(3.75, 1, 6), Vector3()]
 
-onready var CamHelp := $CamHelp
+onready var PMesh := $PMesh
+onready var Left : RayCast = PMesh.get_node("Left")
+onready var Right : RayCast = PMesh.get_node("Right")
+onready var CamHelp := PMesh.get_node("CamHelp")
 onready var Cam : Camera = CamHelp.get_node_or_null("Cam")
-onready var Muzzle := $CamHelp/Gun/Muzzle
-onready var Gun := $CamHelp/Gun
-onready var TweenN := $Tween
-onready var Sfx := $CamHelp/Gun/Sfx
-onready var Firetime := $Firetime
-onready var Raycast = $CamHelp/Gun/Muzzle/RayCast
-onready var PMesh := $CSGMesh
+onready var Gun := CamHelp.get_node("Gun")
+onready var Sfx := Gun.get_node("Sfx")
+onready var Muzzle := Gun.get_node("Muzzle")
+onready var GrappleCast = Muzzle.get_node("GrappleCast")
+onready var GLine := $Line
+
+onready var ROF := $ROF
+onready var FlipTime := $FlipTime
+
 onready var Hitbox := $Hitbox
+onready var tween := $Tween
 
 func _ready() -> void:
 #	Engine.time_scale = .1
@@ -37,7 +48,7 @@ func _ready() -> void:
 		# Send over sync
 		$Sync.start(0)
 #		DebugOverlay.draw.add_vector(self, "vel", 1, 4, Color(0,1,0, 0.5))
-		DebugOverlay.draw.add_vector(self, "grapple_aim", 1, 4, Color(0,1,1, 0.5))
+#		DebugOverlay.draw.add_vector(self, "grapple_aim", 1, 4, Color(0,1,1, 0.5))
 #		DebugOverlay.draw.add_vector(self, "global_transform:basis:x", 1, 4, Color(1,1,1, 0.5))
 		
 	else:
@@ -46,24 +57,23 @@ func _ready() -> void:
 		rpc_id(get_network_master(), "req_syn")
 	translation = Vector3(7, 16, -14)
 
-var fps := false
+
 
 func _input(event: InputEvent) -> void:
 	# Look
 	if event is InputEventMouseMotion: # Rotate Camera
-		rotate_y(event.relative.x * -.002)
-		CamHelp.rotate_x(event.relative.y * -.002)
-		CamHelp.rotation.x = clamp(CamHelp.rotation.x, -PI/2, PI/2)
+		PMesh.rotate_y(event.relative.x * SENS_X) # Side to side // (transform.basis.y, 
+		CamHelp.rotation.x = clamp(CamHelp.rotation.x + (event.relative.y * SENS_Y), -PI/2, PI/2) # Up down
 		rpc_unreliable("r", event.relative)
 	# Switch camera sides
 	if event.is_action_pressed("switch_tps"):
 		var next : Vector3 = Cam.translation
 		next.x = -3.75 * sign(next.x)
-		TweenN.interpolate_property(Cam, "translation", Cam.translation, next, .25, Tween.TRANS_CIRC)
+		tween.interpolate_property(Cam, "translation", Cam.translation, next, .25, Tween.TRANS_CIRC)
 		next = Gun.translation
 		next.x = -.75 * sign(next.x)
-		TweenN.interpolate_property(Gun, "translation", Gun.translation, next, .25, Tween.TRANS_CIRC)
-		TweenN.start()
+		tween.interpolate_property(Gun, "translation", Gun.translation, next, .25, Tween.TRANS_CIRC)
+		tween.start()
 	# Switch between TPS and FPS
 	if event.is_action_pressed("switch_view"):
 		if fps:
@@ -97,10 +107,9 @@ func _physics_process(_delta: float) -> void:
 			collision.collider.apply_central_impulse(-collision.normal * .05 * vel.length())
 			
 	if is_network_master():
-#		not_grappling = true
 
 		# Shooting
-		if Input.is_action_pressed("fire") and Firetime.is_stopped():
+		if Input.is_action_pressed("fire") and ROF.is_stopped():
 			rpc("f") # fire
 			Cam.stress = 0.25
 #		else:
@@ -114,29 +123,35 @@ func _physics_process(_delta: float) -> void:
 
 		# Grapple
 		if Input.is_action_just_pressed("grapple"):
-			if Raycast.get_collider():
-				grapple_pos = Raycast.get_collision_point()
+			if GrappleCast.get_collider():
+				grapple_pos = GrappleCast.get_collision_point()
+				GLine.points[0] = grapple_pos
+				GLine.points[1] = Muzzle.global_transform.origin
+				GLine.visible = true
 				not_grappling = false
-				rpc("gp", grapple_pos)
+				rpc("g", translation, rotation.y, CamHelp.rotation.x, grapple_pos)
 		elif Input.is_action_just_released("grapple"):
 			not_grappling = true
 			rset("not_grappling", true)
+			GLine.visible = false
 
 		# Zoom
 		elif Input.is_action_just_pressed("aim"):
-			TweenN.interpolate_property(Cam, "fov", Cam.fov, int(Cam.fov) % 70 + 35, .25, Tween.TRANS_CIRC)
-			TweenN.start()
+			tween.interpolate_property(Cam, "fov", Cam.fov, int(Cam.fov) % 70 + 35, .25, Tween.TRANS_CIRC)
+			tween.start()
 
 	# apply gravity
-	vel += (int(not_grappling)) * Vector3.DOWN * grav
+	vel -= (int(not_grappling)) * transform.basis.y * grav
 	vel += a
 
-	vel = move_and_slide(vel, Vector3.UP, false, 4, .75, false)
+	vel = move_and_slide(vel, transform.basis.y, false, 4, .75, false)
+	# if grappling
 	if !not_grappling:
 		grapple_aim = grapple_pos - global_transform.origin
-		
+		if GLine.points.size() == 2:
+			GLine.points[1] = Muzzle.global_transform.origin
 		var new_grapple_len = (grapple_pos - global_transform.origin).length()
-		grapple_vel = (global_transform.origin - grapple_pos) / new_grapple_len * min(0, (1 - new_grapple_len) * 2)
+		grapple_vel = (global_transform.origin - grapple_pos) / new_grapple_len * min(0, (1 - new_grapple_len)) * .5
 		if grapple_vel.length() > MAX_GRAPPLE_SPEED:
 			grapple_vel = grapple_vel.normalized() * MAX_GRAPPLE_SPEED
 		vel += grapple_vel
@@ -147,42 +162,104 @@ func _physics_process(_delta: float) -> void:
 			vel *= .999
 	# jumping
 	if is_on_floor():
-		a.y = 0
-		vel.y = 0
+
 		if is_network_master():
-			a = (Input.get_action_strength("sprint") + 1) * speed * (transform.basis.z * (Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")) + transform.basis.x * (Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"))).normalized()
+			# Movement
+			a = (
+				Input.get_action_strength("sprint") + 1) * speed * (
+					PMesh.global_transform.basis.z * (
+						Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+						) 
+					+ 
+					PMesh.global_transform.basis.x * (
+						Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+						)
+				).normalized()
 			if Input.get_action_strength("jump"):
 				rpc("j") # jump
-			# Movement
-			
-	#		var new_acc := (Input.get_action_strength("sprint") + 1) * speed * (transform.basis.z * (Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")) + transform.basis.x * (Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"))).normalized()
-	#		if new_acc != a:
-	#			rset_unreliable("a", new_acc)
-	#			a = new_acc
+
+
 			rset_unreliable("a", a)
 		if not_grappling:
-			# friction along x, z (not up/down)
-			vel.x = lerp(vel.x, 0, friction)
-			vel.z = lerp(vel.z, 0, friction)
+			vel *= friction
 		else:
-			vel.x *= .95
-			vel.z *= .95
+			vel *= .95
 	else:
 		a *= .125
+		if Input.is_action_pressed("sprint"):
+			vel += (grapple_pos - global_transform.origin).normalized() * 3
+#			vel -= CamHelp.global_transform.basis.z
+#			vel.y += 1
 
-#		vel.x = lerp(vel.x, 0, friction)
-#		vel.z = lerp(vel.z, 0, friction)
 	sight.rect_position.x = 10000
-	if Raycast.is_colliding():
-		sight.rect_position = Cam.unproject_position(Raycast.get_collision_point())
+	if GrappleCast.is_colliding():
+		sight.rect_position = Cam.unproject_position(GrappleCast.get_collision_point())
+	if Left.is_colliding() and FlipTime.is_stopped():
+		global_transform = align_with_y(global_transform, Left.get_collision_normal())
+	elif Right.is_colliding() and FlipTime.is_stopped():
+		global_transform = align_with_y(global_transform, Right.get_collision_normal())
+#		global_transform = global_transform.interpolate_with(align_with_y(global_transform, Left.get_collision_normal()), .2)
+##		tween.interpolate_property(self, "rotation", rotation, rotation.z - PI/2, .25)
+#		rotate_object_local(PMesh.transform.basis.z, PI/2)
+#		tween.interpolate_property(self, "rotation", rotation, rotation.rotated(PMesh.transform.basis.z, PI/2), .25)
+#		tween.start()
+#		FlipTime.start()
+#		print(rotation.rotated(PMesh.transform.basis.z, PI/2))
+#		print(PMesh.transform.basis.z)
+#		print(fmod(rotation.z - PI/2, PI))
+#		if fmod(rotation.z - PI/2, PI) < .01 and fmod(rotation.z - PI/2, PI) > -.01:
+#			SENS_X *= -1
+#	elif Right.is_colliding() and FlipTime.is_stopped() and !tween.is_active():
+#		tween.interpolate_property(self, "rotation", rotation, rotation.rotated(PMesh.transform.basis.z, PI/2), .25)
+#		tween.start()
+#		FlipTime.start()
+#		if fmod(rotation.z - PI/2, PI) < .01 and fmod(rotation.z - PI/2, PI) > -.01:
+#			SENS_X *= -1
+#	print(rotation.z)
 
+#	if Left.is_colliding() and FlipTime.is_stopped():
+#		tween.interpolate_property(get_parent(), "rotation:z", get_parent().rotation.z, get_parent().rotation.z - PI/2, .25)
+#		tween.start()
+#		FlipTime.start()
+#		if fmod(get_parent().rotation.z - PI/2, PI) < .01 and fmod(get_parent().rotation.z - PI/2, PI) > -.01:
+#			SENS_X *= -1
+#	elif Right.is_colliding() and FlipTime.is_stopped():
+#		tween.interpolate_property(get_parent(), "rotation:z", get_parent().rotation.z, get_parent().rotation.z + PI/2, .25)
+#		tween.start()
+#		FlipTime.start()
+#		if fmod(get_parent().rotation.z - PI/2, PI) < .01 and fmod(get_parent().rotation.z - PI/2, PI) > -.01:
+#			SENS_X *= -1
+
+func align_with_y(xform: Transform, new_y: Vector3) -> Transform:
+	var new_x := -xform.basis.z.cross(new_y)
+#	print("\n OLD XFORM")
+#	print(xform.basis.x)
+#	print(xform.basis.y)
+#	print(xform.basis.z)
+	if new_x != Vector3.ZERO:
+		xform.basis.x = new_x
+	else:
+		xform.basis.z = xform.basis.x.cross(new_y)
+	xform.basis.y = new_y
+	xform.basis = xform.basis.orthonormalized()
+	
+#	print("NEW XFORM")
+#	print(xform.basis.x)
+#	print(xform.basis.y)
+#	print(xform.basis.z)
+	return xform
+
+# Sync position/aim
 func _on_Sync_timeout():
 	rpc("syn", translation, rotation.y, CamHelp.rotation.x)
 
 
 
 # Set grapple hook position
-remote func gp(pos):
+remote func g(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void:
+	translation = trans
+	rotation.y = y
+	CamHelp.rotation.x = cam_help_x
 	grapple_pos = pos
 	not_grappling = false
 
@@ -196,36 +273,36 @@ remotesync func f() -> void:
 	p.visible = true
 	Sfx.pitch_scale = rand_range(.85, 1.15)
 	Sfx.play()
-	Firetime.start()
+	ROF.start()
 	p.timer.start()
 #	$CamHelp/Gun/Muzzle/OmniLight.visible = true
 
 # Crouch
 remotesync func c() -> void:
-#	PMesh.mesh.mid_height = .5
-	PMesh.translation.y = -.4
-	PMesh.scale = Vector3(.9, .9, .75)
 #	Hitbox.shape.height = .5
 #	Hitbox.translation.y = -.25
 #	Hitbox.scale = Vector3(.9, .9, .5)
+#	PMesh.mesh.mid_height = .5
+	PMesh.translation.y = -.4
+	PMesh.scale = Vector3(.9, .9, .75)
 
 # Uncrouch
 remotesync func u() -> void:
-#	PMesh.mesh.mid_height = 1
-	PMesh.translation.y = 0
-	PMesh.scale = Vector3(1, 1, 1)
 #	Hitbox.shape.height = 1
 #	Hitbox.translation.y = 0
 #	Hitbox.scale = Vector3(1, 1, 1)
+#	PMesh.mesh.mid_height = 1
+	PMesh.translation.y = 0
+	PMesh.scale = Vector3(1, 1, 1)
 
 # Jump
 remotesync func j() -> void:
-	vel.y = jump
+	vel += jump * transform.basis.y
 
 # Aim
 remote func r(rot: Vector2) -> void:
-	rotate_y(rot.x * -.002)
-	CamHelp.rotate_x(rot.y * -.002)
+	rotate_y(rot.x * SENS_X)
+	CamHelp.rotate_x(rot.y * SENS_Y)
 	CamHelp.rotation.x = clamp(CamHelp.rotation.x, -PI/2, PI/2)
 
 # Sync transform
