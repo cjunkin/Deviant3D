@@ -107,7 +107,11 @@ func _physics_process(_delta: float) -> void:
 			collision.collider.apply_central_impulse(-collision.normal * .05 * vel.length())
 			
 	if is_network_master():
-
+		# Set crosshair
+		sight.rect_position.x = 10000
+		if GrappleCast.is_colliding():
+			sight.rect_position = Cam.unproject_position(GrappleCast.get_collision_point())
+		
 		# Shooting
 		if Input.is_action_pressed("fire") and ROF.is_stopped():
 			rpc("f") # fire
@@ -129,11 +133,10 @@ func _physics_process(_delta: float) -> void:
 				GLine.points[1] = Muzzle.global_transform.origin
 				GLine.visible = true
 				not_grappling = false
-				rpc("g", translation, rotation.y, CamHelp.rotation.x, grapple_pos)
+				rpc("g", translation, PMesh.rotation.y, CamHelp.rotation.x, grapple_pos)
 		elif Input.is_action_just_released("grapple"):
-			not_grappling = true
-			rset("not_grappling", true)
-			GLine.visible = false
+			rpc("ng")
+
 
 		# Zoom
 		elif Input.is_action_just_pressed("aim"):
@@ -162,7 +165,6 @@ func _physics_process(_delta: float) -> void:
 			vel *= .999
 	# jumping
 	if is_on_floor():
-
 		if is_network_master():
 			# Movement
 			a = (
@@ -191,13 +193,13 @@ func _physics_process(_delta: float) -> void:
 #			vel -= CamHelp.global_transform.basis.z
 #			vel.y += 1
 
-	sight.rect_position.x = 10000
-	if GrappleCast.is_colliding():
-		sight.rect_position = Cam.unproject_position(GrappleCast.get_collision_point())
+
 	if Left.is_colliding() and FlipTime.is_stopped():
 		global_transform = align_with_y(global_transform, Left.get_collision_normal())
+		rpc("st", global_transform)
 	elif Right.is_colliding() and FlipTime.is_stopped():
 		global_transform = align_with_y(global_transform, Right.get_collision_normal())
+		rpc("st", global_transform)
 #		global_transform = global_transform.interpolate_with(align_with_y(global_transform, Left.get_collision_normal()), .2)
 ##		tween.interpolate_property(self, "rotation", rotation, rotation.z - PI/2, .25)
 #		rotate_object_local(PMesh.transform.basis.z, PI/2)
@@ -230,11 +232,20 @@ func _physics_process(_delta: float) -> void:
 #		if fmod(get_parent().rotation.z - PI/2, PI) < .01 and fmod(get_parent().rotation.z - PI/2, PI) > -.01:
 #			SENS_X *= -1
 
+# Stop (no) grappling
+remotesync func ng() -> void:
+	not_grappling = true
+	GLine.visible = false
+
+# Sync transform (during flip)
+remote func st(gt: Transform) -> void:
+	global_transform = gt
+
 func align_with_y(xform: Transform, new_y: Vector3) -> Transform:
 	var new_x := -xform.basis.z.cross(new_y)
 #	print("\n OLD XFORM")
 #	print(xform.basis.x)
-#	print(xform.basis.y)
+#	print(xform.basis.y
 #	print(xform.basis.z)
 	if new_x != Vector3.ZERO:
 		xform.basis.x = new_x
@@ -251,16 +262,20 @@ func align_with_y(xform: Transform, new_y: Vector3) -> Transform:
 
 # Sync position/aim
 func _on_Sync_timeout():
-	rpc("syn", translation, rotation.y, CamHelp.rotation.x)
+	rpc("syn", translation, PMesh.rotation.y, CamHelp.rotation.x)
 
 
 
 # Set grapple hook position
 remote func g(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void:
 	translation = trans
-	rotation.y = y
+	PMesh.rotation.y = y
 	CamHelp.rotation.x = cam_help_x
 	grapple_pos = pos
+
+	GLine.points[0] = grapple_pos
+	GLine.points[1] = Muzzle.global_transform.origin
+	GLine.visible = true
 	not_grappling = false
 
 # Fire
@@ -301,14 +316,13 @@ remotesync func j() -> void:
 
 # Aim
 remote func r(rot: Vector2) -> void:
-	rotate_y(rot.x * SENS_X)
-	CamHelp.rotate_x(rot.y * SENS_Y)
-	CamHelp.rotation.x = clamp(CamHelp.rotation.x, -PI/2, PI/2)
+	PMesh.rotate_y(rot.x * SENS_X) # Side to side // (transform.basis.y, 
+	CamHelp.rotation.x = clamp(CamHelp.rotation.x + (rot.y * SENS_Y), -PI/2, PI/2) # Up down
 
 # Sync transform
 remote func syn(trans: Vector3, y: float, cam_help_x: float) -> void:
 	translation = trans
-	rotation.y = y
+	PMesh.rotation.y = y
 	CamHelp.rotation.x = cam_help_x
 
 # When other person calls this, send over my info

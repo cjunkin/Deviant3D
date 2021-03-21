@@ -6,10 +6,10 @@
 [ext_resource path="res://icon.png" type="Texture" id=4]
 [ext_resource path="res://addons/LineRenderer/LineRenderer.tscn" type="PackedScene" id=5]
 
-[sub_resource type="CapsuleMesh" id=2]
+[sub_resource type="CapsuleMesh" id=1]
 radial_segments = 16
 
-[sub_resource type="ShaderMaterial" id=3]
+[sub_resource type="ShaderMaterial" id=2]
 shader = ExtResource( 1 )
 shader_param/albedo = Color( 0.360784, 0.627451, 1, 1 )
 shader_param/clamp_diffuse_to_max = false
@@ -25,7 +25,7 @@ shader_param/rim_width = 8.0
 shader_param/rim_color = Color( 1, 1, 1, 1 )
 shader_param/use_ramp = false
 
-[sub_resource type="CapsuleShape" id=1]
+[sub_resource type="CapsuleShape" id=3]
 
 [node name="Player" type="KinematicBody"]
 script = ExtResource( 2 )
@@ -58,8 +58,8 @@ cast_to = Vector3( 0, 0, -400 )
 
 [node name="Mesh" type="CSGMesh" parent="PMesh"]
 transform = Transform( 0.999848, 0.0174524, -7.62868e-10, 0, -4.37114e-08, -1, -0.0174524, 0.999848, -4.37047e-08, 0, 0, 0 )
-mesh = SubResource( 2 )
-material = SubResource( 3 )
+mesh = SubResource( 1 )
+material = SubResource( 2 )
 
 [node name="OnWall" type="RayCast" parent="PMesh"]
 transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, -2.96242e-09, 1, -0.937505 )
@@ -81,7 +81,7 @@ cast_to = Vector3( 0.25, 0, 0 )
 
 [node name="Hitbox" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
-shape = SubResource( 1 )
+shape = SubResource( 3 )
 
 [node name="ROF" type="Timer" parent="."]
 process_mode = 0
@@ -122,8 +122,6 @@ one_shot = true
 
 [node name="Line" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.02375, 2.02893, 3.61047 )
-startThickness = 0.1
-endThickness = 0.1
 drawCaps = false
 drawCorners = false
 scaleTexture = false
