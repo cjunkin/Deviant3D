@@ -216,10 +216,10 @@ material = SubResource( 5 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.307, 21.5107, 10.0221 )
 
 [node name="Enemy2" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.307, 16.5107, 10.0221 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.307, 40.5107, 10.0221 )
 
 [node name="Enemy3" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.307, 16.5107, 10.0221 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.307, 30.5107, 10.0221 )
 
 [node name="Enemy4" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.307, 16.5107, 10.0221 )

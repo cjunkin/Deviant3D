@@ -1,8 +1,8 @@
 class_name Game
 extends Spatial
 
-const num_projectiles := 32
-const num_explosions := 32
+const num_projectiles := 8
+const num_explosions := 8
 #const num_laser_audio := 8
 
 export (PackedScene) var player_s := preload("res://Scn/Actor/Player/Player.tscn")
@@ -26,10 +26,10 @@ func _ready()->void:
 		var e : Particles = exp_s.instance()
 		explosions.append(e)
 		add_child(e)
-	$Enemy.set_target(players[0])
-	$Enemy2.set_target(players[0])
-	$Enemy3.set_target(players[0])
-	$Enemy4.set_target(players[0])
+#	$Enemy.set_target(players[0])
+#	$Enemy2.set_target(players[0])
+#	$Enemy3.set_target(players[0])
+#	$Enemy4.set_target(players[0])
 
 func set_hinge(body):
 	var h: HingeJoint = $HingeJoint

@@ -21,7 +21,8 @@ onready var Top : RayCast = PMesh.get_node("Top")
 onready var Left : RayCast = PMesh.get_node("Left")
 onready var Right : RayCast = PMesh.get_node("Right")
 onready var CamHelp := PMesh.get_node("CamHelp")
-onready var Cam : Camera = CamHelp.get_node_or_null("Cam")
+onready var CamSpring : SpringArm
+onready var Cam : Camera
 onready var Gun := CamHelp.get_node("Gun")
 onready var Sfx := Gun.get_node("Sfx")
 onready var Muzzle := Gun.get_node("Muzzle")
@@ -42,7 +43,8 @@ func _ready() -> void:
 			# Regular cam
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 			CamHelp.add_child(load("res://Scn/Actor/Cam.tscn").instance())
-			Cam = CamHelp.get_node("Cam")
+			Cam = CamHelp.get_node("Spring/Cam")
+			CamSpring = CamHelp.get_node("Spring")
 		else:
 			# AR CAM
 			add_child(load("res://Scn/AR/ARVROrigin.tscn").instance())
@@ -69,9 +71,9 @@ func _input(event: InputEvent) -> void:
 		rpc_unreliable("r", event.relative)
 	# Switch camera sides
 	if event.is_action_pressed("switch_tps"):
-		var next : Vector3 = Cam.translation
-		next.x = -3.75 * sign(next.x)
-		tween.interpolate_property(Cam, "translation", Cam.translation, next, .25, Tween.TRANS_CIRC)
+		var next : Vector3 = CamSpring.translation
+		next.x = -3.5 * sign(next.x) # previously -3.75
+		tween.interpolate_property(CamSpring, "translation", CamSpring.translation, next, .25, Tween.TRANS_CIRC)
 		next = Gun.translation
 		next.x = -.75 * sign(next.x)
 		tween.interpolate_property(Gun, "translation", Gun.translation, next, .25, Tween.TRANS_CIRC)
@@ -79,9 +81,17 @@ func _input(event: InputEvent) -> void:
 	# Switch between TPS and FPS
 	if event.is_action_pressed("switch_view"):
 		if fps:
-			Cam.translation = Vector3(3.75, 1.5, 9)
+#			CamSpring.translation = Vector3(3.5, 1.5, 0) #Vector3(3.75, 1.5, 9)
+			tween.interpolate_property(CamSpring, "translation", CamSpring.translation, Vector3(3.5, 1.5, 0), .25, Tween.TRANS_CIRC)
+			tween.interpolate_property(CamSpring, "spring_length", CamSpring.spring_length, 8, .25, Tween.TRANS_CIRC)
+			tween.start()
+#			CamSpring.spring_length = 8
 		else:
-			Cam.translation = Vector3(0, 1, 0)
+#			CamSpring.translation = Vector3(0, 1, 0)
+			tween.interpolate_property(CamSpring, "translation", CamSpring.translation, Vector3(0, 1, 0), .25, Tween.TRANS_CIRC)
+			tween.interpolate_property(CamSpring, "spring_length", CamSpring.spring_length, 0, .25, Tween.TRANS_CIRC)
+			tween.start()
+#			CamSpring.spring_length = 0
 		fps = !fps
 		# TODO: improve logic of switching
 	# Quit
