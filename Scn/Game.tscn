@@ -18,7 +18,7 @@ uv1_scale = Vector3( 0.1, 0.1, 0.1 )
 uv1_triplanar = true
 uv2_triplanar_sharpness = 0.784584
 
-[sub_resource type="SpatialMaterial" id=3]
+[sub_resource type="SpatialMaterial" id=2]
 flags_vertex_lighting = true
 flags_world_triplanar = true
 albedo_color = Color( 0.219608, 0.960784, 0.137255, 1 )
@@ -28,7 +28,7 @@ uv1_scale = Vector3( 0.1, 0.1, 0.1 )
 uv1_triplanar = true
 uv2_triplanar_sharpness = 0.784584
 
-[sub_resource type="SpatialMaterial" id=4]
+[sub_resource type="SpatialMaterial" id=3]
 flags_vertex_lighting = true
 flags_world_triplanar = true
 albedo_color = Color( 0.968627, 0.592157, 0.0627451, 1 )
@@ -38,7 +38,7 @@ uv1_scale = Vector3( 0.1, 0.1, 0.1 )
 uv1_triplanar = true
 uv2_triplanar_sharpness = 0.784584
 
-[sub_resource type="SpatialMaterial" id=5]
+[sub_resource type="SpatialMaterial" id=4]
 flags_vertex_lighting = true
 flags_world_triplanar = true
 albedo_color = Color( 0.0627451, 0.862745, 0.968627, 1 )
@@ -48,7 +48,7 @@ uv1_scale = Vector3( 0.1, 0.1, 0.1 )
 uv1_triplanar = true
 uv2_triplanar_sharpness = 0.784584
 
-[sub_resource type="SpatialMaterial" id=2]
+[sub_resource type="SpatialMaterial" id=5]
 flags_vertex_lighting = true
 flags_world_triplanar = true
 albedo_texture = ExtResource( 2 )
@@ -138,7 +138,7 @@ use_collision = true
 width = 88.0
 height = 50.0
 depth = 4.0
-material = SubResource( 3 )
+material = SubResource( 2 )
 
 [node name="RoomWall2" type="CSGBox" parent="."]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 51, 21.1388, 126 )
@@ -147,7 +147,7 @@ use_collision = true
 width = 50.0
 height = 50.0
 depth = 4.0
-material = SubResource( 4 )
+material = SubResource( 3 )
 
 [node name="RoomWall3" type="CSGBox" parent="."]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -38, 21.1388, 126 )
@@ -156,7 +156,7 @@ use_collision = true
 width = 50.0
 height = 50.0
 depth = 4.0
-material = SubResource( 5 )
+material = SubResource( 4 )
 
 [node name="Wall4" type="CSGBox" parent="."]
 transform = Transform( -0.258819, 0.965926, 0, -0.965926, -0.258819, 0, 0, 0, 1, 31, 50, -28 )
@@ -210,7 +210,7 @@ use_collision = true
 width = 400.0
 height = 1.0
 depth = 600.0
-material = SubResource( 2 )
+material = SubResource( 5 )
 
 [node name="Enemy" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.307, 21.5107, 10.0221 )

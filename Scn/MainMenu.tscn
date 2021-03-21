@@ -1,8 +1,18 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scn/MainMenu.gd" type="Script" id=1]
-[ext_resource path="res://Theme/MainMenuTheme.tres" type="Theme" id=2]
+[ext_resource path="res://Theme/main_theme.tres" type="Theme" id=2]
+[ext_resource path="res://Font/Typori-Regular.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://Art/Menu01.png" type="Texture" id=4]
 [ext_resource path="res://Scn/Spinner/Spinner.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Shader/BlurShader.tres" type="Material" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+size = 64
+outline_size = 6
+outline_color = Color( 0, 0, 0, 1 )
+use_mipmaps = true
+font_data = ExtResource( 3 )
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
@@ -13,12 +23,26 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Menu01" type="Sprite" parent="."]
+position = Vector2( 641.27, 359.82 )
+texture = ExtResource( 4 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = ExtResource( 6 )
+margin_right = 1286.0
+margin_bottom = 722.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Label" type="Label" parent="."]
-margin_left = 342.24
-margin_top = 159.806
-margin_right = 933.24
-margin_bottom = 198.806
-text = "THE SIMP-LEST NETWURKING YULL EVER C"
+margin_left = 323.888
+margin_top = 101.598
+margin_right = 914.888
+margin_bottom = 178.598
+custom_fonts/font = SubResource( 1 )
+text = "Deviant 3D"
+align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -28,13 +52,18 @@ margin_left = 205.061
 margin_top = 299.814
 margin_right = 453.061
 margin_bottom = 401.814
+custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Host"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Join" type="Button" parent="."]
 margin_left = 804.969
 margin_top = 302.173
 margin_right = 1052.97
 margin_bottom = 404.173
+custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Join"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -42,9 +71,11 @@ __meta__ = {
 
 [node name="Spinner" parent="." instance=ExtResource( 5 )]
 visible = false
-margin_left = -4.28589
-margin_top = 146.932
-margin_right = 71.7141
-margin_bottom = 222.932
+margin_left = -37.3986
+margin_top = 121.115
+margin_right = 38.6014
+margin_bottom = 197.115
+rect_pivot_offset = Vector2( 38, 38 )
+expand = true
 [connection signal="button_up" from="Host" to="." method="_on_Host_button_up"]
 [connection signal="button_up" from="Join" to="." method="_on_Join_button_up"]

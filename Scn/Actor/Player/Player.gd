@@ -17,6 +17,7 @@ export var speed : float = 4 * friction
 #var cam_views : PoolVector3Array = [Vector3(3.75, 1, 6), Vector3()]
 
 onready var PMesh := $PMesh
+onready var Top : RayCast = PMesh.get_node("Top")
 onready var Left : RayCast = PMesh.get_node("Left")
 onready var Right : RayCast = PMesh.get_node("Right")
 onready var CamHelp := PMesh.get_node("CamHelp")
@@ -26,6 +27,7 @@ onready var Sfx := Gun.get_node("Sfx")
 onready var Muzzle := Gun.get_node("Muzzle")
 onready var GrappleCast = Muzzle.get_node("GrappleCast")
 onready var GLine := $Line
+
 
 onready var ROF := $ROF
 onready var FlipTime := $FlipTime
@@ -163,6 +165,14 @@ func _physics_process(_delta: float) -> void:
 			vel *= .95
 		else:
 			vel *= .999
+		
+		# Run flipping
+		if Left.is_colliding() and FlipTime.is_stopped():
+			rpc("st", align_with_y(global_transform, Left.get_collision_normal()))
+		elif Right.is_colliding() and FlipTime.is_stopped():
+			rpc("st", align_with_y(global_transform, Right.get_collision_normal()))
+		elif Top.is_colliding() and FlipTime.is_stopped():
+			rpc("st", align_with_y(global_transform, Top.get_collision_normal()))
 	# jumping
 	if is_on_floor():
 		if is_network_master():
@@ -194,52 +204,17 @@ func _physics_process(_delta: float) -> void:
 #			vel.y += 1
 
 
-	if Left.is_colliding() and FlipTime.is_stopped():
-		global_transform = align_with_y(global_transform, Left.get_collision_normal())
-		rpc("st", global_transform)
-	elif Right.is_colliding() and FlipTime.is_stopped():
-		global_transform = align_with_y(global_transform, Right.get_collision_normal())
-		rpc("st", global_transform)
-#		global_transform = global_transform.interpolate_with(align_with_y(global_transform, Left.get_collision_normal()), .2)
-##		tween.interpolate_property(self, "rotation", rotation, rotation.z - PI/2, .25)
-#		rotate_object_local(PMesh.transform.basis.z, PI/2)
-#		tween.interpolate_property(self, "rotation", rotation, rotation.rotated(PMesh.transform.basis.z, PI/2), .25)
-#		tween.start()
-#		FlipTime.start()
-#		print(rotation.rotated(PMesh.transform.basis.z, PI/2))
-#		print(PMesh.transform.basis.z)
-#		print(fmod(rotation.z - PI/2, PI))
-#		if fmod(rotation.z - PI/2, PI) < .01 and fmod(rotation.z - PI/2, PI) > -.01:
-#			SENS_X *= -1
-#	elif Right.is_colliding() and FlipTime.is_stopped() and !tween.is_active():
-#		tween.interpolate_property(self, "rotation", rotation, rotation.rotated(PMesh.transform.basis.z, PI/2), .25)
-#		tween.start()
-#		FlipTime.start()
-#		if fmod(rotation.z - PI/2, PI) < .01 and fmod(rotation.z - PI/2, PI) > -.01:
-#			SENS_X *= -1
-#	print(rotation.z)
-
-#	if Left.is_colliding() and FlipTime.is_stopped():
-#		tween.interpolate_property(get_parent(), "rotation:z", get_parent().rotation.z, get_parent().rotation.z - PI/2, .25)
-#		tween.start()
-#		FlipTime.start()
-#		if fmod(get_parent().rotation.z - PI/2, PI) < .01 and fmod(get_parent().rotation.z - PI/2, PI) > -.01:
-#			SENS_X *= -1
-#	elif Right.is_colliding() and FlipTime.is_stopped():
-#		tween.interpolate_property(get_parent(), "rotation:z", get_parent().rotation.z, get_parent().rotation.z + PI/2, .25)
-#		tween.start()
-#		FlipTime.start()
-#		if fmod(get_parent().rotation.z - PI/2, PI) < .01 and fmod(get_parent().rotation.z - PI/2, PI) > -.01:
-#			SENS_X *= -1
-
 # Stop (no) grappling
 remotesync func ng() -> void:
 	not_grappling = true
 	GLine.visible = false
 
 # Sync transform (during flip)
-remote func st(gt: Transform) -> void:
-	global_transform = gt
+remotesync func st(gt: Transform) -> void:
+#	global_transform = gt
+	tween.interpolate_property(self, "global_transform", global_transform, gt, .25, Tween.TRANS_SINE)
+	tween.start()
+	FlipTime.start()
 
 func align_with_y(xform: Transform, new_y: Vector3) -> Transform:
 	var new_x := -xform.basis.z.cross(new_y)
