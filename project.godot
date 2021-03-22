@@ -17,7 +17,7 @@ _global_script_classes=[ {
 "base": "Spatial",
 "class": "Game",
 "language": "GDScript",
-"path": "res://Scn/Game.gd"
+"path": "res://Game.gd"
 }, {
 "base": "ImmediateGeometry",
 "class": "Line",
@@ -62,10 +62,10 @@ config/icon="res://icon.png"
 
 [autoload]
 
-G="*res://Global.gd"
-Math="*res://Math.gd"
+G="*res://Global.tscn"
 Network="*res://Network.gd"
-DebugOverlay="*res://DEBUG/DebugOverlay.tscn"
+Math="res://Math.gd"
+DebugOverlay="res://DEBUG/DebugOverlay.tscn"
 
 [display]
 

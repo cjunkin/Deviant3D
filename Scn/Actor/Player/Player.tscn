@@ -82,7 +82,7 @@ enabled = true
 cast_to = Vector3( 0, 0, -1 )
 
 [node name="Top" type="RayCast" parent="PMesh"]
-transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, 0, 1, -1 )
+transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, 0, 1.25, -0.7 )
 enabled = true
 cast_to = Vector3( 0, 1, 0 )
 
@@ -92,15 +92,14 @@ shape = SubResource( 3 )
 
 [node name="ROF" type="Timer" parent="."]
 process_mode = 0
-wait_time = 0.15
+wait_time = 0.2
+one_shot = true
+
+[node name="FlipTime" type="Timer" parent="."]
+process_mode = 0
 one_shot = true
 
 [node name="Tween" type="Tween" parent="."]
-
-[node name="Sync" type="Timer" parent="."]
-process_mode = 0
-wait_time = 4.0
-autostart = true
 
 [node name="Sight" type="Control" parent="."]
 margin_left = -33.234
@@ -123,10 +122,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="FlipTime" type="Timer" parent="."]
-process_mode = 0
-one_shot = true
-
 [node name="Line" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.02375, 2.02893, 3.61047 )
 drawCaps = false
@@ -138,4 +133,3 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.02375, 2.02893, 3.61047 )
 drawCaps = false
 drawCorners = false
 scaleTexture = false
-[connection signal="timeout" from="Sync" to="." method="_on_Sync_timeout"]

@@ -11,6 +11,7 @@ const ALL_GFX_OPTIONS := PoolStringArray(["shadows", "glow"]) # TODO: update gra
 # TODO: minimal theme, where graphics settings are opened in separate panel
 
 func _ready() -> void:
+	OS.set_low_processor_usage_mode(true)
 	# Add options
 	add_options(overall_gfx, PoolStringArray(["Potato", "Low", "Medium", "High", "Custom"]))
 	add_options(shadows, STANDARD)
@@ -67,7 +68,11 @@ func add_options(button: OptionButton, options: PoolStringArray) -> void:
 		i += 1
 
 func _on_Host_button_up() -> void:
+	OS.set_low_processor_usage_mode(false)
+	G.set_process_input(true)
 	Network.host()
 
 func _on_Join_button_up() -> void:
+	OS.set_low_processor_usage_mode(false)
+	G.set_process_input(true)
 	Network.join()

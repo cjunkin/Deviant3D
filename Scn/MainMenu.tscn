@@ -4,7 +4,7 @@
 [ext_resource path="res://Theme/main_theme.tres" type="Theme" id=2]
 [ext_resource path="res://Font/Typori-Regular.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://Art/Menu01.png" type="Texture" id=4]
-[ext_resource path="res://Scn/Spinner/Spinner.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scn/Menu/Spinner/Spinner.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Shader/BlurShader.tres" type="Material" id=6]
 
 [sub_resource type="DynamicFont" id=1]
@@ -73,6 +73,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Play" type="HBoxContainer" parent="Menu/PlayMargin"]
+modulate = Color( 0.709804, 0.827451, 1, 1 )
 margin_top = 83.0
 margin_right = 1047.0
 margin_bottom = 171.0
@@ -85,8 +86,8 @@ __meta__ = {
 [node name="Host" type="Button" parent="Menu/PlayMargin/Play"]
 margin_right = 337.0
 margin_bottom = 88.0
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
-custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Host"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -119,8 +120,8 @@ stretch_mode = 6
 margin_left = 709.0
 margin_right = 1047.0
 margin_bottom = 88.0
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
-custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Join"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -159,10 +160,12 @@ margin_bottom = 40.0
 text = "Overall "
 
 [node name="Button" type="OptionButton" parent="Menu/Gfx/Options/Overall"]
+modulate = Color( 0.619608, 0.721569, 0.882353, 1 )
 margin_left = 133.0
 margin_right = 306.0
 margin_bottom = 42.0
 rect_min_size = Vector2( 0, 42 )
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
 [node name="shadows" type="HBoxContainer" parent="Menu/Gfx/Options"]
@@ -178,10 +181,12 @@ margin_bottom = 40.0
 text = "Shadows "
 
 [node name="Button" type="OptionButton" parent="Menu/Gfx/Options/shadows"]
+modulate = Color( 0.619608, 0.721569, 0.882353, 1 )
 margin_left = 143.0
 margin_right = 306.0
 margin_bottom = 42.0
 rect_min_size = Vector2( 0, 42 )
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
 [node name="glow" type="HBoxContainer" parent="Menu/Gfx/Options"]
@@ -197,10 +202,12 @@ margin_bottom = 40.0
 text = "Glow "
 
 [node name="Button" type="OptionButton" parent="Menu/Gfx/Options/glow"]
+modulate = Color( 0.619608, 0.721569, 0.882353, 1 )
 margin_left = 86.0
 margin_right = 307.0
 margin_bottom = 42.0
 rect_min_size = Vector2( 0, 42 )
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 [connection signal="button_up" from="Menu/PlayMargin/Play/Host" to="." method="_on_Host_button_up"]
 [connection signal="button_up" from="Menu/PlayMargin/Play/Join" to="." method="_on_Join_button_up"]

@@ -11,6 +11,7 @@ var SENS_X := -.002
 
 # Physics
 remote var a := Vector3.ZERO # acceleration, TODO: optimize networking by only sending inputs
+var accel := Vector3.ZERO
 var vel := Vector3.ZERO
 export var grav : float= 64 / 60
 export var jump : float = grav * 32
@@ -46,6 +47,8 @@ onready var Hitbox := $Hitbox
 onready var tween := $Tween
 
 func _ready() -> void:
+#	Engine.time_scale = .1
+	translation = Vector3(7 + rand_range(-2, 2), 17, -14 + rand_range(-2, 2))
 	if is_network_master():
 		# Regular cam
 		if OS.get_name() != "Android" and OS.get_name() != "iOS":
@@ -57,19 +60,42 @@ func _ready() -> void:
 		else:
 			add_child(load("res://Scn/AR/ARVROrigin.tscn").instance())
 			Cam = get_node("ARVROrigin")
-		# Send over sync
-		$Sync.start(0)
+		# Start syncing
+		var sync_timer := Timer.new()
+		add_child(sync_timer)
+		sync_timer.process_mode = Timer.TIMER_PROCESS_PHYSICS
+		sync_timer.wait_time = 4
+		sync_timer.connect("timeout", self, "_sync_timeout")
+		sync_timer.start(0)
+		
+		G.current_player = self
+		
 #		DebugOverlay.draw.add_vector(self, "vel", 1, 4, Color(0,1,0, 0.5))
 #		DebugOverlay.draw.add_vector(self, "grapple_aim", 1, 4, Color(0,1,1, 0.5))
 #		DebugOverlay.draw.add_vector(self, "global_transform:basis:x", 1, 4, Color(1,1,1, 0.5))
 	else:
 		set_process_input(false)
-		$Sync.queue_free()
+		# Request sync from master
 		rpc_id(get_network_master(), "req_syn")
-	translation = Vector3(7, 17, -14)
+
 
 
 func _input(event: InputEvent) -> void:
+	# Ground Movement
+	a = (
+		Input.get_action_strength("sprint") + 1) * speed * (
+			PMesh.global_transform.basis.z * (
+				Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+				) 
+			+ 
+			PMesh.global_transform.basis.x * (
+				Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+				)
+		).normalized()
+	# If our acceleration has changed, sync the new one
+	if a != accel:
+		accel = a
+		rset("a", a)
 	# Look
 	if event is InputEventMouseMotion: # Rotate Camera
 		PMesh.rotate_y(event.relative.x * SENS_X) # Side to side // (transform.basis.y, 
@@ -104,16 +130,31 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("aim"):
 		tween.interpolate_property(Cam, "fov", Cam.fov, int(Cam.fov) % 70 + 35, .25, Tween.TRANS_CIRC)
 		tween.start()
-	# Quit
-	elif event.is_action_pressed("ui_cancel"):
-		# TODO: reduce to no if/else
-		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		else:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	elif event.is_action_pressed("fullscreen"):
-		OS.window_fullscreen = !OS.window_fullscreen
+	# Jumping
+	if event.is_action_pressed("jump") and is_on_floor():
+		rpc("j") # jump
+	
+	# Grapple
+	if event.is_action_pressed("grapple1") and GrappleCast.get_collider():
+		local_grapple(true)
+	elif event.is_action_released("grapple1"):
+		rpc("c")
+	if event.is_action_pressed("grapple2") and GrappleCast.get_collider():
+		local_grapple(false)
+	elif event.is_action_released("grapple2"):
+		rpc("e")
 
+	# Crouching
+	if event.is_action_pressed("crouch"):
+		rpc("v")
+	elif event.is_action_pressed("crouch"):
+		rpc("u")
+
+#		# Accelerate Hook
+#		if Input.is_action_pressed("sprint"):
+#			vel += (grapple_pos - global_transform.origin).normalized() * 3
+##			vel -= CamHelp.global_transform.basis.z
+##			vel.y += 1
 
 func _physics_process(_delta: float) -> void:
 	# collision with boxes
@@ -134,68 +175,30 @@ func _physics_process(_delta: float) -> void:
 			rpc("f") # fire
 			Cam.stress = 0.25
 
-		# Crouching
-		if Input.is_action_just_pressed("crouch"):
-			rpc("v")
-		elif Input.is_action_just_released("crouch"):
-			rpc("u")
-
-		# Grapple
-		if Input.is_action_just_pressed("grapple1") and GrappleCast.get_collider():
-			local_grapple(true)
-		elif Input.is_action_just_released("grapple1"):
-			rpc("c")
-		if Input.is_action_just_pressed("grapple2") and GrappleCast.get_collider():
-			local_grapple(false)
-		elif Input.is_action_just_released("grapple2"):
-			rpc("e")
 		# "Run, the game" flipping
-		if Top.is_colliding() and FlipTime.is_stopped():
-			rpc("st", align_with_y(global_transform, Top.get_collision_normal()))
-		elif Forward.is_colliding() and FlipTime.is_stopped():
+		if Forward.is_colliding() and FlipTime.is_stopped():
 			rpc("st", align_with_y(global_transform, Forward.get_collision_normal()))
+		elif Top.is_colliding() and FlipTime.is_stopped():
+			rpc("st", align_with_y(global_transform, Top.get_collision_normal()))
 		elif Left.is_colliding() and FlipTime.is_stopped():
 			rpc("st", align_with_y(global_transform, Left.get_collision_normal()))
 		elif Right.is_colliding() and FlipTime.is_stopped():
 			rpc("st", align_with_y(global_transform, Right.get_collision_normal()))
 
-		# Ground Movement
-		a = (
-			Input.get_action_strength("sprint") + 1) * speed * (
-				PMesh.global_transform.basis.z * (
-					Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
-					) 
-				+ 
-				PMesh.global_transform.basis.x * (
-					Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
-					)
-			).normalized()
-		rset_unreliable("a", a)
+
 
 	# Grounded
 	if is_on_floor():
-		# Jumping
-		if is_network_master() and Input.get_action_strength("jump"):
-			rpc("j") # jump
-		# Apply friction on ground
-		if not_grappling:
-			vel *= friction
-		# Apply air resistance
-		else:
-			vel *= .95
+		# Apply hard friction, unless grappling (then softer friction)
+		vel *= friction * int(not_grappling) + .95 * int(!not_grappling)
+		vel += a
 	# Midair
 	else:
-#		# Accelerate Hook
-#		if Input.is_action_pressed("sprint"):
-#			vel += (grapple_pos - global_transform.origin).normalized() * 3
-##			vel -= CamHelp.global_transform.basis.z
-##			vel.y += 1
 		# Reduce grounded movespeed
-		a *= .125
+		vel += .125 * a # BIG TODO: fix massive acceleration if jump while moving
 
 	# apply gravity, inputs, physics
 	vel -= (int(not_grappling)) * (int(not_grappling2)) * transform.basis.y * grav
-	vel += a
 	vel = move_and_slide(vel, transform.basis.y, false, 4, .75, false)
 
 	# if grappling
@@ -206,10 +209,9 @@ func _physics_process(_delta: float) -> void:
 		if grapple_vel.length() > MAX_GRAPPLE_SPEED:
 			grapple_vel = grapple_vel.normalized() * MAX_GRAPPLE_SPEED
 		vel += grapple_vel
-		if abs((grapple_pos - global_transform.origin).length_squared()) < 64:
-			vel *= .95
-		else:
-			vel *= .999
+		# If near grappling point, slow down (and get pulled more towards the point)
+		var is_near := abs((grapple_pos - global_transform.origin).length_squared()) < 64
+		vel *= .95 * int(is_near) + .999 * int(!is_near)
 	if !not_grappling2:
 		GLine2.points[1] = Muzzle.global_transform.origin
 		var new_grapple_len := (grapple_pos2 - global_transform.origin).length()
@@ -217,14 +219,12 @@ func _physics_process(_delta: float) -> void:
 		if grapple_vel.length() > MAX_GRAPPLE_SPEED:
 			grapple_vel = grapple_vel.normalized() * MAX_GRAPPLE_SPEED
 		vel += grapple_vel
-		if abs((grapple_pos2 - global_transform.origin).length_squared()) < 64:
-			vel *= .95
-		else:
-			vel *= .999
+		# If near grappling point, slow down (and get pulled more towards the point)
+		var is_near2 := abs((grapple_pos2 - global_transform.origin).length_squared()) < 64
+		vel *= .95 * int(is_near2) + .999 * int(!is_near2)
 	
 
 func local_grapple(right: bool) -> void:
-
 	if right:
 		grapple_pos = GrappleCast.get_collision_point()
 		GLine.points[0] = grapple_pos
@@ -257,7 +257,7 @@ remotesync func c() -> void:
 	not_grappling = true
 	GLine.visible = false
 
-# Set grapple hook position
+# Set grapple hook position for 2nd hook
 remote func d(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void:
 	translation = trans
 	PMesh.rotation.y = y
@@ -268,7 +268,7 @@ remote func d(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void
 	not_grappling2 = false
 	GLine2.visible = true
 
-# Stop (no) grappling
+# Stop (no) grappling for 2nd hook
 remotesync func e() -> void:
 	not_grappling2 = true
 	GLine2.visible = false
@@ -306,7 +306,7 @@ remote func s(trans: Vector3, y: float, cam_help_x: float) -> void:
 # Sync transform (during flip)
 remotesync func st(gt: Transform) -> void:
 	# BIG TODO: MAKE MORE EFFICIENT BY ONLY SENDING NORMAL
-#	global_transform = gt
+#	vel = Vector3.ZERO
 	tween.interpolate_property(self, "global_transform", global_transform, gt, .25, Tween.TRANS_SINE)
 	tween.start()
 	FlipTime.start()
@@ -331,7 +331,7 @@ remotesync func v() -> void:
 
 # When other person calls this, send over my info
 remote func req_syn() -> void:
-	_on_Sync_timeout()
+	_sync_timeout()
 
 
 # Return rotated XFORM where its new normal is NEW_Y
@@ -347,7 +347,6 @@ func align_with_y(xform: Transform, new_y: Vector3) -> Transform:
 		xform.basis.z = xform.basis.x.cross(new_y)
 	xform.basis.y = new_y
 	xform.basis = xform.basis.orthonormalized()
-	
 #	print("NEW XFORM")
 #	print(xform.basis.x)
 #	print(xform.basis.y)
@@ -355,5 +354,5 @@ func align_with_y(xform: Transform, new_y: Vector3) -> Transform:
 	return xform
 
 # Sync position/aim every X seconds
-func _on_Sync_timeout():
+func _sync_timeout():
 	rpc("s", translation, PMesh.rotation.y, CamHelp.rotation.x)

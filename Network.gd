@@ -1,7 +1,7 @@
 extends Node
 
 const PORT := 8070
-const GAME_SCENE := "res://Scn/Game.tscn"
+const GAME_SCENE := "res://Game.tscn"
 const GAME_PATH := "/root/Game"
 var players := {}
 
