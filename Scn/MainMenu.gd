@@ -27,14 +27,13 @@ func setup_graphics_options(gfx_control: Control) -> void:
 				button.select(min(G.get(setting), button.get_item_count() - 1))
 
 func gfx_changed(index: int, setting: String, button: OptionButton) -> void:
-	print(index, setting)
 	if setting == "Overall":
 		for option in ALL_GFX_OPTIONS:
-			index = min(index, button.get_item_count() - 1)
-			G.set(option, index) # So that we don't go overbounds
+			index = min(index, get(option).get_item_count() - 1) # So that we don't go overbounds
+			G.set(option, index)
 			get(option).select(index)
 	else:
-		G.set(setting, index)
+		G.set(setting, min(index, button.get_item_count() - 1))
 
 # Add all strings from OPTIONS as options for BUTTON
 func add_options(button: OptionButton, options: PoolStringArray) -> void:

@@ -14,5 +14,4 @@ func _ready():
 		G.HIGH:
 			sun.directional_shadow_mode = DirectionalLight.SHADOW_PARALLEL_4_SPLITS
 
-	if G.glow != G.OFF:
-		environment.glow_enabled = true
+	environment.glow_enabled = G.glow != G.OFF
