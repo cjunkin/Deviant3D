@@ -1,12 +1,22 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://Font/Typpori_Big.tres" type="DynamicFont" id=1]
-[ext_resource path="res://Scn/Text/Text3DMaterial.tres" type="Material" id=2]
+[ext_resource path="res://Font/Typori_Reg.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Scn/Text/Text3D.gd" type="Script" id=2]
 
 [sub_resource type="QuadMesh" id=1]
 size = Vector2( 3, 3 )
 
+[sub_resource type="ViewportTexture" id=2]
+viewport_path = NodePath("Viewport")
+
+[sub_resource type="SpatialMaterial" id=3]
+resource_local_to_scene = true
+flags_transparent = true
+flags_unshaded = true
+albedo_texture = SubResource( 2 )
+
 [node name="Text" type="Spatial"]
+script = ExtResource( 2 )
 
 [node name="Viewport" type="Viewport" parent="."]
 size = Vector2( 4000, 4000 )
@@ -18,26 +28,13 @@ render_target_v_flip = true
 gui_disable_input = true
 
 [node name="Label" type="Label" parent="Viewport"]
-margin_left = 1024.0
-margin_top = -1000.0
-margin_right = 1172.0
-margin_bottom = -692.0
+margin_right = 181.0
+margin_bottom = 39.0
 rect_scale = Vector2( 20, 20 )
 custom_fonts/font = ExtResource( 1 )
-text = "3"
-align = 1
-
-[node name="Label2" type="Label" parent="Viewport"]
-visible = false
-margin_left = 1024.0
-margin_top = 1900.0
-margin_right = 1167.0
-margin_bottom = 2208.0
-rect_scale = Vector2( 8, 8 )
-custom_fonts/font = ExtResource( 1 )
-text = "2"
+text = "WASD, E, X, Q"
 align = 1
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
 mesh = SubResource( 1 )
-material/0 = ExtResource( 2 )
+material/0 = SubResource( 3 )

@@ -72,16 +72,19 @@ cast_to = Vector3( 0, 2, 0 )
 
 [node name="Left" type="RayCast" parent="PMesh"]
 transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, -1.005, -2.0909e-09, 9.31323e-09 )
-enabled = true
 cast_to = Vector3( -0.25, 0, 0 )
 
 [node name="Right" type="RayCast" parent="PMesh"]
 transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, 1, 0, 0 )
-enabled = true
 cast_to = Vector3( 0.25, 0, 0 )
 
+[node name="Forward" type="RayCast" parent="PMesh"]
+transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, 0, -1.05991, -0.918334 )
+enabled = true
+cast_to = Vector3( 0, 0, -0.258 )
+
 [node name="Top" type="RayCast" parent="PMesh"]
-transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, 0, 1.5, 0 )
+transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, 0, 1.4, -0.75 )
 enabled = true
 cast_to = Vector3( 0, 0.25, 0 )
 

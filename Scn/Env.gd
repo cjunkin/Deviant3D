@@ -4,7 +4,7 @@ export (NodePath) var Sunlight
 
 func _ready():
 	var sun : DirectionalLight = get_node(Sunlight)
-	match G.lighting:
+	match G.shadows:
 		G.OFF:
 			sun.shadow_enabled = false
 		G.LOW:

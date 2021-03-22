@@ -6,7 +6,7 @@ var hosted := false
 enum {OFF, LOW, MED, HIGH}
 
 
-var lighting := HIGH
+var shadows := HIGH
 var glow := HIGH
 #var lighting := OFF
 #var glow := OFF

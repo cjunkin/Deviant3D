@@ -18,6 +18,7 @@ export var speed : float = 4 * friction
 
 onready var PMesh := $PMesh
 onready var Top : RayCast = PMesh.get_node("Top")
+onready var Forward : RayCast = PMesh.get_node("Forward")
 onready var Left : RayCast = PMesh.get_node("Left")
 onready var Right : RayCast = PMesh.get_node("Right")
 onready var CamHelp := PMesh.get_node("CamHelp")
@@ -148,6 +149,15 @@ func _physics_process(_delta: float) -> void:
 				rpc("g", translation, PMesh.rotation.y, CamHelp.rotation.x, grapple_pos)
 		elif Input.is_action_just_released("grapple"):
 			rpc("ng")
+		# Run flipping
+		if Top.is_colliding() and FlipTime.is_stopped():
+			rpc("st", align_with_y(global_transform, Top.get_collision_normal()))
+		elif Forward.is_colliding() and FlipTime.is_stopped():
+			rpc("st", align_with_y(global_transform, Forward.get_collision_normal()))
+		elif Left.is_colliding() and FlipTime.is_stopped():
+			rpc("st", align_with_y(global_transform, Left.get_collision_normal()))
+		elif Right.is_colliding() and FlipTime.is_stopped():
+			rpc("st", align_with_y(global_transform, Right.get_collision_normal()))
 
 
 		# Zoom
@@ -176,14 +186,10 @@ func _physics_process(_delta: float) -> void:
 		else:
 			vel *= .999
 		
-		# Run flipping
-		if Left.is_colliding() and FlipTime.is_stopped():
-			rpc("st", align_with_y(global_transform, Left.get_collision_normal()))
-		elif Right.is_colliding() and FlipTime.is_stopped():
-			rpc("st", align_with_y(global_transform, Right.get_collision_normal()))
-		elif Top.is_colliding() and FlipTime.is_stopped():
-			rpc("st", align_with_y(global_transform, Top.get_collision_normal()))
-	# jumping
+
+
+	
+	# Grounded
 	if is_on_floor():
 		if is_network_master():
 			# Movement
@@ -197,21 +203,23 @@ func _physics_process(_delta: float) -> void:
 						Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 						)
 				).normalized()
+			rset_unreliable("a", a)
+			# Jumping
 			if Input.get_action_strength("jump"):
 				rpc("j") # jump
 
-
-			rset_unreliable("a", a)
 		if not_grappling:
 			vel *= friction
 		else:
 			vel *= .95
+	# Midair
 	else:
 		a *= .125
-		if Input.is_action_pressed("sprint"):
-			vel += (grapple_pos - global_transform.origin).normalized() * 3
-#			vel -= CamHelp.global_transform.basis.z
-#			vel.y += 1
+#		# Hook Accel
+#		if Input.is_action_pressed("sprint"):
+#			vel += (grapple_pos - global_transform.origin).normalized() * 3
+##			vel -= CamHelp.global_transform.basis.z
+##			vel.y += 1
 
 
 # Stop (no) grappling

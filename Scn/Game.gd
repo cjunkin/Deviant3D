@@ -26,6 +26,8 @@ func _ready()->void:
 		var e : Particles = exp_s.instance()
 		explosions.append(e)
 		add_child(e)
+	for child in get_tree().get_root().get_children():
+		print(child.name)
 #	$Enemy.set_target(players[0])
 #	$Enemy2.set_target(players[0])
 #	$Enemy3.set_target(players[0])

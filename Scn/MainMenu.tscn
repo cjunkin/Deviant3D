@@ -23,23 +23,39 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Menu01" type="Sprite" parent="."]
+[node name="BG" type="Sprite" parent="."]
 position = Vector2( 641.27, 359.82 )
 texture = ExtResource( 4 )
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="Blur" type="ColorRect" parent="."]
 material = ExtResource( 6 )
-margin_right = 1286.0
-margin_bottom = 722.0
+margin_left = -52.0
+margin_top = -25.0
+margin_right = 1299.0
+margin_bottom = 744.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="."]
-margin_left = 323.888
-margin_top = 101.598
-margin_right = 914.888
-margin_bottom = 178.598
+[node name="Menu" type="VBoxContainer" parent="."]
+margin_left = 115.0
+margin_top = 28.0
+margin_right = 1162.0
+margin_bottom = 642.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Title" type="CenterContainer" parent="Menu"]
+margin_right = 1047.0
+margin_bottom = 256.0
+size_flags_vertical = 3
+
+[node name="Txt" type="Label" parent="Menu/Title"]
+margin_left = 360.0
+margin_top = 89.0
+margin_right = 686.0
+margin_bottom = 166.0
 custom_fonts/font = SubResource( 1 )
 text = "Deviant 3D"
 align = 1
@@ -47,35 +63,134 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Host" type="Button" parent="."]
-margin_left = 205.061
-margin_top = 299.814
-margin_right = 453.061
-margin_bottom = 401.814
+[node name="PlayMargin" type="MarginContainer" parent="Menu"]
+margin_top = 260.0
+margin_right = 1047.0
+margin_bottom = 516.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Play" type="HBoxContainer" parent="Menu/PlayMargin"]
+margin_top = 90.0
+margin_right = 1047.0
+margin_bottom = 166.0
+size_flags_vertical = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Host" type="Button" parent="Menu/PlayMargin/Play"]
+margin_right = 337.0
+margin_bottom = 76.0
+size_flags_horizontal = 3
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Host"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Join" type="Button" parent="."]
-margin_left = 804.969
-margin_top = 302.173
-margin_right = 1052.97
-margin_bottom = 404.173
+[node name="Center" type="CenterContainer" parent="Menu/PlayMargin/Play"]
+margin_left = 341.0
+margin_right = 705.0
+margin_bottom = 76.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.08
+
+[node name="Spinner" parent="Menu/PlayMargin/Play/Center" instance=ExtResource( 5 )]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 144.0
+margin_top = 0.0
+margin_right = 220.0
+margin_bottom = 76.0
+rect_min_size = Vector2( 76, 76 )
+rect_scale = Vector2( 1, 1 )
+rect_pivot_offset = Vector2( 38, 38 )
+expand = true
+stretch_mode = 6
+
+[node name="Join" type="Button" parent="Menu/PlayMargin/Play"]
+margin_left = 709.0
+margin_right = 1047.0
+margin_bottom = 76.0
+size_flags_horizontal = 3
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Join"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Spinner" parent="." instance=ExtResource( 5 )]
-visible = false
-margin_left = -37.3986
-margin_top = 121.115
-margin_right = 38.6014
-margin_bottom = 197.115
-rect_pivot_offset = Vector2( 38, 38 )
-expand = true
-[connection signal="button_up" from="Host" to="." method="_on_Host_button_up"]
-[connection signal="button_up" from="Join" to="." method="_on_Join_button_up"]
+[node name="Gfx" type="VBoxContainer" parent="Menu"]
+margin_top = 520.0
+margin_right = 1047.0
+margin_bottom = 614.0
+custom_constants/separation = 16
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Menu/Gfx"]
+margin_right = 1047.0
+margin_bottom = 39.0
+text = "Graphics Settings:"
+align = 1
+
+[node name="Options" type="HBoxContainer" parent="Menu/Gfx"]
+margin_top = 55.0
+margin_right = 1047.0
+margin_bottom = 94.0
+custom_constants/separation = 64
+
+[node name="Overall" type="HBoxContainer" parent="Menu/Gfx/Options"]
+margin_right = 306.0
+margin_bottom = 39.0
+size_flags_horizontal = 3
+
+[node name="Txt" type="Label" parent="Menu/Gfx/Options/Overall"]
+margin_right = 129.0
+margin_bottom = 39.0
+text = "Overall "
+
+[node name="Button" type="OptionButton" parent="Menu/Gfx/Options/Overall"]
+margin_left = 133.0
+margin_right = 306.0
+margin_bottom = 39.0
+size_flags_horizontal = 3
+
+[node name="shadow" type="HBoxContainer" parent="Menu/Gfx/Options"]
+margin_left = 370.0
+margin_right = 676.0
+margin_bottom = 39.0
+size_flags_horizontal = 3
+
+[node name="Txt" type="Label" parent="Menu/Gfx/Options/shadow"]
+margin_right = 139.0
+margin_bottom = 39.0
+text = "Shadows "
+
+[node name="Button" type="OptionButton" parent="Menu/Gfx/Options/shadow"]
+margin_left = 143.0
+margin_right = 306.0
+margin_bottom = 39.0
+size_flags_horizontal = 3
+
+[node name="glow" type="HBoxContainer" parent="Menu/Gfx/Options"]
+margin_left = 740.0
+margin_right = 1047.0
+margin_bottom = 39.0
+size_flags_horizontal = 3
+
+[node name="Txt" type="Label" parent="Menu/Gfx/Options/glow"]
+margin_right = 82.0
+margin_bottom = 39.0
+text = "Glow "
+
+[node name="Button" type="OptionButton" parent="Menu/Gfx/Options/glow"]
+margin_left = 86.0
+margin_right = 307.0
+margin_bottom = 39.0
+size_flags_horizontal = 3
+[connection signal="button_up" from="Menu/PlayMargin/Play/Host" to="." method="_on_Host_button_up"]
+[connection signal="button_up" from="Menu/PlayMargin/Play/Join" to="." method="_on_Join_button_up"]
