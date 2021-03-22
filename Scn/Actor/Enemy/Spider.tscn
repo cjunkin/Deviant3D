@@ -11,4 +11,4 @@ tip_bone = "5_l_ik"
 target_node = NodePath("../../../Position3D")
 
 [node name="Position3D" type="Position3D" parent="." index="1"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 2, 3 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.47989, 3.35716, -5.54092 )

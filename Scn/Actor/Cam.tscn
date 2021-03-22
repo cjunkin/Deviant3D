@@ -9,5 +9,5 @@ margin = 0.5
 
 [node name="Cam" type="Camera" parent="."]
 current = true
-far = 200.0
+far = 400.0
 script = ExtResource( 1 )

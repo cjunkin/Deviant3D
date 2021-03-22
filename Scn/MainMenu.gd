@@ -3,6 +3,7 @@ extends Control
 onready var overall_gfx := $Menu/Gfx/Options/Overall/Button
 onready var shadows := $Menu/Gfx/Options/shadows/Button
 onready var glow := $Menu/Gfx/Options/glow/Button
+onready var spinner := $Menu/PlayMargin/Play/Center/Spinner
 
 const STANDARD := PoolStringArray(["Off", "Low", "Medium", "High"])
 const BINARY := PoolStringArray(["Off", "On"])
@@ -20,20 +21,21 @@ func setup_graphics_options(gfx_control: Control) -> void:
 		if child is HBoxContainer:
 			var button : OptionButton = child.get_node("Button")
 			var setting : String = child.name
-			button.connect("item_selected", self, "gfx_changed", [setting, button])
+			if (button.connect("item_selected", self, "gfx_changed", [setting, button]) != OK):
+				print("COULDN'T CONNECT " + setting)
 			if setting == "Overall":
 				button.select(3)
 			else:
-				button.select(min(G.get(setting), button.get_item_count() - 1))
+				button.select(int(min(G.get(setting), button.get_item_count() - 1)))
 
 func gfx_changed(index: int, setting: String, button: OptionButton) -> void:
 	if setting == "Overall":
 		for option in ALL_GFX_OPTIONS:
-			index = min(index, get(option).get_item_count() - 1) # So that we don't go overbounds
+			index = int(min(index, get(option).get_item_count() - 1)) # So that we don't go overbounds
 			G.set(option, index)
 			get(option).select(index)
 	else:
-		G.set(setting, min(index, button.get_item_count() - 1))
+		G.set(setting, int(min(index, button.get_item_count() - 1)))
 
 # Add all strings from OPTIONS as options for BUTTON
 func add_options(button: OptionButton, options: PoolStringArray) -> void:

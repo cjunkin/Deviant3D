@@ -1,6 +1,8 @@
 extends Node
 
 const PORT := 8070
+const GAME_SCENE := "res://Scn/Game.tscn"
+const GAME_PATH := "/root/Game"
 var players := {}
 
 func host() -> void:
@@ -12,14 +14,17 @@ func host() -> void:
 	get_tree().set_network_peer(peer)
 	
 	# Choose what to do on connect/disconnect
-	get_tree().connect("network_peer_connected", self, "player_connected")
-	get_tree().connect("network_peer_disconnected", self, "player_disconnected")
+	if get_tree().connect("network_peer_connected", self, "player_connected") != OK:
+		print("ERROR: CAN'T HANDLE OTHERS CONNECTING, CHECK NETWORK.GD")
+	if get_tree().connect("network_peer_disconnected", self, "player_disconnected") != OK:
+		print("ERROR: CAN'T HANDLE OTHERS DISCONNECTING, CHECK NETWORK.GD")
 	
 	# Load game
-#	var world = load("res://Scn/Game.tscn").instance()
+#	var world = load(GAME_SCENE).instance()
 #	get_tree().get_root().add_child(world)
 #	get_node("/root/MainMenu").queue_free()
-	get_tree().change_scene("res://Scn/Game.tscn")
+	if get_tree().change_scene(GAME_SCENE) != OK:
+		print("ERROR: COULDN'T LOAD GAME")
 
 func join() -> void:
 	# Standard
@@ -28,27 +33,28 @@ func join() -> void:
 	get_tree().set_network_peer(peer)
 	
 	# Wait until we connect to server to load game
-	get_node("/root/MainMenu/Spinner").show()
+	get_node("/root/MainMenu").spinner.show()
 	yield(get_tree(), "connected_to_server")
-	get_tree().change_scene("res://Scn/Game.tscn")
+	if get_tree().change_scene(GAME_SCENE) != OK:
+		print("ERROR: COULDN'T LOAD GAME")
 
 remotesync func register(id: int) -> void:
 	if not id in players:
 		# if player isn't already there
 		players[id] = 0
-		get_node("/root/Game").spawn(id)
+		get_node(GAME_PATH).spawn(id)
 
 func player_connected(id: int) -> void:
 	for pid in players:
 		# spawn all other players on our new guy
-		get_node("/root/Game").rpc_id(id, "spawn", pid)
+		get_node(GAME_PATH).rpc_id(id, "spawn", pid)
 	# spawn him on everyone else
 	rpc("register", id)
 
 remotesync func unregister(id: int) -> void:
 	if players.erase(id):
 		# if player is there
-		get_node("/root/Game").get_node(str(id)).queue_free()
+		get_node(GAME_PATH).get_node(str(id)).queue_free()
 
 func player_disconnected(id: int) -> void:
 	rpc("unregister", id)
