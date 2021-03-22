@@ -1,7 +1,7 @@
 class_name Game
 extends Spatial
 
-const num_projectiles := 8
+const num_projectiles := 32
 const num_explosions := 8
 #const num_laser_audio := 8
 
