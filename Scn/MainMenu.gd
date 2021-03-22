@@ -1,29 +1,40 @@
 extends Control
 
 onready var overall_gfx := $Menu/Gfx/Options/Overall/Button
-onready var shadows := $Menu/Gfx/Options/shadow/Button
+onready var shadows := $Menu/Gfx/Options/shadows/Button
 onready var glow := $Menu/Gfx/Options/glow/Button
 
 const STANDARD := PoolStringArray(["Off", "Low", "Medium", "High"])
 const BINARY := PoolStringArray(["Off", "On"])
+const ALL_GFX_OPTIONS := PoolStringArray(["shadows", "glow"])
 
 func _ready() -> void:
-	setup_graphics_options($Menu/Gfx/Options)
 	add_options(overall_gfx, PoolStringArray(["Potato", "Low", "Medium", "High"]))
 	add_options(shadows, STANDARD)
 	add_options(glow, BINARY)
+	setup_graphics_options($Menu/Gfx/Options)
+
 
 func setup_graphics_options(gfx_control: Control) -> void:
 	for child in gfx_control.get_children():
 		if child is HBoxContainer:
 			var button : OptionButton = child.get_node("Button")
-			button.connect("item_selected", self, "gfx_changed", [button])
+			var setting : String = child.name
+			button.connect("item_selected", self, "gfx_changed", [setting, button])
+			if setting == "Overall":
+				button.select(3)
+			else:
+				button.select(min(G.get(setting), button.get_item_count() - 1))
 
-func gfx_changed(index: int, button: OptionButton) -> void:
-	var setting: String = button.get_item_text(index)
-	print(button.name, setting)
-	G.set(setting, index)
-	print(G.get(setting))
+func gfx_changed(index: int, setting: String, button: OptionButton) -> void:
+	print(index, setting)
+	if setting == "Overall":
+		for option in ALL_GFX_OPTIONS:
+			index = min(index, button.get_item_count() - 1)
+			G.set(option, index) # So that we don't go overbounds
+			get(option).select(index)
+	else:
+		G.set(setting, index)
 
 # Add all strings from OPTIONS as options for BUTTON
 func add_options(button: OptionButton, options: PoolStringArray) -> void:

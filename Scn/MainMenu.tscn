@@ -159,18 +159,18 @@ margin_right = 306.0
 margin_bottom = 39.0
 size_flags_horizontal = 3
 
-[node name="shadow" type="HBoxContainer" parent="Menu/Gfx/Options"]
+[node name="shadows" type="HBoxContainer" parent="Menu/Gfx/Options"]
 margin_left = 370.0
 margin_right = 676.0
 margin_bottom = 39.0
 size_flags_horizontal = 3
 
-[node name="Txt" type="Label" parent="Menu/Gfx/Options/shadow"]
+[node name="Txt" type="Label" parent="Menu/Gfx/Options/shadows"]
 margin_right = 139.0
 margin_bottom = 39.0
 text = "Shadows "
 
-[node name="Button" type="OptionButton" parent="Menu/Gfx/Options/shadow"]
+[node name="Button" type="OptionButton" parent="Menu/Gfx/Options/shadows"]
 margin_left = 143.0
 margin_right = 306.0
 margin_bottom = 39.0
