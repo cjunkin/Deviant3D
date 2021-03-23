@@ -47,6 +47,7 @@ onready var Hitbox := $Hitbox
 onready var tween := $Tween
 
 func _ready() -> void:
+	# TODO: implement wall climb (maybe not)
 #	Engine.time_scale = .1
 	translation = Vector3(7 + rand_range(-2, 2), 17, -14 + rand_range(-2, 2))
 	if is_network_master():
@@ -65,7 +66,8 @@ func _ready() -> void:
 		add_child(sync_timer)
 		sync_timer.process_mode = Timer.TIMER_PROCESS_PHYSICS
 		sync_timer.wait_time = 4
-		sync_timer.connect("timeout", self, "_sync_timeout")
+		if sync_timer.connect("timeout", self, "_sync_timeout") != OK:
+			print("ERROR: COULDN'T SETUP PERIODIC SYNC")
 		sync_timer.start(0)
 		
 		G.current_player = self
@@ -146,9 +148,9 @@ func _input(event: InputEvent) -> void:
 
 	# Crouching
 	if event.is_action_pressed("crouch"):
-		rpc("v")
-	elif event.is_action_pressed("crouch"):
-		rpc("u")
+		rpc("v") # crouch
+	elif event.is_action_released("crouch"):
+		rpc("u") # uncrouch
 
 #		# Accelerate Hook
 #		if Input.is_action_pressed("sprint"):
@@ -331,7 +333,8 @@ remotesync func v() -> void:
 
 # When other person calls this, send over my info
 remote func req_syn() -> void:
-	_sync_timeout()
+	rpc("st", transform)
+	rpc("s", translation, PMesh.rotation.y, CamHelp.rotation.x)
 
 
 # Return rotated XFORM where its new normal is NEW_Y

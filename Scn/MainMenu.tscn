@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scn/MainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Theme/main_theme.tres" type="Theme" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Art/Menu01.png" type="Texture" id=4]
 [ext_resource path="res://Scn/Menu/Spinner/Spinner.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Shader/BlurShader.tres" type="Material" id=6]
+[ext_resource path="res://Font/LTBulletin-Medium.ttf" type="DynamicFontData" id=7]
 
 [sub_resource type="DynamicFont" id=1]
 size = 64
@@ -13,6 +14,12 @@ outline_size = 6
 outline_color = Color( 0, 0, 0, 1 )
 use_mipmaps = true
 font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 24
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 7 )
 
 [node name="MainMenu" type="Control"]
 anchor_right = 1.0
@@ -53,14 +60,30 @@ margin_right = 1047.0
 margin_bottom = 254.0
 size_flags_vertical = 3
 
-[node name="Txt" type="Label" parent="Menu/Title"]
+[node name="VBox" type="VBoxContainer" parent="Menu/Title"]
 margin_left = 360.0
-margin_top = 88.0
+margin_top = 72.0
 margin_right = 686.0
-margin_bottom = 165.0
+margin_bottom = 181.0
+
+[node name="Txt" type="Label" parent="Menu/Title/VBox"]
+margin_right = 326.0
+margin_bottom = 77.0
 custom_fonts/font = SubResource( 1 )
 text = "Deviant 3D"
 align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Txt2" type="Label" parent="Menu/Title/VBox"]
+margin_top = 81.0
+margin_right = 326.0
+margin_bottom = 109.0
+custom_fonts/font = SubResource( 2 )
+text = "© 2021 Calvin Wong "
+align = 1
+valign = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }

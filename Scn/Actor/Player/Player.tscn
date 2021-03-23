@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Shader/flexible_toon.shader" type="Shader" id=1]
 [ext_resource path="res://Scn/Actor/Player/Player.gd" type="Script" id=2]
@@ -26,6 +26,16 @@ shader_param/rim_color = Color( 1, 1, 1, 1 )
 shader_param/use_ramp = false
 
 [sub_resource type="CapsuleShape" id=3]
+
+[sub_resource type="SpatialMaterial" id=4]
+flags_unshaded = true
+flags_vertex_lighting = true
+albedo_color = Color( 1, 0.701961, 0, 1 )
+
+[sub_resource type="SpatialMaterial" id=5]
+flags_unshaded = true
+flags_vertex_lighting = true
+albedo_color = Color( 0.407843, 0, 1, 1 )
 
 [node name="Player" type="KinematicBody"]
 collision_layer = 2
@@ -57,14 +67,6 @@ cast_to = Vector3( 0, 0, -400 )
 transform = Transform( 0.999848, 0.0174524, -7.62868e-10, 0, -4.37114e-08, -1, -0.0174524, 0.999848, -4.37047e-08, 0, 0, 0 )
 mesh = SubResource( 1 )
 material = SubResource( 2 )
-
-[node name="OnWall" type="RayCast" parent="PMesh"]
-transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, -2.96242e-09, 1, -0.937505 )
-cast_to = Vector3( 0, 0, -0.5 )
-
-[node name="Ledge" type="RayCast" parent="PMesh/OnWall"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5 )
-cast_to = Vector3( 0, 2, 0 )
 
 [node name="Left" type="RayCast" parent="PMesh"]
 transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, -1.005, -2.0909e-09, 9.31323e-09 )
@@ -124,12 +126,14 @@ __meta__ = {
 
 [node name="Line" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.02375, 2.02893, 3.61047 )
+material_override = SubResource( 4 )
 drawCaps = false
 drawCorners = false
 scaleTexture = false
 
 [node name="Line2" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.02375, 2.02893, 3.61047 )
+material_override = SubResource( 5 )
 drawCaps = false
 drawCorners = false
 scaleTexture = false
