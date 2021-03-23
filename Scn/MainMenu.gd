@@ -1,23 +1,28 @@
 extends Control
 
-onready var overall_gfx := $Menu/Gfx/Options/Overall/Button
-onready var shadows := $Menu/Gfx/Options/shadows/Button
-onready var glow := $Menu/Gfx/Options/glow/Button
-onready var spinner := $Menu/PlayMargin/Play/Center/Spinner
+onready var overall_gfx := $Graphics/Buttons/Options/Overall/Button
+onready var shadows := $Graphics/Buttons/Options/shadows/Button
+onready var glow := $Graphics/Buttons/Options/glow/Button
+onready var bloom := $Graphics/Buttons/Options/bloom/Button
+onready var spinner := $Menu/PlayMargin/Play/SpinCenter/Spinner
+onready var Graphics := $Graphics
+onready var Menu := $Menu
+onready var Anim := $Anim
 
 const STANDARD := PoolStringArray(["Off", "Low", "Medium", "High"])
 const BINARY := PoolStringArray(["Off", "On"])
-const ALL_GFX_OPTIONS := PoolStringArray(["shadows", "glow"]) # TODO: update graphics settings
+const ALL_GFX_OPTIONS := PoolStringArray(["shadows", "glow", "bloom"]) # TODO: more graphics settings
 # TODO: minimal theme, where graphics settings are opened in separate panel
 
 func _ready() -> void:
 	OS.set_low_processor_usage_mode(true)
 	# Add options
-	add_options(overall_gfx, PoolStringArray(["Potato", "Low", "Medium", "High", "Custom"]))
+	add_options(overall_gfx, PoolStringArray(["Potato", "Low", "Medium", "High"]))
 	add_options(shadows, STANDARD)
 	add_options(glow, BINARY)
+	add_options(bloom, BINARY)
 	# Setup signals
-	setup_graphics_options_signals($Menu/Gfx/Options, "gfx_changed")
+	setup_graphics_options_signals($Graphics/Buttons/Options, "gfx_changed")
 
 # Connects all OptionButtons under parent GFX_CONTROL to FUNCTION_NAME
 # (Note: OptionButtons must be children of an HBoxContainer under GFX_CONTROL)
@@ -50,6 +55,7 @@ func gfx_changed(index: int, setting: String, button: OptionButton) -> void:
 	# Specific setting
 	else:
 		set_setting(setting, index)
+		overall_gfx.text = "Custom"
 
 # Sets SETTING in G to INDEX (off, low, med, high), corrects overbounds INDEX
 func set_setting(setting: String, index: int) -> void:
@@ -76,3 +82,15 @@ func _on_Join_button_up() -> void:
 	OS.set_low_processor_usage_mode(false)
 	G.set_process_input(true)
 	Network.join()
+
+
+func _on_Graphics_button_up():
+	Menu.hide()
+	Graphics.show()
+	Anim.play("ChooseGfx")
+
+
+func _on_Button_button_up():
+	Menu.show()
+	Graphics.hide()
+	Anim.play_backwards("ChooseGfx")

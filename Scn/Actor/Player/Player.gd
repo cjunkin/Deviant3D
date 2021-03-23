@@ -28,13 +28,14 @@ var grapple_pos2 := Vector3.ZERO
 # Cached Nodes
 onready var CamSpring : SpringArm
 onready var Cam : Camera
-onready var PMesh := $PMesh
-onready var Top : RayCast = PMesh.get_node("Top")
-onready var Forward : RayCast = PMesh.get_node("Forward")
-onready var Left : RayCast = PMesh.get_node("Left")
-onready var Right : RayCast = PMesh.get_node("Right")
-onready var CamHelp := PMesh.get_node("CamHelp")
-onready var Gun := CamHelp.get_node("Gun")
+onready var CamX := $CamX
+onready var PMesh := CamX.get_node("PMesh")
+onready var Top : RayCast = CamX.get_node("Top")
+onready var Forward : RayCast = CamX.get_node("Forward")
+onready var Left : RayCast = CamX.get_node("Left")
+onready var Right : RayCast = CamX.get_node("Right")
+onready var CamY := CamX.get_node("CamY")
+onready var Gun := CamY.get_node("Gun")
 onready var Sfx := Gun.get_node("Sfx")
 onready var Muzzle := Gun.get_node("Muzzle")
 onready var GrappleCast = Muzzle.get_node("GrappleCast")
@@ -54,9 +55,9 @@ func _ready() -> void:
 		# Regular cam
 		if OS.get_name() != "Android" and OS.get_name() != "iOS":
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-			CamHelp.add_child(load("res://Scn/Actor/Cam.tscn").instance())
-			Cam = CamHelp.get_node("Spring/Cam")
-			CamSpring = CamHelp.get_node("Spring")
+			CamY.add_child(load("res://Scn/Actor/Cam.tscn").instance())
+			Cam = CamY.get_node("Spring/Cam")
+			CamSpring = CamY.get_node("Spring")
 		# AR CAM
 		else:
 			add_child(load("res://Scn/AR/ARVROrigin.tscn").instance())
@@ -86,11 +87,11 @@ func _input(event: InputEvent) -> void:
 	# Ground Movement
 	a = (
 		Input.get_action_strength("sprint") + 1) * speed * (
-			PMesh.global_transform.basis.z * (
+			CamX.global_transform.basis.z * (
 				Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
 				) 
 			+ 
-			PMesh.global_transform.basis.x * (
+			CamX.global_transform.basis.x * (
 				Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 				)
 		).normalized()
@@ -99,9 +100,9 @@ func _input(event: InputEvent) -> void:
 		accel = a
 		rset("a", a)
 	# Look
-	if event is InputEventMouseMotion: # Rotate Camera
-		PMesh.rotate_y(event.relative.x * SENS_X) # Side to side // (transform.basis.y, 
-		CamHelp.rotation.x = clamp(CamHelp.rotation.x + (event.relative.y * SENS_Y), -PI/2, PI/2) # Up down
+	if event is InputEventMouseMotion:
+		CamX.rotate_y(event.relative.x * SENS_X) # Side to side // (transform.basis.y, 
+		CamY.rotation.x = clamp(CamY.rotation.x + (event.relative.y * SENS_Y), -PI/2, PI/2) # Up down
 		rpc_unreliable("r", event.relative)
 	# Switch camera sides
 	if event.is_action_pressed("switch_tps"):
@@ -155,15 +156,15 @@ func _input(event: InputEvent) -> void:
 #		# Accelerate Hook
 #		if Input.is_action_pressed("sprint"):
 #			vel += (grapple_pos - global_transform.origin).normalized() * 3
-##			vel -= CamHelp.global_transform.basis.z
+##			vel -= CamY.global_transform.basis.z
 ##			vel.y += 1
 
 func _physics_process(_delta: float) -> void:
-	# collision with boxes
-	for index in get_slide_count():
-		var collision := get_slide_collision(index)
-		if collision.collider is RigidBody:
-			collision.collider.apply_central_impulse(-collision.normal * .05 * vel.length())
+#	# collision with boxes
+#	for index in get_slide_count():
+#		var collision := get_slide_collision(index)
+#		if collision.collider is RigidBody:
+#			collision.collider.apply_central_impulse(-collision.normal * .05 * vel.length())
 
 	if is_network_master():
 		# Set crosshair
@@ -179,15 +180,13 @@ func _physics_process(_delta: float) -> void:
 
 		# "Run, the game" flipping
 		if Forward.is_colliding() and FlipTime.is_stopped():
-			rpc("st", align_with_y(global_transform, Forward.get_collision_normal()))
+			rpc("st", Forward.get_collision_normal())
 		elif Top.is_colliding() and FlipTime.is_stopped():
-			rpc("st", align_with_y(global_transform, Top.get_collision_normal()))
+			rpc("st", Top.get_collision_normal())
 		elif Left.is_colliding() and FlipTime.is_stopped():
-			rpc("st", align_with_y(global_transform, Left.get_collision_normal()))
+			rpc("st", Left.get_collision_normal())
 		elif Right.is_colliding() and FlipTime.is_stopped():
-			rpc("st", align_with_y(global_transform, Right.get_collision_normal()))
-
-
+			rpc("st", Right.get_collision_normal())
 
 	# Grounded
 	if is_on_floor():
@@ -203,28 +202,31 @@ func _physics_process(_delta: float) -> void:
 	vel -= (int(not_grappling)) * (int(not_grappling2)) * transform.basis.y * grav
 	vel = move_and_slide(vel, transform.basis.y, false, 4, .75, false)
 
+
+	var air_resistance := 1.0
+	var air_resistance2 := 1.0
 	# if grappling
 	if !not_grappling:
 		GLine.points[1] = Muzzle.global_transform.origin
 		var new_grapple_len := (grapple_pos - global_transform.origin).length()
-		var grapple_vel := (global_transform.origin - grapple_pos) / new_grapple_len * min(0, (1 - new_grapple_len)) * .5
+		var grapple_vel := (global_transform.origin - grapple_pos) / new_grapple_len * min(0, (1 - new_grapple_len)) * .25
 		if grapple_vel.length() > MAX_GRAPPLE_SPEED:
 			grapple_vel = grapple_vel.normalized() * MAX_GRAPPLE_SPEED
 		vel += grapple_vel
 		# If near grappling point, slow down (and get pulled more towards the point)
 		var is_near := abs((grapple_pos - global_transform.origin).length_squared()) < 64
-		vel *= .95 * int(is_near) + .999 * int(!is_near)
+		air_resistance = .95 * int(is_near) + .999 * int(!is_near)
 	if !not_grappling2:
 		GLine2.points[1] = Muzzle.global_transform.origin
 		var new_grapple_len := (grapple_pos2 - global_transform.origin).length()
-		var grapple_vel := (global_transform.origin - grapple_pos2) / new_grapple_len * min(0, (1 - new_grapple_len)) * .5
+		var grapple_vel := (global_transform.origin - grapple_pos2) / new_grapple_len * min(0, (1 - new_grapple_len)) * .25
 		if grapple_vel.length() > MAX_GRAPPLE_SPEED:
 			grapple_vel = grapple_vel.normalized() * MAX_GRAPPLE_SPEED
 		vel += grapple_vel
 		# If near grappling point, slow down (and get pulled more towards the point)
-		var is_near2 := abs((grapple_pos2 - global_transform.origin).length_squared()) < 64
-		vel *= .95 * int(is_near2) + .999 * int(!is_near2)
-	
+		var is_near2 := int(abs((grapple_pos2 - global_transform.origin).length_squared()) < 64)
+		air_resistance2 = .95 * int(is_near2) + .999 * int(!is_near2)
+	vel *= air_resistance*air_resistance2 
 
 func local_grapple(right: bool) -> void:
 	if right:
@@ -233,20 +235,20 @@ func local_grapple(right: bool) -> void:
 		GLine.points[1] = Muzzle.global_transform.origin
 		GLine.visible = true
 		not_grappling = false
-		rpc("b", translation, PMesh.rotation.y, CamHelp.rotation.x, grapple_pos)
+		rpc("b", translation, CamX.rotation.y, CamY.rotation.x, grapple_pos)
 	else:
 		grapple_pos2 = GrappleCast.get_collision_point()
 		GLine2.points[0] = grapple_pos2
 		GLine2.points[1] = Muzzle.global_transform.origin
 		GLine2.visible = true
 		not_grappling2 = false
-		rpc("d", translation, PMesh.rotation.y, CamHelp.rotation.x, grapple_pos2)
+		rpc("d", translation, CamX.rotation.y, CamY.rotation.x, grapple_pos2)
 
 # Set grapple hook position
 remote func b(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void:
 	translation = trans
-	PMesh.rotation.y = y
-	CamHelp.rotation.x = cam_help_x
+	CamX.rotation.y = y
+	CamY.rotation.x = cam_help_x
 	grapple_pos = pos
 
 	GLine.points[0] = pos
@@ -262,8 +264,8 @@ remotesync func c() -> void:
 # Set grapple hook position for 2nd hook
 remote func d(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void:
 	translation = trans
-	PMesh.rotation.y = y
-	CamHelp.rotation.x = cam_help_x
+	CamX.rotation.y = y
+	CamY.rotation.x = cam_help_x
 	grapple_pos2 = pos
 	GLine2.points[0] = pos
 	GLine2.points[1] = Muzzle.global_transform.origin
@@ -296,20 +298,26 @@ remotesync func j() -> void:
 
 # Aim
 remote func r(rot: Vector2) -> void:
-	PMesh.rotate_y(rot.x * SENS_X) # Side to side // (transform.basis.y, 
-	CamHelp.rotation.x = clamp(CamHelp.rotation.x + (rot.y * SENS_Y), -PI/2, PI/2) # Up down
+	CamX.rotate_y(rot.x * SENS_X) # Side to side // (transform.basis.y, 
+	CamY.rotation.x = clamp(CamY.rotation.x + (rot.y * SENS_Y), -PI/2, PI/2) # Up down
 
 # Sync transform
 remote func s(trans: Vector3, y: float, cam_help_x: float) -> void:
 	translation = trans
-	PMesh.rotation.y = y
-	CamHelp.rotation.x = cam_help_x
+	CamX.rotation.y = y
+	CamY.rotation.x = cam_help_x
 
 # Sync transform (during flip)
-remotesync func st(gt: Transform) -> void:
-	# BIG TODO: MAKE MORE EFFICIENT BY ONLY SENDING NORMAL
+remotesync func st(normal: Vector3) -> void:
 #	vel = Vector3.ZERO
-	tween.interpolate_property(self, "global_transform", global_transform, gt, .25, Tween.TRANS_SINE)
+	tween.interpolate_property(
+		self, 
+		"global_transform", 
+		global_transform, 
+		align_with_y(global_transform, normal), 
+		.25, 
+		Tween.TRANS_SINE
+		)
 	tween.start()
 	FlipTime.start()
 
@@ -334,7 +342,7 @@ remotesync func v() -> void:
 # When other person calls this, send over my info
 remote func req_syn() -> void:
 	rpc("st", transform)
-	rpc("s", translation, PMesh.rotation.y, CamHelp.rotation.x)
+	rpc("s", translation, CamX.rotation.y, CamY.rotation.x)
 	rpc("ss", -SENS_X)
 
 # Set Sensitivity
@@ -363,4 +371,4 @@ func align_with_y(xform: Transform, new_y: Vector3) -> Transform:
 
 # Sync position/aim every X seconds
 func _sync_timeout():
-	rpc("s", translation, PMesh.rotation.y, CamHelp.rotation.x)
+	rpc("s", translation, CamX.rotation.y, CamY.rotation.x)

@@ -1,13 +1,15 @@
 class_name Game
 extends Spatial
 
-const num_projectiles := 32
+const num_projectiles := 42
 const num_explosions := 8
 #const num_laser_audio := 8
+const num_grapple_sounds := 6
 
 export (PackedScene) var player_s := preload("res://Scn/Actor/Player/Player.tscn")
-export (PackedScene) var proj_s := preload("res://Scn/Projectile.tscn")
-export (PackedScene) var exp_s := preload("res://Scn/Fx/Explosion.tscn")
+# Only use this if num_proj isn't constant
+#export (PackedScene) var proj_s := preload("res://Scn/Projectile.tscn")
+#export (PackedScene) var exp_s := preload("res://Scn/Fx/Explosion.tscn")
 
 var projectiles: Array = []
 var explosions: Array = []
@@ -20,12 +22,17 @@ func _ready()->void:
 		Network.register(get_tree().get_network_unique_id())
 	G.game = self
 	for __ in range(num_projectiles):
+		var proj_s := load("res://Scn/Projectile.tscn")
 		var p : Projectile = proj_s.instance()
 		projectiles.append(p)
 	for __ in range(num_explosions):
+		var exp_s := load("res://Scn/Fx/Explosion.tscn")
 		var e : Particles = exp_s.instance()
 		explosions.append(e)
 		add_child(e)
+#	for __ in range(num_grapple_sounds):
+#		var grapple_sfx := load("res://Sfx/Slap.wav")
+#		var 
 #	for child in get_tree().get_root().get_children():
 #		print(child.name)
 #	$Enemy.set_target(players[0])

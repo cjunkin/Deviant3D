@@ -3,7 +3,7 @@
 [ext_resource path="res://Global.gd" type="Script" id=1]
 [ext_resource path="res://Scn/Menu/Blur.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Shader/BlurShader.shader" type="Shader" id=3]
-[ext_resource path="res://Theme/main_theme.tres" type="Theme" id=4]
+[ext_resource path="res://Scn/Menu/CenteredPanel.tscn" type="PackedScene" id=5]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 3 )
@@ -29,39 +29,14 @@ mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Panel" type="MarginContainer" parent="Menu"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -300.0
-margin_top = -225.0
-margin_right = 300.0
-margin_bottom = 225.0
-rect_min_size = Vector2( 600, 450 )
-mouse_filter = 1
-theme = ExtResource( 4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Menu" parent="Menu" instance=ExtResource( 5 )]
 
-[node name="Panel2" type="Panel" parent="Menu/Panel"]
-margin_right = 600.0
-margin_bottom = 450.0
-
-[node name="Buttons" type="VBoxContainer" parent="Menu/Panel"]
-margin_right = 600.0
-margin_bottom = 450.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Sensitivity" type="HBoxContainer" parent="Menu/Panel/Buttons"]
+[node name="Sensitivity" type="HBoxContainer" parent="Menu/Menu/Buttons" index="0"]
 margin_right = 600.0
 margin_bottom = 86.0
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Menu/Panel/Buttons/Sensitivity"]
+[node name="Label" type="Label" parent="Menu/Menu/Buttons/Sensitivity"]
 margin_right = 198.0
 margin_bottom = 86.0
 hint_tooltip = "Haha mouse make player aim go skrrt"
@@ -76,7 +51,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SensSlider" type="HSlider" parent="Menu/Panel/Buttons/Sensitivity"]
+[node name="SensSlider" type="HSlider" parent="Menu/Menu/Buttons/Sensitivity"]
 modulate = Color( 0.694118, 0.815686, 1, 1 )
 margin_left = 202.0
 margin_right = 600.0
@@ -89,8 +64,8 @@ max_value = 5.0
 step = 0.1
 value = 2.0
 
-[node name="Flip" type="CheckButton" parent="Menu/Panel/Buttons"]
-modulate = Color( 0.698039, 0.815686, 1, 1 )
+[node name="Flip" type="CheckButton" parent="Menu/Menu/Buttons" index="1"]
+modulate = Color( 0.705882, 0.823529, 1, 1 )
 margin_top = 90.0
 margin_right = 600.0
 margin_bottom = 177.0
@@ -101,13 +76,13 @@ pressed = true
 text = "FlipDeeDoo Activator"
 align = 1
 
-[node name="Sound" type="HBoxContainer" parent="Menu/Panel/Buttons"]
+[node name="Sound" type="HBoxContainer" parent="Menu/Menu/Buttons" index="2"]
 margin_top = 181.0
 margin_right = 600.0
 margin_bottom = 268.0
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Menu/Panel/Buttons/Sound"]
+[node name="Label" type="Label" parent="Menu/Menu/Buttons/Sound"]
 margin_right = 198.0
 margin_bottom = 87.0
 hint_tooltip = "How loud sounds are (don't break yur ears plz)"
@@ -122,7 +97,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="SSlider" type="HSlider" parent="Menu/Panel/Buttons/Sound"]
+[node name="SSlider" type="HSlider" parent="Menu/Menu/Buttons/Sound"]
 modulate = Color( 0.694118, 0.815686, 1, 1 )
 margin_left = 202.0
 margin_right = 600.0
@@ -133,13 +108,13 @@ size_flags_vertical = 3
 max_value = 1.0
 step = 0.01
 
-[node name="Music" type="HBoxContainer" parent="Menu/Panel/Buttons"]
+[node name="Music" type="HBoxContainer" parent="Menu/Menu/Buttons" index="3"]
 margin_top = 272.0
 margin_right = 600.0
 margin_bottom = 359.0
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Menu/Panel/Buttons/Music"]
+[node name="Label" type="Label" parent="Menu/Menu/Buttons/Music"]
 margin_right = 198.0
 margin_bottom = 87.0
 hint_tooltip = "Lets you disable my tunes to listen to your own, you spoons"
@@ -154,7 +129,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="MSlider" type="HSlider" parent="Menu/Panel/Buttons/Music"]
+[node name="MSlider" type="HSlider" parent="Menu/Menu/Buttons/Music"]
 modulate = Color( 0.694118, 0.815686, 1, 1 )
 margin_left = 202.0
 margin_right = 600.0
@@ -165,21 +140,23 @@ size_flags_vertical = 3
 max_value = 1.0
 step = 0.01
 
-[node name="Quit" type="Button" parent="Menu/Panel/Buttons"]
+[node name="Quit" type="Button" parent="Menu/Menu/Buttons" index="4"]
 modulate = Color( 0.698039, 0.815686, 1, 1 )
 margin_top = 363.0
 margin_right = 600.0
 margin_bottom = 450.0
 rect_min_size = Vector2( 0, 64 )
-hint_tooltip = "Exit the game (sad face)"
+hint_tooltip = "Ditch your friends"
 mouse_default_cursor_shape = 2
 size_flags_vertical = 3
-text = "Quit"
-[connection signal="mouse_exited" from="Menu/Panel/Buttons/Sensitivity/SensSlider" to="." method="_on_SensSlider_mouse_exited"]
-[connection signal="value_changed" from="Menu/Panel/Buttons/Sensitivity/SensSlider" to="." method="_on_SensSlider_value_changed"]
-[connection signal="toggled" from="Menu/Panel/Buttons/Flip" to="." method="_on_CheckBox_toggled"]
-[connection signal="mouse_exited" from="Menu/Panel/Buttons/Sound/SSlider" to="." method="_on_SSlider_mouse_exited"]
-[connection signal="value_changed" from="Menu/Panel/Buttons/Sound/SSlider" to="." method="_on_SSlider_value_changed"]
-[connection signal="mouse_exited" from="Menu/Panel/Buttons/Music/MSlider" to="." method="_on_MSlider_mouse_exited"]
-[connection signal="value_changed" from="Menu/Panel/Buttons/Music/MSlider" to="." method="_on_MSlider_value_changed"]
-[connection signal="button_up" from="Menu/Panel/Buttons/Quit" to="." method="_on_Quit_button_up"]
+text = "Quit to Main Menu"
+[connection signal="mouse_exited" from="Menu/Menu/Buttons/Sensitivity/SensSlider" to="." method="_on_SensSlider_mouse_exited"]
+[connection signal="value_changed" from="Menu/Menu/Buttons/Sensitivity/SensSlider" to="." method="_on_SensSlider_value_changed"]
+[connection signal="toggled" from="Menu/Menu/Buttons/Flip" to="." method="_on_CheckBox_toggled"]
+[connection signal="mouse_exited" from="Menu/Menu/Buttons/Sound/SSlider" to="." method="_on_SSlider_mouse_exited"]
+[connection signal="value_changed" from="Menu/Menu/Buttons/Sound/SSlider" to="." method="_on_SSlider_value_changed"]
+[connection signal="mouse_exited" from="Menu/Menu/Buttons/Music/MSlider" to="." method="_on_MSlider_mouse_exited"]
+[connection signal="value_changed" from="Menu/Menu/Buttons/Music/MSlider" to="." method="_on_MSlider_value_changed"]
+[connection signal="button_up" from="Menu/Menu/Buttons/Quit" to="." method="_on_Quit_button_up"]
+
+[editable path="Menu/Menu"]

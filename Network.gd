@@ -1,6 +1,7 @@
 extends Node
 
 const PORT := 8070
+const MENU_SCENE := "res://Scn/MainMenu.tscn"
 const GAME_SCENE := "res://Game.tscn"
 const GAME_PATH := "/root/Game"
 var players := {}
@@ -28,7 +29,7 @@ func host() -> void:
 
 func join() -> void:
 	# Standard
-	var peer = NetworkedMultiplayerENet.new()
+	var peer := NetworkedMultiplayerENet.new()
 	peer.create_client("127.0.0.1", PORT)
 	get_tree().set_network_peer(peer)
 	
@@ -58,3 +59,15 @@ remotesync func unregister(id: int) -> void:
 
 func player_disconnected(id: int) -> void:
 	rpc("unregister", id)
+
+# Disconnect and return to main menu
+func disconnect_from_server() -> void:
+	print(get_tree().is_connected("network_peer_connected", self, "player_connected"))
+	if get_tree().disconnect("network_peer_connected", self, "player_connected") != OK:
+		print("ERROR: CAN'T DISCONNECT CONNECTING, CHECK NETWORK.GD")
+	if get_tree().disconnect("network_peer_disconnected", self, "player_disconnected") != OK:
+		print("ERROR: CAN'T DISCONNECT DISCONNECTING, CHECK NETWORK.GD")
+
+	get_tree().change_scene(MENU_SCENE)
+	get_tree().network_peer.close_connection()
+	
