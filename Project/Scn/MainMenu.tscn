@@ -10,14 +10,14 @@
 [ext_resource path="res://Scn/Menu/CenteredPanel.tscn" type="PackedScene" id=8]
 [ext_resource path="res://SinusoidalAnims.gd" type="Script" id=9]
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=1]
 size = 64
 outline_size = 6
 outline_color = Color( 0, 0, 0, 1 )
 use_mipmaps = true
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=2]
 size = 24
 outline_size = 2
 outline_color = Color( 0, 0, 0, 1 )
@@ -157,7 +157,7 @@ margin_bottom = 171.0
 [node name="Txt" type="Label" parent="Menu/Title/VBox"]
 margin_right = 326.0
 margin_bottom = 77.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 1 )
 text = "Deviant 3D"
 align = 1
 __meta__ = {
@@ -168,7 +168,7 @@ __meta__ = {
 margin_top = 81.0
 margin_right = 326.0
 margin_bottom = 109.0
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 2 )
 text = "© 2021 Calvin Wong "
 align = 1
 valign = 2

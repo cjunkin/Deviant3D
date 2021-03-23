@@ -80,9 +80,9 @@ enabled = true
 cast_to = Vector3( 0.25, 0, 0 )
 
 [node name="Forward" type="RayCast" parent="CamX"]
-transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, 0, -1.21437, -0.918334 )
+transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, 0, -1.28026, -0.921797 )
 enabled = true
-cast_to = Vector3( 0, 0, -1 )
+cast_to = Vector3( 0, 0, -1.5 )
 
 [node name="Top" type="RayCast" parent="CamX"]
 transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, 0, 1.25, -0.7 )

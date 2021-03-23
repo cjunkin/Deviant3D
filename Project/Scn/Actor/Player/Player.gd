@@ -67,7 +67,7 @@ func _ready() -> void:
 		var sync_timer := Timer.new()
 		add_child(sync_timer)
 		sync_timer.process_mode = Timer.TIMER_PROCESS_PHYSICS
-		sync_timer.wait_time = 4
+		sync_timer.wait_time = 10
 		if sync_timer.connect("timeout", self, "_sync_timeout") != OK:
 			print("ERROR: COULDN'T SETUP PERIODIC SYNC")
 		sync_timer.start(0)
@@ -309,15 +309,16 @@ remote func r(rot: Vector2) -> void:
 	CamX.rotate_y(rot.x * SENS_X) # Side to side // (transform.basis.y, 
 	CamY.rotation.x = clamp(CamY.rotation.x + (rot.y * SENS_Y), -PI/2, PI/2) # Up down
 
-# Sync transform
-remote func s(trans: Vector3, y: float, cam_help_x: float) -> void:
+# Sync position/orientation
+remote func s(trans: Vector3, y: float, cam_help_x: float, velocity: Vector3) -> void:
 	translation = trans
 	CamX.rotation.y = y
 	CamY.rotation.x = cam_help_x
+	vel = velocity
 
 # Sync transform (during flip)
 remotesync func st(normal: Vector3) -> void:
-#	vel = Vector3.ZERO
+	vel *= .25
 	tween.interpolate_property(
 		self, 
 		"global_transform", 
@@ -328,6 +329,10 @@ remotesync func st(normal: Vector3) -> void:
 		)
 	tween.start()
 	FlipTime.start()
+
+# Transform
+remotesync func t(trans: Transform) -> void:
+	transform = trans
 
 # Uncrouch
 remotesync func u() -> void:
@@ -349,8 +354,8 @@ remotesync func v() -> void:
 
 # When other person calls this, send over my info
 remote func req_syn() -> void:
-	rpc("st", transform)
-	rpc("s", translation, CamX.rotation.y, CamY.rotation.x)
+	rpc("t", transform)
+	rpc("s", translation, CamX.rotation.y, CamY.rotation.x, vel)
 	rpc("ss", -SENS_X)
 
 # Set Sensitivity
@@ -379,4 +384,4 @@ func align_with_y(xform: Transform, new_y: Vector3) -> Transform:
 
 # Sync position/aim every X seconds
 func _sync_timeout():
-	rpc("s", translation, CamX.rotation.y, CamY.rotation.x)
+	rpc("s", translation, CamX.rotation.y, CamY.rotation.x, vel)

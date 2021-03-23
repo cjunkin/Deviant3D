@@ -16,10 +16,22 @@ var explosions: Array = []
 var proj_i : int = 0
 var exp_i : int = 0
 var players: Array = []
+var noise := OpenSimplexNoise.new()
 
 func _ready()->void:
+	noise.octaves = 4
+	noise.period = 20
+	noise.persistence = .8
 	if G.hosted:
+		randomize()
+		noise.seed = randi() % 1000
+		seed(noise.seed)
 		Network.register(get_tree().get_network_unique_id())
+		print(noise.seed)
+		gen_boxes()
+	else:
+		rpc("req_seed")
+
 	G.game = self
 	for __ in range(num_projectiles):
 		var proj_s := load("res://Scn/Projectile.tscn")
@@ -45,10 +57,34 @@ func _physics_process(delta: float) -> void:
 		if p.is_inside_tree():
 			p.translation += p.speed * p.transform.basis.z * delta
 #	for p in players:
-		
+#		
+
+func gen_boxes() -> void:
+	var static_box_s := load("res://Scn/StaticBox.tscn")
+	for x in range(-200, 201, 20):
+		for z in range(-200, 201, 20):
+			if (noise.get_noise_3d(x, x, z) > 0):
+				var b :CSGBox = static_box_s.instance()
+				b.translation = Vector3(x, 50 + randf() * 1000, z)
+				b.rotation = Vector3(randf(), randf(), randf()) * 2 * PI
+				add_child(b)
+
 
 # MULTIPLAYER STUFF --------------------------------------------
 
+# Request seed, should only be called on hosts
+remote func req_seed() -> void:
+	rpc("set_seed", noise.seed)
+
+# Send seed, should only be called on non-host
+remote func set_seed(s: int) -> void:
+	# To ensure only host sends it
+	if get_tree().get_rpc_sender_id() == 1:
+		noise.seed = s
+		seed(noise.seed)
+		gen_boxes()
+
+# Spawn player with id PLAYER TODO: use get_rpc_sender_id to avoid hack
 remote func spawn(id: int) -> void:
 	var p: Spatial = player_s.instance()
 	p.name = str(id)
