@@ -40,6 +40,7 @@ albedo_color = Color( 0.407843, 0, 1, 1 )
 
 [node name="Player" type="KinematicBody"]
 collision_layer = 2
+collision_mask = 7
 script = ExtResource( 2 )
 
 [node name="CamX" type="Spatial" parent="."]

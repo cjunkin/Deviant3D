@@ -16,19 +16,14 @@ var explosions: Array = []
 var proj_i : int = 0
 var exp_i : int = 0
 var players: Array = []
-var noise := OpenSimplexNoise.new()
+var SEED : int
 
 func _ready()->void:
-	noise.octaves = 4
-	noise.period = 20
-	noise.persistence = .8
 	if G.hosted:
 		randomize()
-		noise.seed = randi() % 1000
-		seed(noise.seed)
+		SEED = randi() % 1000
 		Network.register(get_tree().get_network_unique_id())
-		print(noise.seed)
-		gen_boxes()
+		gen_boxes(SEED)
 	else:
 		rpc("req_seed")
 
@@ -59,14 +54,21 @@ func _physics_process(delta: float) -> void:
 #	for p in players:
 #		
 
-func gen_boxes() -> void:
+func gen_boxes(my_seed: int) -> void:
+	var noise := OpenSimplexNoise.new()
+	noise.seed = my_seed
+	noise.octaves = 4
+	noise.period = 20
+	noise.persistence = .8
+	var rng := RandomNumberGenerator.new()
+	rng.seed = my_seed
 	var static_box_s := load("res://Scn/StaticBox.tscn")
 	for x in range(-200, 201, 20):
 		for z in range(-200, 201, 20):
 			if (noise.get_noise_3d(x, x, z) > 0):
 				var b :CSGBox = static_box_s.instance()
-				b.translation = Vector3(x, 50 + randf() * 1000, z)
-				b.rotation = Vector3(randf(), randf(), randf()) * 2 * PI
+				b.translation = Vector3(x, 50 + rng.randf() * 1000, z)
+				b.rotation = Vector3(rng.randf(), rng.randf(), rng.randf()) * 2 * PI
 				add_child(b)
 
 
@@ -74,15 +76,13 @@ func gen_boxes() -> void:
 
 # Request seed, should only be called on hosts
 remote func req_seed() -> void:
-	rpc("set_seed", noise.seed)
+	rpc("set_seed", SEED)
 
 # Send seed, should only be called on non-host
 remote func set_seed(s: int) -> void:
 	# To ensure only host sends it
 	if get_tree().get_rpc_sender_id() == 1:
-		noise.seed = s
-		seed(noise.seed)
-		gen_boxes()
+		gen_boxes(s)
 
 # Spawn player with id PLAYER TODO: use get_rpc_sender_id to avoid hack
 remote func spawn(id: int) -> void:

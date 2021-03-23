@@ -356,7 +356,7 @@ remotesync func v() -> void:
 remote func req_syn() -> void:
 	rpc("t", transform)
 	rpc("s", translation, CamX.rotation.y, CamY.rotation.x, vel)
-	rpc("ss", -SENS_X)
+	rpc("ss", -SENS_X * 1000)
 
 # Set Sensitivity
 remote func ss(sens: float) -> void:
