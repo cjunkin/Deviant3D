@@ -41,6 +41,13 @@ margin_bottom = 225.0
 rect_min_size = Vector2( 600, 450 )
 mouse_filter = 1
 theme = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel2" type="Panel" parent="Menu/Panel"]
+margin_right = 600.0
+margin_bottom = 450.0
 
 [node name="Buttons" type="VBoxContainer" parent="Menu/Panel"]
 margin_right = 600.0
