@@ -21,7 +21,7 @@ var SEED : int
 func _ready()->void:
 	if G.hosted:
 		randomize()
-		SEED = randi() % 1000
+		SEED = randi() % 2048
 		Network.register(get_tree().get_network_unique_id())
 		gen_boxes(SEED)
 	else:
@@ -40,8 +40,6 @@ func _ready()->void:
 #	for __ in range(num_grapple_sounds):
 #		var grapple_sfx := load("res://Sfx/Slap.wav")
 #		var 
-#	for child in get_tree().get_root().get_children():
-#		print(child.name)
 #	$Enemy.set_target(players[0])
 #	$Enemy2.set_target(players[0])
 #	$Enemy3.set_target(players[0])

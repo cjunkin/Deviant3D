@@ -1,13 +1,14 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Scn/StaticBox.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scn/Text/Text3D.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Art/Material/tile.svg" type="Texture" id=4]
 [ext_resource path="res://Scn/Sunlight.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scn/Env.gd" type="Script" id=6]
-[ext_resource path="res://Art/Material/tile.png" type="Texture" id=8]
+[ext_resource path="res://Shader/Grid.tres" type="Material" id=7]
 
-[sub_resource type="ProceduralSky" id=2]
+[sub_resource type="ProceduralSky" id=1]
 sky_top_color = Color( 0.196078, 0.388235, 0.847059, 1 )
 sky_horizon_color = Color( 0.545098, 0.686275, 0.811765, 1 )
 sky_curve = 0.13
@@ -15,9 +16,9 @@ ground_bottom_color = Color( 0.545098, 0.686275, 0.811765, 1 )
 ground_horizon_color = Color( 0.545098, 0.686275, 0.811765, 1 )
 sun_angle_max = 30.0
 
-[sub_resource type="Environment" id=3]
+[sub_resource type="Environment" id=2]
 background_mode = 2
-background_sky = SubResource( 2 )
+background_sky = SubResource( 1 )
 ambient_light_color = Color( 0.501961, 0.501961, 0.501961, 1 )
 ambient_light_sky_contribution = 0.25
 tonemap_mode = 2
@@ -32,11 +33,11 @@ glow_blend_mode = 1
 glow_hdr_threshold = 0.9
 glow_hdr_luminance_cap = 2.0
 
-[sub_resource type="SpatialMaterial" id=1]
+[sub_resource type="SpatialMaterial" id=3]
 flags_vertex_lighting = true
 flags_world_triplanar = true
-albedo_color = Color( 1.38, 2.28, 3, 1 )
-albedo_texture = ExtResource( 8 )
+albedo_color = Color( 2.68359, 1.38, 3, 1 )
+albedo_texture = ExtResource( 4 )
 roughness = 0.6
 uv1_scale = Vector3( 0.1, 0.1, 0.1 )
 uv1_triplanar = true
@@ -45,39 +46,9 @@ uv2_triplanar_sharpness = 0.784584
 [sub_resource type="SpatialMaterial" id=4]
 flags_vertex_lighting = true
 flags_world_triplanar = true
-albedo_color = Color( 0.88, 2, 0.54, 1 )
-albedo_texture = ExtResource( 8 )
+albedo_color = Color( 1.38, 3, 1.67109, 1 )
+albedo_texture = ExtResource( 4 )
 roughness = 0.6
-uv1_scale = Vector3( 0.1, 0.1, 0.1 )
-uv1_triplanar = true
-uv2_triplanar_sharpness = 0.784584
-
-[sub_resource type="SpatialMaterial" id=5]
-flags_vertex_lighting = true
-flags_world_triplanar = true
-albedo_color = Color( 2.42, 1.47, 0.15, 1 )
-albedo_texture = ExtResource( 8 )
-roughness = 0.6
-uv1_scale = Vector3( 0.1, 0.1, 0.1 )
-uv1_triplanar = true
-uv2_triplanar_sharpness = 0.784584
-
-[sub_resource type="SpatialMaterial" id=6]
-flags_vertex_lighting = true
-flags_world_triplanar = true
-albedo_color = Color( 0.26, 1.30672, 2, 1 )
-albedo_texture = ExtResource( 8 )
-roughness = 0.6
-uv1_scale = Vector3( 0.1, 0.1, 0.1 )
-uv1_triplanar = true
-uv2_triplanar_sharpness = 0.784584
-
-[sub_resource type="SpatialMaterial" id=7]
-flags_vertex_lighting = true
-flags_world_triplanar = true
-albedo_color = Color( 2, 2, 2, 1 )
-albedo_texture = ExtResource( 8 )
-roughness = 0.75
 uv1_scale = Vector3( 0.1, 0.1, 0.1 )
 uv1_triplanar = true
 uv2_triplanar_sharpness = 0.784584
@@ -89,18 +60,18 @@ script = ExtResource( 1 )
 transform = Transform( 1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, 0, 5.4548, 0 )
 
 [node name="Env" type="WorldEnvironment" parent="."]
-environment = SubResource( 3 )
+environment = SubResource( 2 )
 script = ExtResource( 6 )
 Sunlight = NodePath("../Sunlight")
 
 [node name="Wall" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 3.72835, -14 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 2.66452, -14 )
 use_in_baked_light = true
 use_collision = true
 width = 8.0
-height = 14.7377
+height = 12.0
 depth = 6.0
-material = SubResource( 1 )
+material = ExtResource( 7 )
 
 [node name="Wall3" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -71, 129, -40 )
@@ -109,7 +80,7 @@ use_collision = true
 width = 26.0
 height = 20.0
 depth = 38.0
-material = SubResource( 1 )
+material = ExtResource( 7 )
 
 [node name="Wall10" parent="." instance=ExtResource( 2 )]
 
@@ -120,16 +91,16 @@ use_collision = true
 width = 18.0
 height = 14.0
 depth = 18.0
-material = SubResource( 1 )
+material = ExtResource( 7 )
 
 [node name="Wall9" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.138825, -20 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, -0.503316, -20 )
 use_in_baked_light = true
 use_collision = true
 width = 8.0
-height = 8.0
+height = 6.0
 depth = 6.0
-material = SubResource( 1 )
+material = ExtResource( 7 )
 
 [node name="RoomWall" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 18.1388, 146 )
@@ -138,7 +109,7 @@ use_collision = true
 width = 88.0
 height = 44.0
 depth = 8.0
-material = SubResource( 1 )
+material = SubResource( 3 )
 
 [node name="RoomCeil" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 7, 42.1388, 125 )
@@ -156,7 +127,7 @@ use_collision = true
 width = 50.0
 height = 50.0
 depth = 26.0
-material = SubResource( 5 )
+material = ExtResource( 7 )
 
 [node name="RoomWall3" type="CSGBox" parent="."]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -47, 21.1388, 126 )
@@ -165,7 +136,7 @@ use_collision = true
 width = 50.0
 height = 50.0
 depth = 20.0
-material = SubResource( 6 )
+material = ExtResource( 7 )
 
 [node name="Wall4" type="CSGBox" parent="."]
 transform = Transform( -0.258819, 0.965926, 0, -0.965926, -0.258819, 0, 0, 0, 1, 31, 50, -28 )
@@ -174,7 +145,7 @@ use_collision = true
 width = 12.0
 height = 12.0
 depth = 12.0
-material = SubResource( 1 )
+material = ExtResource( 7 )
 
 [node name="Wall5" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -121, 42, -28 )
@@ -183,7 +154,7 @@ use_collision = true
 width = 10.0
 height = 12.0
 depth = 30.0
-material = SubResource( 1 )
+material = ExtResource( 7 )
 
 [node name="Wall7" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -54, 36, -117 )
@@ -192,7 +163,7 @@ use_collision = true
 width = 16.0
 height = 12.0
 depth = 16.0
-material = SubResource( 1 )
+material = ExtResource( 7 )
 
 [node name="Ground" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7.38, 0 )
@@ -201,7 +172,7 @@ use_collision = true
 width = 400.0
 height = 8.0
 depth = 400.0
-material = SubResource( 7 )
+material = ExtResource( 7 )
 
 [node name="Text" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9717, 3.47361, -42.4121 )

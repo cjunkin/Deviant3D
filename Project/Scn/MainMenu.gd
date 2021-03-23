@@ -24,6 +24,7 @@ func _ready() -> void:
 	# Setup signals
 	setup_graphics_options_signals($Graphics/Buttons/Options, "gfx_changed")
 
+
 # Connects all OptionButtons under parent GFX_CONTROL to FUNCTION_NAME
 # (Note: OptionButtons must be children of an HBoxContainer under GFX_CONTROL)
 func setup_graphics_options_signals(gfx_control: Control, function_name: String) -> void:
@@ -94,3 +95,5 @@ func _on_Button_button_up():
 	Menu.show()
 	Graphics.hide()
 	Anim.play_backwards("ChooseGfx")
+
+

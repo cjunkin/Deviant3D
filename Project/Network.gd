@@ -13,11 +13,14 @@ func host() -> void:
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_server(PORT)
 	get_tree().set_network_peer(peer)
-	
+
 	# Choose what to do on connect/disconnect
-	if get_tree().connect("network_peer_connected", self, "player_connected") != OK:
+
+	if !get_tree().is_connected("network_peer_connected", self, "player_connected") and \
+			get_tree().connect("network_peer_connected", self, "player_connected") != OK:
 		print("ERROR: CAN'T HANDLE OTHERS CONNECTING, CHECK NETWORK.GD")
-	if get_tree().connect("network_peer_disconnected", self, "player_disconnected") != OK:
+	if !get_tree().is_connected("network_peer_disconnected", self, "player_disconnected") and \
+			get_tree().connect("network_peer_disconnected", self, "player_disconnected") != OK:
 		print("ERROR: CAN'T HANDLE OTHERS DISCONNECTING, CHECK NETWORK.GD")
 	
 	# Load game
@@ -26,6 +29,7 @@ func host() -> void:
 #	get_node("/root/MainMenu").queue_free()
 	if get_tree().change_scene(GAME_SCENE) != OK:
 		print("ERROR: COULDN'T LOAD GAME")
+
 
 func join() -> void:
 	# Standard
@@ -63,13 +67,10 @@ func player_disconnected(id: int) -> void:
 
 # Disconnect and return to main menu
 func disconnect_from_server() -> void:
-	print(get_tree().is_connected("network_peer_connected", self, "player_connected"))
-	if get_tree().disconnect("network_peer_connected", self, "player_connected") != OK:
-		print("ERROR: CAN'T DISCONNECT CONNECTING, CHECK NETWORK.GD")
-	if get_tree().disconnect("network_peer_disconnected", self, "player_disconnected") != OK:
-		print("ERROR: CAN'T DISCONNECT DISCONNECTING, CHECK NETWORK.GD")
-
+	players.clear()
+	if get_tree().network_peer:
+		get_tree().network_peer.close_connection()
 	if get_tree().change_scene(MENU_SCENE) != OK:
 		print("ERROR: Couldn't go back to main menu")
-	get_tree().network_peer.close_connection()
+	
 	
