@@ -335,7 +335,12 @@ remotesync func v() -> void:
 remote func req_syn() -> void:
 	rpc("st", transform)
 	rpc("s", translation, PMesh.rotation.y, CamHelp.rotation.x)
+	rpc("ss", -SENS_X)
 
+# Set Sensitivity
+remote func ss(sens: float) -> void:
+	SENS_X = -sens/1000
+	SENS_Y = -sens/1000
 
 # Return rotated XFORM where its new normal is NEW_Y
 func align_with_y(xform: Transform, new_y: Vector3) -> Transform:

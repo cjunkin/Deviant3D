@@ -49,27 +49,66 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Sensitivity" type="HBoxContainer" parent="Menu/Panel/Buttons"]
+margin_right = 600.0
+margin_bottom = 86.0
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Menu/Panel/Buttons/Sensitivity"]
+margin_right = 198.0
+margin_bottom = 86.0
+hint_tooltip = "Haha mouse make player aim go skrrt"
+mouse_filter = 0
+mouse_default_cursor_shape = 16
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+text = "Sensitivity"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SensSlider" type="HSlider" parent="Menu/Panel/Buttons/Sensitivity"]
+modulate = Color( 0.694118, 0.815686, 1, 1 )
+margin_left = 202.0
+margin_right = 600.0
+margin_bottom = 86.0
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+min_value = 0.1
+max_value = 5.0
+step = 0.1
+value = 2.0
+
 [node name="Flip" type="CheckButton" parent="Menu/Panel/Buttons"]
 modulate = Color( 0.698039, 0.815686, 1, 1 )
+margin_top = 90.0
 margin_right = 600.0
-margin_bottom = 109.0
+margin_bottom = 177.0
+hint_tooltip = "Whether surfaces are magnets ;P"
+mouse_default_cursor_shape = 2
 size_flags_vertical = 3
 pressed = true
 text = "FlipDeeDoo Activator"
 align = 1
 
 [node name="Sound" type="HBoxContainer" parent="Menu/Panel/Buttons"]
-margin_top = 113.0
+margin_top = 181.0
 margin_right = 600.0
-margin_bottom = 223.0
+margin_bottom = 268.0
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="Menu/Panel/Buttons/Sound"]
-margin_right = 176.0
-margin_bottom = 110.0
+margin_right = 198.0
+margin_bottom = 87.0
+hint_tooltip = "How loud sounds are (don't break yur ears plz)"
+mouse_filter = 0
+mouse_default_cursor_shape = 16
 size_flags_horizontal = 3
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.42
+size_flags_stretch_ratio = 0.5
 text = "Sound"
 valign = 1
 __meta__ = {
@@ -78,9 +117,9 @@ __meta__ = {
 
 [node name="SSlider" type="HSlider" parent="Menu/Panel/Buttons/Sound"]
 modulate = Color( 0.694118, 0.815686, 1, 1 )
-margin_left = 180.0
+margin_left = 202.0
 margin_right = 600.0
-margin_bottom = 110.0
+margin_bottom = 87.0
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -88,17 +127,20 @@ max_value = 1.0
 step = 0.01
 
 [node name="Music" type="HBoxContainer" parent="Menu/Panel/Buttons"]
-margin_top = 227.0
+margin_top = 272.0
 margin_right = 600.0
-margin_bottom = 336.0
+margin_bottom = 359.0
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="Menu/Panel/Buttons/Music"]
-margin_right = 176.0
-margin_bottom = 109.0
+margin_right = 198.0
+margin_bottom = 87.0
+hint_tooltip = "Lets you disable my tunes to listen to your own, you spoons"
+mouse_filter = 0
+mouse_default_cursor_shape = 16
 size_flags_horizontal = 3
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.42
+size_flags_stretch_ratio = 0.5
 text = "Music"
 valign = 1
 __meta__ = {
@@ -107,9 +149,9 @@ __meta__ = {
 
 [node name="MSlider" type="HSlider" parent="Menu/Panel/Buttons/Music"]
 modulate = Color( 0.694118, 0.815686, 1, 1 )
-margin_left = 180.0
+margin_left = 202.0
 margin_right = 600.0
-margin_bottom = 109.0
+margin_bottom = 87.0
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -118,13 +160,16 @@ step = 0.01
 
 [node name="Quit" type="Button" parent="Menu/Panel/Buttons"]
 modulate = Color( 0.698039, 0.815686, 1, 1 )
-margin_top = 340.0
+margin_top = 363.0
 margin_right = 600.0
 margin_bottom = 450.0
 rect_min_size = Vector2( 0, 64 )
+hint_tooltip = "Exit the game (sad face)"
 mouse_default_cursor_shape = 2
 size_flags_vertical = 3
 text = "Quit"
+[connection signal="mouse_exited" from="Menu/Panel/Buttons/Sensitivity/SensSlider" to="." method="_on_SensSlider_mouse_exited"]
+[connection signal="value_changed" from="Menu/Panel/Buttons/Sensitivity/SensSlider" to="." method="_on_SensSlider_value_changed"]
 [connection signal="toggled" from="Menu/Panel/Buttons/Flip" to="." method="_on_CheckBox_toggled"]
 [connection signal="mouse_exited" from="Menu/Panel/Buttons/Sound/SSlider" to="." method="_on_SSlider_mouse_exited"]
 [connection signal="value_changed" from="Menu/Panel/Buttons/Sound/SSlider" to="." method="_on_SSlider_value_changed"]

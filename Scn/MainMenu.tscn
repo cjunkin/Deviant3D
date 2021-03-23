@@ -58,6 +58,8 @@ __meta__ = {
 [node name="Title" type="CenterContainer" parent="Menu"]
 margin_right = 1047.0
 margin_bottom = 254.0
+hint_tooltip = "So, you decided to hover over me? I wonder what else you can hover over ;P"
+mouse_default_cursor_shape = 16
 size_flags_vertical = 3
 
 [node name="VBox" type="VBoxContainer" parent="Menu/Title"]
@@ -109,6 +111,7 @@ __meta__ = {
 [node name="Host" type="Button" parent="Menu/PlayMargin/Play"]
 margin_right = 337.0
 margin_bottom = 88.0
+hint_tooltip = "Press then look for the invite link to send to friends!"
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Host"
@@ -116,14 +119,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Center" type="CenterContainer" parent="Menu/PlayMargin/Play"]
+[node name="SpinCenter" type="CenterContainer" parent="Menu/PlayMargin/Play"]
 margin_left = 341.0
 margin_right = 705.0
 margin_bottom = 88.0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.08
 
-[node name="Spinner" parent="Menu/PlayMargin/Play/Center" instance=ExtResource( 5 )]
+[node name="Spinner" parent="Menu/PlayMargin/Play/SpinCenter" instance=ExtResource( 5 )]
 visible = false
 anchor_left = 0.0
 anchor_top = 0.0
@@ -143,6 +146,7 @@ stretch_mode = 6
 margin_left = 709.0
 margin_right = 1047.0
 margin_bottom = 88.0
+hint_tooltip = "Press this if you've joined using the link"
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Join"
@@ -162,6 +166,9 @@ __meta__ = {
 [node name="Label" type="Label" parent="Menu/Gfx"]
 margin_right = 1047.0
 margin_bottom = 39.0
+hint_tooltip = "Choose how to set your eyeballs on fire"
+mouse_filter = 1
+mouse_default_cursor_shape = 16
 text = "Graphics Settings:"
 align = 1
 
@@ -180,6 +187,9 @@ size_flags_horizontal = 3
 margin_top = 1.0
 margin_right = 129.0
 margin_bottom = 40.0
+hint_tooltip = "Set all graphics, at once. Truly, a pro gamer move."
+mouse_filter = 0
+mouse_default_cursor_shape = 16
 text = "Overall "
 
 [node name="Button" type="OptionButton" parent="Menu/Gfx/Options/Overall"]
@@ -188,6 +198,7 @@ margin_left = 133.0
 margin_right = 306.0
 margin_bottom = 42.0
 rect_min_size = Vector2( 0, 42 )
+hint_tooltip = "Set all graphics, at once. Truly, a pro gamer move."
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
@@ -201,6 +212,9 @@ size_flags_horizontal = 3
 margin_top = 1.0
 margin_right = 139.0
 margin_bottom = 40.0
+hint_tooltip = "Turning this to high will NOT make you edgy"
+mouse_filter = 0
+mouse_default_cursor_shape = 16
 text = "Shadows "
 
 [node name="Button" type="OptionButton" parent="Menu/Gfx/Options/shadows"]
@@ -209,6 +223,7 @@ margin_left = 143.0
 margin_right = 306.0
 margin_bottom = 42.0
 rect_min_size = Vector2( 0, 42 )
+hint_tooltip = "Turning this to high will NOT make you edgy"
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
@@ -222,6 +237,9 @@ size_flags_horizontal = 3
 margin_top = 1.0
 margin_right = 82.0
 margin_bottom = 40.0
+hint_tooltip = "Did you know fireflies are beetles?"
+mouse_filter = 0
+mouse_default_cursor_shape = 16
 text = "Glow "
 
 [node name="Button" type="OptionButton" parent="Menu/Gfx/Options/glow"]
@@ -230,6 +248,7 @@ margin_left = 86.0
 margin_right = 307.0
 margin_bottom = 42.0
 rect_min_size = Vector2( 0, 42 )
+hint_tooltip = "Did you know fireflies are beetles?"
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 [connection signal="button_up" from="Menu/PlayMargin/Play/Host" to="." method="_on_Host_button_up"]
