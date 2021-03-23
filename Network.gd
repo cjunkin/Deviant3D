@@ -30,7 +30,8 @@ func host() -> void:
 func join() -> void:
 	# Standard
 	var peer := NetworkedMultiplayerENet.new()
-	peer.create_client("127.0.0.1", PORT)
+	if peer.create_client("127.0.0.1", PORT) != OK:
+		print("ERROR: Couldn't connect!")
 	get_tree().set_network_peer(peer)
 	
 	# Wait until we connect to server to load game
@@ -68,6 +69,7 @@ func disconnect_from_server() -> void:
 	if get_tree().disconnect("network_peer_disconnected", self, "player_disconnected") != OK:
 		print("ERROR: CAN'T DISCONNECT DISCONNECTING, CHECK NETWORK.GD")
 
-	get_tree().change_scene(MENU_SCENE)
+	if get_tree().change_scene(MENU_SCENE) != OK:
+		print("ERROR: Couldn't go back to main menu")
 	get_tree().network_peer.close_connection()
 	

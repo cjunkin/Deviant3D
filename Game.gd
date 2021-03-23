@@ -40,12 +40,6 @@ func _ready()->void:
 #	$Enemy3.set_target(players[0])
 #	$Enemy4.set_target(players[0])
 
-func set_hinge(body):
-	var h: HingeJoint = $HingeJoint
-	h.set_node_b(body.get_path())
-	print("set")
-#	h.set("nodes:node_a", body)
-
 func _physics_process(delta: float) -> void:
 	for p in projectiles:
 		if p.is_inside_tree():

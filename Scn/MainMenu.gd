@@ -33,7 +33,7 @@ func setup_graphics_options_signals(gfx_control: Control, function_name: String)
 			var button : OptionButton = child.get_node("Button")
 			var setting : String = child.name
 			# Connect signal
-			if (button.connect("item_selected", self, function_name, [setting, button]) != OK):
+			if (button.connect("item_selected", self, function_name, [setting]) != OK): # , button
 				print("ERROR: COULDN'T CONNECT " + setting)
 			# Default overall is high
 			if setting == "Overall":
@@ -44,7 +44,7 @@ func setup_graphics_options_signals(gfx_control: Control, function_name: String)
 
 # If setup_graphics_options_signals connects BUTTON to this, sets SETTING
 # anytime the BUTTON's option is changed.
-func gfx_changed(index: int, setting: String, button: OptionButton) -> void:
+func gfx_changed(index: int, setting: String) -> void: #, button: OptionButton
 	# Overall setting
 	if setting == "Overall":
 		for option in ALL_GFX_OPTIONS: 

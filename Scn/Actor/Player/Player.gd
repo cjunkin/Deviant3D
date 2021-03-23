@@ -46,6 +46,7 @@ onready var ROF := $ROF
 onready var FlipTime := $FlipTime
 onready var Hitbox := $Hitbox
 onready var tween := $Tween
+onready var GrappleSfx := CamX.get_node("GrappleSfx")
 
 func _ready() -> void:
 	# TODO: implement wall climb (maybe not)
@@ -243,6 +244,8 @@ func local_grapple(right: bool) -> void:
 		GLine2.visible = true
 		not_grappling2 = false
 		rpc("d", translation, CamX.rotation.y, CamY.rotation.x, grapple_pos2)
+	GrappleSfx.pitch_scale = rand_range(.85, 1.15)
+	GrappleSfx.play()
 
 # Set grapple hook position
 remote func b(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void:
@@ -255,6 +258,9 @@ remote func b(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void
 	GLine.points[1] = Muzzle.global_transform.origin
 	GLine.visible = true
 	not_grappling = false
+
+	GrappleSfx.pitch_scale = rand_range(.85, 1.15)
+	GrappleSfx.play()
 
 # Stop (no) grappling
 remotesync func c() -> void:
@@ -271,6 +277,8 @@ remote func d(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void
 	GLine2.points[1] = Muzzle.global_transform.origin
 	not_grappling2 = false
 	GLine2.visible = true
+	GrappleSfx.pitch_scale = rand_range(.85, 1.15)
+	GrappleSfx.play()
 
 # Stop (no) grappling for 2nd hook
 remotesync func e() -> void:
