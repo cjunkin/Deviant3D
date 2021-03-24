@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Scn/StaticBox.tscn" type="PackedScene" id=2]
@@ -7,6 +7,8 @@
 [ext_resource path="res://Scn/Sunlight.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scn/Env.gd" type="Script" id=6]
 [ext_resource path="res://Shader/Grid.tres" type="Material" id=7]
+[ext_resource path="res://Scn/Env/Island1.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Scn/Env/Rock1.tscn" type="PackedScene" id=9]
 
 [sub_resource type="ProceduralSky" id=1]
 sky_top_color = Color( 0.196078, 0.388235, 0.847059, 1 )
@@ -55,6 +57,7 @@ uv2_triplanar_sharpness = 0.784584
 
 [node name="Game" type="Spatial"]
 script = ExtResource( 1 )
+rock_path = "res://Scn/Env/Rock1.tscn"
 
 [node name="Sunlight" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, 0, 5.4548, 0 )
@@ -174,5 +177,11 @@ height = 8.0
 depth = 400.0
 material = ExtResource( 7 )
 
+[node name="Island1" parent="." instance=ExtResource( 8 )]
+transform = Transform( 16, 0, 0, 0, 16, 0, 0, 0, 16, 137.756, 483.134, -351.662 )
+
 [node name="Text" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9717, 3.47361, -42.4121 )
+
+[node name="Rock2" parent="." instance=ExtResource( 9 )]
+transform = Transform( 1.11542, 4.46487, -6.54376, 1.76636, 6.30176, 4.60084, 7.72242, -2.08632, -0.107179, -29.5906, 39.5014, -84.4337 )

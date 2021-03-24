@@ -64,37 +64,45 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1 )
 [node name="GrappleCast" type="RayCast" parent="CamX/CamY/Gun/Muzzle"]
 enabled = true
 cast_to = Vector3( 0, 0, -400 )
+collision_mask = 7
 
 [node name="PMesh" type="CSGMesh" parent="CamX"]
 transform = Transform( 0.999848, 0.0174524, -7.62868e-10, 0, -4.37114e-08, -1, -0.0174524, 0.999848, -4.37047e-08, 0, 0, 0 )
 mesh = SubResource( 1 )
 material = SubResource( 2 )
 
-[node name="Left" type="RayCast" parent="CamX"]
-transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, -1.005, -2.0909e-09, 9.31323e-09 )
-enabled = true
-cast_to = Vector3( -0.25, 0, 0 )
-
-[node name="Right" type="RayCast" parent="CamX"]
-transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, 1, 0, 0 )
-enabled = true
-cast_to = Vector3( 0.25, 0, 0 )
-
-[node name="Forward" type="RayCast" parent="CamX"]
-transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, 0, -1.28026, -0.921797 )
-enabled = true
-cast_to = Vector3( 0, 0, -1.5 )
-
-[node name="Top" type="RayCast" parent="CamX"]
-transform = Transform( 1, -2.0805e-09, -1.86265e-08, 2.08049e-09, 1, 1.19191e-07, 1.86265e-08, -1.19191e-07, 1, 0, 1.25, -0.7 )
-enabled = true
-cast_to = Vector3( 0, 1, 0 )
-
 [node name="GrappleSfx" type="AudioStreamPlayer3D" parent="CamX"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13213, 0 )
 stream = ExtResource( 6 )
 max_db = 0.0
 bus = "Sfx"
+
+[node name="Flippers" type="Spatial" parent="CamX"]
+transform = Transform( 0.999848, 0.0174524, -7.62868e-10, 0, -4.37114e-08, -1, -0.0174524, 0.999848, -4.37047e-08, 0, 0, 0 )
+
+[node name="Left" type="RayCast" parent="CamX/Flippers"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -0.25, 0 )
+enabled = true
+cast_to = Vector3( -0.25, 0, 0 )
+
+[node name="Right" type="RayCast" parent="CamX/Flippers"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -0.25, 0 )
+enabled = true
+cast_to = Vector3( 0.25, 0, 0 )
+
+[node name="Forward" type="RayCast" parent="CamX/Flippers"]
+transform = Transform( 1, 0, -5.55112e-17, 0, 1, 0, 0, -3.55271e-15, 1, 0, -0.75, -1.25 )
+enabled = true
+
+[node name="Forward2" type="RayCast" parent="CamX/Flippers"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1.25 )
+enabled = true
+cast_to = Vector3( 0, -1.5, 0 )
+
+[node name="Top" type="RayCast" parent="CamX/Flippers"]
+transform = Transform( 1, 0, -5.55112e-17, 0, 1, 0, 0, -3.55271e-15, 1, 0, -0.7, -1.25 )
+enabled = true
+cast_to = Vector3( 0, 0, -0.5 )
 
 [node name="Hitbox" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )

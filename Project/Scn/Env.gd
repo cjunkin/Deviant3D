@@ -1,9 +1,11 @@
 extends WorldEnvironment
 
 export (NodePath) var Sunlight
+const bloom_amt := .05
 
 func _ready():
 	var sun : DirectionalLight = get_node(Sunlight)
+
 	match G.shadows:
 		G.OFF:
 			sun.shadow_enabled = false
@@ -20,11 +22,11 @@ func _ready():
 		G.OFF:
 			environment.glow_bloom = 0
 		G.LOW:
-			environment.glow_bloom = .1
+			environment.glow_bloom = bloom_amt
 			environment.glow_bicubic_upscale = false
 		G.MED:
-			environment.glow_bloom = .1
+			environment.glow_bloom = bloom_amt
 			environment.glow_bicubic_upscale = true
 		G.HIGH:
-			environment.glow_bloom = .1
+			environment.glow_bloom = bloom_amt
 			environment.glow_bicubic_upscale = true

@@ -84,7 +84,7 @@ func _on_SensSlider_mouse_exited():
 
 
 func _on_CheckBox_toggled(button_pressed: bool):
-	for raycast in current_player.CamX.get_children():
+	for raycast in current_player.Flippers:
 		if raycast is RayCast:
 			raycast.enabled = button_pressed
 	if button_pressed:

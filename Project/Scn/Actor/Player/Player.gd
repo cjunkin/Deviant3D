@@ -30,10 +30,7 @@ onready var CamSpring : SpringArm
 onready var Cam : Camera
 onready var CamX := $CamX
 onready var PMesh := CamX.get_node("PMesh")
-onready var Top : RayCast = CamX.get_node("Top")
-onready var Forward : RayCast = CamX.get_node("Forward")
-onready var Left : RayCast = CamX.get_node("Left")
-onready var Right : RayCast = CamX.get_node("Right")
+onready var Flippers : Array = CamX.get_node("Flippers").get_children()
 onready var CamY := CamX.get_node("CamY")
 onready var Gun := CamY.get_node("Gun")
 onready var Sfx := Gun.get_node("Sfx")
@@ -180,14 +177,15 @@ func _physics_process(_delta: float) -> void:
 			Cam.stress = 0.25
 
 		# "Run, the game" flipping
-		if Forward.is_colliding() and FlipTime.is_stopped():
-			rpc("st", Forward.get_collision_normal())
-		elif Top.is_colliding() and FlipTime.is_stopped():
-			rpc("st", Top.get_collision_normal())
-		elif Left.is_colliding() and FlipTime.is_stopped():
-			rpc("st", Left.get_collision_normal())
-		elif Right.is_colliding() and FlipTime.is_stopped():
-			rpc("st", Right.get_collision_normal())
+		for ray in Flippers:
+			if ray.is_colliding() and FlipTime.is_stopped():
+				rpc("st", ray.get_collision_normal())
+#		elif Top.is_colliding() and FlipTime.is_stopped():
+#			rpc("st", Top.get_collision_normal())
+#		elif Left.is_colliding() and FlipTime.is_stopped():
+#			rpc("st", Left.get_collision_normal())
+#		elif Right.is_colliding() and FlipTime.is_stopped():
+#			rpc("st", Right.get_collision_normal())
 
 	# Grounded
 	if is_on_floor():
@@ -244,7 +242,7 @@ func local_grapple(right: bool) -> void:
 		GLine2.visible = true
 		not_grappling2 = false
 		rpc("d", translation, CamX.rotation.y, CamY.rotation.x, grapple_pos2)
-	GrappleSfx.pitch_scale = rand_range(.85, 1.15)
+	GrappleSfx.pitch_scale = rand_range(.5, .85)
 	GrappleSfx.play()
 
 # Set grapple hook position
@@ -259,7 +257,7 @@ remote func b(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void
 	GLine.visible = true
 	not_grappling = false
 
-	GrappleSfx.pitch_scale = rand_range(.85, 1.15)
+	GrappleSfx.pitch_scale = rand_range(.5, .85)
 	GrappleSfx.play()
 
 # Stop (no) grappling
@@ -277,7 +275,7 @@ remote func d(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void
 	GLine2.points[1] = Muzzle.global_transform.origin
 	not_grappling2 = false
 	GLine2.visible = true
-	GrappleSfx.pitch_scale = rand_range(.85, 1.15)
+	GrappleSfx.pitch_scale = rand_range(.5, .85)
 	GrappleSfx.play()
 
 # Stop (no) grappling for 2nd hook

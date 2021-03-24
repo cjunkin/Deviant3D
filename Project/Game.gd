@@ -6,6 +6,8 @@ const num_explosions := 8
 #const num_laser_audio := 8
 const num_grapple_sounds := 6
 
+export(String, FILE) var rock_path
+
 export (PackedScene) var player_s := preload("res://Scn/Actor/Player/Player.tscn")
 # Only use this if num_proj isn't constant
 #export (PackedScene) var proj_s := preload("res://Scn/Projectile.tscn")
@@ -60,13 +62,14 @@ func gen_boxes(my_seed: int) -> void:
 	noise.persistence = .8
 	var rng := RandomNumberGenerator.new()
 	rng.seed = my_seed
-	var static_box_s := load("res://Scn/StaticBox.tscn")
-	for x in range(-200, 201, 20):
-		for z in range(-200, 201, 20):
+	var static_box_s := load(rock_path)
+	for x in range(-300, 301, 30):
+		for z in range(-300, 301, 30):
 			if (noise.get_noise_3d(x, x, z) > 0):
-				var b :CSGBox = static_box_s.instance()
+				var b : Spatial = static_box_s.instance()
 				b.translation = Vector3(x, 50 + rng.randf() * 1000, z)
 				b.rotation = Vector3(rng.randf(), rng.randf(), rng.randf()) * 2 * PI
+				b.scale = Vector3(1, 1, 1) * rng.randf_range(8, 16)
 				add_child(b)
 
 

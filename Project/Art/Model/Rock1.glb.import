@@ -2,12 +2,12 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/Spider.glb-03dfdcf79fa11fff149054e3d24947ff.scn"
+path="res://.import/Rock1.glb-abe12f26caf411db7417395e6a868d30.scn"
 
 [deps]
 
-source_file="res://Art/Spider.glb"
-dest_files=[ "res://.import/Spider.glb-03dfdcf79fa11fff149054e3d24947ff.scn" ]
+source_file="res://Art/Model/Rock1.glb"
+dest_files=[ "res://.import/Rock1.glb-abe12f26caf411db7417395e6a868d30.scn" ]
 
 [params]
 
