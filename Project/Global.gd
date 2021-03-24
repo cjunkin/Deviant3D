@@ -23,10 +23,10 @@ var deactivated_color := Color("ff9898")
 
 # GUI nodes
 onready var Menu := $Menu
-onready var SSlider := Menu.get_node("Menu/Buttons/Sound/SSlider")
-onready var MSlider := Menu.get_node("Menu/Buttons/Music/MSlider")
-onready var SensSlider := Menu.get_node("Menu/Buttons/Sensitivity/SensSlider")
-onready var Flip := Menu.get_node("Menu/Buttons/Flip")
+onready var SSlider := Menu.get_node("Center/Menu/Buttons/Sound/SSlider")
+onready var MSlider := Menu.get_node("Center/Menu/Buttons/Music/MSlider")
+onready var SensSlider := Menu.get_node("Center/Menu/Buttons/Sensitivity/SensSlider")
+onready var Flip := Menu.get_node("Center/Menu/Buttons/Flip")
 onready var Music := $Music
 
 # Music
@@ -38,6 +38,12 @@ func _ready() -> void:
 	SSlider.value = db2linear(AudioServer.get_bus_volume_db(SFX_BUS))
 	MSlider.value = db2linear(AudioServer.get_bus_volume_db(MUSIC_BUS))
 	SensSlider.value = 2
+	
+	for child in $Menu/Center/Menu/Buttons.get_children():
+		if child is HBoxContainer:
+			for c in child.get_children():
+				if c is Slider:
+					c.connect("mouse_exited", self, "mouse_exited", [c])
 
 func _input(event: InputEvent) -> void:
 	# Pause
@@ -72,27 +78,12 @@ func _on_SSlider_value_changed(value: float) -> void:
 
 func _on_Quit_button_up():
 	Menu.visible = false
+	set_process_input(false)
 	Network.disconnect_from_server()
 
+func mouse_exited(slider: Control) -> void:
+	slider.release_focus()
 
-func _on_SSlider_mouse_exited():
-	SSlider.release_focus()
-
-
-func _on_MSlider_mouse_exited():
-	MSlider.release_focus()
-
-func _on_SensSlider_mouse_exited():
-	SensSlider.release_focus()
-
-func _on_CheckBox_toggled(button_pressed: bool):
-	for raycast in current_player.Flippers:
-		if raycast is RayCast:
-			raycast.enabled = button_pressed
-	if button_pressed:
-		Flip.modulate = G.primary_color
-	else:
-		Flip.modulate = G.deactivated_color
 
 func _on_SensSlider_value_changed(value: float):
 	sens_changed = true
@@ -103,7 +94,6 @@ func play_music(track_number: int = -1) -> void:
 		randomize()
 		Music.stream = music[randi() % music.size()]
 		Music.play()
-		print("Playing!")
 
 # Load files of extension EXT from DIR and return it as an array of loaded resources
 static func load_files(dir: String, ext: String = ".ogg") -> Array:
@@ -132,3 +122,13 @@ static func load_files(dir: String, ext: String = ".ogg") -> Array:
 
 func _on_Music_finished():
 	play_music()
+
+
+func _on_Flip_toggled(button_pressed: bool):
+	for raycast in current_player.Flippers:
+		if raycast is RayCast:
+			raycast.enabled = button_pressed
+	if button_pressed:
+		Flip.modulate = G.primary_color
+	else:
+		Flip.modulate = G.deactivated_color

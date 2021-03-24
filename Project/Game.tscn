@@ -3,10 +3,10 @@
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Scn/StaticBox.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scn/Text/Text3D.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Art/Material/tile.svg" type="Texture" id=4]
-[ext_resource path="res://Scn/Sunlight.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Scn/Env.gd" type="Script" id=6]
-[ext_resource path="res://Shader/Grid.tres" type="Material" id=7]
+[ext_resource path="res://Gfx/Material/tile.svg" type="Texture" id=4]
+[ext_resource path="res://Scn/Env/Sunlight.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scn/Env/Env.gd" type="Script" id=6]
+[ext_resource path="res://Gfx/Material/Grid.tres" type="Material" id=7]
 [ext_resource path="res://Scn/Env/Island1.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Scn/Env/Rock1.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Scn/Env/Rock1R.tscn" type="PackedScene" id=10]
@@ -68,12 +68,21 @@ environment = SubResource( 2 )
 script = ExtResource( 6 )
 Sunlight = NodePath("../Sunlight")
 
-[node name="Wall" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 2.66452, -14 )
+[node name="Stairs" type="CSGBox" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3222, 1.49208, -16.1938 )
 use_in_baked_light = true
 use_collision = true
 width = 8.0
-height = 12.0
+height = 9.97336
+depth = 6.0
+material = ExtResource( 7 )
+
+[node name="Stairs2" type="CSGBox" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3222, -0.503316, -22.1938 )
+use_in_baked_light = true
+use_collision = true
+width = 8.0
+height = 6.0
 depth = 6.0
 material = ExtResource( 7 )
 
@@ -107,15 +116,6 @@ use_collision = true
 width = 18.0
 height = 14.0
 depth = 18.0
-material = ExtResource( 7 )
-
-[node name="Wall9" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, -0.503316, -20 )
-use_in_baked_light = true
-use_collision = true
-width = 8.0
-height = 6.0
-depth = 6.0
 material = ExtResource( 7 )
 
 [node name="RoomWall" type="CSGBox" parent="."]

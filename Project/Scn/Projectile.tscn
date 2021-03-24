@@ -13,10 +13,13 @@ emission_on_uv2 = false
 
 [sub_resource type="CapsuleMesh" id=2]
 material = SubResource( 1 )
-radius = 0.25
+radius = 0.3
+mid_height = 1.5
+radial_segments = 8
+rings = 4
 
 [sub_resource type="BoxShape" id=3]
-extents = Vector3( 0.3, 0.3, 1 )
+extents = Vector3( 0.35, 0.35, 1.25 )
 
 [node name="Proj" type="Area"]
 monitorable = false

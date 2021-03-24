@@ -21,10 +21,3 @@ __meta__ = {
 [node name="Panel" type="Panel" parent="."]
 margin_right = 600.0
 margin_bottom = 450.0
-
-[node name="Buttons" type="VBoxContainer" parent="."]
-margin_right = 600.0
-margin_bottom = 450.0
-__meta__ = {
-"_edit_use_anchors_": false
-}

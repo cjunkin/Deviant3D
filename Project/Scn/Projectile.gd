@@ -1,7 +1,7 @@
 class_name Projectile
 extends Area
 
-export var speed := -128
+export var speed := -256
 onready var timer := $Timer
 
 func _on_Timer_timeout() -> void:
@@ -16,7 +16,7 @@ func _on_Proj_body_entered(body) -> void:
 		visible = false
 		
 		# Push body
-		body.apply_impulse(global_transform.origin - body.global_transform.origin, -50 * transform.basis.z)
+		body.apply_impulse(global_transform.origin - body.global_transform.origin, -100 * transform.basis.z)
 		
 	elif body.is_in_group("Enemy"):
 		

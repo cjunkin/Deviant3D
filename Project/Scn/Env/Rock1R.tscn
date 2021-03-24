@@ -1,8 +1,9 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Art/Material/Rock1.tres" type="Material" id=1]
-[ext_resource path="res://Art/Model/Rock1.glb" type="PackedScene" id=2]
+[ext_resource path="res://Gfx/Material/Rock1.tres" type="Material" id=1]
+[ext_resource path="res://Gfx/Model/Rock1.glb" type="PackedScene" id=2]
 [ext_resource path="res://Scn/Env/Rock1Collision.tres" type="Shape" id=3]
+
 
 [node name="Rock1R" type="RigidBody"]
 gravity_scale = 0.0

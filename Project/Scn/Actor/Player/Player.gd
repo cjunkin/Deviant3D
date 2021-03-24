@@ -25,6 +25,9 @@ var grapple_pos := Vector3.ZERO
 var not_grappling2 := true
 var grapple_pos2 := Vector3.ZERO
 
+# File Paths
+export(String, FILE) var cam_path
+
 # Cached Nodes
 onready var CamSpring : SpringArm
 onready var Cam : Camera
@@ -53,7 +56,7 @@ func _ready() -> void:
 		# Regular cam
 		if OS.get_name() != "Android" and OS.get_name() != "iOS":
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-			CamY.add_child(load("res://Scn/Actor/Cam.tscn").instance())
+			CamY.add_child(load(cam_path).instance())
 			Cam = CamY.get_node("Spring/Cam")
 			CamSpring = CamY.get_node("Spring")
 		# AR CAM
@@ -206,7 +209,7 @@ func _physics_process(_delta: float) -> void:
 	var air_resistance2 := 1.0
 	# if grappling
 	if !not_grappling:
-		GLine.points[1] = Muzzle.global_transform.origin
+		GLine.points[1] = GrappleCast.global_transform.origin
 		var new_grapple_len := (grapple_pos - global_transform.origin).length()
 		var grapple_vel := (global_transform.origin - grapple_pos) / new_grapple_len * min(0, (1 - new_grapple_len)) * .25
 		if grapple_vel.length() > MAX_GRAPPLE_SPEED:
@@ -216,7 +219,7 @@ func _physics_process(_delta: float) -> void:
 		var is_near := abs((grapple_pos - global_transform.origin).length_squared()) < 64
 		air_resistance = .95 * int(is_near) + .999 * int(!is_near)
 	if !not_grappling2:
-		GLine2.points[1] = Muzzle.global_transform.origin
+		GLine2.points[1] = GrappleCast.global_transform.origin
 		var new_grapple_len := (grapple_pos2 - global_transform.origin).length()
 		var grapple_vel := (global_transform.origin - grapple_pos2) / new_grapple_len * min(0, (1 - new_grapple_len)) * .25
 		if grapple_vel.length() > MAX_GRAPPLE_SPEED:
@@ -231,14 +234,14 @@ func local_grapple(right: bool) -> void:
 	if right:
 		grapple_pos = GrappleCast.get_collision_point()
 		GLine.points[0] = grapple_pos
-		GLine.points[1] = Muzzle.global_transform.origin
+		GLine.points[1] = GrappleCast.global_transform.origin
 		GLine.visible = true
 		not_grappling = false
 		rpc("b", translation, CamX.rotation.y, CamY.rotation.x, grapple_pos)
 	else:
 		grapple_pos2 = GrappleCast.get_collision_point()
 		GLine2.points[0] = grapple_pos2
-		GLine2.points[1] = Muzzle.global_transform.origin
+		GLine2.points[1] = GrappleCast.global_transform.origin
 		GLine2.visible = true
 		not_grappling2 = false
 		rpc("d", translation, CamX.rotation.y, CamY.rotation.x, grapple_pos2)
@@ -253,7 +256,7 @@ remote func b(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void
 	grapple_pos = pos
 
 	GLine.points[0] = pos
-	GLine.points[1] = Muzzle.global_transform.origin
+	GLine.points[1] = GrappleCast.global_transform.origin
 	GLine.visible = true
 	not_grappling = false
 
@@ -272,7 +275,7 @@ remote func d(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void
 	CamY.rotation.x = cam_help_x
 	grapple_pos2 = pos
 	GLine2.points[0] = pos
-	GLine2.points[1] = Muzzle.global_transform.origin
+	GLine2.points[1] = GrappleCast.global_transform.origin
 	not_grappling2 = false
 	GLine2.visible = true
 	GrappleSfx.pitch_scale = rand_range(.5, .85)
@@ -290,7 +293,7 @@ remotesync func f() -> void:
 	G.game.proj_i = (G.game.proj_i + 1) % G.game.num_projectiles
 	var p : Projectile = G.game.projectiles[G.game.proj_i]
 	G.game.add_child(p)
-	p.global_transform = Muzzle.global_transform
+	p.global_transform = GrappleCast.global_transform
 	p.monitoring = true
 	p.visible = true
 	Sfx.pitch_scale = rand_range(.85, 1.15)
@@ -323,7 +326,7 @@ remotesync func st(normal: Vector3) -> void:
 		global_transform, 
 		align_with_y(global_transform, normal), 
 		.25, 
-		Tween.TRANS_SINE
+		Tween.TRANS_CIRC
 		)
 	tween.start()
 	FlipTime.start()

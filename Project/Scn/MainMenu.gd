@@ -1,13 +1,22 @@
 extends Control
 
-onready var overall_gfx := $Graphics/Buttons/Options/Overall/Button
-onready var shadows := $Graphics/Buttons/Options/shadows/Button
-onready var glow := $Graphics/Buttons/Options/glow/Button
-onready var bloom := $Graphics/Buttons/Options/bloom/Button
-onready var spinner := $Menu/PlayMargin/Play/SpinCenter/Spinner
-onready var Graphics := $Graphics
-onready var Menu := $Menu
+export (NodePath) var overall_path
+export (NodePath) var shadows_path
+export (NodePath) var glow_path
+export (NodePath) var bloom_path
+export (NodePath) var spinner_path
+export (NodePath) var Graphics_path
+export (NodePath) var Menu_path
+
+onready var overall : OptionButton = get_node(overall_path)
+onready var shadows : OptionButton = get_node(shadows_path)
+onready var glow : OptionButton = get_node(glow_path)
+onready var bloom : OptionButton = get_node(bloom_path)
+onready var spinner : Control = get_node(spinner_path)
+onready var Graphics : Control = get_node(Graphics_path)
+onready var Menu : Control = get_node(Menu_path)
 onready var Anim := $Anim
+onready var ClickAnim := $ClickAnim
 
 
 const STANDARD := PoolStringArray(["Off", "Low", "Medium", "High"])
@@ -16,15 +25,23 @@ const ALL_GFX_OPTIONS := PoolStringArray(["shadows", "glow", "bloom"]) # TODO: m
 # TODO: minimal theme, where graphics settings are opened in separate panel
 
 func _ready() -> void:
-	OS.set_low_processor_usage_mode(true)
+#	OS.set_low_processor_usage_mode(true)
+
 	# Add options
-	add_options(overall_gfx, PoolStringArray(["Potato", "Low", "Medium", "High"]))
+	add_options(overall, PoolStringArray(["Potato", "Low", "Medium", "High"]))
 	add_options(shadows, STANDARD)
 	add_options(glow, BINARY)
 	add_options(bloom, BINARY)
-	# Setup signals
-	setup_graphics_options_signals($Graphics/Buttons/Options, "gfx_changed")
 
+	# Setup signals
+	setup_graphics_options_signals($All/Margin/Center/Graphics/Buttons/Options, "gfx_changed")
+
+	var screen : float = get_viewport().size.x
+	var bg_img := $BG/Img
+	screen /= 1920
+	bg_img._set_size(bg_img.rect_size * screen)
+	bg_img.rect_position = bg_img.rect_size / -2
+	
 
 
 # Connects all OptionButtons under parent GFX_CONTROL to FUNCTION_NAME
@@ -58,7 +75,7 @@ func gfx_changed(index: int, setting: String) -> void: #, button: OptionButton
 	# Specific setting
 	else:
 		set_setting(setting, index)
-		overall_gfx.text = "Custom"
+		overall.text = "Custom"
 
 # Sets SETTING in G to INDEX (off, low, med, high), corrects overbounds INDEX
 func set_setting(setting: String, index: int) -> void:
@@ -85,18 +102,18 @@ func _on_Join_button_up() -> void:
 	Network.join()
 
 func start():
-	OS.set_low_processor_usage_mode(false)
+#	OS.set_low_processor_usage_mode(false)
 	G.set_process_input(true)
 	G.play_music()
 
 func _on_Graphics_button_up():
+	Anim.play("ChooseGfx")
 	Menu.hide()
 	Graphics.show()
-	Anim.play("ChooseGfx")
 
 
-func _on_Button_button_up():
+func _on_DoneButton_button_up():
+	Anim.play_backwards("ChooseGfx")
 	Menu.show()
 	Graphics.hide()
-	Anim.play_backwards("ChooseGfx")
 

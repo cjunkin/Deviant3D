@@ -14,3 +14,8 @@ func _ready():
 #		text.text = raycast.get_collider().name
 #	else:
 #		text.text = "Null"
+
+#	var acc := Input.get_accelerometer()
+##	var acc = Input.get_gravity()
+##	var acc = Input.get_magnetometer()
+#	rotation = Vector3(-acc.y, acc.x, 0) / 20

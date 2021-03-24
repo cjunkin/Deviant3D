@@ -37,7 +37,7 @@ _global_script_classes=[ {
 "base": "Camera",
 "class": "ShakeCamera",
 "language": "GDScript",
-"path": "res://addons/camera_shake/shake_camera.gd"
+"path": "res://Scn/Actor/ShakyCam.gd"
 }, {
 "base": "Spatial",
 "class": "Text",
@@ -65,7 +65,7 @@ config/icon="res://icon.png"
 G="*res://Global.tscn"
 Network="*res://Network.gd"
 Math="res://Math.gd"
-DebugOverlay="res://DEBUG/DebugOverlay.tscn"
+DebugOverlay="res://addons/DEBUG/DebugOverlay.tscn"
 
 [display]
 
@@ -73,6 +73,10 @@ window/size/width=1280
 window/size/height=720
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "Todo_Manager" )
 
 [gui]
 
@@ -190,6 +194,16 @@ fullscreen={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777253,"unicode":0,"echo":false,"script":null)
  ]
 }
+respawn={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777220,"unicode":0,"echo":false,"script":null)
+ ]
+}
+reset_gravity={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":66,"unicode":0,"echo":false,"script":null)
+ ]
+}
 
 [layer_names]
 
@@ -202,5 +216,5 @@ fullscreen={
 quality/driver/fallback_to_gles2=true
 quality/filters/anisotropic_filter_level=8
 vram_compression/import_etc=true
-environment/default_clear_color=Color( 0.294118, 0.411765, 0.592157, 1 )
+environment/default_clear_color=Color( 0.741176, 0.858824, 0.933333, 1 )
 environment/default_environment="res://default_env.tres"
