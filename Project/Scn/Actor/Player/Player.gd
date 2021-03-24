@@ -158,11 +158,11 @@ func _input(event: InputEvent) -> void:
 ##			vel.y += 1
 
 func _physics_process(_delta: float) -> void:
-#	# collision with boxes
-#	for index in get_slide_count():
-#		var collision := get_slide_collision(index)
-#		if collision.collider is RigidBody:
-#			collision.collider.apply_central_impulse(-collision.normal * .05 * vel.length())
+	# collision with boxes
+	for index in get_slide_count():
+		var collision := get_slide_collision(index)
+		if collision.collider is RigidBody:
+			collision.collider.apply_central_impulse(-collision.normal * .05 * vel.length())
 
 	if is_network_master():
 		# Set crosshair

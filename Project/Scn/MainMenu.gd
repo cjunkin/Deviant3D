@@ -9,6 +9,7 @@ onready var Graphics := $Graphics
 onready var Menu := $Menu
 onready var Anim := $Anim
 
+
 const STANDARD := PoolStringArray(["Off", "Low", "Medium", "High"])
 const BINARY := PoolStringArray(["Off", "On"])
 const ALL_GFX_OPTIONS := PoolStringArray(["shadows", "glow", "bloom"]) # TODO: more graphics settings
@@ -23,6 +24,7 @@ func _ready() -> void:
 	add_options(bloom, BINARY)
 	# Setup signals
 	setup_graphics_options_signals($Graphics/Buttons/Options, "gfx_changed")
+
 
 
 # Connects all OptionButtons under parent GFX_CONTROL to FUNCTION_NAME
@@ -75,15 +77,17 @@ func add_options(button: OptionButton, options: PoolStringArray) -> void:
 		i += 1
 
 func _on_Host_button_up() -> void:
-	OS.set_low_processor_usage_mode(false)
-	G.set_process_input(true)
+	start()
 	Network.host()
 
 func _on_Join_button_up() -> void:
-	OS.set_low_processor_usage_mode(false)
-	G.set_process_input(true)
+	start()
 	Network.join()
 
+func start():
+	OS.set_low_processor_usage_mode(false)
+	G.set_process_input(true)
+	G.play_music()
 
 func _on_Graphics_button_up():
 	Menu.hide()
@@ -95,5 +99,4 @@ func _on_Button_button_up():
 	Menu.show()
 	Graphics.hide()
 	Anim.play_backwards("ChooseGfx")
-
 

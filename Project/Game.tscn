@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Scn/StaticBox.tscn" type="PackedScene" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://Shader/Grid.tres" type="Material" id=7]
 [ext_resource path="res://Scn/Env/Island1.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Scn/Env/Rock1.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Scn/Env/Rock1R.tscn" type="PackedScene" id=10]
 
 [sub_resource type="ProceduralSky" id=1]
 sky_top_color = Color( 0.196078, 0.388235, 0.847059, 1 )
@@ -75,6 +76,18 @@ width = 8.0
 height = 12.0
 depth = 6.0
 material = ExtResource( 7 )
+
+[node name="Rock1R" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -94.1456, 14.3448, -72.2908 )
+
+[node name="Rock1R2" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -131.913, 10.0827, -133.947 )
+
+[node name="Rock1R3" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -111.483, 36.0115, -101.185 )
+
+[node name="Rock1R4" parent="." instance=ExtResource( 10 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -55.9494, 8.12141, -29.2171 )
 
 [node name="Wall3" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -71, 129, -40 )

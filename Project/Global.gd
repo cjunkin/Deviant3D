@@ -27,6 +27,10 @@ onready var SSlider := Menu.get_node("Menu/Buttons/Sound/SSlider")
 onready var MSlider := Menu.get_node("Menu/Buttons/Music/MSlider")
 onready var SensSlider := Menu.get_node("Menu/Buttons/Sensitivity/SensSlider")
 onready var Flip := Menu.get_node("Menu/Buttons/Flip")
+onready var Music := $Music
+
+# Music
+var music := load_files("Sfx/Music")
 
 func _ready() -> void:
 	$Menu.hide()
@@ -81,8 +85,6 @@ func _on_MSlider_mouse_exited():
 func _on_SensSlider_mouse_exited():
 	SensSlider.release_focus()
 
-
-
 func _on_CheckBox_toggled(button_pressed: bool):
 	for raycast in current_player.Flippers:
 		if raycast is RayCast:
@@ -96,5 +98,37 @@ func _on_SensSlider_value_changed(value: float):
 	sens_changed = true
 	current_player.ss(value)
 
+func play_music(track_number: int = -1) -> void:
+	if !Music.playing or track_number != -1:
+		randomize()
+		Music.stream = music[randi() % music.size()]
+		Music.play()
+		print("Playing!")
+
+# Load files of extension EXT from DIR and return it as an array of loaded resources
+static func load_files(dir: String, ext: String = ".ogg") -> Array:
+	var files: Array = []
+	var filenames: Array = []
+	var file_directory: Directory = Directory.new()
+	if file_directory.open(dir) == OK:
+		if file_directory.list_dir_begin(true) == OK:
+
+			var file: String = file_directory.get_next()
+			while file != "":
+				if file.right(file.length() - ext.length()) == ext:
+					filenames.append(dir + "/" + file)
+	#				filenames.append("preload(\"" + dir + file + "\")")
+				file = file_directory.get_next()
+			file_directory.list_dir_end()
+		else:
+			print("ERROR: Couldn't load " + ext + " files!")
+
+#	filenames.sort()
+#	print(filenames)
+	for file in filenames:
+		files.append(load(file))
+	return files
 
 
+func _on_Music_finished():
+	play_music()

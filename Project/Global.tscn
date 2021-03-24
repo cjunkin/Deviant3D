@@ -150,6 +150,9 @@ hint_tooltip = "Ditch your friends"
 mouse_default_cursor_shape = 2
 size_flags_vertical = 3
 text = "Quit to Main Menu"
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+bus = "Music"
 [connection signal="mouse_exited" from="Menu/Menu/Buttons/Sensitivity/SensSlider" to="." method="_on_SensSlider_mouse_exited"]
 [connection signal="value_changed" from="Menu/Menu/Buttons/Sensitivity/SensSlider" to="." method="_on_SensSlider_value_changed"]
 [connection signal="toggled" from="Menu/Menu/Buttons/Flip" to="." method="_on_CheckBox_toggled"]
@@ -158,5 +161,6 @@ text = "Quit to Main Menu"
 [connection signal="mouse_exited" from="Menu/Menu/Buttons/Music/MSlider" to="." method="_on_MSlider_mouse_exited"]
 [connection signal="value_changed" from="Menu/Menu/Buttons/Music/MSlider" to="." method="_on_MSlider_value_changed"]
 [connection signal="button_up" from="Menu/Menu/Buttons/Quit" to="." method="_on_Quit_button_up"]
+[connection signal="finished" from="Music" to="." method="_on_Music_finished"]
 
 [editable path="Menu/Menu"]
