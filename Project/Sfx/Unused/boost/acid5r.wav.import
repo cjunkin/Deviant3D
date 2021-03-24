@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/acid5.wav-b74bb310e65704fbff593ad92dc91d67.sample"
+path="res://.import/acid5r.wav-67a5d37accace0d40c96320838249689.sample"
 
 [deps]
 
-source_file="res://Sfx/boost/acid5.wav"
-dest_files=[ "res://.import/acid5.wav-b74bb310e65704fbff593ad92dc91d67.sample" ]
+source_file="res://Sfx/Unused/boost/acid5r.wav"
+dest_files=[ "res://.import/acid5r.wav-67a5d37accace0d40c96320838249689.sample" ]
 
 [params]
 

@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/laser00.wav-233124327f62fb05143f89fcf1a061f2.sample"
+path="res://.import/acid5.wav-c4cdf13eb76f207eceffd0d72e4748c0.sample"
 
 [deps]
 
-source_file="res://Sfx/weapon/laser00.wav"
-dest_files=[ "res://.import/laser00.wav-233124327f62fb05143f89fcf1a061f2.sample" ]
+source_file="res://Sfx/Unused/boost/acid5.wav"
+dest_files=[ "res://.import/acid5.wav-c4cdf13eb76f207eceffd0d72e4748c0.sample" ]
 
 [params]
 
