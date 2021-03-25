@@ -18,6 +18,7 @@ var exp_i : int = 0
 var enemies := []
 var enemy_i : int = 0
 var players := []
+var hooks := []
 
 # File Paths
 export(String, FILE) var rock_path
@@ -87,7 +88,7 @@ func _ready()->void:
 func _physics_process(delta: float) -> void:
 	for p in projectiles:
 		if p.is_inside_tree():
-			p.translation += p.speed * p.transform.basis.z * delta
+			p.translation -= p.speed * p.transform.basis.z * delta
 			
 
 	# Enemies
@@ -109,6 +110,19 @@ func _physics_process(delta: float) -> void:
 			# If fallen too low, die
 			if e.translation.y < -7:
 				e.rpc("d")
+
+	# Hooks
+	for hook in hooks:
+		if hook.enabled:
+			hook.translation -= 256 * hook.transform.basis.z * delta
+			if hook.is_colliding():
+				var hitpt : Vector3 = hook.get_collision_point()
+				hook.get_parent().remove_child(hook)
+				hook.get_collider().add_child(hook)
+				hook.global_transform.origin = hitpt
+				hook.player.set(hook.name, false)
+				hook.enabled = false
+
 #	TimeLeft.text =  str(EnemySpawnTime.time_left)
 #	for p in players:
 #		

@@ -17,7 +17,7 @@ var sens_changed := false
 var gravity_changed := false
 
 # Game
-var game: Spatial
+var game: Game
 var current_player : Player
 
 # Theme

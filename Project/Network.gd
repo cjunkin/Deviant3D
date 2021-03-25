@@ -60,7 +60,7 @@ func player_connected(id: int) -> void:
 remotesync func unregister(id: int) -> void:
 	if players.erase(id):
 		# if player is there
-		get_node(GAME_PATH).get_node(str(id)).queue_free()
+		get_node(GAME_PATH).get_node(str(id)).unregister()
 
 func player_disconnected(id: int) -> void:
 	rpc("unregister", id)
