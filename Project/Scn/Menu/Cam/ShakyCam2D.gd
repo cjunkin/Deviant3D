@@ -14,6 +14,7 @@ func _on_Duration_timeout() -> void:
 	set_physics_process(false)
 	self.offset = Vector2.ZERO
 
+
 func startShake(mag: float = magnitude, dur := duration, easing := DAMP_EASING) -> void:
 	set_physics_process(true)
 	self.magnitude = mag
