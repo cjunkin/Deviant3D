@@ -62,12 +62,12 @@ func _ready() -> void:
 	RHook = hook_s.instance()
 	RHook.player = self
 	RHook.add_exception(self)
-	RHook.name = "not_grappling"
+	RHook.name = "R"
 	G.game.hooks.append(RHook)
 	LHook = hook_s.instance()
 	LHook.player = self
 	LHook.add_exception(self)
-	LHook.name = "not_grappling2"
+	LHook.name = "L"
 	G.game.hooks.append(LHook)
 
 	# TODO: implement wall climb (maybe not)
@@ -272,18 +272,24 @@ func _physics_process(_delta: float) -> void:
 	vel *= air_resistance*air_resistance2 
 
 
+func hook(hook_name: String):
+	if hook_name == "R":
+		GLine.visible = true
+		not_grappling = false
+		RHook.visible = false
+	else:
+		GLine2.visible = true
+		not_grappling2 = false
+
 func local_grapple(right: bool) -> void:
 	if right:
 		RHook.enabled = true
 		RHook.global_transform = GrappleCast.global_transform
 		GLine.points[1] = Muzzle.global_transform.origin
-		GLine.visible = true
 		G.game.add_child(RHook)
-		print("LKJ")
 		rpc("s", translation, CamX.rotation.y, CamY.rotation.x, vel)
 
 #		GLine.points[1] = Muzzle.global_transform.origin
-		GLine.visible = true
 #		rpc("b", translation, CamX.rotation.y, CamY.rotation.x)
 	else:
 		grapple_pos2 = GrappleCast.get_collision_point()
@@ -318,6 +324,7 @@ puppetsync func c() -> void:
 	not_grappling = true
 	GLine.visible = false
 	RHook.enabled = false
+	RHook.visible = true
 	# Put hook back in G.game
 
 # Set grapple hook position for 2nd hook

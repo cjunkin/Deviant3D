@@ -118,9 +118,9 @@ func _physics_process(delta: float) -> void:
 			if hook.is_colliding():
 				var hitpt : Vector3 = hook.get_collision_point()
 				hook.get_parent().remove_child(hook)
-				hook.get_collider().add_child(hook)
+				hook.get_collider().add_child(hook)# TODO: don't scale by paren
 				hook.global_transform.origin = hitpt
-				hook.player.set(hook.name, false)
+				hook.player.call("hook", hook.name)
 				hook.enabled = false
 
 #	TimeLeft.text =  str(EnemySpawnTime.time_left)
