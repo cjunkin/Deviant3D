@@ -6,7 +6,7 @@ const PROJ_PER_PLAYER := 5
 const EXP_PER_PLAYER := 10
 var num_projectiles := PROJ_PER_PLAYER
 var num_explosions := EXP_PER_PLAYER
-const num_enemies := 2
+const num_enemies := 16
 #const num_laser_audio := 8
 const num_grapple_sounds := 6
 
@@ -32,7 +32,7 @@ export(NodePath) var enemy_spawn_time
 export (PackedScene) var player_s := preload("res://Scn/Actor/Player/Player.tscn")
 
 # Gameplay
-var spawn_time := 2.0
+const spawn_time := 1.0
 
 # RNG
 var TERRAIN_SEED : int
@@ -90,6 +90,27 @@ func _physics_process(delta: float) -> void:
 	for p in projectiles:
 		if p.is_inside_tree():
 			p.translation += p.speed * p.transform.basis.z * delta
+			
+
+	# Enemies
+	for e in enemies:
+		if e.is_inside_tree():
+			if is_instance_valid(e.target):
+				#	vel = translation.direction_to(target.global_transform.origin)
+
+				# Look at target, but not looking up
+				e.look_at(e.target.global_transform.origin, Vector3.UP)
+				e.rotation.x = 0
+
+			e.acc = e.transform.basis.z * e.speed
+			e.vel.z = e.vel.z * .8 + e.acc.z
+			e.vel.x = e.vel.x * .8 + e.acc.x
+			e.vel += Vector3.DOWN * e.grav
+			
+			e.vel = e.move_and_slide(e.vel , Vector3.UP, false, 4, .75, false)
+			# If fallen too low, die
+			if e.translation.y < -7:
+				e.rpc("d")
 #	TimeLeft.text =  str(EnemySpawnTime.time_left)
 #	for p in players:
 #		

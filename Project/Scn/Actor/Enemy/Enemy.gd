@@ -16,22 +16,22 @@ func _ready() -> void:
 func set_target(t) -> void:
 	target = t
 
-func _physics_process(_delta: float) -> void:
-#	vel = translation.direction_to(target.global_transform.origin)
-	if is_instance_valid(target):
-		# Look at target, but not looking up
-		look_at(target.global_transform.origin, Vector3.UP)
-		rotation.x = 0
-
-	acc = transform.basis.z * speed
-	vel.z = vel.z * .8 + acc.z
-	vel.x = vel.x * .8 + acc.x
-	vel += Vector3.DOWN * grav
-	
-	vel = move_and_slide(vel , Vector3.UP, false, 4, .75, false)
-	# If fallen too low, die
-	if translation.y < -5:
-		rpc("d")
+#func _physics_process(_delta: float) -> void:
+##	vel = translation.direction_to(target.global_transform.origin)
+#	if is_instance_valid(target):
+#		# Look at target, but not looking up
+#		look_at(target.global_transform.origin, Vector3.UP)
+#		rotation.x = 0
+#
+#	acc = transform.basis.z * speed
+#	vel.z = vel.z * .8 + acc.z
+#	vel.x = vel.x * .8 + acc.x
+#	vel += Vector3.DOWN * grav
+#
+#	vel = move_and_slide(vel , Vector3.UP, false, 4, .75, false)
+#	# If fallen too low, die
+#	if translation.y < -7:
+#		rpc("d")
 
 # MULTIPLAYER STUFF --------------------------------------------
 
