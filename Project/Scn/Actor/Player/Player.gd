@@ -310,8 +310,8 @@ puppetsync func e() -> void:
 
 # Fire
 puppetsync func f() -> void:
-	G.game.proj_i = (G.game.proj_i + 1) % G.game.num_projectiles
-	var p : Projectile = G.game.projectiles[G.game.proj_i]
+	G.game.laser_i = (G.game.laser_i + 1) % G.game.num_lasers
+	var p : Projectile = G.game.projectiles[G.game.laser_i]
 	G.game.add_child(p)
 	p.global_transform = GrappleCast.global_transform
 	p.monitoring = true

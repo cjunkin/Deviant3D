@@ -4,7 +4,7 @@ extends Spatial
 # Num Cached     TODO: make caches in C++ for efficiency
 const PROJ_PER_PLAYER := 5
 const EXP_PER_PLAYER := 10
-var num_projectiles := PROJ_PER_PLAYER
+var num_lasers := PROJ_PER_PLAYER
 var num_explosions := EXP_PER_PLAYER
 const num_enemies := 16
 #const num_laser_audio := 8
@@ -12,7 +12,7 @@ const num_grapple_sounds := 6
 
 # Cached Arrays
 var projectiles := []
-var proj_i : int = 0
+var laser_i : int = 0
 var explosions := []
 var exp_i : int = 0
 var enemies := []
@@ -22,14 +22,14 @@ var players := []
 # File Paths
 export(String, FILE) var rock_path
 export(String, FILE) var enemy_path
-export(String, FILE) var exp_path
-export(String, FILE) var proj_path
 
 # Node Paths
 export(NodePath) var enemy_spawn_time
 
 # Packed Scenes
 export (PackedScene) var player_s := preload("res://Scn/Actor/Player/Player.tscn")
+export (PackedScene) var laser_s := preload("res://Scn/Projectile/Laser.tscn")
+export (PackedScene) var exp_s
 
 # Gameplay
 const spawn_time := 1.0
@@ -62,13 +62,11 @@ func _ready()->void:
 	else:
 		request_current_data()
 	# Projectiles
-	var proj_s := load(proj_path)
-	for __ in range(num_projectiles):
-		var p : Projectile = proj_s.instance()
+	for __ in range(num_lasers):
+		var p : Projectile = laser_s.instance()
 		projectiles.append(p)
 
 	# Explosions
-	var exp_s := load(exp_path)
 	for __ in range(num_explosions):
 		var e : Particles = exp_s.instance()
 		explosions.append(e)
@@ -226,14 +224,12 @@ remote func spawn(id: int) -> void:
 	players.append(player)
 	
 	# Projectiles
-	var proj_s := load(proj_path)
 	for __ in range(PROJ_PER_PLAYER):
-		var p : Projectile = proj_s.instance()
+		var p : Projectile = laser_s.instance()
 		projectiles.append(p)
-	num_projectiles += PROJ_PER_PLAYER
+	num_lasers += PROJ_PER_PLAYER
 
 	# Explosions
-	var exp_s := load(exp_path)
 	for __ in range(EXP_PER_PLAYER):
 		var e : Particles = exp_s.instance()
 		explosions.append(e)

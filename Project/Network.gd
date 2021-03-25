@@ -48,6 +48,7 @@ remotesync func register(id: int) -> void:
 		# if player isn't already there
 		players[id] = 0
 		get_node(GAME_PATH).spawn(id)
+		get_tree().paused = false
 
 func player_connected(id: int) -> void:
 	for pid in players:

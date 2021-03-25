@@ -80,6 +80,7 @@ process_mode = 0
 one_shot = true
 
 [node name="Tween" type="Tween" parent="."]
+playback_process_mode = 0
 
 [node name="Sight" type="Control" parent="."]
 margin_left = -33.234

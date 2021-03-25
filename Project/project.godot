@@ -32,7 +32,7 @@ _global_script_classes=[ {
 "base": "Area",
 "class": "Projectile",
 "language": "GDScript",
-"path": "res://Scn/Projectile.gd"
+"path": "res://Scn/Projectile/Projectile.gd"
 }, {
 "base": "Camera",
 "class": "ShakeCamera",
@@ -42,7 +42,7 @@ _global_script_classes=[ {
 "base": "Spatial",
 "class": "Text",
 "language": "GDScript",
-"path": "res://Scn/Text/Text3D.gd"
+"path": "res://Scn/UI/Text/Text3D.gd"
 } ]
 _global_script_class_icons={
 "Enemy": "",

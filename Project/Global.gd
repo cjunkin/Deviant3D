@@ -57,9 +57,11 @@ func _input(event: InputEvent) -> void:
 		# TODO: reduce to no if/else
 		# Pause
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+			current_player.set_process_input(false)
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			Menu.visible = true
-			current_player.set_process_input(false)
+			get_tree().paused = Network.players.size() <= 1
+
 		# Unpause
 		else:
 			if sens_changed:
@@ -71,6 +73,7 @@ func _input(event: InputEvent) -> void:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 			Menu.visible = false
 			current_player.set_process_input(true)
+			get_tree().paused = false
 
 	# Fullscreen
 	elif event.is_action_pressed("fullscreen"):

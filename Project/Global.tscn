@@ -1,15 +1,16 @@
 [gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Global.gd" type="Script" id=1]
-[ext_resource path="res://Scn/Menu/Blur.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scn/UI/Blur.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Gfx/Shader/BlurShader.shader" type="Shader" id=3]
-[ext_resource path="res://Scn/Menu/CenteredPanel.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scn/UI/CenteredPanel.tscn" type="PackedScene" id=5]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 3 )
 shader_param/blur_amount = 2.5
 
 [node name="Pause" type="CanvasLayer"]
+pause_mode = 2
 script = ExtResource( 1 )
 gravity = NodePath("Menu/Center/Menu/Buttons/Grav")
 

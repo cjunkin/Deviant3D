@@ -1,8 +1,8 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Scn/StaticBox.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Scn/Text/Text3D.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scn/UI/Text/Text3D.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Gfx/Material/tile.svg" type="Texture" id=4]
 [ext_resource path="res://Scn/Env/Sunlight.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scn/Env/Env.gd" type="Script" id=6]
@@ -11,8 +11,9 @@
 [ext_resource path="res://Scn/Env/Rock1.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Scn/Env/Rock1R.tscn" type="PackedScene" id=10]
 [ext_resource path="res://WorldEnv.tres" type="Environment" id=11]
+[ext_resource path="res://Scn/Fx/Explosion.tscn" type="PackedScene" id=12]
 
-[sub_resource type="SpatialMaterial" id=3]
+[sub_resource type="SpatialMaterial" id=1]
 flags_vertex_lighting = true
 flags_world_triplanar = true
 albedo_color = Color( 2.68359, 1.38, 3, 1 )
@@ -22,7 +23,7 @@ uv1_scale = Vector3( 0.1, 0.1, 0.1 )
 uv1_triplanar = true
 uv2_triplanar_sharpness = 0.784584
 
-[sub_resource type="SpatialMaterial" id=4]
+[sub_resource type="SpatialMaterial" id=2]
 flags_vertex_lighting = true
 flags_world_triplanar = true
 albedo_color = Color( 1.38, 3, 1.67109, 1 )
@@ -36,9 +37,8 @@ uv2_triplanar_sharpness = 0.784584
 script = ExtResource( 1 )
 rock_path = "res://Scn/Env/Rock1.tscn"
 enemy_path = "res://Scn/Actor/Enemy/Enemy.tscn"
-exp_path = "res://Scn/Fx/Explosion.tscn"
-proj_path = "res://Scn/Projectile.tscn"
 enemy_spawn_time = NodePath("EnemySpawnTime")
+exp_s = ExtResource( 12 )
 
 [node name="Sunlight" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, 0, 5.4548, 0 )
@@ -105,7 +105,7 @@ use_collision = true
 width = 88.0
 height = 44.0
 depth = 8.0
-material = SubResource( 3 )
+material = SubResource( 1 )
 
 [node name="RoomCeil" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 7, 42.1388, 125 )
@@ -114,7 +114,7 @@ use_collision = true
 width = 88.0
 height = 50.0
 depth = 8.0
-material = SubResource( 4 )
+material = SubResource( 2 )
 
 [node name="RoomWall2" type="CSGBox" parent="."]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 64, 21.1388, 126 )

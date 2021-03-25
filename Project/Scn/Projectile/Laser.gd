@@ -1,14 +1,6 @@
-class_name Projectile
-extends Area
+extends Projectile
 
-export var speed := -256
-onready var timer := $Timer
-
-func _on_Timer_timeout() -> void:
-	get_parent().remove_child(self)
-
-
-func _on_Proj_body_entered(body) -> void:
+func _on_Laser_body_entered(body) -> void:
 	if body is RigidBody:
 		
 		# Disable self
@@ -31,4 +23,3 @@ func _on_Proj_body_entered(body) -> void:
 		# Disable self
 		set_deferred("monitoring", false)
 		visible = false
-
