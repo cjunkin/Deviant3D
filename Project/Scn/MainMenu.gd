@@ -22,7 +22,6 @@ onready var ClickAnim := $ClickAnim
 const STANDARD := PoolStringArray(["Off", "Low", "Medium", "High"])
 const BINARY := PoolStringArray(["Off", "On"])
 const ALL_GFX_OPTIONS := PoolStringArray(["shadows", "glow", "bloom"]) # TODO: more graphics settings
-# TODO: minimal theme, where graphics settings are opened in separate panel
 
 func _ready() -> void:
 #	OS.set_low_processor_usage_mode(true)

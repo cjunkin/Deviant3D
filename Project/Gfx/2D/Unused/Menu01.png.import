@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Menu01.png-5a2b32ed3d7b2a6f2086a99854583605.stex"
+path="res://.import/Menu01.png-8c7ee4246407843a6061f49914de4586.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Gfx/2D/Menu01.png"
-dest_files=[ "res://.import/Menu01.png-5a2b32ed3d7b2a6f2086a99854583605.stex" ]
+source_file="res://Gfx/2D/Unused/Menu01.png"
+dest_files=[ "res://.import/Menu01.png-8c7ee4246407843a6061f49914de4586.stex" ]
 
 [params]
 

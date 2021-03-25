@@ -43,6 +43,7 @@ collision_layer = 2
 collision_mask = 7
 script = ExtResource( 2 )
 cam_path = "res://Scn/Actor/ShakyCam.tscn"
+flippers_path = "res://Scn/Actor/Player/Flippers.tscn"
 
 [node name="CamX" type="Spatial" parent="."]
 
@@ -78,33 +79,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13213, 0 )
 stream = ExtResource( 6 )
 max_db = 0.0
 bus = "Sfx"
-
-[node name="Flippers" type="Spatial" parent="CamX"]
-transform = Transform( 0.999848, 0.0174524, -7.62868e-10, 0, -4.37114e-08, -1, -0.0174524, 0.999848, -4.37047e-08, 0, 0, 0 )
-
-[node name="Front" type="RayCast" parent="CamX/Flippers"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 2.22045e-16, -1.42109e-14, 1, 0, -0.8, 1.4 )
-enabled = true
-cast_to = Vector3( 0, -1.5, 0 )
-
-[node name="Top" type="RayCast" parent="CamX/Flippers"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, -1.25 )
-enabled = true
-cast_to = Vector3( 0, 0, -0.5 )
-
-[node name="Left" type="RayCast" parent="CamX/Flippers"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -0.25, -0.5 )
-enabled = true
-cast_to = Vector3( -0.25, 0, 0 )
-
-[node name="Right" type="RayCast" parent="CamX/Flippers"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -0.25, -0.5 )
-enabled = true
-cast_to = Vector3( 0.25, 0, 0 )
-
-[node name="Front2" type="RayCast" parent="CamX/Flippers"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.75, -1.25 )
-enabled = true
 
 [node name="Hitbox" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )

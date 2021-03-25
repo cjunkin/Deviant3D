@@ -10,6 +10,7 @@ var SENS_Y := -.002
 var SENS_X := -.002
 
 # Physics
+var gravity := true
 remote var a := Vector3.ZERO # acceleration, TODO: optimize networking by only sending inputs
 var accel := Vector3.ZERO
 var vel := Vector3.ZERO
@@ -27,13 +28,14 @@ var grapple_pos2 := Vector3.ZERO
 
 # File Paths
 export(String, FILE) var cam_path
+export(String, FILE) var flippers_path
 
 # Cached Nodes
 onready var CamSpring : SpringArm
 onready var Cam : Camera
 onready var CamX := $CamX
 onready var PMesh := CamX.get_node("PMesh")
-onready var Flippers : Array = CamX.get_node("Flippers").get_children()
+onready var Flippers : Array
 onready var CamY := CamX.get_node("CamY")
 onready var Gun := CamY.get_node("Gun")
 onready var Sfx := Gun.get_node("Sfx")
@@ -74,6 +76,10 @@ func _ready() -> void:
 		
 		G.current_player = self
 		
+		var flippers : Spatial = load(flippers_path).instance()
+		CamX.add_child(flippers)
+		Flippers = flippers.get_children()
+		
 #		DebugOverlay.draw.add_vector(self, "vel", 1, 4, Color(0,1,0, 0.5))
 #		DebugOverlay.draw.add_vector(self, "grapple_aim", 1, 4, Color(0,1,1, 0.5))
 #		DebugOverlay.draw.add_vector(self, "global_transform:basis:x", 1, 4, Color(1,1,1, 0.5))
@@ -81,6 +87,7 @@ func _ready() -> void:
 		set_process_input(false)
 		# Request sync from master
 		rpc_id(get_network_master(), "req_syn")
+		$CamX/Flippers.queue_free()
 
 
 
@@ -154,11 +161,29 @@ func _input(event: InputEvent) -> void:
 	elif event.is_action_released("crouch"):
 		rpc("u") # uncrouch
 
+	if event.is_action_pressed("reset_gravity") and FlipTime.is_stopped():
+		rpc("st", Vector3.UP) # reset rotation to normal
+		toggle_flippers(!G.Flip.pressed)
+		G.Flip.pressed = !G.Flip.pressed
+		# If we're turning flip off, set wait time
+		if !G.Flip.pressed:
+			FlipTime.start(5)
+			yield(FlipTime, "timeout")
+			FlipTime.wait_time = 1
+		else:
+			FlipTime.start()
+
+
+
 #		# Accelerate Hook
 #		if Input.is_action_pressed("sprint"):
 #			vel += (grapple_pos - global_transform.origin).normalized() * 3
 ##			vel -= CamY.global_transform.basis.z
 ##			vel.y += 1
+
+func toggle_flippers(enabled: bool) -> void:
+	for raycast in Flippers:
+		raycast.enabled = enabled
 
 func _physics_process(_delta: float) -> void:
 	# collision with boxes
@@ -201,7 +226,7 @@ func _physics_process(_delta: float) -> void:
 		vel += .125 * a # BIG TODO: fix massive acceleration if jump while moving
 
 	# apply gravity, inputs, physics
-	vel -= (int(not_grappling)) * (int(not_grappling2)) * transform.basis.y * grav
+	vel -= int(gravity) * (int(not_grappling)) * (int(not_grappling2)) * transform.basis.y * grav
 	vel = move_and_slide(vel, transform.basis.y, false, 4, .75, false)
 
 
@@ -229,6 +254,8 @@ func _physics_process(_delta: float) -> void:
 		var is_near2 := int(abs((grapple_pos2 - global_transform.origin).length_squared()) < 64)
 		air_resistance2 = .95 * int(is_near2) + .999 * int(!is_near2)
 	vel *= air_resistance*air_resistance2 
+
+
 
 func local_grapple(right: bool) -> void:
 	if right:
@@ -335,21 +362,25 @@ remotesync func st(normal: Vector3) -> void:
 remotesync func t(trans: Transform) -> void:
 	transform = trans
 
-# Uncrouch
+# Uncrouch TODO: tween crouching
 remotesync func u() -> void:
 #	Hitbox.shape.height = 1
 #	Hitbox.translation.y = 0
 #	Hitbox.scale = Vector3(1, 1, 1)
 #	PMesh.mesh.mid_height = 1
+	if Cam:
+		Cam.get_parent().translation.y = 1.5 * int(!fps) + 1 * int(fps)
 	PMesh.translation.y = 0
 	PMesh.scale = Vector3(1, 1, 1)
 
-# Crouch
+# Crouch TODO: make hitbox also smaller, cam translate down
 remotesync func v() -> void:
 #	Hitbox.shape.height = .5
 #	Hitbox.translation.y = -.25
 #	Hitbox.scale = Vector3(.9, .9, .5)
 #	PMesh.mesh.mid_height = .5
+	if Cam:
+		Cam.get_parent().translation.y = 1 * int(!fps) + .5 * int(fps)
 	PMesh.translation.y = -.4
 	PMesh.scale = Vector3(.9, .9, .75)
 
@@ -367,20 +398,12 @@ remote func ss(sens: float) -> void:
 # Return rotated XFORM where its new normal is NEW_Y
 func align_with_y(xform: Transform, new_y: Vector3) -> Transform:
 	var new_x := -xform.basis.z.cross(new_y)
-#	print("\n OLD XFORM")
-#	print(xform.basis.x)
-#	print(xform.basis.y
-#	print(xform.basis.z)
 	if new_x != Vector3.ZERO:
 		xform.basis.x = new_x
 	else:
 		xform.basis.z = xform.basis.x.cross(new_y)
 	xform.basis.y = new_y
 	xform.basis = xform.basis.orthonormalized()
-#	print("NEW XFORM")
-#	print(xform.basis.x)
-#	print(xform.basis.y)
-#	print(xform.basis.z)
 	return xform
 
 # Sync position/aim every X seconds

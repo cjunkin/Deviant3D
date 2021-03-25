@@ -22,6 +22,9 @@ var primary_color := Color("b4d2ff")
 var deactivated_color := Color("ff9898")
 
 # GUI nodes
+export (NodePath) var gravity
+
+onready var Grav := get_node(gravity)
 onready var Menu := $Menu
 onready var SSlider := Menu.get_node("Center/Menu/Buttons/Sound/SSlider")
 onready var MSlider := Menu.get_node("Center/Menu/Buttons/Music/MSlider")
@@ -89,6 +92,7 @@ func _on_SensSlider_value_changed(value: float):
 	sens_changed = true
 	current_player.ss(value)
 
+# Plays TRACK_NUMBER, or a random track if -1 is passed in
 func play_music(track_number: int = -1) -> void:
 	if !Music.playing or track_number != -1:
 		randomize()
@@ -119,16 +123,22 @@ static func load_files(dir: String, ext: String = ".ogg") -> Array:
 		files.append(load(file))
 	return files
 
-
+# Plays another random track
 func _on_Music_finished():
 	play_music()
 
-
+# Actually changes player's flip
 func _on_Flip_toggled(button_pressed: bool):
-	for raycast in current_player.Flippers:
-		if raycast is RayCast:
-			raycast.enabled = button_pressed
+	current_player.toggle_flippers(button_pressed)
 	if button_pressed:
 		Flip.modulate = G.primary_color
 	else:
 		Flip.modulate = G.deactivated_color
+
+# Actually changes player's gravity
+func _on_Grav_toggled(button_pressed: bool) -> void:
+	current_player.gravity = button_pressed
+	if button_pressed:
+		Grav.modulate = G.primary_color
+	else:
+		Grav.modulate = G.deactivated_color
