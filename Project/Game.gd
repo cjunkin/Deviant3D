@@ -3,7 +3,7 @@ extends Spatial
 
 # Num Cached     TODO: make caches in C++ for efficiency
 const PROJ_PER_PLAYER := 5
-const EXP_PER_PLAYER := 5
+const EXP_PER_PLAYER := 10
 var num_projectiles := PROJ_PER_PLAYER
 var num_explosions := EXP_PER_PLAYER
 const num_enemies := 2
@@ -35,8 +35,8 @@ export (PackedScene) var player_s := preload("res://Scn/Actor/Player/Player.tscn
 var spawn_time := 2.0
 
 # RNG
-var SEED : int
-var rng := RandomNumberGenerator.new()
+var TERRAIN_SEED : int
+var spawn_rng := RandomNumberGenerator.new()
 
 # Networking
 signal received_data
@@ -55,9 +55,9 @@ func _ready()->void:
 	set_network_master(1, false)
 	if is_network_master():
 		randomize()
-		SEED = randi() % 2048
+		TERRAIN_SEED = randi() % 2048
 		Network.register(get_tree().get_network_unique_id())
-		gen_boxes(SEED)
+		gen_boxes(TERRAIN_SEED)
 		get_node(enemy_spawn_time).start(spawn_time)
 	else:
 		request_current_data()
@@ -83,14 +83,14 @@ func _ready()->void:
 #	$Enemy3.set_target(players[0])
 #	$Enemy4.set_target(players[0])
 
-onready var TimeLeft := $Label
-onready var EnemySpawnTime : Timer = get_node(enemy_spawn_time)
+#onready var TimeLeft := $Label
+#onready var EnemySpawnTime : Timer = get_node(enemy_spawn_time)
 
 func _physics_process(delta: float) -> void:
 	for p in projectiles:
 		if p.is_inside_tree():
 			p.translation += p.speed * p.transform.basis.z * delta
-	TimeLeft.text =  str(EnemySpawnTime.time_left)
+#	TimeLeft.text =  str(EnemySpawnTime.time_left)
 #	for p in players:
 #		
 
@@ -101,6 +101,7 @@ func gen_boxes(my_seed: int) -> void:
 	noise.octaves = 4
 	noise.period = 20
 	noise.persistence = .8
+	var rng := RandomNumberGenerator.new()
 	rng.seed = my_seed
 	var static_box_s := load(rock_path)
 	for x in range(-400, 400, 40):
@@ -112,61 +113,73 @@ func gen_boxes(my_seed: int) -> void:
 				b.scale = Vector3(1, 1, 1) * rng.randf_range(8, 16)
 				add_child(b)
 
-func spawn_enemy() -> void:
+func spawn_enemy(trans := Vector3.INF, velocity := Vector3.INF, target_name := "") -> void:
 	var enemy: Enemy = enemies[enemy_i]
+	enemy_i = (enemy_i + 1) % num_enemies
 	# If enemy isn't already spawned in
 	if !enemy.is_inside_tree():
-		enemy.translation = Vector3(randf(), .5 + randf() / 16, randf()) * 100
-		#Vector3(rng.randf(), .5 + rng.randf() / 16, rng.randf()) * 100
-		print(enemy.translation)
-		add_child(enemy)
-		enemy_i = (enemy_i + 1) % num_enemies
-		enemy.set_target(players[randi() % players.size()])
-		
+		# Not syncing
+		if trans == Vector3.INF:
+			enemy.translation = Vector3(spawn_rng.randf(), .5 + spawn_rng.randf() / 16, spawn_rng.randf()) * 100
+			enemy.set_target(players[spawn_rng.randi() % players.size()])
+		# Called via rpc
+		else:
+			enemy.translation = trans
+			enemy.vel = velocity
+			enemy.set_target(get_node(target_name))
+
+		call_deferred("add_child", enemy)
 
 func _on_EnemySpawnTime_timeout():
 	spawn_enemy()
 
 # MULTIPLAYER STUFF --------------------------------------------
 
+# Reqeuests current seed
 func request_current_data() -> void:
 	var latency_timer := Timer.new()
 	get_node("/root").add_child(latency_timer)
-	rpc("req_cur")
+	rpc("sen_seed")
 	latency_timer.start(4)
 	
 	# When packet comes back, read latency
 	yield(self, "received_data")
 	latency = 4 - latency_timer.time_left
 
-	# Start spawn timer, must be positive amount mod 4
-#	var enemy_spawn: Timer = get_node(enemy_spawn_time)
-#	enemy_spawn.start(fposmod(enemy_spawn_time_left - latency, 4))
-#	print(fposmod(enemy_spawn_time_left - latency, 4))
-	
-	# Reset wait_time (since timer should go back to 4 seconds)
-#	yield(enemy_spawn, "timeout")
-#	enemy_spawn.start(4)
-	rpc("req_time")
-	
-	# Cleanup
+	# Now that we have latency (TODO: average latency rather than just
+	# taking 1 sample), we can request the time 
+	rpc("sen_time")
+
+	# Cleanup timer
 	latency_timer.queue_free()
 
-# Sends seed and current enemy spawn time, should only be called on hosts
-master func req_cur() -> void:
+# Sends seed and current enemies, should only be called on hosts
+master func sen_seed() -> void:
 	# Send seed and our current spawn timer's time
-	rpc("set_cur", SEED)
+	var new_spawn_seed := randi() % 2048
+	rpc("set_cur", TERRAIN_SEED, new_spawn_seed)
+	spawn_rng.seed = new_spawn_seed
 
-master func req_time() -> void:
+
+# Sends enemy spawn timer's time_left
+master func sen_time() -> void:
 	rpc("set_time", get_node(enemy_spawn_time).time_left)
-	print(get_node(enemy_spawn_time).time_left)
+	# Sync up all existing enemies
+	for enemy in enemies:
+		if enemy.is_inside_tree() and enemy.target:
+			rpc("s", enemy.translation, enemy.vel, enemy.target.get_network_master())
+	enemy_i = 0
 
-# Recieve current data, should only be called on non-host
-puppet func set_cur(s: int) -> void:
+puppet func s(master_translation: Vector3, velocity: Vector3, target_i : int) -> void:
+	spawn_enemy(master_translation, velocity, str(target_i))
+
+# Recieve current seeds, should only be called on non-host
+puppet func set_cur(terrain_seed: int, spawn_seed: int) -> void:
 	# To ensure only host sends it
 	if get_tree().get_rpc_sender_id() == 1:
 		emit_signal("received_data")
-		gen_boxes(s)
+		spawn_rng.seed = spawn_seed
+		gen_boxes(terrain_seed)
 
 # Recieve current spawn_time, should only be called on non-host
 puppet func set_time(spawn_time_left: float) -> void:
@@ -181,7 +194,6 @@ puppet func set_time(spawn_time_left: float) -> void:
 		# Reset wait_time (since timer should go back to 4 seconds)
 		yield(enemy_spawn, "timeout")
 		enemy_spawn.start(spawn_time)
-		
 
 
 # Spawn player with id PLAYER TODO: use get_rpc_sender_id to avoid hack

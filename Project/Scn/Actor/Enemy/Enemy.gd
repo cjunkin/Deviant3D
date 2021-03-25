@@ -2,6 +2,8 @@ class_name Enemy
 extends KinematicBody
 
 var target: Player
+
+# Physics
 var vel := Vector3()
 var speed := -2
 var grav := 1
@@ -9,12 +11,10 @@ var acc := Vector3()
 export var friction := .125
 
 func _ready() -> void:
-	set_physics_process(false)
 	add_to_group("Enemy")
 
 func set_target(t) -> void:
 	target = t
-	set_physics_process(true)
 
 func _physics_process(_delta: float) -> void:
 #	vel = translation.direction_to(target.global_transform.origin)
@@ -37,9 +37,18 @@ func _physics_process(_delta: float) -> void:
 
 # Die
 remotesync func d() -> void:
+	# Particle
+	G.game.exp_i = (G.game.exp_i + 1) % G.game.num_explosions
+	var e : Particles = G.game.explosions[G.game.exp_i]
+	e.translation = translation
+	e.emitting = true
+	set_deferred("monitoring", false)
+
+	# Remove self
 	get_parent().remove_child(self)
 
 # Set translation, velocity
 remote func s(master_translation: Vector3, velocity: Vector3) -> void:
 	translation = master_translation
 	vel = velocity
+

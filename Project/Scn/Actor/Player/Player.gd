@@ -378,7 +378,7 @@ puppetsync func v() -> void:
 	PMesh.scale = Vector3(.9, .9, .75)
 
 # When other person calls this, send over my info
-puppet func req_syn() -> void:
+master func req_syn() -> void:
 	rpc("t", transform)
 	rpc("s", translation, CamX.rotation.y, CamY.rotation.x, vel)
 	rpc("ss", -SENS_X * 1000)

@@ -56,7 +56,7 @@ func setup_graphics_options_signals(gfx_control: Control, function_name: String)
 				print("ERROR: COULDN'T CONNECT " + setting)
 			# Default overall is high
 			if setting == "Overall":
-				button.select(3)
+				button.select(2)
 			# Set other defaults
 			else:
 				set_setting(setting, G.get(setting))

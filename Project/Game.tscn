@@ -183,13 +183,4 @@ transform = Transform( 1.11542, 4.46487, -6.54376, 7.60949, 1.23349, 2.13871, 2.
 [node name="EnemySpawnTime" type="Timer" parent="."]
 process_mode = 0
 wait_time = 4.0
-
-[node name="Label" type="Label" parent="."]
-margin_left = 24.2944
-margin_top = 18.0969
-margin_right = 163.294
-margin_bottom = 105.097
-__meta__ = {
-"_edit_use_anchors_": false
-}
 [connection signal="timeout" from="EnemySpawnTime" to="." method="_on_EnemySpawnTime_timeout"]
