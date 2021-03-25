@@ -10,8 +10,8 @@ var SENS_Y := -.002
 var SENS_X := -.002
 
 # Physics
-var gravity := true
-remote var a := Vector3.ZERO # acceleration, TODO: optimize networking by only sending inputs
+puppet var gravity := true
+puppet var a := Vector3.ZERO # acceleration
 var accel := Vector3.ZERO
 var vel := Vector3.ZERO
 export var grav : float= 64 / 60
@@ -87,7 +87,6 @@ func _ready() -> void:
 		set_process_input(false)
 		# Request sync from master
 		rpc_id(get_network_master(), "req_syn")
-		$CamX/Flippers.queue_free()
 
 
 
@@ -208,12 +207,6 @@ func _physics_process(_delta: float) -> void:
 		for ray in Flippers:
 			if ray.is_colliding() and FlipTime.is_stopped():
 				rpc("st", ray.get_collision_normal())
-#		elif Top.is_colliding() and FlipTime.is_stopped():
-#			rpc("st", Top.get_collision_normal())
-#		elif Left.is_colliding() and FlipTime.is_stopped():
-#			rpc("st", Left.get_collision_normal())
-#		elif Right.is_colliding() and FlipTime.is_stopped():
-#			rpc("st", Right.get_collision_normal())
 
 	# Grounded
 	if is_on_floor():
@@ -276,7 +269,7 @@ func local_grapple(right: bool) -> void:
 	GrappleSfx.play()
 
 # Set grapple hook position
-remote func b(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void:
+puppet func b(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void:
 	translation = trans
 	CamX.rotation.y = y
 	CamY.rotation.x = cam_help_x
@@ -291,12 +284,12 @@ remote func b(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void
 	GrappleSfx.play()
 
 # Stop (no) grappling
-remotesync func c() -> void:
+puppetsync func c() -> void:
 	not_grappling = true
 	GLine.visible = false
 
 # Set grapple hook position for 2nd hook
-remote func d(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void:
+puppet func d(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void:
 	translation = trans
 	CamX.rotation.y = y
 	CamY.rotation.x = cam_help_x
@@ -309,14 +302,14 @@ remote func d(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void
 	GrappleSfx.play()
 
 # Stop (no) grappling for 2nd hook
-remotesync func e() -> void:
+puppetsync func e() -> void:
 	not_grappling2 = true
 	GLine2.visible = false
 
 
 
 # Fire
-remotesync func f() -> void:
+puppetsync func f() -> void:
 	G.game.proj_i = (G.game.proj_i + 1) % G.game.num_projectiles
 	var p : Projectile = G.game.projectiles[G.game.proj_i]
 	G.game.add_child(p)
@@ -329,23 +322,23 @@ remotesync func f() -> void:
 	p.timer.start()
 
 # Jump
-remotesync func j() -> void:
+puppetsync func j() -> void:
 	vel += jump * transform.basis.y
 
 # Aim
-remote func r(rot: Vector2) -> void:
+puppet func r(rot: Vector2) -> void:
 	CamX.rotate_y(rot.x * SENS_X) # Side to side // (transform.basis.y, 
 	CamY.rotation.x = clamp(CamY.rotation.x + (rot.y * SENS_Y), -PI/2, PI/2) # Up down
 
 # Sync position/orientation
-remote func s(trans: Vector3, y: float, cam_help_x: float, velocity: Vector3) -> void:
+puppet func s(trans: Vector3, y: float, cam_help_x: float, velocity: Vector3) -> void:
 	translation = trans
 	CamX.rotation.y = y
 	CamY.rotation.x = cam_help_x
 	vel = velocity
 
 # Sync transform (during flip)
-remotesync func st(normal: Vector3) -> void:
+puppetsync func st(normal: Vector3) -> void:
 	vel *= .25
 	tween.interpolate_property(
 		self, 
@@ -359,11 +352,11 @@ remotesync func st(normal: Vector3) -> void:
 	FlipTime.start()
 
 # Transform
-remotesync func t(trans: Transform) -> void:
+puppetsync func t(trans: Transform) -> void:
 	transform = trans
 
 # Uncrouch TODO: tween crouching
-remotesync func u() -> void:
+puppetsync func u() -> void:
 #	Hitbox.shape.height = 1
 #	Hitbox.translation.y = 0
 #	Hitbox.scale = Vector3(1, 1, 1)
@@ -374,7 +367,7 @@ remotesync func u() -> void:
 	PMesh.scale = Vector3(1, 1, 1)
 
 # Crouch TODO: make hitbox also smaller, cam translate down
-remotesync func v() -> void:
+puppetsync func v() -> void:
 #	Hitbox.shape.height = .5
 #	Hitbox.translation.y = -.25
 #	Hitbox.scale = Vector3(.9, .9, .5)
@@ -385,13 +378,13 @@ remotesync func v() -> void:
 	PMesh.scale = Vector3(.9, .9, .75)
 
 # When other person calls this, send over my info
-remote func req_syn() -> void:
+puppet func req_syn() -> void:
 	rpc("t", transform)
 	rpc("s", translation, CamX.rotation.y, CamY.rotation.x, vel)
 	rpc("ss", -SENS_X * 1000)
 
 # Set Sensitivity
-remote func ss(sens: float) -> void:
+puppet func ss(sens: float) -> void:
 	SENS_X = -sens/1000
 	SENS_Y = -sens/1000
 

@@ -7,7 +7,6 @@ const GAME_PATH := "/root/Game"
 var players := {}
 
 func host() -> void:
-	G.hosted = true
 	
 	# Standard
 	var peer = NetworkedMultiplayerENet.new()

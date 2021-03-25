@@ -5,16 +5,19 @@ const MUSIC_BUS := 2
 enum {OFF, LOW, MED, HIGH}
 
 # Graphics
-var shadows := HIGH
-var glow := HIGH
-var bloom := HIGH
+#var shadows := HIGH
+#var glow := HIGH
+#var bloom := HIGH
+var shadows := OFF
+var glow := OFF
+var bloom := OFF
 
 # Pause Settings
 var sens_changed := false
+var gravity_changed := false
 
 # Game
 var game: Spatial
-var hosted := false
 var current_player : Player
 
 # Theme
@@ -59,12 +62,15 @@ func _input(event: InputEvent) -> void:
 			current_player.set_process_input(false)
 		# Unpause
 		else:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-			Menu.visible = false
-			current_player.set_process_input(true)
 			if sens_changed:
 				current_player.rpc("ss", -current_player.SENS_X/1000)
 				sens_changed = false
+			if gravity_changed:
+				current_player.rset("gravity", current_player.gravity)
+				gravity_changed = false
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+			Menu.visible = false
+			current_player.set_process_input(true)
 
 	# Fullscreen
 	elif event.is_action_pressed("fullscreen"):
@@ -137,6 +143,7 @@ func _on_Flip_toggled(button_pressed: bool):
 
 # Actually changes player's gravity
 func _on_Grav_toggled(button_pressed: bool) -> void:
+	gravity_changed = true
 	current_player.gravity = button_pressed
 	if button_pressed:
 		Grav.modulate = G.primary_color

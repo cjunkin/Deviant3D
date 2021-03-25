@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Scn/StaticBox.tscn" type="PackedScene" id=2]
@@ -10,31 +10,7 @@
 [ext_resource path="res://Scn/Env/Island1.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Scn/Env/Rock1.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Scn/Env/Rock1R.tscn" type="PackedScene" id=10]
-
-[sub_resource type="ProceduralSky" id=1]
-sky_top_color = Color( 0.196078, 0.388235, 0.847059, 1 )
-sky_horizon_color = Color( 0.545098, 0.686275, 0.811765, 1 )
-sky_curve = 0.13
-ground_bottom_color = Color( 0.545098, 0.686275, 0.811765, 1 )
-ground_horizon_color = Color( 0.545098, 0.686275, 0.811765, 1 )
-sun_angle_max = 30.0
-
-[sub_resource type="Environment" id=2]
-background_mode = 2
-background_sky = SubResource( 1 )
-ambient_light_color = Color( 0.501961, 0.501961, 0.501961, 1 )
-ambient_light_sky_contribution = 0.25
-tonemap_mode = 2
-dof_blur_far_distance = 64.0
-dof_blur_far_transition = 100.0
-dof_blur_far_amount = 0.04
-dof_blur_far_quality = 2
-dof_blur_near_quality = 2
-glow_enabled = true
-glow_bloom = 0.1
-glow_blend_mode = 1
-glow_hdr_threshold = 0.9
-glow_hdr_luminance_cap = 2.0
+[ext_resource path="res://WorldEnv.tres" type="Environment" id=11]
 
 [sub_resource type="SpatialMaterial" id=3]
 flags_vertex_lighting = true
@@ -59,17 +35,21 @@ uv2_triplanar_sharpness = 0.784584
 [node name="Game" type="Spatial"]
 script = ExtResource( 1 )
 rock_path = "res://Scn/Env/Rock1.tscn"
+enemy_path = "res://Scn/Actor/Enemy/Enemy.tscn"
+exp_path = "res://Scn/Fx/Explosion.tscn"
+proj_path = "res://Scn/Projectile.tscn"
+enemy_spawn_time = NodePath("EnemySpawnTime")
 
 [node name="Sunlight" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, 0, 5.4548, 0 )
 
 [node name="Env" type="WorldEnvironment" parent="."]
-environment = SubResource( 2 )
+environment = ExtResource( 11 )
 script = ExtResource( 6 )
 Sunlight = NodePath("../Sunlight")
 
 [node name="Stairs" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3222, 1.49208, -16.1938 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -19.5033, 1.49208, -16.1938 )
 use_in_baked_light = true
 use_collision = true
 width = 8.0
@@ -78,7 +58,7 @@ depth = 6.0
 material = ExtResource( 7 )
 
 [node name="Stairs2" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.3222, -0.503316, -22.1938 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -19.5033, -0.503316, -22.1938 )
 use_in_baked_light = true
 use_collision = true
 width = 8.0
@@ -185,6 +165,7 @@ material = ExtResource( 7 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7.38, 0 )
 use_in_baked_light = true
 use_collision = true
+collision_mask = 7
 width = 400.0
 height = 8.0
 depth = 400.0
@@ -197,4 +178,18 @@ transform = Transform( 16, 0, 0, 0, 16, 0, 0, 0, 16, 137.756, 483.134, -351.662 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9717, 3.47361, -42.4121 )
 
 [node name="Rock2" parent="." instance=ExtResource( 9 )]
-transform = Transform( 1.11542, 4.46487, -6.54376, 1.76636, 6.30176, 4.60084, 7.72242, -2.08632, -0.107179, -29.5906, 39.5014, -84.4337 )
+transform = Transform( 1.11542, 4.46487, -6.54376, 7.60949, 1.23349, 2.13871, 2.2026, -6.52253, -4.07494, -29.5906, 39.5014, -84.4337 )
+
+[node name="EnemySpawnTime" type="Timer" parent="."]
+process_mode = 0
+wait_time = 4.0
+
+[node name="Label" type="Label" parent="."]
+margin_left = 24.2944
+margin_top = 18.0969
+margin_right = 163.294
+margin_bottom = 105.097
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="timeout" from="EnemySpawnTime" to="." method="_on_EnemySpawnTime_timeout"]

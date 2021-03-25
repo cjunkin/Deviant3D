@@ -1,6 +1,5 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://Gfx/Shader/flexible_toon.shader" type="Shader" id=1]
 [ext_resource path="res://Scn/Actor/Player/Player.gd" type="Script" id=2]
 [ext_resource path="res://Scn/Fx/Sound/Sfx.tscn" type="PackedScene" id=3]
 [ext_resource path="res://icon.png" type="Texture" id=4]
@@ -10,21 +9,8 @@
 [sub_resource type="CapsuleMesh" id=1]
 radial_segments = 16
 
-[sub_resource type="ShaderMaterial" id=2]
-shader = ExtResource( 1 )
-shader_param/albedo = Color( 0.360784, 0.627451, 1, 1 )
-shader_param/clamp_diffuse_to_max = false
-shader_param/cuts = 2
-shader_param/wrap = 0.0
-shader_param/steepness = 1.0
-shader_param/use_attenuation = false
-shader_param/use_specular = true
-shader_param/specular_strength = 0.25
-shader_param/specular_shininess = 8.0
-shader_param/use_rim = false
-shader_param/rim_width = 8.0
-shader_param/rim_color = Color( 1, 1, 1, 1 )
-shader_param/use_ramp = false
+[sub_resource type="SpatialMaterial" id=2]
+albedo_color = Color( 0.168627, 0.54902, 1, 1 )
 
 [sub_resource type="CapsuleShape" id=3]
 

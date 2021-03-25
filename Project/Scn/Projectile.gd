@@ -31,5 +31,6 @@ func _on_Proj_body_entered(body) -> void:
 		e.emitting = true
 		
 		# Kill enemy
-		body.queue_free()
+		body.rpc("d")
+#		body.get_parent().remove_child(body)
 
