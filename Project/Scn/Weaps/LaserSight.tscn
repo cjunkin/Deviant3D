@@ -1,9 +1,9 @@
 [gd_scene load_steps=2 format=2]
 
-[sub_resource type="SpatialMaterial" id=2]
+[sub_resource type="SpatialMaterial" id=1]
 flags_transparent = true
 flags_vertex_lighting = true
-albedo_color = Color( 1, 0, 0, 0.392157 )
+albedo_color = Color( 1, 0, 0, 0.25098 )
 emission_enabled = true
 emission = Color( 1, 0, 0, 1 )
 emission_energy = 1.0
@@ -14,4 +14,4 @@ emission_on_uv2 = false
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, -32 )
 radius = 0.1
 height = 64.0
-material = SubResource( 2 )
+material = SubResource( 1 )

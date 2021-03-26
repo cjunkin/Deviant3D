@@ -136,6 +136,7 @@ __meta__ = {
 }
 
 [node name="All" type="CanvasLayer" parent="."]
+layer = 0
 
 [node name="Margin" type="MarginContainer" parent="All"]
 anchor_left = 0.5

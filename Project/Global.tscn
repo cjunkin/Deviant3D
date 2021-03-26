@@ -11,6 +11,7 @@ shader_param/blur_amount = 2.5
 
 [node name="Pause" type="CanvasLayer"]
 pause_mode = 2
+layer = 2
 script = ExtResource( 1 )
 gravity = NodePath("Menu/Center/Menu/Buttons/Grav")
 

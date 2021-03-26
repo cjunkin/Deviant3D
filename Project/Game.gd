@@ -34,6 +34,7 @@ export (PackedScene) var exp_s
 
 # Gameplay
 const spawn_time := 1.0
+onready var Reticule : TextureRect = $HUD/Reticule
 
 # RNG
 var TERRAIN_SEED : int
@@ -100,8 +101,8 @@ func _physics_process(delta: float) -> void:
 				# Look at target, but not looking up
 				e.look_at(e.target.global_transform.origin, Vector3.UP)
 				e.rotation.x = 0
-
-			e.acc = e.transform.basis.z * e.speed
+			
+			e.acc = e.transform.basis.z * e.speed #* int(e.global_transform.origin.distance_squared_to(e.target.global_transform.origin) > 1)
 			e.vel.z = e.vel.z * .8 + e.acc.z
 			e.vel.x = e.vel.x * .8 + e.acc.x
 			e.vel += Vector3.DOWN * e.grav

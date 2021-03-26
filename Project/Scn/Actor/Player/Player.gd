@@ -15,7 +15,7 @@ puppet var a := Vector3.ZERO # acceleration
 var accel := Vector3.ZERO
 var vel := Vector3.ZERO
 export var grav : float= 64 / 60
-export var jump : float = grav * 32
+export var jump : float = grav * 42
 export var friction : float = .825
 export var speed : float = 4 * friction
 
@@ -231,6 +231,9 @@ func _physics_process(_delta: float) -> void:
 			# TODO: Muzzle flash
 			rpc("f") # fire
 			Cam.stress = 0.25
+		else:
+			G.game.Reticule.rect_scale = Vector2(ROF.time_left + .2, ROF.time_left + .2) * 5
+#			print(G.game.Reticule.rect_scale, ROF.wait_time + 1)
 
 		# "Run, the game" flipping
 		for ray in Flippers:
