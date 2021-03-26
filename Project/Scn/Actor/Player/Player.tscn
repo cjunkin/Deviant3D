@@ -105,6 +105,7 @@ __meta__ = {
 
 [node name="Line" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.02375, 2.02893, 3.61047 )
+visible = false
 material_override = SubResource( 4 )
 drawCaps = false
 drawCorners = false
@@ -112,6 +113,7 @@ scaleTexture = false
 
 [node name="Line2" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.02375, 2.02893, 3.61047 )
+visible = false
 material_override = SubResource( 5 )
 drawCaps = false
 drawCorners = false

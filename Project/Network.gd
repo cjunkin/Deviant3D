@@ -52,8 +52,8 @@ remotesync func register(id: int) -> void:
 
 func player_connected(id: int) -> void:
 	for pid in players:
-		# spawn all other players on our new guy
-		get_node(GAME_PATH).rpc_id(id, "spawn", pid)
+		# register and spawn all other players on our new guy
+		rpc_id(id, "register", pid)
 	# spawn him on everyone else
 	rpc("register", id)
 
