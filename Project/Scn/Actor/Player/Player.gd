@@ -35,7 +35,8 @@ onready var CamSpring : SpringArm
 onready var Cam : Camera
 onready var CamX := $CamX
 onready var GrappleSfx := CamX.get_node("GrappleSfx")
-onready var PMesh := CamX.get_node("PMesh")
+onready var MeshHelp := CamX.get_node("MeshHelp")
+onready var PMesh := MeshHelp.get_node("PMesh")
 onready var Flippers : Array
 onready var CamY := CamX.get_node("CamY")
 onready var Gun := CamY.get_node("Gun")
@@ -237,6 +238,11 @@ func _physics_process(_delta: float) -> void:
 		else:
 			LaserSight.height = 256
 			LaserSight.translation.z = -128
+		if L_not_grapplin and not_grappling:
+			MeshHelp.rotation = lerp(MeshHelp.rotation, Vector3.ZERO, .2)
+		else:
+			MeshHelp.look_at(grapple_pos * int(!not_grappling) + grapple_pos2 * int(!L_not_grapplin), transform.basis.y)
+
 
 	# Grounded
 	if is_on_floor():
@@ -264,11 +270,12 @@ func _physics_process(_delta: float) -> void:
 	# Grappling logic
 	var air_resistance := 1.0
 	var air_resistance2 := 1.0
-	# if grappling
+	# if Hook shot
 	if GLine.visible:
 		grapple_pos = RHook.global_transform.origin
 		GLine.points[0] = grapple_pos
 		GLine.points[1] = FrontCast.global_transform.origin
+	# Hook hit
 	if !not_grappling:
 		var new_grapple_len := (grapple_pos - global_transform.origin).length()
 		var grapple_vel := (global_transform.origin - grapple_pos) / new_grapple_len * min(0, (1 - new_grapple_len)) * .25
@@ -279,10 +286,12 @@ func _physics_process(_delta: float) -> void:
 		var is_near := abs((grapple_pos - global_transform.origin).length_squared()) < 64
 		air_resistance = .95 * int(is_near) + .999 * int(!is_near)
 
+	# if Left Hook shot
 	if LGLine.visible:
 		grapple_pos2 = LHook.global_transform.origin
 		LGLine.points[0] = grapple_pos2
 		LGLine.points[1] = FrontCast.global_transform.origin
+	# Left Hook hit
 	if !L_not_grapplin:
 		var new_grapple_len := (grapple_pos2 - global_transform.origin).length()
 		var grapple_vel := (global_transform.origin - grapple_pos2) / new_grapple_len * min(0, (1 - new_grapple_len)) * .25
@@ -292,7 +301,7 @@ func _physics_process(_delta: float) -> void:
 		# If near grappling point, slow down (and get pulled more towards the point)
 		var is_near2 := int(abs((grapple_pos2 - global_transform.origin).length_squared()) < 64)
 		air_resistance2 = .95 * int(is_near2) + .999 * int(!is_near2)
-	vel *= air_resistance*air_resistance2 
+	vel *= air_resistance*air_resistance2
 
 # Call only on self so that sounds follow TPS/FPS camera
 func reparent_sound(sfx: AudioStreamPlayer3D) -> void:
@@ -411,6 +420,8 @@ puppetsync func st(normal: Vector3, trans: Vector3) -> void:
 puppetsync func t(trans: Transform) -> void:
 	transform = trans
 
+const CROUCH_TIME := .05
+
 # Uncrouch TODO: tween crouching
 puppetsync func u() -> void:
 #	Hitbox.shape.height = 1
@@ -419,8 +430,11 @@ puppetsync func u() -> void:
 #	PMesh.mesh.mid_height = 1
 	if Cam:
 		Cam.get_parent().translation.y = 1.5 * int(!fps) + 1 * int(fps)
-	PMesh.translation.y = 0
-	PMesh.scale = Vector3(1, 1, 1)
+	tween.interpolate_property(PMesh, "translation:y", PMesh.translation.y, 0, CROUCH_TIME, Tween.TRANS_CIRC)
+	tween.interpolate_property(PMesh, "scale", PMesh.scale, Vector3.ONE, CROUCH_TIME, Tween.TRANS_CIRC)
+	tween.start()
+#	PMesh.translation.y = 0
+#	PMesh.scale = Vector3.ONE
 
 # Crouch TODO: make hitbox also smaller, cam translate down
 puppetsync func v() -> void:
@@ -430,8 +444,11 @@ puppetsync func v() -> void:
 #	PMesh.mesh.mid_height = .5
 	if Cam:
 		Cam.get_parent().translation.y = 1 * int(!fps) + .5 * int(fps)
-	PMesh.translation.y = -.4
-	PMesh.scale = Vector3(.9, .9, .75)
+	tween.interpolate_property(PMesh, "translation:y", PMesh.translation.y, -.4, CROUCH_TIME, Tween.TRANS_CIRC)
+	tween.interpolate_property(PMesh, "scale", PMesh.scale, Vector3(.9, .9, .75), CROUCH_TIME, Tween.TRANS_CIRC)
+	tween.start()
+#	PMesh.translation.y = -.4
+#	PMesh.scale = Vector3(.9, .9, .75)
 
 # When other person calls this, send over my info
 master func req_syn() -> void:
@@ -447,11 +464,10 @@ puppet func ss(sens: float) -> void:
 # Return rotated XFORM where its new normal is NEW_Y
 func align_with_y(xform: Transform, new_y: Vector3) -> Transform:
 	var new_x := -xform.basis.z.cross(new_y)
-	xform.basis.x = new_x
-#	if new_x != Vector3.ZERO:
-#		xform.basis.x = new_x
-#	else:
-#		xform.basis.z = xform.basis.x.cross(new_y)
+	if new_x != Vector3.ZERO:
+		xform.basis.x = new_x
+	else:
+		xform.basis.z = xform.basis.x.cross(new_y)
 	xform.basis.y = new_y
 	xform.basis = xform.basis.orthonormalized()
 	return xform
