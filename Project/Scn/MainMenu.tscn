@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Scn/MainMenu.gd" type="Script" id=1]
 [ext_resource path="res://Theme/main_theme.tres" type="Theme" id=2]
@@ -8,7 +8,6 @@
 [ext_resource path="res://Gfx/Shader/BlurShader.tres" type="Material" id=6]
 [ext_resource path="res://Gfx/Font/LTBulletin-Medium.ttf" type="DynamicFontData" id=7]
 [ext_resource path="res://Scn/UI/CenteredPanel.tscn" type="PackedScene" id=8]
-[ext_resource path="res://addons/SinusoidalAnims.gd" type="Script" id=9]
 [ext_resource path="res://Scn/UI/Cam/ShakyCam2D.tscn" type="PackedScene" id=10]
 
 [sub_resource type="DynamicFont" id=1]
@@ -455,7 +454,6 @@ anims/ChooseGfx = SubResource( 3 )
 
 [node name="ClickAnim" type="AnimationPlayer" parent="."]
 anims/Click = SubResource( 4 )
-script = ExtResource( 9 )
 
 [node name="shaky_cam" parent="." instance=ExtResource( 10 )]
 [connection signal="button_up" from="All/Margin/Menu/PlayMargin/Play/Host" to="." method="_on_Host_button_up"]

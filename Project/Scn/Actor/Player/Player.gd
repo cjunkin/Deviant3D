@@ -146,7 +146,6 @@ func _input(event: InputEvent) -> void:
 		rpc_unreliable("A", event.relative)
 	# Switch camera sides
 	if event.is_action_pressed("switch_tps"):
-		print("LJ")
 		var next : Vector3 = CamSpring.translation
 		next.x = -3.5 * sign(next.x) # previously -3.75
 		tween.interpolate_property(CamSpring, "translation", CamSpring.translation, next, .25, Tween.TRANS_CIRC)
@@ -268,6 +267,7 @@ func _physics_process(_delta: float) -> void:
 	else:
 		# Reduce grounded movespeed
 		vel += .125 * a # BIG TODO: fix massive acceleration if jump while moving
+		AnimTree.set("parameters/Move/blend_amount", 0)
 
 	# apply gravity, inputs, physics
 	vel -= int(gravity) * (int(not_grappling)) * (int(L_not_grapplin)) * transform.basis.y * grav

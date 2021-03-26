@@ -62,6 +62,8 @@ func _input(event: InputEvent) -> void:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			Menu.visible = true
 			get_tree().paused = Network.players.size() <= 1
+			current_player.rpc("R")
+			current_player.rpc("L")
 
 		# Unpause
 		else:
