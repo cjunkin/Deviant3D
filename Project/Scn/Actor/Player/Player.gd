@@ -447,10 +447,11 @@ puppet func ss(sens: float) -> void:
 # Return rotated XFORM where its new normal is NEW_Y
 func align_with_y(xform: Transform, new_y: Vector3) -> Transform:
 	var new_x := -xform.basis.z.cross(new_y)
-	if new_x != Vector3.ZERO:
-		xform.basis.x = new_x
-	else:
-		xform.basis.z = xform.basis.x.cross(new_y)
+	xform.basis.x = new_x
+#	if new_x != Vector3.ZERO:
+#		xform.basis.x = new_x
+#	else:
+#		xform.basis.z = xform.basis.x.cross(new_y)
 	xform.basis.y = new_y
 	xform.basis = xform.basis.orthonormalized()
 	return xform
