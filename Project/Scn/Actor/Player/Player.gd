@@ -238,11 +238,6 @@ func _physics_process(_delta: float) -> void:
 		else:
 			LaserSight.height = 256
 			LaserSight.translation.z = -128
-		if L_not_grapplin and not_grappling:
-			MeshHelp.rotation = lerp(MeshHelp.rotation, Vector3.ZERO, .2)
-		else:
-			MeshHelp.look_at(grapple_pos * int(!not_grappling) + grapple_pos2 * int(!L_not_grapplin), transform.basis.y)
-
 
 	# Grounded
 	if is_on_floor():
@@ -302,6 +297,13 @@ func _physics_process(_delta: float) -> void:
 		var is_near2 := int(abs((grapple_pos2 - global_transform.origin).length_squared()) < 64)
 		air_resistance2 = .95 * int(is_near2) + .999 * int(!is_near2)
 	vel *= air_resistance*air_resistance2
+	
+	if L_not_grapplin and not_grappling:
+		MeshHelp.rotation = lerp(MeshHelp.rotation, Vector3.ZERO, .2)
+	else:
+		MeshHelp.look_at(grapple_pos * int(!not_grappling) + grapple_pos2 * int(!L_not_grapplin), transform.basis.y)
+
+
 
 # Call only on self so that sounds follow TPS/FPS camera
 func reparent_sound(sfx: AudioStreamPlayer3D) -> void:
@@ -428,13 +430,14 @@ puppetsync func u() -> void:
 #	Hitbox.translation.y = 0
 #	Hitbox.scale = Vector3(1, 1, 1)
 #	PMesh.mesh.mid_height = 1
+#	PMesh.translation.y = 0
+#	PMesh.scale = Vector3.ONE
 	if Cam:
 		Cam.get_parent().translation.y = 1.5 * int(!fps) + 1 * int(fps)
 	tween.interpolate_property(PMesh, "translation:y", PMesh.translation.y, 0, CROUCH_TIME, Tween.TRANS_CIRC)
 	tween.interpolate_property(PMesh, "scale", PMesh.scale, Vector3.ONE, CROUCH_TIME, Tween.TRANS_CIRC)
 	tween.start()
-#	PMesh.translation.y = 0
-#	PMesh.scale = Vector3.ONE
+
 
 # Crouch TODO: make hitbox also smaller, cam translate down
 puppetsync func v() -> void:
@@ -442,13 +445,14 @@ puppetsync func v() -> void:
 #	Hitbox.translation.y = -.25
 #	Hitbox.scale = Vector3(.9, .9, .5)
 #	PMesh.mesh.mid_height = .5
+#	PMesh.translation.y = -.4
+#	PMesh.scale = Vector3(.9, .9, .75)
 	if Cam:
 		Cam.get_parent().translation.y = 1 * int(!fps) + .5 * int(fps)
 	tween.interpolate_property(PMesh, "translation:y", PMesh.translation.y, -.4, CROUCH_TIME, Tween.TRANS_CIRC)
 	tween.interpolate_property(PMesh, "scale", PMesh.scale, Vector3(.9, .9, .75), CROUCH_TIME, Tween.TRANS_CIRC)
 	tween.start()
-#	PMesh.translation.y = -.4
-#	PMesh.scale = Vector3(.9, .9, .75)
+
 
 # When other person calls this, send over my info
 master func req_syn() -> void:
