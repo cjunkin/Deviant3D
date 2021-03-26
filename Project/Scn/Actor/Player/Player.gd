@@ -57,7 +57,12 @@ onready var FlipTime := $FlipTime
 onready var Hitbox := $Hitbox
 onready var tween := $Tween
 
-var LaserSight : ImmediateGeometry
+var LaserSight : CSGCylinder
+
+func reparent_sound(sfx: AudioStreamPlayer3D) -> void:
+	sfx.get_parent().remove_child(sfx)
+	Cam.add_child(sfx)
+	sfx.translation = Vector3.ZERO
 
 func _ready() -> void:
 	var hook_s := load("res://Scn/Projectile/Hook.tscn")
@@ -83,6 +88,8 @@ func _ready() -> void:
 			CamHolder.add_child(load(cam_path).instance())
 			Cam = CamHolder.get_node("Spring/Cam")
 			CamSpring = CamHolder.get_node("Spring")
+			reparent_sound(Sfx)
+			reparent_sound(GrappleSfx)
 		# AR CAM
 		else:
 			add_child(load("res://Scn/AR/ARVROrigin.tscn").instance())
@@ -102,8 +109,9 @@ func _ready() -> void:
 		CamX.add_child(flippers)
 		Flippers = flippers.get_children()
 		
-		LaserSight = load("res://addons/LineRenderer/Line.tscn").instance()
-		add_child(LaserSight)
+		LaserSight = load("res://Scn/Weaps/LaserSight.tscn").instance()
+		LaserSight.visible = true
+		Muzzle.add_child(LaserSight)
 		
 #		DebugOverlay.draw.add_vector(self, "vel", 1, 4, Color(0,1,0, 0.5))
 #		DebugOverlay.draw.add_vector(self, "grapple_aim", 1, 4, Color(0,1,1, 0.5))
@@ -138,6 +146,7 @@ func _input(event: InputEvent) -> void:
 		rpc_unreliable("A", event.relative)
 	# Switch camera sides
 	if event.is_action_pressed("switch_tps"):
+		print("LJ")
 		var next : Vector3 = CamSpring.translation
 		next.x = -3.5 * sign(next.x) # previously -3.75
 		tween.interpolate_property(CamSpring, "translation", CamSpring.translation, next, .25, Tween.TRANS_CIRC)
@@ -147,17 +156,19 @@ func _input(event: InputEvent) -> void:
 		tween.start()
 	# Switch between TPS and FPS
 	if event.is_action_pressed("switch_view"):
-		# TODO: reduce to no if/else
+		# Switching to TPS TODO: reduce to no if/else
 		if fps:
 #			CamSpring.translation = Vector3(3.5, 1.5, 0) #Vector3(3.75, 1.5, 9)
 			tween.interpolate_property(CamSpring, "translation", CamSpring.translation, Vector3(3.5, 1.5, 0), .25, Tween.TRANS_CIRC)
 			tween.interpolate_property(CamSpring, "spring_length", CamSpring.spring_length, 8, .25, Tween.TRANS_CIRC)
+#			tween.interpolate_property(Sfx, "translation", Sfx.translation, Vector3(3.5, 5, 0), .25, Tween.TRANS_CIRC)
 			tween.start()
 #			CamSpring.spring_length = 8
 		else:
 #			CamSpring.translation = Vector3(0, 1, 0)
 			tween.interpolate_property(CamSpring, "translation", CamSpring.translation, Vector3(0, 1, 0), .25, Tween.TRANS_CIRC)
 			tween.interpolate_property(CamSpring, "spring_length", CamSpring.spring_length, 0, .25, Tween.TRANS_CIRC)
+#			tween.interpolate_property(Sfx, "translation", Sfx.translation, Vector3(0, 0, 0), .25, Tween.TRANS_CIRC)
 			tween.start()
 #			CamSpring.spring_length = 0
 		fps = !fps
@@ -227,14 +238,30 @@ func _physics_process(_delta: float) -> void:
 			if ray.is_colliding() and FlipTime.is_stopped():
 				rpc("st", ray.get_collision_normal(), translation)
 
+			# Set crosshair
+		if GrappleCast.is_colliding():
+	#		LaserSight.points[0] = Muzzle.global_transform.origin
+	#		LaserSight.points[1] = GrappleCast.get_collision_point()
+	##		sight.rect_position.x = 10000
+	#		LaserSight.draw_line(LaserSight.to_local(GrappleCast.get_collision_point()))
+			LaserSight.height = LaserSight.to_local(GrappleCast.get_collision_point()).length()
+			LaserSight.translation.z = LaserSight.height / -2
+		else:
+	#		LaserSight.points[0] = Muzzle.global_transform.origin
+	#		LaserSight.points[1] = Muzzle.global_transform.origin - Muzzle.global_transform.basis.z * 400
+	#			sight.rect_position = Cam.unproject_position(GrappleCast.get_collision_point())
+	#		LaserSight.draw_line(LaserSight.transform.basis.z * -256)
+			LaserSight.height = 256
+			LaserSight.translation.z = -128
+
 	# Grounded
 	if is_on_floor():
 		# Apply hard friction, unless grappling (then softer friction)
 		vel *= friction * int(not_grappling) + .95 * int(!not_grappling)
 		vel += a
-		var speed := a.length()
-		AnimTree.set("parameters/Move/blend_amount", speed)
-		AnimTree.set("parameters/SprintFactor/scale", clamp(speed * .3, 1, 1.25))
+		var vel_speed := a.length()
+		AnimTree.set("parameters/Move/blend_amount", vel_speed)
+		AnimTree.set("parameters/SprintFactor/scale", clamp(vel_speed * .3, 1, 1.25))
 #		print(speed * .3)
 
 	# Midair
@@ -279,15 +306,7 @@ func _physics_process(_delta: float) -> void:
 		air_resistance2 = .95 * int(is_near2) + .999 * int(!is_near2)
 	vel *= air_resistance*air_resistance2 
 
-	# Set crosshair
-	LaserSight.visible = false
-	if is_network_master() and GrappleCast.is_colliding():
-		LaserSight.visible = true
-		LaserSight.points[0] = Muzzle.global_transform.origin
-		LaserSight.points[1] = GrappleCast.get_collision_point()
-#		sight.rect_position.x = 10000
-#		
-#			sight.rect_position = Cam.unproject_position(GrappleCast.get_collision_point())
+
 
 
 
@@ -326,8 +345,8 @@ puppet func A(rot: Vector2) -> void:
 	CamY.rotation.x = clamp(CamY.rotation.x + (rot.y * SENS_Y), -PI/2, PI/2) # Up down
 
 # Set grapple hook position
-puppet func r(trans: Vector3, y: float, cam_help_x: float, vel: Vector3) -> void:
-	s(trans, y, cam_help_x, vel)
+puppet func r(trans: Vector3, y: float, cam_help_x: float, v: Vector3) -> void:
+	s(trans, y, cam_help_x, v)
 	RHook.enabled = true
 	RHook.global_transform = GrappleCast.global_transform
 	GLine.points[1] = Muzzle.global_transform.origin
@@ -410,7 +429,7 @@ puppetsync func st(normal: Vector3, trans: Vector3) -> void:
 		"global_transform", 
 		global_transform, 
 		align_with_y(global_transform, normal), 
-		.25, 
+		.45, 
 		Tween.TRANS_CIRC
 		)
 	tween.start()
