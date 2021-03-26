@@ -180,7 +180,7 @@ func _input(event: InputEvent) -> void:
 		rpc("u") # uncrouch
 
 	if event.is_action_pressed("reset_gravity") and FlipTime.is_stopped():
-		rpc("st", Vector3.UP) # reset rotation to normal
+		rpc("st", Vector3.UP, translation) # reset rotation to normal
 		toggle_flippers(!G.Flip.pressed)
 		G.Flip.pressed = !G.Flip.pressed
 		# If we're turning flip off, set wait time
@@ -225,7 +225,7 @@ func _physics_process(_delta: float) -> void:
 		# "Run, the game" flipping
 		for ray in Flippers:
 			if ray.is_colliding() and FlipTime.is_stopped():
-				rpc("st", ray.get_collision_normal())
+				rpc("st", ray.get_collision_normal(), translation)
 
 	# Grounded
 	if is_on_floor():
@@ -245,10 +245,11 @@ func _physics_process(_delta: float) -> void:
 	var air_resistance := 1.0
 	var air_resistance2 := 1.0
 	# if grappling
-	if !not_grappling:
+	if GLine.visible:
 		grapple_pos = RHook.global_transform.origin
 		GLine.points[0] = grapple_pos
 		GLine.points[1] = GrappleCast.global_transform.origin
+	if !not_grappling:
 		var new_grapple_len := (grapple_pos - global_transform.origin).length()
 		var grapple_vel := (global_transform.origin - grapple_pos) / new_grapple_len * min(0, (1 - new_grapple_len)) * .25
 		if grapple_vel.length() > MAX_GRAPPLE_SPEED:
@@ -257,10 +258,12 @@ func _physics_process(_delta: float) -> void:
 		# If near grappling point, slow down (and get pulled more towards the point)
 		var is_near := abs((grapple_pos - global_transform.origin).length_squared()) < 64
 		air_resistance = .95 * int(is_near) + .999 * int(!is_near)
-	if !L_not_grapplin:
+
+	if LGLine.visible:
 		grapple_pos2 = LHook.global_transform.origin
 		LGLine.points[0] = grapple_pos2
 		LGLine.points[1] = GrappleCast.global_transform.origin
+	if !L_not_grapplin:
 		var new_grapple_len := (grapple_pos2 - global_transform.origin).length()
 		var grapple_vel := (global_transform.origin - grapple_pos2) / new_grapple_len * min(0, (1 - new_grapple_len)) * .25
 		if grapple_vel.length() > MAX_GRAPPLE_SPEED:
@@ -270,6 +273,8 @@ func _physics_process(_delta: float) -> void:
 		var is_near2 := int(abs((grapple_pos2 - global_transform.origin).length_squared()) < 64)
 		air_resistance2 = .95 * int(is_near2) + .999 * int(!is_near2)
 	vel *= air_resistance*air_resistance2 
+	
+
 
 
 func hook(hook_name: String):
@@ -286,12 +291,14 @@ func local_grapple(right: bool) -> void:
 		RHook.enabled = true
 		RHook.global_transform = GrappleCast.global_transform
 		GLine.points[1] = Muzzle.global_transform.origin
+		GLine.visible = true
 		G.game.add_child(RHook)
 		rpc("r", translation, CamX.rotation.y, CamY.rotation.x, vel)
 	else:
 		LHook.enabled = true
 		LHook.global_transform = GrappleCast.global_transform
 		LGLine.points[1] = Muzzle.global_transform.origin
+		LGLine.visible = true
 		G.game.add_child(LHook)
 		rpc("l", translation, CamX.rotation.y, CamY.rotation.x, vel)
 
@@ -311,6 +318,7 @@ puppet func r(trans: Vector3, y: float, cam_help_x: float, vel: Vector3) -> void
 	RHook.global_transform = GrappleCast.global_transform
 	GLine.points[1] = Muzzle.global_transform.origin
 	G.game.add_child(RHook)
+	GLine.visible = true
 
 	# Audio
 	GrappleSfx.pitch_scale = rand_range(.5, .85)
@@ -331,6 +339,7 @@ puppet func l(trans: Vector3, y: float, cam_help_x: float, vel: Vector3) -> void
 	LHook.enabled = true
 	LHook.global_transform = GrappleCast.global_transform
 	LGLine.points[1] = Muzzle.global_transform.origin
+	LGLine.visible = true
 	G.game.add_child(LHook)
 
 	# Audio
@@ -377,7 +386,8 @@ puppet func s(trans: Vector3, y: float, cam_help_x: float, velocity: Vector3) ->
 	vel = velocity
 
 # Sync transform (during flip)
-puppetsync func st(normal: Vector3) -> void:
+puppetsync func st(normal: Vector3, trans: Vector3) -> void:
+	translation = trans
 	vel *= .25
 	tween.interpolate_property(
 		self, 
