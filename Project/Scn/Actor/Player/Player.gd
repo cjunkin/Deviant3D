@@ -47,7 +47,7 @@ onready var AnimTree := $AnimTree
 var LHook: Hook
 var RHook: Hook
 
-onready var GrappleCast = Muzzle.get_node("GrappleCast")
+onready var FrontCast = Muzzle.get_node("FrontCast") # TODO: Get rid of FrontCast (dont need)
 
 onready var GLine := $Line
 onready var LGLine := $Line2
@@ -59,10 +59,6 @@ onready var tween := $Tween
 
 var LaserSight : CSGCylinder
 
-func reparent_sound(sfx: AudioStreamPlayer3D) -> void:
-	sfx.get_parent().remove_child(sfx)
-	Cam.add_child(sfx)
-	sfx.translation = Vector3.ZERO
 
 func _ready() -> void:
 	var hook_s := load("res://Scn/Projectile/Hook.tscn")
@@ -120,8 +116,6 @@ func _ready() -> void:
 		set_process_input(false)
 		# Request sync from master
 		rpc_id(get_network_master(), "req_syn")
-
-
 
 func _input(event: InputEvent) -> void:
 	# Ground Movement
@@ -213,10 +207,6 @@ func _input(event: InputEvent) -> void:
 ##			vel -= CamY.global_transform.basis.z
 ##			vel.y += 1
 
-func toggle_flippers(enabled: bool) -> void:
-	for raycast in Flippers:
-		raycast.enabled = enabled
-
 func _physics_process(_delta: float) -> void:
 	# collision with boxes
 	for index in get_slide_count():
@@ -240,19 +230,11 @@ func _physics_process(_delta: float) -> void:
 			if ray.is_colliding() and FlipTime.is_stopped():
 				rpc("st", ray.get_collision_normal(), translation)
 
-			# Set crosshair
-		if GrappleCast.is_colliding():
-	#		LaserSight.points[0] = Muzzle.global_transform.origin
-	#		LaserSight.points[1] = GrappleCast.get_collision_point()
-	##		sight.rect_position.x = 10000
-	#		LaserSight.draw_line(LaserSight.to_local(GrappleCast.get_collision_point()))
-			LaserSight.height = LaserSight.to_local(GrappleCast.get_collision_point()).length()
+		# Set crosshair
+		if FrontCast.is_colliding():
+			LaserSight.height = LaserSight.to_local(FrontCast.get_collision_point()).length()
 			LaserSight.translation.z = LaserSight.height / -2
 		else:
-	#		LaserSight.points[0] = Muzzle.global_transform.origin
-	#		LaserSight.points[1] = Muzzle.global_transform.origin - Muzzle.global_transform.basis.z * 400
-	#			sight.rect_position = Cam.unproject_position(GrappleCast.get_collision_point())
-	#		LaserSight.draw_line(LaserSight.transform.basis.z * -256)
 			LaserSight.height = 256
 			LaserSight.translation.z = -128
 
@@ -262,9 +244,10 @@ func _physics_process(_delta: float) -> void:
 		vel *= friction * int(not_grappling) + .95 * int(!not_grappling)
 		vel += a
 		var vel_speed := a.length()
+		
+		# Walking Anims
 		AnimTree.set("parameters/Move/blend_amount", vel_speed)
 		AnimTree.set("parameters/SprintFactor/scale", clamp(vel_speed * .3, 1, 1.25))
-#		print(speed * .3)
 
 	# Midair
 	else:
@@ -275,15 +258,17 @@ func _physics_process(_delta: float) -> void:
 	# apply gravity, inputs, physics
 	vel -= int(gravity) * (int(not_grappling)) * (int(L_not_grapplin)) * transform.basis.y * grav
 	vel = move_and_slide(vel, transform.basis.y, false, 4, .75, false)
+	
+	global_transform = global_transform.interpolate_with(align_with_y(global_transform, newest_normal), .15)
 
-
+	# Grappling logic
 	var air_resistance := 1.0
 	var air_resistance2 := 1.0
 	# if grappling
 	if GLine.visible:
 		grapple_pos = RHook.global_transform.origin
 		GLine.points[0] = grapple_pos
-		GLine.points[1] = GrappleCast.global_transform.origin
+		GLine.points[1] = FrontCast.global_transform.origin
 	if !not_grappling:
 		var new_grapple_len := (grapple_pos - global_transform.origin).length()
 		var grapple_vel := (global_transform.origin - grapple_pos) / new_grapple_len * min(0, (1 - new_grapple_len)) * .25
@@ -297,7 +282,7 @@ func _physics_process(_delta: float) -> void:
 	if LGLine.visible:
 		grapple_pos2 = LHook.global_transform.origin
 		LGLine.points[0] = grapple_pos2
-		LGLine.points[1] = GrappleCast.global_transform.origin
+		LGLine.points[1] = FrontCast.global_transform.origin
 	if !L_not_grapplin:
 		var new_grapple_len := (grapple_pos2 - global_transform.origin).length()
 		var grapple_vel := (global_transform.origin - grapple_pos2) / new_grapple_len * min(0, (1 - new_grapple_len)) * .25
@@ -309,9 +294,16 @@ func _physics_process(_delta: float) -> void:
 		air_resistance2 = .95 * int(is_near2) + .999 * int(!is_near2)
 	vel *= air_resistance*air_resistance2 
 
+# Call only on self so that sounds follow TPS/FPS camera
+func reparent_sound(sfx: AudioStreamPlayer3D) -> void:
+	sfx.get_parent().remove_child(sfx)
+	Cam.add_child(sfx)
+	sfx.translation = Vector3.ZERO
 
-
-
+# Turn flipping on/off based on ENABLED
+func toggle_flippers(enabled: bool) -> void:
+	for raycast in Flippers:
+		raycast.enabled = enabled
 
 func hook(hook_name: String):
 	if hook_name == "R":
@@ -322,25 +314,9 @@ func hook(hook_name: String):
 		LGLine.visible = true
 		L_not_grapplin = false
 
-func local_grapple(right: bool) -> void:
-	if right:
-		RHook.enabled = true
-		RHook.global_transform = GrappleCast.global_transform
-		GLine.points[1] = Muzzle.global_transform.origin
-		GLine.visible = true
-		G.game.add_child(RHook)
-		rpc("r", translation, CamX.rotation.y, CamY.rotation.x, vel)
-	else:
-		LHook.enabled = true
-		LHook.global_transform = GrappleCast.global_transform
-		LGLine.points[1] = Muzzle.global_transform.origin
-		LGLine.visible = true
-		G.game.add_child(LHook)
-		rpc("l", translation, CamX.rotation.y, CamY.rotation.x, vel)
-
-	# Audio
-	GrappleSfx.pitch_scale = rand_range(.5, .85)
-	GrappleSfx.play()
+# =------------------------------------=
+# Multiplayer Functions (single letters to save network usage)
+# =------------------------------------=
 
 # Aim
 puppet func A(rot: Vector2) -> void:
@@ -351,7 +327,7 @@ puppet func A(rot: Vector2) -> void:
 puppet func r(trans: Vector3, y: float, cam_help_x: float, v: Vector3) -> void:
 	s(trans, y, cam_help_x, v)
 	RHook.enabled = true
-	RHook.global_transform = GrappleCast.global_transform
+	RHook.global_transform = FrontCast.global_transform
 	GLine.points[1] = Muzzle.global_transform.origin
 	G.game.add_child(RHook)
 	GLine.visible = true
@@ -373,7 +349,7 @@ puppetsync func R() -> void:
 puppet func l(trans: Vector3, y: float, cam_help_x: float, vel: Vector3) -> void:
 	s(trans, y, cam_help_x, vel)
 	LHook.enabled = true
-	LHook.global_transform = GrappleCast.global_transform
+	LHook.global_transform = FrontCast.global_transform
 	LGLine.points[1] = Muzzle.global_transform.origin
 	LGLine.visible = true
 	G.game.add_child(LHook)
@@ -399,8 +375,7 @@ puppetsync func f() -> void:
 	p.global_transform = Muzzle.global_transform
 	p.monitoring = true
 	p.visible = true
-	
-	
+
 #	AnimTree.set("parameters/Firing/active", false)
 	AnimTree.set("parameters/Firing/active", true)
 
@@ -423,19 +398,13 @@ puppet func s(trans: Vector3, y: float, cam_help_x: float, velocity: Vector3) ->
 	CamY.rotation.x = cam_help_x
 	vel = velocity
 
+var newest_normal := Vector3.UP
+
 # Sync transform (during flip)
 puppetsync func st(normal: Vector3, trans: Vector3) -> void:
 	translation = trans
+	newest_normal = normal
 	vel *= .25
-	tween.interpolate_property(
-		self, 
-		"global_transform", 
-		global_transform, 
-		align_with_y(global_transform, normal), 
-		.45, 
-		Tween.TRANS_CIRC
-		)
-	tween.start()
 	FlipTime.start()
 
 # Transform
@@ -494,3 +463,23 @@ func unregister() -> void:
 	G.game.hooks.erase(LHook)
 	G.game.hooks.erase(RHook)
 	queue_free()
+
+func local_grapple(right: bool) -> void:
+	if right:
+		RHook.enabled = true
+		RHook.global_transform = FrontCast.global_transform
+		GLine.points[1] = Muzzle.global_transform.origin
+		GLine.visible = true
+		G.game.add_child(RHook)
+		rpc("r", translation, CamX.rotation.y, CamY.rotation.x, vel)
+	else:
+		LHook.enabled = true
+		LHook.global_transform = FrontCast.global_transform
+		LGLine.points[1] = Muzzle.global_transform.origin
+		LGLine.visible = true
+		G.game.add_child(LHook)
+		rpc("l", translation, CamX.rotation.y, CamY.rotation.x, vel)
+
+	# Audio
+	GrappleSfx.pitch_scale = rand_range(.5, .85)
+	GrappleSfx.play()
