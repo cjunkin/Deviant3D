@@ -1,0 +1,271 @@
+[gd_scene load_steps=18 format=2]
+
+[ext_resource path="res://Gfx/Model/astronautA_arm.glb" type="PackedScene" id=3]
+[ext_resource path="res://Gfx/Model/astronautA.glb" type="PackedScene" id=4]
+[ext_resource path="res://Gfx/Model/AR.glb" type="PackedScene" id=6]
+
+[sub_resource type="Animation" id=1]
+resource_name = "Fire"
+length = 0.3
+step = 0.025
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("Gimbal/Help/Cam/Arm:translation:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0.09, -0.25, 0, 0.05, 0, 0.09, -0.05, 0, 0.15, 0, 0.09, -0.15, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.05, 0.3 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("Gimbal/Help/Cam/Arm:translation:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( -0.11, -0.25, 0, 0.05, 0, -0.11, -0.05, 0, 0.15, 0, -0.11, -0.15, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.05, 0.3 )
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath("Gimbal/Help/Cam/Arm:translation:z")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"points": PoolRealArray( 0.06, -0.00512079, 0.000184428, 0.00512079, -0.000184428, 0.0802358, -0.0224396, 1.42704e-05, 0.143986, -9.15676e-05, 0.060365, -0.0293829, 0.013368, 0.0293829, -0.013368 ),
+"times": PoolRealArray( 0, 0.025, 0.3 )
+}
+tracks/3/type = "bezier"
+tracks/3/path = NodePath("Gimbal/Help/Cam/Arm:rotation_degrees:x")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.05, 0, 1, -0.05, 0, 0.15, 0, 0, -0.15, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.05, 0.3 )
+}
+tracks/4/type = "bezier"
+tracks/4/path = NodePath("Gimbal/Help/Cam/Arm:rotation_degrees:y")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.05, 0, 0, -0.05, 0, 0.15, 0, 0, -0.15, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.05, 0.3 )
+}
+tracks/5/type = "bezier"
+tracks/5/path = NodePath("Gimbal/Help/Cam/Arm:rotation_degrees:z")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.05, 0, 0, -0.05, 0, 0.15, 0, 0, -0.15, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.05, 0.3 )
+}
+
+[sub_resource type="Animation" id=2]
+length = 2.0
+loop = true
+step = 0.05
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("Gimbal/Help/Cam:translation:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.105616, -5.41629e-05, 0.125, 0 ),
+"times": PoolRealArray( 0 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("Gimbal/Help/Cam:translation:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.5, 0, -0.01, -0.5, 0, 0.5, 0, 0, -0.5, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 1, 2 )
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath("Gimbal/Help/Cam:translation:z")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = false
+tracks/2/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.125, 0 ),
+"times": PoolRealArray( 0 )
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "JumpStart"
+
+[sub_resource type="Animation" id=4]
+length = 0.6
+step = 0.05
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("Gimbal/Help/Cam:translation:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 0, -0.0684905, -1.87801e-05, 0.075, 0, -0.03, -0.075, 0, 0.075, 0, 0, -0.075, 0, 0.075, 0, 0.03, -0.075, 0, 0.075, 0, 0, -0.075, 0, 0.0644437, -1.87801e-05 ),
+"times": PoolRealArray( 0, 0.15, 0.3, 0.45, 0.6 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("Gimbal/Help/Cam:translation:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 0, -0.0729712, -0.000123404, 0.075, 0, -0.03, -0.075, 0, 0.075, 0, 0, -0.075, 0, 0.075, 0, -0.03, -0.075, 0, 0.075, 0, 0, -0.075, 0, 0.05, 0 ),
+"times": PoolRealArray( 0, 0.15, 0.3, 0.45, 0.6 )
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath("Gimbal/Help/Cam:translation:z")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = false
+tracks/2/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.075, 0, 0, -0.075, 0, 0.075, 0, 0, -0.075, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.15, 0.3 )
+}
+tracks/3/type = "bezier"
+tracks/3/path = NodePath("Gimbal/Help/Cam:rotation_degrees:x")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = false
+tracks/3/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.075, 0, 0, -0.075, 0, 0.075, 0, 0, -0.075, 0, 0.075, 0, 0, -0.075, 0, 0.075, 0, 0, -0.075, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.15, 0.3, 0.45, 0.6 )
+}
+tracks/4/type = "bezier"
+tracks/4/path = NodePath("Gimbal/Help/Cam:rotation_degrees:y")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = false
+tracks/4/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.075, 0, 0, -0.075, 0, 0.075, 0, 0, -0.075, 0, 0.075, 0, 0, -0.075, 0, 0.075, 0, 0, -0.075, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.15, 0.3, 0.45, 0.6 )
+}
+tracks/5/type = "bezier"
+tracks/5/path = NodePath("Gimbal/Help/Cam:rotation_degrees:z")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"points": PoolRealArray( 0, -0.05, 0, 0.075, 0, 0.2, -0.075, 0, 0.075, 0, 0, -0.075, 0, 0.075, 0, -0.2, -0.075, 0, 0.075, 0, 0, -0.075, 0, 0.05, 0 ),
+"times": PoolRealArray( 0, 0.15, 0.3, 0.45, 0.6 )
+}
+
+[sub_resource type="BoxShape" id=5]
+extents = Vector3( 0.1, 0.25, 0.1 )
+
+[sub_resource type="AnimationNodeBlend2" id=6]
+
+[sub_resource type="AnimationNodeAnimation" id=7]
+animation = "Fire"
+
+[sub_resource type="AnimationNodeOneShot" id=8]
+filter_enabled = true
+filters = [ "Gimbal/Help/Cam/Arm:rotation_degrees:x", "Gimbal/Help/Cam/Arm:rotation_degrees:y", "Gimbal/Help/Cam/Arm:rotation_degrees:z", "Gimbal/Help/Cam/Arm:translation:x", "Gimbal/Help/Cam/Arm:translation:y", "Gimbal/Help/Cam/Arm:translation:z" ]
+
+[sub_resource type="AnimationNodeAnimation" id=9]
+animation = "Idle"
+
+[sub_resource type="AnimationNodeAnimation" id=10]
+animation = "JumpStart"
+
+[sub_resource type="AnimationNodeAnimation" id=11]
+animation = "JumpStart"
+
+[sub_resource type="AnimationNodeOneShot" id=12]
+filter_enabled = true
+filters = [ "Gimbal/Help/Cam:rotation_degrees:x", "Gimbal/Help/Cam:rotation_degrees:y", "Gimbal/Help/Cam:rotation_degrees:z", "Gimbal/Help/Cam:translation:x", "Gimbal/Help/Cam:translation:y", "Gimbal/Help/Cam:translation:z" ]
+
+[sub_resource type="AnimationNodeAnimation" id=13]
+animation = "WalkCam"
+
+[sub_resource type="AnimationNodeBlendTree" id=14]
+graph_offset = Vector2( -2, 28.5 )
+nodes/Combine/node = SubResource( 6 )
+nodes/Combine/position = Vector2( 800, 220 )
+nodes/Fire/node = SubResource( 7 )
+nodes/Fire/position = Vector2( 60, 560 )
+nodes/Gun/node = SubResource( 8 )
+nodes/Gun/position = Vector2( 480, 460 )
+nodes/Idle/node = SubResource( 9 )
+nodes/Idle/position = Vector2( 20, 80 )
+nodes/Jump/node = SubResource( 10 )
+nodes/Jump/position = Vector2( 216, 470.5 )
+nodes/JumpStart/node = SubResource( 11 )
+nodes/JumpStart/position = Vector2( 20, 360 )
+nodes/Main/node = SubResource( 12 )
+nodes/Main/position = Vector2( 560, 160 )
+nodes/Walk/node = SubResource( 13 )
+nodes/Walk/position = Vector2( 20, 220 )
+nodes/output/position = Vector2( 1060, 240 )
+node_connections = [ "output", 0, "Combine", "Gun", 0, "Jump", "Gun", 1, "Fire", "Main", 0, "Idle", "Combine", 0, "Main", "Combine", 1, "Gun" ]
+
+[node name="Player" type="KinematicBody"]
+
+[node name="Anim" type="AnimationPlayer" parent="."]
+playback_process_mode = 0
+playback_speed = 0.75
+anims/Fire = SubResource( 1 )
+anims/Idle = SubResource( 2 )
+anims/JumpStart = SubResource( 3 )
+anims/WalkCam = SubResource( 4 )
+
+[node name="Hitbox" type="CollisionShape" parent="."]
+shape = SubResource( 5 )
+
+[node name="Gimbal" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, -0.05 )
+
+[node name="Help" type="Spatial" parent="Gimbal"]
+
+[node name="Cam" type="Camera" parent="Gimbal/Help"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00122404, 0 )
+current = true
+fov = 80.0
+near = 0.02
+
+[node name="Arm" parent="Gimbal/Help/Cam" instance=ExtResource( 3 )]
+transform = Transform( 0.63, 0, 0, 0, 0.63, 0, 0, 0, 0.63, 0.09, -0.11, 0.060365 )
+
+[node name="Gun" parent="Gimbal/Help/Cam/Arm" instance=ExtResource( 6 )]
+transform = Transform( 0.15873, 0, 0, 0, 0.15873, 0, 0, 0, 0.15873, 0, -0.03, -0.29 )
+
+[node name="Muzzle" type="Position3D" parent="Gimbal/Help/Cam/Arm/Gun"]
+transform = Transform( 4.725, 0, 0, 0, 4.725, 0, 0, 0, 4.725, 0, 0.8, -2.75 )
+
+[node name="Firetime" type="Timer" parent="."]
+process_mode = 0
+wait_time = 0.15
+one_shot = true
+
+[node name="Mesh" parent="." instance=ExtResource( 4 )]
+transform = Transform( 0.63, 0, 0, 0, 0.63, 0, 0, 0, 0.63, 0, -0.25, 0 )
+
+[node name="AnimTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 14 )
+anim_player = NodePath("../Anim")
+active = true
+process_mode = 0
+parameters/Combine/blend_amount = 0.5
+parameters/Gun/active = false
+parameters/Main/active = false

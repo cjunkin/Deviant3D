@@ -79,7 +79,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -111.483, 36.0115, -101.185 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -55.9494, 8.12141, -29.2171 )
 
 [node name="Wall3" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -71, 129, -40 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -71, 101.536, -40 )
 use_in_baked_light = true
 use_collision = true
 width = 26.0
@@ -88,6 +88,7 @@ depth = 38.0
 material = ExtResource( 7 )
 
 [node name="Wall10" parent="." instance=ExtResource( 2 )]
+material = ExtResource( 7 )
 
 [node name="Wall11" type="CSGBox" parent="."]
 transform = Transform( 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0, 1, -90, 72, 23 )
@@ -177,8 +178,8 @@ transform = Transform( 16, 0, 0, 0, 16, 0, 0, 0, 16, 137.756, 483.134, -351.662 
 [node name="Text" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9717, 3.47361, -42.4121 )
 
-[node name="Rock2" parent="." instance=ExtResource( 9 )]
-transform = Transform( 1.11542, 4.46487, -6.54376, 7.60949, 1.23349, 2.13871, 2.2026, -6.52253, -4.07494, -29.5906, 39.5014, -84.4337 )
+[node name="Rock" parent="." instance=ExtResource( 9 )]
+transform = Transform( 1.11542, 4.46487, -6.54376, 7.60949, 1.23349, 2.13871, 2.2026, -6.52253, -4.07494, -29.5906, 160.573, -84.4337 )
 
 [node name="EnemySpawnTime" type="Timer" parent="."]
 process_mode = 0

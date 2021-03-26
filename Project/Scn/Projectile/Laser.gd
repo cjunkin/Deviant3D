@@ -14,11 +14,11 @@ func _on_Laser_body_entered(body) -> void:
 		# Kill enemy
 		body.rpc("d")
 
-		# Get a particle going
-		G.game.exp_i = (G.game.exp_i + 1) % G.game.num_explosions
-		var e : Particles = G.game.explosions[G.game.exp_i]
-		e.translation = translation
-		e.emitting = true
+#		# Get a particle going
+#		G.game.exp_i = (G.game.exp_i + 1) % G.game.num_explosions
+#		var e : Particles = G.game.explosions[G.game.exp_i]
+#		e.translation = translation
+#		e.emitting = true
 
 		# Disable self
 		set_deferred("monitoring", false)

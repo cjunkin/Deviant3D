@@ -30,17 +30,18 @@ var grapple_pos2 := Vector3.ZERO
 export(String, FILE) var cam_path
 export(String, FILE) var flippers_path
 
-
 # Cached Nodes
 onready var CamSpring : SpringArm
 onready var Cam : Camera
 onready var CamX := $CamX
+onready var GrappleSfx := CamX.get_node("GrappleSfx")
 onready var PMesh := CamX.get_node("PMesh")
 onready var Flippers : Array
 onready var CamY := CamX.get_node("CamY")
 onready var Gun := CamY.get_node("Gun")
-onready var Sfx := Gun.get_node("Sfx")
 onready var Muzzle := Gun.get_node("Muzzle")
+onready var Sfx := Muzzle.get_node("Sfx")
+onready var AnimTree := $AnimTree
 
 # Hooks are first outside scene tree, enter on grapple begin, reparent to collision
 var LHook: Hook
@@ -55,7 +56,8 @@ onready var ROF := $ROF
 onready var FlipTime := $FlipTime
 onready var Hitbox := $Hitbox
 onready var tween := $Tween
-onready var GrappleSfx := CamX.get_node("GrappleSfx")
+
+var LaserSight : ImmediateGeometry
 
 func _ready() -> void:
 	var hook_s := load("res://Scn/Projectile/Hook.tscn")
@@ -77,9 +79,10 @@ func _ready() -> void:
 		# Regular cam
 		if OS.get_name() != "Android" and OS.get_name() != "iOS":
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-			CamY.add_child(load(cam_path).instance())
-			Cam = CamY.get_node("Spring/Cam")
-			CamSpring = CamY.get_node("Spring")
+			var CamHolder :Spatial = CamY.get_node("CamHolder")
+			CamHolder.add_child(load(cam_path).instance())
+			Cam = CamHolder.get_node("Spring/Cam")
+			CamSpring = CamHolder.get_node("Spring")
 		# AR CAM
 		else:
 			add_child(load("res://Scn/AR/ARVROrigin.tscn").instance())
@@ -98,6 +101,9 @@ func _ready() -> void:
 		var flippers : Spatial = load(flippers_path).instance()
 		CamX.add_child(flippers)
 		Flippers = flippers.get_children()
+		
+		LaserSight = load("res://addons/LineRenderer/Line.tscn").instance()
+		add_child(LaserSight)
 		
 #		DebugOverlay.draw.add_vector(self, "vel", 1, 4, Color(0,1,0, 0.5))
 #		DebugOverlay.draw.add_vector(self, "grapple_aim", 1, 4, Color(0,1,1, 0.5))
@@ -191,8 +197,6 @@ func _input(event: InputEvent) -> void:
 		else:
 			FlipTime.start()
 
-
-
 #		# Accelerate Hook
 #		if Input.is_action_pressed("sprint"):
 #			vel += (grapple_pos - global_transform.origin).normalized() * 3
@@ -211,10 +215,6 @@ func _physics_process(_delta: float) -> void:
 			collision.collider.apply_central_impulse(-collision.normal * .05 * vel.length())
 
 	if is_network_master():
-		# Set crosshair
-		sight.rect_position.x = 10000
-		if GrappleCast.is_colliding():
-			sight.rect_position = Cam.unproject_position(GrappleCast.get_collision_point())
 
 		# Shooting
 		if Input.is_action_pressed("fire") and ROF.is_stopped():
@@ -232,6 +232,11 @@ func _physics_process(_delta: float) -> void:
 		# Apply hard friction, unless grappling (then softer friction)
 		vel *= friction * int(not_grappling) + .95 * int(!not_grappling)
 		vel += a
+		var speed := a.length()
+		AnimTree.set("parameters/Move/blend_amount", speed)
+		AnimTree.set("parameters/SprintFactor/scale", clamp(speed * .3, 1, 1.25))
+#		print(speed * .3)
+
 	# Midair
 	else:
 		# Reduce grounded movespeed
@@ -273,7 +278,16 @@ func _physics_process(_delta: float) -> void:
 		var is_near2 := int(abs((grapple_pos2 - global_transform.origin).length_squared()) < 64)
 		air_resistance2 = .95 * int(is_near2) + .999 * int(!is_near2)
 	vel *= air_resistance*air_resistance2 
-	
+
+	# Set crosshair
+	LaserSight.visible = false
+	if is_network_master() and GrappleCast.is_colliding():
+		LaserSight.visible = true
+		LaserSight.points[0] = Muzzle.global_transform.origin
+		LaserSight.points[1] = GrappleCast.get_collision_point()
+#		sight.rect_position.x = 10000
+#		
+#			sight.rect_position = Cam.unproject_position(GrappleCast.get_collision_point())
 
 
 
@@ -355,8 +369,6 @@ puppetsync func L() -> void:
 	LHook.enabled = false
 	LHook.visible = true
 
-
-
 # Fire
 puppetsync func f() -> void:
 	G.game.laser_i = (G.game.laser_i + 1) % G.game.num_lasers
@@ -365,6 +377,10 @@ puppetsync func f() -> void:
 	p.global_transform = Muzzle.global_transform
 	p.monitoring = true
 	p.visible = true
+	
+	
+#	AnimTree.set("parameters/Firing/active", false)
+	AnimTree.set("parameters/Firing/active", true)
 
 	# Audio
 	Sfx.pitch_scale = rand_range(.85, 1.15)

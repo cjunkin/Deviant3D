@@ -55,7 +55,7 @@ func setup_graphics_options_signals(gfx_control: Control, function_name: String)
 				print("ERROR: COULDN'T CONNECT " + setting)
 			# Default overall is high
 			if setting == "Overall":
-				button.select(2)
+				update_overall_ui()
 			# Set other defaults
 			else:
 				set_setting(setting, G.get(setting))
@@ -83,6 +83,18 @@ func set_setting(setting: String, index: int) -> void:
 	G.set(setting, index)
 	# Visual update
 	get(setting).select(index)
+
+func update_overall_ui() -> void:
+	var first : int = G.get(ALL_GFX_OPTIONS[0])
+	var all_match := true
+	for option in ALL_GFX_OPTIONS:
+		if first != G.get(option):
+			all_match = false
+			break
+	if all_match:
+		overall.select(first)
+	else:
+		overall.text = "Custom"
 
 # Add all strings from OPTIONS as options for BUTTON
 func add_options(button: OptionButton, options: PoolStringArray) -> void:

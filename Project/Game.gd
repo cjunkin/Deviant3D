@@ -2,7 +2,7 @@ class_name Game
 extends Spatial
 
 # Num Cached     TODO: make caches in C++ for efficiency
-const PROJ_PER_PLAYER := 5
+const PROJ_PER_PLAYER := 10
 const EXP_PER_PLAYER := 10
 var num_lasers := PROJ_PER_PLAYER
 var num_explosions := EXP_PER_PLAYER
@@ -135,8 +135,12 @@ func gen_boxes(my_seed: int) -> void:
 	noise.octaves = 4
 	noise.period = 20
 	noise.persistence = .8
+
 	var rng := RandomNumberGenerator.new()
 	rng.seed = my_seed
+	var mat : SpatialMaterial = load("res://Gfx/Material/Rock1.tres").duplicate()
+	mat.albedo_color -= Color(rng.randf(), rng.randf(), rng.randf()) / 10
+	
 	var static_box_s := load(rock_path)
 	for x in range(-400, 400, 40):
 		for z in range(-400, 400, 40):
@@ -145,6 +149,9 @@ func gen_boxes(my_seed: int) -> void:
 				b.translation = Vector3(x, 64 + rng.randf() * 1000, z)
 				b.rotation = Vector3(rng.randf(), rng.randf(), rng.randf()) * 2 * PI
 				b.scale = Vector3(1, 1, 1) * rng.randf_range(8, 16)
+				if rng.randf() > .5:
+					b.get_node("Cube001").set_surface_material(0, mat)
+
 				add_child(b)
 
 func spawn_enemy(trans := Vector3.INF, velocity := Vector3.INF, target_name := "") -> void:
