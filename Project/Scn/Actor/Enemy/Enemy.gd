@@ -10,6 +10,7 @@ var grav := 1
 var acc := Vector3()
 export var friction := .125
 
+
 func _ready() -> void:
 	add_to_group("Enemy")
 
@@ -37,6 +38,12 @@ func set_target(t) -> void:
 
 # Die
 remotesync func d() -> void:
+	# Remove hooks safely
+	for child in get_children():
+		if child is Hook:
+			remove_child(child)
+			child.player.call(child.name)
+	
 	# Particle
 	G.game.exp_i = (G.game.exp_i + 1) % G.game.num_explosions
 	var e : Particles = G.game.explosions[G.game.exp_i]

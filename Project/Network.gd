@@ -16,10 +16,10 @@ func host() -> void:
 	# Choose what to do on connect/disconnect
 
 	if !get_tree().is_connected("network_peer_connected", self, "player_connected") and \
-			get_tree().connect("network_peer_connected", self, "player_connected") != OK:
+		get_tree().connect("network_peer_connected", self, "player_connected") != OK:
 		print("ERROR: CAN'T HANDLE OTHERS CONNECTING, CHECK NETWORK.GD")
 	if !get_tree().is_connected("network_peer_disconnected", self, "player_disconnected") and \
-			get_tree().connect("network_peer_disconnected", self, "player_disconnected") != OK:
+		get_tree().connect("network_peer_disconnected", self, "player_disconnected") != OK:
 		print("ERROR: CAN'T HANDLE OTHERS DISCONNECTING, CHECK NETWORK.GD")
 	
 	# Load game
@@ -67,6 +67,8 @@ func player_disconnected(id: int) -> void:
 
 # Disconnect and return to main menu
 func disconnect_from_server() -> void:
+	if get_tree().disconnect("network_peer_connected", self, "player_connected") != OK:
+		print("WTF couldn't disconnect")
 	players.clear()
 	if get_tree().network_peer:
 		get_tree().network_peer.close_connection()

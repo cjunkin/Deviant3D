@@ -40,7 +40,6 @@ func _ready() -> void:
 	screen /= 1920
 	bg_img._set_size(bg_img.rect_size * screen)
 	bg_img.rect_position = bg_img.rect_size / -2
-	
 
 
 # Connects all OptionButtons under parent GFX_CONTROL to FUNCTION_NAME
@@ -115,4 +114,3 @@ func _on_DoneButton_button_up():
 	Anim.play_backwards("ChooseGfx")
 	Menu.show()
 	Graphics.hide()
-

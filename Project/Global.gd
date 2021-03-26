@@ -39,17 +39,18 @@ onready var Music := $Music
 var music := load_files("Sfx/Music")
 
 func _ready() -> void:
-	$Menu.hide()
+	Menu.hide()
 	set_process_input(false)
 	SSlider.value = db2linear(AudioServer.get_bus_volume_db(SFX_BUS))
 	MSlider.value = db2linear(AudioServer.get_bus_volume_db(MUSIC_BUS))
 	SensSlider.value = 2
 	
+	# Sliders should lose focus when mouse exits
 	for child in $Menu/Center/Menu/Buttons.get_children():
 		if child is HBoxContainer:
 			for c in child.get_children():
 				if c is Slider:
-					c.connect("mouse_exited", self, "mouse_exited", [c])
+					c.connect("mouse_exited", self, "mouse_exit", [c])
 
 func _input(event: InputEvent) -> void:
 	# Pause
@@ -89,11 +90,12 @@ func _on_SSlider_value_changed(value: float) -> void:
 
 
 func _on_Quit_button_up():
+	get_tree().paused = false
 	Menu.visible = false
 	set_process_input(false)
 	Network.disconnect_from_server()
 
-func mouse_exited(slider: Control) -> void:
+func mouse_exit(slider: Control) -> void:
 	slider.release_focus()
 
 

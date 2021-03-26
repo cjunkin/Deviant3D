@@ -23,7 +23,7 @@ export var speed : float = 4 * friction
 const MAX_GRAPPLE_SPEED := 3
 var not_grappling := true
 var grapple_pos := Vector3.ZERO
-var not_grappling2 := true
+var L_not_grapplin := true
 var grapple_pos2 := Vector3.ZERO
 
 # File Paths
@@ -49,7 +49,7 @@ var RHook: Hook
 onready var GrappleCast = Muzzle.get_node("GrappleCast")
 
 onready var GLine := $Line
-onready var GLine2 := $Line2
+onready var LGLine := $Line2
 onready var sight := $Sight
 onready var ROF := $ROF
 onready var FlipTime := $FlipTime
@@ -129,7 +129,7 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		CamX.rotate_y(event.relative.x * SENS_X) # Side to side // (transform.basis.y, 
 		CamY.rotation.x = clamp(CamY.rotation.x + (event.relative.y * SENS_Y), -PI/2, PI/2) # Up down
-		rpc_unreliable("r", event.relative)
+		rpc_unreliable("A", event.relative)
 	# Switch camera sides
 	if event.is_action_pressed("switch_tps"):
 		var next : Vector3 = CamSpring.translation
@@ -167,11 +167,11 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("grapple1"):
 		local_grapple(true)
 	elif event.is_action_released("grapple1"):
-		rpc("c")
+		rpc("R")
 	if event.is_action_pressed("grapple2"):
 		local_grapple(false)
 	elif event.is_action_released("grapple2"):
-		rpc("e")
+		rpc("L")
 
 	# Crouching
 	if event.is_action_pressed("crouch"):
@@ -238,7 +238,7 @@ func _physics_process(_delta: float) -> void:
 		vel += .125 * a # BIG TODO: fix massive acceleration if jump while moving
 
 	# apply gravity, inputs, physics
-	vel -= int(gravity) * (int(not_grappling)) * (int(not_grappling2)) * transform.basis.y * grav
+	vel -= int(gravity) * (int(not_grappling)) * (int(L_not_grapplin)) * transform.basis.y * grav
 	vel = move_and_slide(vel, transform.basis.y, false, 4, .75, false)
 
 
@@ -257,10 +257,10 @@ func _physics_process(_delta: float) -> void:
 		# If near grappling point, slow down (and get pulled more towards the point)
 		var is_near := abs((grapple_pos - global_transform.origin).length_squared()) < 64
 		air_resistance = .95 * int(is_near) + .999 * int(!is_near)
-	if !not_grappling2:
+	if !L_not_grapplin:
 		grapple_pos2 = LHook.global_transform.origin
-		GLine2.points[0] = grapple_pos2
-		GLine2.points[1] = GrappleCast.global_transform.origin
+		LGLine.points[0] = grapple_pos2
+		LGLine.points[1] = GrappleCast.global_transform.origin
 		var new_grapple_len := (grapple_pos2 - global_transform.origin).length()
 		var grapple_vel := (global_transform.origin - grapple_pos2) / new_grapple_len * min(0, (1 - new_grapple_len)) * .25
 		if grapple_vel.length() > MAX_GRAPPLE_SPEED:
@@ -278,8 +278,8 @@ func hook(hook_name: String):
 		not_grappling = false
 		RHook.visible = false
 	else:
-		GLine2.visible = true
-		not_grappling2 = false
+		LGLine.visible = true
+		L_not_grapplin = false
 
 func local_grapple(right: bool) -> void:
 	if right:
@@ -287,64 +287,64 @@ func local_grapple(right: bool) -> void:
 		RHook.global_transform = GrappleCast.global_transform
 		GLine.points[1] = Muzzle.global_transform.origin
 		G.game.add_child(RHook)
-		rpc("s", translation, CamX.rotation.y, CamY.rotation.x, vel)
-
-#		GLine.points[1] = Muzzle.global_transform.origin
-#		rpc("b", translation, CamX.rotation.y, CamY.rotation.x)
+		rpc("r", translation, CamX.rotation.y, CamY.rotation.x, vel)
 	else:
-		grapple_pos2 = GrappleCast.get_collision_point()
-
-		GLine2.points[0] = grapple_pos2
-		GLine2.points[1] = Muzzle.global_transform.origin
-		GLine2.visible = true
-		not_grappling2 = false
-#		rpc("d", translation, CamX.rotation.y, CamY.rotation.x)
+		LHook.enabled = true
+		LHook.global_transform = GrappleCast.global_transform
+		LGLine.points[1] = Muzzle.global_transform.origin
+		G.game.add_child(LHook)
+		rpc("l", translation, CamX.rotation.y, CamY.rotation.x, vel)
 
 	# Audio
 	GrappleSfx.pitch_scale = rand_range(.5, .85)
 	GrappleSfx.play()
 
+# Aim
+puppet func A(rot: Vector2) -> void:
+	CamX.rotate_y(rot.x * SENS_X) # Side to side // (transform.basis.y, 
+	CamY.rotation.x = clamp(CamY.rotation.x + (rot.y * SENS_Y), -PI/2, PI/2) # Up down
+
 # Set grapple hook position
-puppet func b(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void:
-	translation = trans
-	CamX.rotation.y = y
-	CamY.rotation.x = cam_help_x
-	grapple_pos = pos
+puppet func r(trans: Vector3, y: float, cam_help_x: float, vel: Vector3) -> void:
+	s(trans, y, cam_help_x, vel)
+	RHook.enabled = true
+	RHook.global_transform = GrappleCast.global_transform
+	GLine.points[1] = Muzzle.global_transform.origin
+	G.game.add_child(RHook)
 
-	GLine.points[0] = pos
-	GLine.points[1] = GrappleCast.global_transform.origin
-	GLine.visible = true
-	not_grappling = false
-
+	# Audio
 	GrappleSfx.pitch_scale = rand_range(.5, .85)
 	GrappleSfx.play()
 
 # Stop (no) grappling
-puppetsync func c() -> void:
+puppetsync func R() -> void:
+	if RHook.is_inside_tree():
+		RHook.get_parent().remove_child(RHook)
 	not_grappling = true
 	GLine.visible = false
 	RHook.enabled = false
 	RHook.visible = true
-	# Put hook back in G.game
 
 # Set grapple hook position for 2nd hook
-puppet func d(trans: Vector3, y: float, cam_help_x: float, pos: Vector3) -> void:
-	translation = trans
-	CamX.rotation.y = y
-	CamY.rotation.x = cam_help_x
-	grapple_pos2 = pos
-	GLine2.points[0] = pos
-	GLine2.points[1] = GrappleCast.global_transform.origin
-	not_grappling2 = false
-	GLine2.visible = true
+puppet func l(trans: Vector3, y: float, cam_help_x: float, vel: Vector3) -> void:
+	s(trans, y, cam_help_x, vel)
+	LHook.enabled = true
+	LHook.global_transform = GrappleCast.global_transform
+	LGLine.points[1] = Muzzle.global_transform.origin
+	G.game.add_child(LHook)
+
+	# Audio
 	GrappleSfx.pitch_scale = rand_range(.5, .85)
 	GrappleSfx.play()
 
 # Stop (no) grappling for 2nd hook
-puppetsync func e() -> void:
-	not_grappling2 = true
-	GLine2.visible = false
+puppetsync func L() -> void:
+	if LHook.is_inside_tree():
+		LHook.get_parent().remove_child(LHook)
+	L_not_grapplin = true
+	LGLine.visible = false
 	LHook.enabled = false
+	LHook.visible = true
 
 
 
@@ -368,11 +368,6 @@ puppetsync func f() -> void:
 # Jump
 puppetsync func j() -> void:
 	vel += jump * transform.basis.y
-
-# Aim
-puppet func r(rot: Vector2) -> void:
-	CamX.rotate_y(rot.x * SENS_X) # Side to side // (transform.basis.y, 
-	CamY.rotation.x = clamp(CamY.rotation.x + (rot.y * SENS_Y), -PI/2, PI/2) # Up down
 
 # Sync position/orientation
 puppet func s(trans: Vector3, y: float, cam_help_x: float, velocity: Vector3) -> void:
