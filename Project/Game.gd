@@ -8,7 +8,7 @@ var num_lasers := PROJ_PER_PLAYER
 var num_explosions := EXP_PER_PLAYER
 const num_enemies := 16
 #const num_laser_audio := 8
-const num_grapple_sounds := 6
+#const num_grapple_sounds := 6
 
 # Cached Arrays
 var projectiles := []
@@ -117,13 +117,13 @@ func _physics_process(delta: float) -> void:
 		if hook.enabled:
 			hook.translation -= 1024 * hook.transform.basis.z * delta
 			if hook.is_colliding():
+				hook.player.call("hook", hook.name)
+				hook.enabled = false
+				hook.visible = false
 				var hitpt : Vector3 = hook.get_collision_point()
 				hook.get_parent().remove_child(hook)
 				hook.get_collider().add_child(hook)# TODO: don't scale by paren
 				hook.global_transform.origin = hitpt
-				hook.player.call("hook", hook.name)
-				hook.enabled = false
-				hook.visible = false
 
 #	TimeLeft.text =  str(EnemySpawnTime.time_left)
 #	for p in players:

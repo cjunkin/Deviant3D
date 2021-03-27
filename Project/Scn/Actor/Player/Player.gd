@@ -179,10 +179,23 @@ func _input(event: InputEvent) -> void:
 		local_grapple(true)
 	elif event.is_action_released("grapple1"):
 		rpc("R")
+		not_grappling = true
+		if RHook.is_inside_tree():
+			RHook.get_parent().remove_child(RHook)
+		RHook.enabled = false
+		RHook.visible = true
+		GLine.visible = false
+
 	if event.is_action_pressed("grapple2"):
 		local_grapple(false)
 	elif event.is_action_released("grapple2"):
 		rpc("L")
+		L_not_grapplin = true
+		if LHook.is_inside_tree():
+			LHook.get_parent().remove_child(LHook)
+		LHook.enabled = false
+		LHook.visible = true
+		LGLine.visible = false
 
 	# Crouching
 	if event.is_action_pressed("crouch"):
@@ -349,7 +362,7 @@ puppet func r(trans: Vector3, y: float, cam_help_x: float, v: Vector3) -> void:
 	GrappleSfx.play()
 
 # Stop (no) grappling
-puppetsync func R() -> void:
+puppet func R() -> void:
 	if RHook.is_inside_tree():
 		RHook.get_parent().remove_child(RHook)
 	not_grappling = true
@@ -371,7 +384,7 @@ puppet func l(trans: Vector3, y: float, cam_help_x: float, v: Vector3) -> void:
 	GrappleSfx.play()
 
 # Stop (no) grappling for 2nd hook
-puppetsync func L() -> void:
+puppet func L() -> void:
 	if LHook.is_inside_tree():
 		LHook.get_parent().remove_child(LHook)
 	L_not_grapplin = true
@@ -488,13 +501,14 @@ func unregister() -> void:
 
 func local_grapple(right: bool) -> void:
 	if right:
-		RHook.enabled = true
-		RHook.global_transform = FrontCast.global_transform
-		GLine.points[1] = Muzzle.global_transform.origin
-		GLine.visible = true
-		G.game.add_child(RHook)
-		rpc("r", translation, CamX.rotation.y, CamY.rotation.x, vel)
-	else:
+		if !RHook.is_inside_tree():
+			RHook.enabled = true
+			RHook.global_transform = FrontCast.global_transform
+			GLine.points[1] = Muzzle.global_transform.origin
+			GLine.visible = true
+			G.game.add_child(RHook)
+			rpc("r", translation, CamX.rotation.y, CamY.rotation.x, vel)
+	elif !LHook.is_inside_tree():
 		LHook.enabled = true
 		LHook.global_transform = FrontCast.global_transform
 		LGLine.points[1] = Muzzle.global_transform.origin
