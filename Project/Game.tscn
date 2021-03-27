@@ -14,7 +14,7 @@
 [ext_resource path="res://Scn/Fx/Explosion.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Gfx/2D/Reticule.svg" type="Texture" id=13]
 
-[sub_resource type="SpatialMaterial" id=2]
+[sub_resource type="SpatialMaterial" id=1]
 flags_vertex_lighting = true
 flags_world_triplanar = true
 albedo_color = Color( 1.27, 2.23617, 2.76, 1 )
@@ -24,7 +24,7 @@ uv1_scale = Vector3( 0.1, 0.1, 0.1 )
 uv1_triplanar = true
 uv2_triplanar_sharpness = 0.784584
 
-[sub_resource type="SpatialMaterial" id=1]
+[sub_resource type="SpatialMaterial" id=2]
 flags_vertex_lighting = true
 flags_world_triplanar = true
 albedo_color = Color( 1.27, 1.74727, 2.76, 1 )
@@ -107,7 +107,7 @@ use_collision = true
 width = 88.0
 height = 50.0
 depth = 8.0
-material = SubResource( 2 )
+material = SubResource( 1 )
 
 [node name="RoomBACK" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 18.1388, 146 )
@@ -116,7 +116,7 @@ use_collision = true
 width = 88.0
 height = 44.0
 depth = 8.0
-material = SubResource( 1 )
+material = SubResource( 2 )
 
 [node name="RoomWall2" type="CSGBox" parent="."]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 64, 21.1388, 126 )

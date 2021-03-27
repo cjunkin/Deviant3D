@@ -3,7 +3,7 @@ extends WorldEnvironment
 export (NodePath) var Sunlight
 const bloom_amt := .05
 
-func _ready():
+func _ready() -> void:
 	var all_off := true
 	var sun : DirectionalLight = get_node(Sunlight)
 

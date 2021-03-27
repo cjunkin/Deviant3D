@@ -100,7 +100,7 @@ func _ready() -> void:
 			print("ERROR: COULDN'T SETUP PERIODIC SYNC")
 		sync_timer.start(0)
 		
-		G.current_player = self
+		G.start_game(self)
 		
 		var flippers : Spatial = load(flippers_path).instance()
 		CamX.add_child(flippers)
@@ -179,23 +179,10 @@ func _input(event: InputEvent) -> void:
 		local_grapple(true)
 	elif event.is_action_released("grapple1"):
 		rpc("R")
-		not_grappling = true
-		if RHook.is_inside_tree():
-			RHook.get_parent().remove_child(RHook)
-		RHook.enabled = false
-		RHook.visible = true
-		GLine.visible = false
-
 	if event.is_action_pressed("grapple2"):
 		local_grapple(false)
 	elif event.is_action_released("grapple2"):
 		rpc("L")
-		L_not_grapplin = true
-		if LHook.is_inside_tree():
-			LHook.get_parent().remove_child(LHook)
-		LHook.enabled = false
-		LHook.visible = true
-		LGLine.visible = false
 
 	# Crouching
 	if event.is_action_pressed("crouch"):
@@ -204,7 +191,7 @@ func _input(event: InputEvent) -> void:
 		rpc("u") # uncrouch
 
 	if event.is_action_pressed("reset_gravity") and FlipTime.is_stopped():
-		rpc("st", Vector3.UP, translation) # reset rotation to normal
+		rpc("t", Vector3.UP, translation) # reset rotation to normal
 		toggle_flippers(!G.Flip.pressed)
 		G.Flip.pressed = !G.Flip.pressed
 		# If we're turning flip off, set wait time
@@ -215,6 +202,10 @@ func _input(event: InputEvent) -> void:
 		else:
 			FlipTime.start()
 
+	if event.is_action_pressed("slowmo"):
+		Engine.time_scale = int(Network.players.size() > 1) * .9 + .1
+	elif event.is_action_released("slowmo"):
+		Engine.time_scale = 1
 #		# Accelerate Hook
 #		if Input.is_action_pressed("sprint"):
 #			vel += (grapple_pos - global_transform.origin).normalized() * 3
@@ -242,7 +233,7 @@ func _physics_process(_delta: float) -> void:
 		# "Run, the game" flipping
 		for ray in Flippers:
 			if ray.is_colliding() and FlipTime.is_stopped():
-				rpc("st", ray.get_collision_normal(), translation)
+				rpc("t", ray.get_collision_normal(), translation)
 
 		# Set crosshair
 		if FrontCast.is_colliding():
@@ -330,7 +321,7 @@ func toggle_flippers(enabled: bool) -> void:
 	for raycast in Flippers:
 		raycast.enabled = enabled
 
-func hook(hook_name: String):
+func hook(hook_name: String) -> void:
 	if hook_name == "R":
 		GLine.visible = true
 		not_grappling = false
@@ -362,7 +353,7 @@ puppet func r(trans: Vector3, y: float, cam_help_x: float, v: Vector3) -> void:
 	GrappleSfx.play()
 
 # Stop (no) grappling
-puppet func R() -> void:
+puppetsync func R() -> void:
 	if RHook.is_inside_tree():
 		RHook.get_parent().remove_child(RHook)
 	not_grappling = true
@@ -384,7 +375,7 @@ puppet func l(trans: Vector3, y: float, cam_help_x: float, v: Vector3) -> void:
 	GrappleSfx.play()
 
 # Stop (no) grappling for 2nd hook
-puppet func L() -> void:
+puppetsync func L() -> void:
 	if LHook.is_inside_tree():
 		LHook.get_parent().remove_child(LHook)
 	L_not_grapplin = true
@@ -417,24 +408,22 @@ puppetsync func j() -> void:
 	vel += jump * transform.basis.y
 
 # Sync position/orientation
-puppet func s(trans: Vector3, y: float, cam_help_x: float, velocity: Vector3) -> void:
+puppet func s(trans: Vector3, y: float, cam_help_x: float, velocity: Vector3, norm := newest_normal) -> void:
 	translation = trans
 	CamX.rotation.y = y
 	CamY.rotation.x = cam_help_x
 	vel = velocity
+	newest_normal = norm
 
 var newest_normal := Vector3.UP
 
 # Sync transform (during flip)
-puppetsync func st(normal: Vector3, trans: Vector3) -> void:
+puppetsync func t(normal: Vector3, trans: Vector3) -> void:
 	translation = trans
 	newest_normal = normal
 	vel *= .25
 	FlipTime.start()
 
-# Transform
-puppetsync func t(trans: Transform) -> void:
-	transform = trans
 
 const CROUCH_TIME := .05
 
@@ -470,8 +459,7 @@ puppetsync func v() -> void:
 
 # When other person calls this, send over my info
 master func req_syn() -> void:
-	rpc("t", transform)
-	rpc("s", translation, CamX.rotation.y, CamY.rotation.x, vel)
+	rpc("s", translation, CamX.rotation.y, CamY.rotation.x, vel, newest_normal)
 	rpc("ss", -SENS_X * 1000)
 
 # Set Sensitivity
@@ -491,7 +479,7 @@ func align_with_y(xform: Transform, new_y: Vector3) -> Transform:
 	return xform
 
 # Sync position/aim every X seconds
-func _sync_timeout():
+func _sync_timeout() -> void:
 	rpc("s", translation, CamX.rotation.y, CamY.rotation.x, vel)
 
 func unregister() -> void:
@@ -500,14 +488,13 @@ func unregister() -> void:
 	queue_free()
 
 func local_grapple(right: bool) -> void:
-	if right:
-		if !RHook.is_inside_tree():
-			RHook.enabled = true
-			RHook.global_transform = FrontCast.global_transform
-			GLine.points[1] = Muzzle.global_transform.origin
-			GLine.visible = true
-			G.game.add_child(RHook)
-			rpc("r", translation, CamX.rotation.y, CamY.rotation.x, vel)
+	if right and !RHook.is_inside_tree():
+		RHook.enabled = true
+		RHook.global_transform = FrontCast.global_transform
+		GLine.points[1] = Muzzle.global_transform.origin
+		GLine.visible = true
+		G.game.add_child(RHook)
+		rpc("r", translation, CamX.rotation.y, CamY.rotation.x, vel)
 	elif !LHook.is_inside_tree():
 		LHook.enabled = true
 		LHook.global_transform = FrontCast.global_transform

@@ -16,12 +16,14 @@ script = ExtResource( 1 )
 gravity = NodePath("Menu/Center/Menu/Buttons/Grav")
 
 [node name="Menu" type="MarginContainer" parent="."]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Blur" parent="Menu" instance=ExtResource( 2 )]
 material = SubResource( 1 )
@@ -46,6 +48,7 @@ margin_left = 340.0
 margin_top = 135.0
 margin_right = 940.0
 margin_bottom = 585.0
+hint_tooltip = "sdfsdf"
 
 [node name="Buttons" type="VBoxContainer" parent="Menu/Center/Menu"]
 margin_right = 600.0

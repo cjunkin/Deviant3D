@@ -38,7 +38,9 @@ func set_target(t) -> void:
 
 # Die
 remotesync func d() -> void:
-	# Remove hooks safely
+	set_deferred("monitoring", false)
+
+	# Remove grappling hooks safely
 	for child in get_children():
 		if child is Hook:
 			remove_child(child)
@@ -49,7 +51,6 @@ remotesync func d() -> void:
 	var e : Particles = G.game.explosions[G.game.exp_i]
 	e.translation = translation
 	e.emitting = true
-	set_deferred("monitoring", false)
 
 	# Remove self
 	get_parent().remove_child(self)

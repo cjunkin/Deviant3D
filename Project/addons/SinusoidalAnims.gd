@@ -7,7 +7,7 @@ var ignored : PoolStringArray = ["Fire"]
 To use, slap this on an animation player, and it'll make all your bezier curves sinusoidal.
 WARNING: NO UNDO, and I haven't tested this with non bezier curve animations
 """
-func _ready():
+func _ready() -> void:
 	if Engine.editor_hint:
 		for anim_name in get_animation_list():
 			if anim_name in ignored:

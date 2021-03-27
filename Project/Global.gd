@@ -1,5 +1,11 @@
 extends Node
 
+# Groups
+#const ENEMY := "E"
+const LASER := "L"
+const EXPL := "E"
+
+# Settings
 const SFX_BUS := 1
 const MUSIC_BUS := 2
 enum {OFF, LOW, MED, HIGH}
@@ -44,7 +50,7 @@ func _ready() -> void:
 	SSlider.value = db2linear(AudioServer.get_bus_volume_db(SFX_BUS))
 	MSlider.value = db2linear(AudioServer.get_bus_volume_db(MUSIC_BUS))
 	SensSlider.value = 2
-	
+
 	# Sliders should lose focus when mouse exits
 	for child in $Menu/Center/Menu/Buttons.get_children():
 		if child is HBoxContainer:
@@ -64,7 +70,10 @@ func _input(event: InputEvent) -> void:
 			get_tree().paused = Network.players.size() <= 1
 			current_player.rpc("R")
 			current_player.rpc("L")
-
+#			print(ProjectSettings.get_setting("gui/timers/tooltip_delay_sec"))
+#			ProjectSettings.set_persisting("gui/timers/tooltip_delay_sec", true)
+#			Global.set("gui/timers/tooltip_delay_sec", 0)
+#			Global.save()
 		# Unpause
 		else:
 			if sens_changed:
@@ -83,6 +92,16 @@ func _input(event: InputEvent) -> void:
 		OS.window_fullscreen = !OS.window_fullscreen
 
 
+func start_game(player: Player) -> void:
+	Menu.hide()
+	SSlider.value = db2linear(AudioServer.get_bus_volume_db(SFX_BUS))
+	MSlider.value = db2linear(AudioServer.get_bus_volume_db(MUSIC_BUS))
+	current_player = player
+	$Menu/Center/Menu/Buttons/Grav.pressed = current_player.gravity
+	Flip.pressed = true # TODO: Fix hardcode
+	set_process_input(true)
+	play_music()
+
 func _on_MSlider_value_changed(value: float) -> void:
 	AudioServer.set_bus_volume_db(MUSIC_BUS, linear2db(value))
 
@@ -91,7 +110,7 @@ func _on_SSlider_value_changed(value: float) -> void:
 	AudioServer.set_bus_volume_db(SFX_BUS, linear2db(value))
 
 
-func _on_Quit_button_up():
+func _on_Quit_button_up() -> void:
 	get_tree().paused = false
 	Menu.visible = false
 	set_process_input(false)
@@ -101,7 +120,7 @@ func mouse_exit(slider: Control) -> void:
 	slider.release_focus()
 
 
-func _on_SensSlider_value_changed(value: float):
+func _on_SensSlider_value_changed(value: float) -> void:
 	sens_changed = true
 	current_player.ss(value)
 
@@ -137,11 +156,11 @@ static func load_files(dir: String, ext: String = ".ogg") -> Array:
 	return files
 
 # Plays another random track
-func _on_Music_finished():
+func _on_Music_finished() -> void:
 	play_music()
 
 # Actually changes player's flip
-func _on_Flip_toggled(button_pressed: bool):
+func _on_Flip_toggled(button_pressed: bool) -> void:
 	current_player.toggle_flippers(button_pressed)
 	if button_pressed:
 		Flip.modulate = G.primary_color

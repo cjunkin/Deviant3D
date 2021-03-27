@@ -63,14 +63,17 @@ func _ready()->void:
 		get_node(enemy_spawn_time).start(spawn_time)
 	else:
 		request_current_data()
+
 	# Projectiles
-	for __ in range(num_lasers):
+	for i in range(num_lasers):
 		var p : Projectile = laser_s.instance()
+		p.name = G.LASER + str(i)
 		projectiles.append(p)
 
 	# Explosions
-	for __ in range(num_explosions):
+	for i in range(num_explosions):
 		var e : Particles = exp_s.instance()
+		e.name = G.EXPL + str(i)
 		explosions.append(e)
 		add_child(e)
 
@@ -90,7 +93,7 @@ func _physics_process(delta: float) -> void:
 	for p in projectiles:
 		if p.is_inside_tree():
 			p.translation -= p.speed * p.transform.basis.z * delta
-			
+#			p.rotation.x -= delta * p.rot
 
 	# Enemies
 	for e in enemies:
@@ -112,7 +115,7 @@ func _physics_process(delta: float) -> void:
 			if e.translation.y < -7:
 				e.rpc("d")
 
-	# Hooks
+	# Grappling Hooks
 	for hook in hooks:
 		if hook.enabled:
 			hook.translation -= 1024 * hook.transform.basis.z * delta
@@ -122,7 +125,7 @@ func _physics_process(delta: float) -> void:
 				hook.visible = false
 				var hitpt : Vector3 = hook.get_collision_point()
 				hook.get_parent().remove_child(hook)
-				hook.get_collider().add_child(hook)# TODO: don't scale by paren
+				hook.get_collider().add_child(hook) # TODO: don't scale by paren
 				hook.global_transform.origin = hitpt
 
 #	TimeLeft.text =  str(EnemySpawnTime.time_left)

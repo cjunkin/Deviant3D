@@ -106,26 +106,24 @@ func add_options(button: OptionButton, options: PoolStringArray) -> void:
 func _on_Host_button_up() -> void:
 	start()
 	Network.host()
-	spinner.show()
+#	spinner.show()
 
 func _on_Join_button_up() -> void:
 	start()
 	Network.join()
 	spinner.show()
 
-func start():
+func start() -> void:
 #	OS.set_low_processor_usage_mode(false)
 	$All/Margin/Menu/Status.text = "Connecting..."
-	G.set_process_input(true)
-	G.play_music()
 
-func _on_Graphics_button_up():
+func _on_Graphics_button_up() -> void:
 	Anim.play("ChooseGfx")
 	Menu.hide()
 	Graphics.show()
 
 
-func _on_DoneButton_button_up():
+func _on_DoneButton_button_up() -> void:
 	Anim.play_backwards("ChooseGfx")
 	Menu.show()
 	Graphics.hide()
