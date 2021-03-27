@@ -143,32 +143,32 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("switch_tps"):
 		var next : Vector3 = CamSpring.translation
 		next.x = -3.5 * sign(next.x) # previously -3.75
-		tween.interpolate_property(CamSpring, "translation", CamSpring.translation, next, .25, Tween.TRANS_CIRC)
+		tween.interpolate_property(CamSpring, "translation", CamSpring.translation, next, .25, Tween.TRANS_CUBIC)
 		next = Gun.translation
 		next.x = -.75 * sign(next.x)
-		tween.interpolate_property(Gun, "translation", Gun.translation, next, .25, Tween.TRANS_CIRC)
+		tween.interpolate_property(Gun, "translation", Gun.translation, next, .25, Tween.TRANS_CUBIC)
 		tween.start()
 	# Switch between TPS and FPS
 	if event.is_action_pressed("switch_view"):
 		# Switching to TPS TODO: reduce to no if/else
 		if fps:
 #			CamSpring.translation = Vector3(3.5, 1.5, 0) #Vector3(3.75, 1.5, 9)
-			tween.interpolate_property(CamSpring, "translation", CamSpring.translation, Vector3(3.5, 1.5, 0), .25, Tween.TRANS_CIRC)
-			tween.interpolate_property(CamSpring, "spring_length", CamSpring.spring_length, 8, .25, Tween.TRANS_CIRC)
-#			tween.interpolate_property(Sfx, "translation", Sfx.translation, Vector3(3.5, 5, 0), .25, Tween.TRANS_CIRC)
+			tween.interpolate_property(CamSpring, "translation", CamSpring.translation, Vector3(3.5, 1.5, 0), .25, Tween.TRANS_CUBIC)
+			tween.interpolate_property(CamSpring, "spring_length", CamSpring.spring_length, 8, .25, Tween.TRANS_CUBIC)
+#			tween.interpolate_property(Sfx, "translation", Sfx.translation, Vector3(3.5, 5, 0), .25, Tween.TRANS_CUBIC)
 			tween.start()
 #			CamSpring.spring_length = 8
 		else:
 #			CamSpring.translation = Vector3(0, 1, 0)
-			tween.interpolate_property(CamSpring, "translation", CamSpring.translation, Vector3(0, 1, 0), .25, Tween.TRANS_CIRC)
-			tween.interpolate_property(CamSpring, "spring_length", CamSpring.spring_length, 0, .25, Tween.TRANS_CIRC)
-#			tween.interpolate_property(Sfx, "translation", Sfx.translation, Vector3(0, 0, 0), .25, Tween.TRANS_CIRC)
+			tween.interpolate_property(CamSpring, "translation", CamSpring.translation, Vector3(0, 1, 0), .25, Tween.TRANS_CUBIC)
+			tween.interpolate_property(CamSpring, "spring_length", CamSpring.spring_length, 0, .25, Tween.TRANS_CUBIC)
+#			tween.interpolate_property(Sfx, "translation", Sfx.translation, Vector3(0, 0, 0), .25, Tween.TRANS_CUBIC)
 			tween.start()
 #			CamSpring.spring_length = 0
 		fps = !fps
 	# Zoom
 	if event.is_action_pressed("aim"):
-		tween.interpolate_property(Cam, "fov", Cam.fov, int(Cam.fov) % 70 + 35, .25, Tween.TRANS_CIRC)
+		tween.interpolate_property(Cam, "fov", Cam.fov, int(Cam.fov) % 70 + 35, .25, Tween.TRANS_CUBIC)
 		tween.start()
 	# Jumping
 	if event.is_action_pressed("jump") and is_on_floor():
@@ -301,7 +301,8 @@ func _physics_process(_delta: float) -> void:
 	if L_not_grapplin and not_grappling:
 		MeshHelp.rotation = lerp(MeshHelp.rotation, Vector3.ZERO, .2)
 	else:
-		MeshHelp.look_at(grapple_pos * int(!not_grappling) + grapple_pos2 * int(!L_not_grapplin), transform.basis.y)
+		
+		MeshHelp.global_transform = MeshHelp.global_transform.interpolate_with(MeshHelp.global_transform.looking_at(grapple_pos * int(!not_grappling) + grapple_pos2 * int(!L_not_grapplin), transform.basis.y), .2)
 
 
 
@@ -357,8 +358,8 @@ puppetsync func R() -> void:
 	RHook.visible = true
 
 # Set grapple hook position for 2nd hook
-puppet func l(trans: Vector3, y: float, cam_help_x: float, vel: Vector3) -> void:
-	s(trans, y, cam_help_x, vel)
+puppet func l(trans: Vector3, y: float, cam_help_x: float, v: Vector3) -> void:
+	s(trans, y, cam_help_x, v)
 	LHook.enabled = true
 	LHook.global_transform = FrontCast.global_transform
 	LGLine.points[1] = Muzzle.global_transform.origin
@@ -434,8 +435,8 @@ puppetsync func u() -> void:
 #	PMesh.scale = Vector3.ONE
 	if Cam:
 		Cam.get_parent().translation.y = 1.5 * int(!fps) + 1 * int(fps)
-	tween.interpolate_property(PMesh, "translation:y", PMesh.translation.y, 0, CROUCH_TIME, Tween.TRANS_CIRC)
-	tween.interpolate_property(PMesh, "scale", PMesh.scale, Vector3.ONE, CROUCH_TIME, Tween.TRANS_CIRC)
+	tween.interpolate_property(PMesh, "translation:y", PMesh.translation.y, 0, CROUCH_TIME, Tween.TRANS_CUBIC)
+	tween.interpolate_property(PMesh, "scale", PMesh.scale, Vector3.ONE, CROUCH_TIME, Tween.TRANS_CUBIC)
 	tween.start()
 
 
@@ -449,8 +450,8 @@ puppetsync func v() -> void:
 #	PMesh.scale = Vector3(.9, .9, .75)
 	if Cam:
 		Cam.get_parent().translation.y = 1 * int(!fps) + .5 * int(fps)
-	tween.interpolate_property(PMesh, "translation:y", PMesh.translation.y, -.4, CROUCH_TIME, Tween.TRANS_CIRC)
-	tween.interpolate_property(PMesh, "scale", PMesh.scale, Vector3(.9, .9, .75), CROUCH_TIME, Tween.TRANS_CIRC)
+	tween.interpolate_property(PMesh, "translation:y", PMesh.translation.y, -.4, CROUCH_TIME, Tween.TRANS_CUBIC)
+	tween.interpolate_property(PMesh, "scale", PMesh.scale, Vector3(.9, .9, .75), CROUCH_TIME, Tween.TRANS_CUBIC)
 	tween.start()
 
 

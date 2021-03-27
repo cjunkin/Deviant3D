@@ -107,7 +107,7 @@ func _on_SensSlider_value_changed(value: float):
 
 # Plays TRACK_NUMBER, or a random track if -1 is passed in
 func play_music(track_number: int = -1) -> void:
-	if !Music.playing or track_number != -1:
+	if music.size() > 0 and (!Music.playing or track_number != -1):
 		randomize()
 		Music.stream = music[randi() % music.size()]
 		Music.play()
