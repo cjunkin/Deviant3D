@@ -70,7 +70,7 @@ config/icon="res://icon.png"
 
 G="*res://Global.tscn"
 Network="*res://Network.gd"
-Math="res://Math.gd"
+Math="res://Unused/Math.gd"
 DebugOverlay="res://addons/DEBUG/DebugOverlay.tscn"
 
 [display]
@@ -260,4 +260,4 @@ quality/driver/fallback_to_gles2=true
 quality/filters/anisotropic_filter_level=8
 vram_compression/import_etc=true
 environment/default_clear_color=Color( 0.741176, 0.858824, 0.933333, 1 )
-environment/default_environment="res://default_env.tres"
+environment/default_environment="res://Unused/default_env.tres"

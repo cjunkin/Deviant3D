@@ -18,6 +18,8 @@ export var grav : float= 64 / 60
 export var jump : float = grav * 42
 export var friction : float = .825
 export var speed : float = 4 * friction
+const CROUCH_TIME := .05
+var newest_normal := Vector3.UP
 
 # Shooting
 puppetsync var b : float = 0.0 # Bendiness of bullet
@@ -46,13 +48,10 @@ onready var Gun := CamY.get_node("Gun")
 onready var Muzzle := Gun.get_node("Muzzle")
 onready var Sfx := Muzzle.get_node("Sfx")
 onready var AnimTree := $AnimTree
-
 # Hooks are first outside scene tree, enter on grapple begin, reparent to collision
 var LHook: Hook
 var RHook: Hook
-
 onready var FrontCast = Muzzle.get_node("FrontCast") # TODO: Get rid of FrontCast (dont need)
-
 onready var GLine := $Line
 onready var LGLine := $Line2
 onready var sight := $Sight
@@ -60,11 +59,12 @@ onready var ROF := $ROF
 onready var FlipTime := $FlipTime
 onready var Hitbox := $Hitbox
 onready var tween := $Tween
-
 var LaserSight : CSGCylinder
+var RespawnTime : Timer
 
 
 func _ready() -> void:
+	# Setup grappling hooks
 	var hook_s := load("res://Scn/Projectile/Hook.tscn")
 	RHook = hook_s.instance()
 	RHook.player = self
@@ -90,18 +90,31 @@ func _ready() -> void:
 			CamSpring = CamHolder.get_node("Spring")
 			reparent_sound(Sfx)
 			reparent_sound(GrappleSfx)
+		
 		# AR CAM
 		else:
 			add_child(load("res://Scn/AR/ARVROrigin.tscn").instance())
 			Cam = get_node("ARVROrigin")
+		
 		# Start syncing
-		var sync_timer := Timer.new()
-		add_child(sync_timer)
-		sync_timer.process_mode = Timer.TIMER_PROCESS_PHYSICS
-		sync_timer.wait_time = 10
-		if sync_timer.connect("timeout", self, "_sync_timeout") != OK:
+		var timer := Timer.new()
+		timer.name = "Sync"
+		add_child(timer)
+		timer.process_mode = Timer.TIMER_PROCESS_PHYSICS
+		timer.wait_time = 10
+		if timer.connect("timeout", self, "_sync_timeout") != OK:
 			print("ERROR: COULDN'T SETUP PERIODIC SYNC")
-		sync_timer.start(0)
+		timer.start(0)
+		
+		# Setup Respawn Timer
+		RespawnTime = Timer.new()
+		RespawnTime.name = "Respawn"
+		add_child(RespawnTime)
+		RespawnTime.process_mode = Timer.TIMER_PROCESS_PHYSICS
+		RespawnTime.one_shot = true
+		RespawnTime.wait_time = 8
+#		if RespawnTime.connect("timeout", self, "_respawn_timeout") != OK:
+#			print("ERROR: COULDN'T SETUP PERIODIC SYNC")
 		
 		G.start_game(self)
 		
@@ -122,105 +135,120 @@ func _ready() -> void:
 		rpc_id(get_network_master(), "req_syn")
 
 func _input(event: InputEvent) -> void:
-	# Ground Movement
-	a = (
-		Input.get_action_strength("sprint") + 1) * speed * (
-			CamX.global_transform.basis.z * (
-				Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
-				) 
-			+ 
-			CamX.global_transform.basis.x * (
-				Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+	if event is InputEventKey:
+		# Ground Movement
+		a = (
+			Input.get_action_strength("sprint") + 1) * speed * (
+				CamX.global_transform.basis.z * (
+					Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+					) 
+				+ 
+				CamX.global_transform.basis.x * (
+					Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+					)
+			).normalized()
+		# If our acceleration has changed, sync the new one
+		if a != accel:
+			accel = a
+			rset("a", a)
+		# Switch camera sides
+		if event.is_action_pressed("switch_tps"):
+			var next : Vector3 = CamSpring.translation
+			next.x = -3.5 * sign(next.x) # previously -3.75
+			tween.interpolate_property(
+				CamSpring, "translation", CamSpring.translation, next, .25, Tween.TRANS_CUBIC
 				)
-		).normalized()
-	# If our acceleration has changed, sync the new one
-	if a != accel:
-		accel = a
-		rset("a", a)
-	# Look
-	if event is InputEventMouseMotion:
-		CamX.rotate_y(event.relative.x * SENS_X) # Side to side // (transform.basis.y, 
-		CamY.rotation.x = clamp(CamY.rotation.x + (event.relative.y * SENS_Y), -PI/2, PI/2) # Up down
-		rpc_unreliable("A", event.relative)
-	# Switch camera sides
-	if event.is_action_pressed("switch_tps"):
-		var next : Vector3 = CamSpring.translation
-		next.x = -3.5 * sign(next.x) # previously -3.75
-		tween.interpolate_property(CamSpring, "translation", CamSpring.translation, next, .25, Tween.TRANS_CUBIC)
-		next = Gun.translation
-		next.x = -.75 * sign(next.x)
-		tween.interpolate_property(Gun, "translation", Gun.translation, next, .25, Tween.TRANS_CUBIC)
-		tween.start()
-	# Switch between TPS and FPS
-	if event.is_action_pressed("switch_view"):
-		# Switching to TPS TODO: reduce to no if/else
-		if fps:
-#			CamSpring.translation = Vector3(3.5, 1.5, 0) #Vector3(3.75, 1.5, 9)
-			tween.interpolate_property(CamSpring, "translation", CamSpring.translation, Vector3(3.5, 1.5, 0), .25, Tween.TRANS_CUBIC)
-			tween.interpolate_property(CamSpring, "spring_length", CamSpring.spring_length, 8, .25, Tween.TRANS_CUBIC)
-#			tween.interpolate_property(Sfx, "translation", Sfx.translation, Vector3(3.5, 5, 0), .25, Tween.TRANS_CUBIC)
+			next = Gun.translation
+			next.x = -.75 * sign(next.x)
+			tween.interpolate_property(
+				Gun, "translation", Gun.translation, next, .25, Tween.TRANS_CUBIC
+				)
 			tween.start()
-#			CamSpring.spring_length = 8
-		else:
-#			CamSpring.translation = Vector3(0, 1, 0)
-			tween.interpolate_property(CamSpring, "translation", CamSpring.translation, Vector3(0, 1, 0), .25, Tween.TRANS_CUBIC)
-			tween.interpolate_property(CamSpring, "spring_length", CamSpring.spring_length, 0, .25, Tween.TRANS_CUBIC)
-#			tween.interpolate_property(Sfx, "translation", Sfx.translation, Vector3(0, 0, 0), .25, Tween.TRANS_CUBIC)
+		# Switch between TPS and FPS
+		if event.is_action_pressed("switch_view"):
+			# Switching to TPS TODO: reduce to no if/else
+			if fps:
+	#			CamSpring.translation = Vector3(3.5, 1.5, 0) #Vector3(3.75, 1.5, 9)
+				tween.interpolate_property(CamSpring, "translation", CamSpring.translation, Vector3(3.5, 1.5, 0), .25, Tween.TRANS_CUBIC)
+				tween.interpolate_property(CamSpring, "spring_length", CamSpring.spring_length, 8, .25, Tween.TRANS_CUBIC)
+	#			tween.interpolate_property(Sfx, "translation", Sfx.translation, Vector3(3.5, 5, 0), .25, Tween.TRANS_CUBIC)
+				tween.start()
+	#			CamSpring.spring_length = 8
+			else:
+	#			CamSpring.translation = Vector3(0, 1, 0)
+				tween.interpolate_property(CamSpring, "translation", CamSpring.translation, Vector3(0, 1, 0), .25, Tween.TRANS_CUBIC)
+				tween.interpolate_property(CamSpring, "spring_length", CamSpring.spring_length, 0, .25, Tween.TRANS_CUBIC)
+	#			tween.interpolate_property(Sfx, "translation", Sfx.translation, Vector3(0, 0, 0), .25, Tween.TRANS_CUBIC)
+				tween.start()
+	#			CamSpring.spring_length = 0
+			fps = !fps
+		# Zoom
+		if event.is_action_pressed("aim"):
+			tween.interpolate_property(
+				Cam, "fov", Cam.fov, int(Cam.fov) % 70 + 35, .25, Tween.TRANS_CUBIC
+				)
 			tween.start()
-#			CamSpring.spring_length = 0
-		fps = !fps
-	# Zoom
-	if event.is_action_pressed("aim"):
-		tween.interpolate_property(Cam, "fov", Cam.fov, int(Cam.fov) % 70 + 35, .25, Tween.TRANS_CUBIC)
-		tween.start()
-	# Jumping
-	if event.is_action_pressed("jump") and is_on_floor():
-		rpc("j") # jump
-	
-	# Grapple
-	if event.is_action_pressed("grapple1"):
-		local_grapple(true)
-	elif event.is_action_released("grapple1"):
-		rpc("R")
-	if event.is_action_pressed("grapple2"):
-		local_grapple(false)
-	elif event.is_action_released("grapple2"):
-		rpc("L")
+		# Jumping
+		if event.is_action_pressed("jump") and is_on_floor():
+			rpc("j") # jump
+		
+		# Grapple
+		if event.is_action_pressed("grapple1"):
+			local_grapple(true)
+		elif event.is_action_released("grapple1"):
+			rpc("R")
+		if event.is_action_pressed("grapple2"):
+			local_grapple(false)
+		elif event.is_action_released("grapple2"):
+			rpc("L")
 
-	# Crouching
-	if event.is_action_pressed("crouch"):
-		rpc("v") # crouch
-	elif event.is_action_released("crouch"):
-		rpc("u") # uncrouch
+		# Crouching
+		if event.is_action_pressed("crouch"):
+			rpc("v") # crouch
+		elif event.is_action_released("crouch"):
+			rpc("u") # uncrouch
 
-	if event.is_action_pressed("reset_gravity") and FlipTime.is_stopped():
-		rpc("t", Vector3.UP, translation) # reset rotation to normal
-		toggle_flippers(!G.Flip.pressed)
-		G.Flip.pressed = !G.Flip.pressed
-		# If we're turning flip off, set wait time
-		if !G.Flip.pressed:
-			FlipTime.start(5)
-			yield(FlipTime, "timeout")
-			FlipTime.wait_time = 1
-		else:
-			FlipTime.start()
+		if event.is_action_pressed("reset_gravity") and FlipTime.is_stopped():
+			rpc("t", Vector3.UP, translation) # reset rotation to normal
+			toggle_flippers(!G.Flip.pressed)
+			G.Flip.pressed = !G.Flip.pressed
+			# If we're turning flip off, set wait time
+			if !G.Flip.pressed:
+				FlipTime.start(5)
+				yield(FlipTime, "timeout")
+				FlipTime.wait_time = 1
+			else:
+				FlipTime.start()
 
-	if event.is_action_pressed("slowmo"):
-		Engine.time_scale = int(Network.players.size() > 1) * .9 + .1
-	elif event.is_action_released("slowmo"):
-		Engine.time_scale = 1
-#		# Accelerate Hook
-#		if Input.is_action_pressed("sprint"):
-#			vel += (grapple_pos - global_transform.origin).normalized() * 3
-##			vel -= CamY.global_transform.basis.z
-##			vel.y += 1
+		if event.is_action_pressed("slowmo"):
+			Engine.time_scale = int(Network.players.size() > 1) * .9 + .1
+		elif event.is_action_released("slowmo"):
+			Engine.time_scale = 1
+	#		# Accelerate Hook
+	#		if Input.is_action_pressed("sprint"):
+	#			vel += (grapple_pos - global_transform.origin).normalized() * 3
+	##			vel -= CamY.global_transform.basis.z
+	##			vel.y += 1
+		if event.is_action("respawn") and RespawnTime.is_stopped():
+			rpc("respawn")
+			RespawnTime.start()
+	else:
+		# Scroll
+		if event is InputEventMouseButton: # and event.is_pressed():
+			if event.button_index == BUTTON_WHEEL_UP:
+				rset("b", b - .025)
+			elif event.button_index == BUTTON_WHEEL_DOWN:
+				rset("b", b + .025)
+		# Look
+		if event is InputEventMouseMotion:
+			CamX.rotate_y(event.relative.x * SENS_X) # Side to side // (transform.basis.y, 
+			CamY.rotation.x = clamp(
+				CamY.rotation.x + (event.relative.y * SENS_Y), 
+				-PI/2, 
+				PI/2
+				) # Up down
+			rpc_unreliable("A", event.relative)
 
-	if event is InputEventMouseButton: # and event.is_pressed():
-		if event.button_index == BUTTON_WHEEL_UP:
-			rset("b", b - .025)
-		elif event.button_index == BUTTON_WHEEL_DOWN:
-			rset("b", b + .025)
-	a -= transform.basis.z * 2
 
 func _physics_process(_delta: float) -> void:
 	# collision with boxes
@@ -274,7 +302,9 @@ func _physics_process(_delta: float) -> void:
 	vel -= int(g) * (int(not_grappling)) * (int(L_not_grapplin)) * transform.basis.y * grav
 	vel = move_and_slide(vel, transform.basis.y, false, 4, .75, false)
 	
-	global_transform = global_transform.interpolate_with(align_with_y(global_transform, newest_normal), .15)
+	global_transform = global_transform.interpolate_with(
+		align_with_y(global_transform, newest_normal), .15
+		)
 
 	# Grappling logic
 	var air_resistance := 1.0
@@ -287,7 +317,9 @@ func _physics_process(_delta: float) -> void:
 	# Hook hit
 	if !not_grappling:
 		var new_grapple_len := (grapple_pos - global_transform.origin).length()
-		var grapple_vel := (global_transform.origin - grapple_pos) / new_grapple_len * min(0, (1 - new_grapple_len)) * .25
+		var grapple_vel := (global_transform.origin - grapple_pos) / new_grapple_len * min(
+			0, (1 - new_grapple_len)
+			) * .25
 		if grapple_vel.length() > MAX_GRAPPLE_SPEED:
 			grapple_vel = grapple_vel.normalized() * MAX_GRAPPLE_SPEED
 		vel += grapple_vel
@@ -303,7 +335,9 @@ func _physics_process(_delta: float) -> void:
 	# Left Hook hit
 	if !L_not_grapplin:
 		var new_grapple_len := (grapple_pos2 - global_transform.origin).length()
-		var grapple_vel := (global_transform.origin - grapple_pos2) / new_grapple_len * min(0, (1 - new_grapple_len)) * .25
+		var grapple_vel := (global_transform.origin - grapple_pos2) / new_grapple_len * min(0, (
+			1 - new_grapple_len)
+			) * .25
 		if grapple_vel.length() > MAX_GRAPPLE_SPEED:
 			grapple_vel = grapple_vel.normalized() * MAX_GRAPPLE_SPEED
 		vel += grapple_vel
@@ -315,8 +349,13 @@ func _physics_process(_delta: float) -> void:
 	if L_not_grapplin and not_grappling:
 		MeshHelp.rotation = lerp(MeshHelp.rotation, Vector3.ZERO, .2)
 	else:
-		
-		MeshHelp.global_transform = MeshHelp.global_transform.interpolate_with(MeshHelp.global_transform.looking_at(grapple_pos * int(!not_grappling) + grapple_pos2 * int(!L_not_grapplin), transform.basis.y), .2)
+		MeshHelp.global_transform = MeshHelp.global_transform.interpolate_with(
+			MeshHelp.global_transform.looking_at(
+				grapple_pos * int(!not_grappling) + grapple_pos2 * int(!L_not_grapplin),
+				transform.basis.y
+				), 
+			.2
+			)
 
 
 
@@ -331,6 +370,7 @@ func toggle_flippers(enabled: bool) -> void:
 	for raycast in Flippers:
 		raycast.enabled = enabled
 
+# Activate Grappling Hooks
 func hook(hook_name: String) -> void:
 	if hook_name == "R":
 		GLine.visible = true
@@ -340,9 +380,9 @@ func hook(hook_name: String) -> void:
 		LGLine.visible = true
 		L_not_grapplin = false
 
-# =------------------------------------=
+# =-----------------------------------------------------------=
 # Multiplayer Functions (single letters to save network usage)
-# =------------------------------------=
+# =-----------------------------------------------------------=
 
 # Aim
 puppet func A(rot: Vector2) -> void:
@@ -419,14 +459,12 @@ puppetsync func j() -> void:
 	vel += jump * transform.basis.y
 
 # Sync position/orientation
-puppet func s(trans: Vector3, y: float, cam_help_x: float, velocity: Vector3, norm := newest_normal) -> void:
+puppet func s(trans: Vector3, y: float, x: float, velocity: Vector3, norm := newest_normal) -> void:
 	translation = trans
 	CamX.rotation.y = y
-	CamY.rotation.x = cam_help_x
+	CamY.rotation.x = x
 	vel = velocity
 	newest_normal = norm
-
-var newest_normal := Vector3.UP
 
 # Sync transform (during flip)
 puppetsync func t(normal: Vector3, trans: Vector3) -> void:
@@ -434,9 +472,6 @@ puppetsync func t(normal: Vector3, trans: Vector3) -> void:
 	newest_normal = normal
 	vel *= .25
 	FlipTime.start()
-
-
-const CROUCH_TIME := .05
 
 # Uncrouch TODO: tween crouching
 puppetsync func u() -> void:
@@ -448,10 +483,13 @@ puppetsync func u() -> void:
 #	PMesh.scale = Vector3.ONE
 	if Cam:
 		Cam.get_parent().translation.y = 1.5 * int(!fps) + 1 * int(fps)
-	tween.interpolate_property(PMesh, "translation:y", PMesh.translation.y, 0, CROUCH_TIME, Tween.TRANS_CUBIC)
-	tween.interpolate_property(PMesh, "scale", PMesh.scale, Vector3.ONE, CROUCH_TIME, Tween.TRANS_CUBIC)
+	tween.interpolate_property(
+		PMesh, "translation:y", PMesh.translation.y, 0, CROUCH_TIME, Tween.TRANS_CUBIC
+		)
+	tween.interpolate_property(
+		PMesh, "scale", PMesh.scale, Vector3.ONE, CROUCH_TIME, Tween.TRANS_CUBIC
+		)
 	tween.start()
-
 
 # Crouch TODO: make hitbox also smaller, cam translate down
 puppetsync func v() -> void:
@@ -463,9 +501,25 @@ puppetsync func v() -> void:
 #	PMesh.scale = Vector3(.9, .9, .75)
 	if Cam:
 		Cam.get_parent().translation.y = 1 * int(!fps) + .5 * int(fps)
-	tween.interpolate_property(PMesh, "translation:y", PMesh.translation.y, -.4, CROUCH_TIME, Tween.TRANS_CUBIC)
-	tween.interpolate_property(PMesh, "scale", PMesh.scale, Vector3(.9, .9, .75), CROUCH_TIME, Tween.TRANS_CUBIC)
+	tween.interpolate_property(
+		PMesh, "translation:y", PMesh.translation.y, -.4, CROUCH_TIME, Tween.TRANS_CUBIC
+		)
+	tween.interpolate_property(
+		PMesh, "scale", PMesh.scale, Vector3(.9, .9, .75), CROUCH_TIME, Tween.TRANS_CUBIC
+		)
 	tween.start()
+
+# Respawn
+puppetsync func respawn() -> void:
+	translation = Vector3(0, 12, 0)
+	vel = Vector3.ZERO
+	rotation = Vector3.ZERO
+	newest_normal = Vector3.UP
+	CamX.rotation.y = 0
+	CamY.rotation.x = 0
+	L()
+	R()
+
 
 
 # When other person calls this, send over my info
@@ -492,6 +546,8 @@ func align_with_y(xform: Transform, new_y: Vector3) -> Transform:
 # Sync position/aim every X seconds
 func _sync_timeout() -> void:
 	rpc("s", translation, CamX.rotation.y, CamY.rotation.x, vel)
+
+
 
 func unregister() -> void:
 	G.game.hooks.erase(LHook)
