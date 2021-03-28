@@ -182,12 +182,7 @@ func _input(event: InputEvent) -> void:
 				tween.start()
 	#			CamSpring.spring_length = 0
 			fps = !fps
-		# Zoom
-		if event.is_action_pressed("aim"):
-			tween.interpolate_property(
-				Cam, "fov", Cam.fov, int(Cam.fov) % 70 + 35, .25, Tween.TRANS_CUBIC
-				)
-			tween.start()
+
 		# Jumping
 		if event.is_action_pressed("jump") and is_on_floor():
 			rpc("j") # jump
@@ -248,6 +243,13 @@ func _input(event: InputEvent) -> void:
 				PI/2
 				) # Up down
 			rpc_unreliable("A", event.relative)
+		
+		# Zoom
+		if event.is_action_pressed("aim"):
+			tween.interpolate_property(
+				Cam, "fov", Cam.fov, int(Cam.fov) % 70 + 35, .25, Tween.TRANS_CUBIC
+				)
+			tween.start()
 
 
 func _physics_process(_delta: float) -> void:
