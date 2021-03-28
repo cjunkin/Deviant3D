@@ -93,7 +93,7 @@ func _physics_process(delta: float) -> void:
 	for p in projectiles:
 		if p.is_inside_tree():
 			p.translation -= p.speed * p.transform.basis.z * delta
-#			p.rotation.x -= delta * p.rot
+			p.rotation.x -= delta * p.rot
 
 	# Enemies
 	for e in enemies:

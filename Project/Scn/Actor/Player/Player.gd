@@ -10,7 +10,7 @@ var SENS_Y := -.002
 var SENS_X := -.002
 
 # Physics
-puppet var gravity := true
+puppet var g := true # gravity on/off
 puppet var a := Vector3.ZERO # acceleration
 var accel := Vector3.ZERO
 var vel := Vector3.ZERO
@@ -18,6 +18,9 @@ export var grav : float= 64 / 60
 export var jump : float = grav * 42
 export var friction : float = .825
 export var speed : float = 4 * friction
+
+# Shooting
+puppetsync var b : float = 0.0 # Bendiness of bullet
 
 # Grappling
 const MAX_GRAPPLE_SPEED := 3
@@ -212,6 +215,13 @@ func _input(event: InputEvent) -> void:
 ##			vel -= CamY.global_transform.basis.z
 ##			vel.y += 1
 
+	if event is InputEventMouseButton: # and event.is_pressed():
+		if event.button_index == BUTTON_WHEEL_UP:
+			rset("b", b - .025)
+		elif event.button_index == BUTTON_WHEEL_DOWN:
+			rset("b", b + .025)
+	a -= transform.basis.z * 2
+
 func _physics_process(_delta: float) -> void:
 	# collision with boxes
 	for index in get_slide_count():
@@ -261,7 +271,7 @@ func _physics_process(_delta: float) -> void:
 		AnimTree.set("parameters/Move/blend_amount", 0)
 
 	# apply gravity, inputs, physics
-	vel -= int(gravity) * (int(not_grappling)) * (int(L_not_grapplin)) * transform.basis.y * grav
+	vel -= int(g) * (int(not_grappling)) * (int(L_not_grapplin)) * transform.basis.y * grav
 	vel = move_and_slide(vel, transform.basis.y, false, 4, .75, false)
 	
 	global_transform = global_transform.interpolate_with(align_with_y(global_transform, newest_normal), .15)
@@ -391,6 +401,7 @@ puppetsync func f() -> void:
 	p.global_transform = Muzzle.global_transform
 	p.monitoring = true
 	p.visible = true
+	p.rot = b
 
 #	AnimTree.set("parameters/Firing/active", false)
 	AnimTree.set("parameters/Firing/active", true)

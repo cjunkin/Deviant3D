@@ -80,7 +80,7 @@ func _input(event: InputEvent) -> void:
 				current_player.rpc("ss", -current_player.SENS_X/1000)
 				sens_changed = false
 			if gravity_changed:
-				current_player.rset("gravity", current_player.gravity)
+				current_player.rset("g", current_player.g)
 				gravity_changed = false
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 			Menu.visible = false
@@ -97,7 +97,7 @@ func start_game(player: Player) -> void:
 	SSlider.value = db2linear(AudioServer.get_bus_volume_db(SFX_BUS))
 	MSlider.value = db2linear(AudioServer.get_bus_volume_db(MUSIC_BUS))
 	current_player = player
-	$Menu/Center/Menu/Buttons/Grav.pressed = current_player.gravity
+	$Menu/Center/Menu/Buttons/Grav.pressed = current_player.g
 	Flip.pressed = true # TODO: Fix hardcode
 	set_process_input(true)
 	play_music()
@@ -170,7 +170,7 @@ func _on_Flip_toggled(button_pressed: bool) -> void:
 # Actually changes player's gravity
 func _on_Grav_toggled(button_pressed: bool) -> void:
 	gravity_changed = true
-	current_player.gravity = button_pressed
+	current_player.g = button_pressed
 	if button_pressed:
 		Grav.modulate = G.primary_color
 	else:
