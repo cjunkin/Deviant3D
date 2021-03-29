@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Scn/StaticBox.tscn" type="PackedScene" id=2]
@@ -33,6 +33,113 @@ roughness = 0.6
 uv1_scale = Vector3( 0.1, 0.1, 0.1 )
 uv1_triplanar = true
 uv2_triplanar_sharpness = 0.784584
+
+[sub_resource type="CubeMesh" id=4]
+size = Vector3( 400, 2, 400 )
+
+[sub_resource type="ConvexPolygonShape" id=5]
+points = PoolVector3Array( -200, 1, 200, 200, 1, -200, 200, 1, 200, -200, 1, -200, -200, -1, 200, 200, -1, -200, 200, -1, 200, -200, -1, -200, 200, 1, 200, -200, 1, -200, 200, 1, -200, -200, 1, 200, 200, -1, 200, -200, -1, -200, 200, -1, -200, -200, -1, 200, 200, 1, 200, -200, -1, 200, -200, 1, 200, 200, -1, 200, 200, 1, -200, -200, -1, -200, -200, 1, -200, 200, -1, -200 )
+
+[sub_resource type="Animation" id=3]
+resource_name = "DNC"
+length = 10.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sunlight:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 5, 10 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( -120, 0, 0 ), Vector3( 120, 0, 0 ), Vector3( -120, 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sunlight:light_energy")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 5, 10 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 2.0, 0.0, 2.0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Env:environment:background_sky:sky_top_color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 5, 10 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.196078, 0.388235, 0.847059, 1 ), Color( 0, 0, 0, 1 ), Color( 0.196078, 0.388235, 0.847059, 1 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Env:environment:background_sky:sky_horizon_color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 5, 10 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.545098, 0.686275, 0.811765, 1 ), Color( 0, 0, 0, 1 ), Color( 0.545098, 0.686275, 0.811765, 1 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Env:environment:background_sky:ground_bottom_color")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 5, 10 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.545098, 0.686275, 0.811765, 1 ), Color( 0, 0, 0, 1 ), Color( 0.545098, 0.686275, 0.811765, 1 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("Env:environment:background_sky:ground_horizon_color")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 5, 10 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.545098, 0.686275, 0.811765, 1 ), Color( 0, 0, 0, 1 ), Color( 0.545098, 0.686275, 0.811765, 1 ) ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("Env:environment:background_sky:sky_energy")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = false
+tracks/6/keys = {
+"times": PoolRealArray( 0, 5, 10 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 1.0, 0.0, 1.0 ]
+}
+tracks/7/type = "value"
+tracks/7/path = NodePath("Env:environment:background_sky:ground_energy")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = false
+tracks/7/keys = {
+"times": PoolRealArray( 0, 5, 10 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 1.0, 0.0, 1.0 ]
+}
 
 [node name="Game" type="Spatial"]
 script = ExtResource( 1 )
@@ -101,7 +208,7 @@ depth = 18.0
 material = ExtResource( 7 )
 
 [node name="RoomCEIL" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 7, 42.1388, 125 )
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 7, 42, 125 )
 use_in_baked_light = true
 use_collision = true
 width = 88.0
@@ -110,7 +217,7 @@ depth = 8.0
 material = SubResource( 1 )
 
 [node name="RoomBACK" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 18.1388, 146 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 18, 146 )
 use_in_baked_light = true
 use_collision = true
 width = 88.0
@@ -119,7 +226,7 @@ depth = 8.0
 material = SubResource( 2 )
 
 [node name="RoomWall2" type="CSGBox" parent="."]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 64, 21.1388, 126 )
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 64, 18, 126 )
 use_in_baked_light = true
 use_collision = true
 width = 50.0
@@ -128,7 +235,7 @@ depth = 26.0
 material = ExtResource( 7 )
 
 [node name="RoomWall3" type="CSGBox" parent="."]
-transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -47, 21.1388, 126 )
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -47, 18, 126 )
 use_in_baked_light = true
 use_collision = true
 width = 50.0
@@ -163,15 +270,17 @@ height = 12.0
 depth = 16.0
 material = ExtResource( 7 )
 
-[node name="Ground" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7.38, 0 )
+[node name="Ground" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0 )
 use_in_baked_light = true
-use_collision = true
+mesh = SubResource( 4 )
+material/0 = ExtResource( 7 )
+
+[node name="StaticBody" type="StaticBody" parent="Ground"]
 collision_mask = 7
-width = 400.0
-height = 8.0
-depth = 400.0
-material = ExtResource( 7 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Ground/StaticBody"]
+shape = SubResource( 5 )
 
 [node name="Island1" parent="." instance=ExtResource( 8 )]
 transform = Transform( 16, 0, 0, 0, 16, 0, 0, 0, 16, 137.756, 483.134, -351.662 )
@@ -204,4 +313,8 @@ expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="DayNight" type="AnimationPlayer" parent="."]
+playback_process_mode = 0
+anims/DNC = SubResource( 3 )
 [connection signal="timeout" from="EnemySpawnTime" to="." method="_on_EnemySpawnTime_timeout"]

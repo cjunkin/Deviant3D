@@ -36,6 +36,8 @@ export(String, FILE) var cam_path
 export(String, FILE) var flippers_path
 
 # Cached Nodes
+#export(NodePath) var flash
+
 onready var CamSpring : SpringArm
 onready var Cam : Camera
 onready var CamX := $CamX
@@ -61,7 +63,7 @@ onready var Hitbox := $Hitbox
 onready var tween := $Tween
 var LaserSight : CSGCylinder
 var RespawnTime : Timer
-
+#onready var Flash : OmniLight = get_node(flash)
 
 func _ready() -> void:
 	# Setup grappling hooks
@@ -455,6 +457,8 @@ puppetsync func f() -> void:
 	# Timing
 	ROF.start()
 	p.timer.start()
+#	Flash.visible = true
+
 
 # Jump
 puppetsync func j() -> void:
@@ -575,3 +579,7 @@ func local_grapple(right: bool) -> void:
 	# Audio
 	GrappleSfx.pitch_scale = rand_range(.5, .85)
 	GrappleSfx.play()
+
+
+#func _on_ROF_timeout():
+#	Flash.visible = false
