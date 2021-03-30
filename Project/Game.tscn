@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Scn/StaticBox.tscn" type="PackedScene" id=2]
@@ -13,8 +13,24 @@
 [ext_resource path="res://WorldEnv.tres" type="Environment" id=11]
 [ext_resource path="res://Scn/Fx/Explosion.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Gfx/2D/Reticule.svg" type="Texture" id=13]
+[ext_resource path="res://Scn/MovingPlatform.gd" type="Script" id=14]
+[ext_resource path="res://Gfx/Font/Typori-Regular.ttf" type="DynamicFontData" id=15]
+[ext_resource path="res://Gfx/2D/Hitmark.svg" type="Texture" id=16]
 
-[sub_resource type="SpatialMaterial" id=1]
+[sub_resource type="CubeMesh" id=10]
+size = Vector3( 64, 8, 48 )
+
+[sub_resource type="BoxShape" id=11]
+extents = Vector3( 32, 4, 24 )
+
+[sub_resource type="Curve3D" id=12]
+bake_interval = 1.0
+_data = {
+"points": PoolVector3Array( 0, 0, 0, 0, 0, 0, 219.386, 7.30613, 84.4106, 0, 0, 0, 0, 0, 0, -91.4182, 18.58, 183.941, 0, 0, 0, 0, 0, 0, -122.4, 120.243, -11.6246, 0, 0, 0, 0, 0, 0, 36.3, 41.6427, -144.725, 0, 0, 0, 0, 0, 0, 219.386, 7.30613, 84.4106 ),
+"tilts": PoolRealArray( 0, 0, 0, 0, 0 )
+}
+
+[sub_resource type="SpatialMaterial" id=13]
 flags_vertex_lighting = true
 flags_world_triplanar = true
 albedo_color = Color( 1.27, 2.23617, 2.76, 1 )
@@ -24,7 +40,7 @@ uv1_scale = Vector3( 0.1, 0.1, 0.1 )
 uv1_triplanar = true
 uv2_triplanar_sharpness = 0.784584
 
-[sub_resource type="SpatialMaterial" id=2]
+[sub_resource type="SpatialMaterial" id=14]
 flags_vertex_lighting = true
 flags_world_triplanar = true
 albedo_color = Color( 1.27, 1.74727, 2.76, 1 )
@@ -34,14 +50,153 @@ uv1_scale = Vector3( 0.1, 0.1, 0.1 )
 uv1_triplanar = true
 uv2_triplanar_sharpness = 0.784584
 
-[sub_resource type="CubeMesh" id=4]
+[sub_resource type="CubeMesh" id=15]
 size = Vector3( 400, 2, 400 )
 
-[sub_resource type="ConvexPolygonShape" id=5]
+[sub_resource type="ConvexPolygonShape" id=16]
 points = PoolVector3Array( -200, 1, 200, 200, 1, -200, 200, 1, 200, -200, 1, -200, -200, -1, 200, 200, -1, -200, 200, -1, 200, -200, -1, -200, 200, 1, 200, -200, 1, -200, 200, 1, -200, -200, 1, 200, 200, -1, 200, -200, -1, -200, 200, -1, -200, -200, -1, 200, 200, 1, 200, -200, -1, 200, -200, 1, 200, 200, -1, 200, 200, 1, -200, -200, -1, -200, -200, 1, -200, 200, -1, -200 )
 
-[sub_resource type="Animation" id=3]
-resource_name = "DNC"
+[sub_resource type="DynamicFont" id=17]
+size = 32
+outline_size = 4
+font_data = ExtResource( 15 )
+
+[sub_resource type="Animation" id=9]
+resource_name = "Score"
+tracks/0/type = "bezier"
+tracks/0/path = NodePath("Label:custom_colors/font_color:r")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.0315, 0, 0, -0.0315, 0, 0.0315, 0, 0.905882, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.25, 0, 1, -0.25, 0, 0.0315, 0, 0, -0.0315, 0, 0.0315, 0, 0.905882, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.25, 0, 1, -0.25, 0, 0.0315, 0, 0, -0.0315, 0, 0.0315, 0, 0.905882, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.25, 0, 1, -0.25, 0, 0.0315, 0, 0, -0.0315, 0, 0.0315, 0, 0.905882, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.063, 0.126, 0.189, 0.252, 0.315, 0.378, 0.441, 0.504, 0.567, 0.63, 0.693, 0.756, 0.819, 0.882, 0.945 )
+}
+tracks/1/type = "bezier"
+tracks/1/path = NodePath("Label:custom_colors/font_color:g")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 0.529412, -0.0315, 0, 0.0315, 0, 0.956863, -0.0315, 0, 0.25, 0, 1, -0.25, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 0.529412, -0.0315, 0, 0.0315, 0, 0.956863, -0.0315, 0, 0.25, 0, 1, -0.25, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 0.529412, -0.0315, 0, 0.0315, 0, 0.956863, -0.0315, 0, 0.25, 0, 1, -0.25, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 0.529412, -0.0315, 0, 0.0315, 0, 0.956863, -0.0315, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.063, 0.126, 0.189, 0.252, 0.315, 0.378, 0.441, 0.504, 0.567, 0.63, 0.693, 0.756, 0.819, 0.882, 0.945 )
+}
+tracks/2/type = "bezier"
+tracks/2/path = NodePath("Label:custom_colors/font_color:b")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.0315, 0, 0.643137, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 0.635294, -0.0315, 0, 0.25, 0, 1, -0.25, 0, 0.0315, 0, 0.643137, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 0.635294, -0.0315, 0, 0.25, 0, 1, -0.25, 0, 0.0315, 0, 0.643137, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 0.635294, -0.0315, 0, 0.25, 0, 1, -0.25, 0, 0.0315, 0, 0.643137, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 0.635294, -0.0315, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.063, 0.126, 0.189, 0.252, 0.315, 0.378, 0.441, 0.504, 0.567, 0.63, 0.693, 0.756, 0.819, 0.882, 0.945 )
+}
+tracks/3/type = "bezier"
+tracks/3/path = NodePath("Label:custom_colors/font_color:a")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.25, 0, 1, -0.25, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.25, 0, 1, -0.25, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.25, 0, 1, -0.25, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.063, 0.126, 0.189, 0.252, 0.315, 0.378, 0.441, 0.504, 0.567, 0.63, 0.693, 0.756, 0.819, 0.882, 0.945 )
+}
+tracks/4/type = "bezier"
+tracks/4/path = NodePath("Label:custom_colors/font_outline_modulate:r")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.0315, 0, 0.227451, -0.0315, 0, 0.0315, 0, 0.121569, -0.0315, 0, 0.0315, 0, 0.0196078, -0.0315, 0, 0.25, 0, 0, -0.25, 0, 0.0315, 0, 0.227451, -0.0315, 0, 0.0315, 0, 0.121569, -0.0315, 0, 0.0315, 0, 0.0196078, -0.0315, 0, 0.25, 0, 0, -0.25, 0, 0.0315, 0, 0.227451, -0.0315, 0, 0.0315, 0, 0.121569, -0.0315, 0, 0.0315, 0, 0.0196078, -0.0315, 0, 0.25, 0, 0, -0.25, 0, 0.0315, 0, 0.227451, -0.0315, 0, 0.0315, 0, 0.121569, -0.0315, 0, 0.0315, 0, 0.0196078, -0.0315, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.063, 0.126, 0.189, 0.252, 0.315, 0.378, 0.441, 0.504, 0.567, 0.63, 0.693, 0.756, 0.819, 0.882, 0.945 )
+}
+tracks/5/type = "bezier"
+tracks/5/path = NodePath("Label:custom_colors/font_outline_modulate:g")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.0315, 0, 0.0313726, -0.0315, 0, 0.0315, 0, 0.164706, -0.0315, 0, 0.0315, 0, 0.054902, -0.0315, 0, 0.25, 0, 0, -0.25, 0, 0.0315, 0, 0.0313726, -0.0315, 0, 0.0315, 0, 0.164706, -0.0315, 0, 0.0315, 0, 0.054902, -0.0315, 0, 0.25, 0, 0, -0.25, 0, 0.0315, 0, 0.0313726, -0.0315, 0, 0.0315, 0, 0.164706, -0.0315, 0, 0.0315, 0, 0.054902, -0.0315, 0, 0.25, 0, 0, -0.25, 0, 0.0315, 0, 0.0313726, -0.0315, 0, 0.0315, 0, 0.164706, -0.0315, 0, 0.0315, 0, 0.054902, -0.0315, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.063, 0.126, 0.189, 0.252, 0.315, 0.378, 0.441, 0.504, 0.567, 0.63, 0.693, 0.756, 0.819, 0.882, 0.945 )
+}
+tracks/6/type = "bezier"
+tracks/6/path = NodePath("Label:custom_colors/font_outline_modulate:b")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"points": PoolRealArray( 0, -0.25, 0, 0.0315, 0, 0.0313726, -0.0315, 0, 0.0315, 0, 0.0156863, -0.0315, 0, 0.0315, 0, 0.211765, -0.0315, 0, 0.25, 0, 0, -0.25, 0, 0.0315, 0, 0.0313726, -0.0315, 0, 0.0315, 0, 0.0156863, -0.0315, 0, 0.0315, 0, 0.211765, -0.0315, 0, 0.25, 0, 0, -0.25, 0, 0.0315, 0, 0.0313726, -0.0315, 0, 0.0315, 0, 0.0156863, -0.0315, 0, 0.0315, 0, 0.211765, -0.0315, 0, 0.25, 0, 0, -0.25, 0, 0.0315, 0, 0.0313726, -0.0315, 0, 0.0315, 0, 0.0156863, -0.0315, 0, 0.0315, 0, 0.211765, -0.0315, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.063, 0.126, 0.189, 0.252, 0.315, 0.378, 0.441, 0.504, 0.567, 0.63, 0.693, 0.756, 0.819, 0.882, 0.945 )
+}
+tracks/7/type = "bezier"
+tracks/7/path = NodePath("Label:custom_colors/font_outline_modulate:a")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.25, 0, 1, -0.25, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.25, 0, 1, -0.25, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.25, 0, 1, -0.25, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.0315, 0, 1, -0.0315, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.063, 0.126, 0.189, 0.252, 0.315, 0.378, 0.441, 0.504, 0.567, 0.63, 0.693, 0.756, 0.819, 0.882, 0.945 )
+}
+tracks/8/type = "bezier"
+tracks/8/path = NodePath("Label:modulate:r")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.0945, 0, 1, -0.0945, 0, 0.0315, 0, 1, -0.0315, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.945, 1 )
+}
+tracks/9/type = "bezier"
+tracks/9/path = NodePath("Label:modulate:g")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.0945, 0, 1, -0.0945, 0, 0.0315, 0, 1, -0.0315, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.945, 1 )
+}
+tracks/10/type = "bezier"
+tracks/10/path = NodePath("Label:modulate:b")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.0945, 0, 1, -0.0945, 0, 0.0315, 0, 1, -0.0315, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.945, 1 )
+}
+tracks/11/type = "bezier"
+tracks/11/path = NodePath("Label:modulate:a")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/keys = {
+"points": PoolRealArray( 1, -0.25, 0, 0.0945, 0, 1, -0.0945, 0, 0.0315, 0, 0, -0.0315, 0, 0.25, 0 ),
+"times": PoolRealArray( 0, 0.945, 1 )
+}
+tracks/12/type = "value"
+tracks/12/path = NodePath("Reticule/Hitmark:visible")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+
+[sub_resource type="Animation" id=18]
 length = 10.0
 loop = true
 tracks/0/type = "value"
@@ -186,16 +341,24 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -111.483, 36.0115, -101.185 )
 [node name="Rock1R4" parent="." instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -55.9494, 8.12141, -29.2171 )
 
-[node name="Wall3" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -71, 101.536, -40 )
-use_in_baked_light = true
-use_collision = true
-width = 26.0
-height = 20.0
-depth = 38.0
-material = ExtResource( 7 )
+[node name="MovingPlatform" type="KinematicBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 241.64, 25.7573, -209.175 )
+collision_mask = 7
+script = ExtResource( 14 )
+patrol_path = NodePath("Path")
+
+[node name="MeshInstance" type="MeshInstance" parent="MovingPlatform"]
+mesh = SubResource( 10 )
+material/0 = ExtResource( 7 )
+
+[node name="CollisionShape" type="CollisionShape" parent="MovingPlatform"]
+shape = SubResource( 11 )
+
+[node name="Path" type="Path" parent="MovingPlatform"]
+curve = SubResource( 12 )
 
 [node name="Wall10" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -42, 92.4259, -14 )
 material = ExtResource( 7 )
 
 [node name="Wall11" type="CSGBox" parent="."]
@@ -214,7 +377,7 @@ use_collision = true
 width = 88.0
 height = 50.0
 depth = 8.0
-material = SubResource( 1 )
+material = SubResource( 13 )
 
 [node name="RoomBACK" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 18, 146 )
@@ -223,7 +386,7 @@ use_collision = true
 width = 88.0
 height = 44.0
 depth = 8.0
-material = SubResource( 2 )
+material = SubResource( 14 )
 
 [node name="RoomWall2" type="CSGBox" parent="."]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 64, 18, 126 )
@@ -252,15 +415,6 @@ height = 12.0
 depth = 12.0
 material = ExtResource( 7 )
 
-[node name="Wall5" type="CSGBox" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -121, 42, -28 )
-use_in_baked_light = true
-use_collision = true
-width = 10.0
-height = 12.0
-depth = 30.0
-material = ExtResource( 7 )
-
 [node name="Wall7" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -54, 36, -117 )
 use_in_baked_light = true
@@ -273,14 +427,14 @@ material = ExtResource( 7 )
 [node name="Ground" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0 )
 use_in_baked_light = true
-mesh = SubResource( 4 )
+mesh = SubResource( 15 )
 material/0 = ExtResource( 7 )
 
 [node name="StaticBody" type="StaticBody" parent="Ground"]
 collision_mask = 7
 
 [node name="CollisionShape" type="CollisionShape" parent="Ground/StaticBody"]
-shape = SubResource( 5 )
+shape = SubResource( 16 )
 
 [node name="Island1" parent="." instance=ExtResource( 8 )]
 transform = Transform( 16, 0, 0, 0, 16, 0, 0, 0, 16, 137.756, 483.134, -351.662 )
@@ -298,7 +452,7 @@ wait_time = 4.0
 [node name="HUD" type="CanvasLayer" parent="."]
 
 [node name="Reticule" type="TextureRect" parent="HUD"]
-modulate = Color( 1, 0, 0, 0.25098 )
+self_modulate = Color( 1, 0, 0, 0.25098 )
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -314,7 +468,46 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Hitmark" type="TextureRect" parent="HUD/Reticule"]
+visible = false
+self_modulate = Color( 1, 0, 0, 0.490196 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -16.0
+margin_top = -16.0
+margin_right = 16.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 32, 32 )
+texture = ExtResource( 16 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="HUD"]
+modulate = Color( 1, 1, 1, 0 )
+anchor_top = 0.025
+anchor_right = 1.0
+anchor_bottom = 0.025
+margin_bottom = 39.0
+custom_fonts/font = SubResource( 17 )
+custom_colors/font_color = Color( 1, 0.956863, 0.635294, 1 )
+custom_colors/font_outline_modulate = Color( 0.0196078, 0.054902, 0.211765, 1 )
+text = "Nice shot!"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Anim" type="AnimationPlayer" parent="HUD"]
+playback_process_mode = 0
+method_call_mode = 1
+anims/Score = SubResource( 9 )
+
 [node name="DayNight" type="AnimationPlayer" parent="."]
 playback_process_mode = 0
-anims/DNC = SubResource( 3 )
+anims/DNC = SubResource( 18 )
 [connection signal="timeout" from="EnemySpawnTime" to="." method="_on_EnemySpawnTime_timeout"]

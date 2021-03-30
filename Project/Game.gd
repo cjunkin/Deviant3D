@@ -6,7 +6,7 @@ const PROJ_PER_PLAYER := 10
 const EXP_PER_PLAYER := 10
 var num_lasers := PROJ_PER_PLAYER
 var num_explosions := EXP_PER_PLAYER
-const num_enemies := 16
+const num_enemies := 12
 #const num_laser_audio := 8
 #const num_grapple_sounds := 6
 
@@ -110,7 +110,7 @@ func _physics_process(delta: float) -> void:
 			e.vel.x = e.vel.x * .8 + e.acc.x
 			e.vel += Vector3.DOWN * e.grav
 			
-			e.vel = e.move_and_slide(e.vel , Vector3.UP, false, 4, .75, false)
+			e.vel = e.move_and_slide(e.vel , Vector3.UP, false, 1, .75, false)
 			# If fallen too low, die
 			if e.translation.y < -7:
 				e.rpc("d")
@@ -174,6 +174,11 @@ func spawn_enemy(trans := Vector3.INF, velocity := Vector3.INF, target_name := "
 			enemy.set_target(get_node(target_name))
 
 		call_deferred("add_child", enemy)
+
+onready var Anim := $HUD/Anim
+func score() -> void:
+	Anim.play("Score")
+	Anim.seek(0)
 
 func _on_EnemySpawnTime_timeout():
 	spawn_enemy()

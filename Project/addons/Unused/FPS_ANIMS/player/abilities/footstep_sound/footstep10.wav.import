@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/footstep10.wav-ee407b0260cec1dd1a7cc2093afd2c1a.sample"
+
+[deps]
+
+source_file="res://addons/Unused/FPS_ANIMS/player/abilities/footstep_sound/footstep10.wav"
+dest_files=[ "res://.import/footstep10.wav-ee407b0260cec1dd1a7cc2093afd2c1a.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

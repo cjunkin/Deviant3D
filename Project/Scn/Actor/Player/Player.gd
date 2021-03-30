@@ -56,7 +56,6 @@ var RHook: Hook
 onready var FrontCast = Muzzle.get_node("FrontCast") # TODO: Get rid of FrontCast (dont need)
 onready var GLine := $Line
 onready var LGLine := $Line2
-onready var sight := $Sight
 onready var ROF := $ROF
 onready var FlipTime := $FlipTime
 onready var Hitbox := $Hitbox
@@ -137,22 +136,22 @@ func _ready() -> void:
 		rpc_id(get_network_master(), "req_syn")
 
 func _input(event: InputEvent) -> void:
+	# Ground Movement
+	a = (
+		Input.get_action_strength("sprint") + 1) * speed * (
+			CamX.global_transform.basis.z * (
+				Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+				) 
+			+ 
+			CamX.global_transform.basis.x * (
+				Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+				)
+		).normalized()
+	# If our acceleration has changed, sync the new one
+	if a != accel:
+		accel = a
+		rset("a", a)
 	if event is InputEventKey:
-		# Ground Movement
-		a = (
-			Input.get_action_strength("sprint") + 1) * speed * (
-				CamX.global_transform.basis.z * (
-					Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
-					) 
-				+ 
-				CamX.global_transform.basis.x * (
-					Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
-					)
-			).normalized()
-		# If our acceleration has changed, sync the new one
-		if a != accel:
-			accel = a
-			rset("a", a)
 		# Switch camera sides
 		if event.is_action_pressed("switch_tps"):
 			var next : Vector3 = CamSpring.translation
@@ -205,6 +204,7 @@ func _input(event: InputEvent) -> void:
 		elif event.is_action_released("crouch"):
 			rpc("u") # uncrouch
 
+		# Reset Gravity
 		if event.is_action_pressed("reset_gravity") and FlipTime.is_stopped():
 			rpc("t", Vector3.UP, translation) # reset rotation to normal
 			toggle_flippers(!G.Flip.pressed)
@@ -217,15 +217,23 @@ func _input(event: InputEvent) -> void:
 			else:
 				FlipTime.start()
 
+		# Reload
+		if event.is_action_pressed("reload"):
+			AnimTree.set("parameters/Reloading/blend_amount", 1)
+			AnimTree.set("parameters/Firing/active", true)
+
+		# Slowdown time
 		if event.is_action_pressed("slowmo"):
 			Engine.time_scale = int(Network.players.size() > 1) * .9 + .1
 		elif event.is_action_released("slowmo"):
 			Engine.time_scale = 1
+
 	#		# Accelerate Hook
 	#		if Input.is_action_pressed("sprint"):
 	#			vel += (grapple_pos - global_transform.origin).normalized() * 3
 	##			vel -= CamY.global_transform.basis.z
 	##			vel.y += 1
+
 		if event.is_action("respawn") and RespawnTime.is_stopped():
 			rpc("respawn")
 			RespawnTime.start()
@@ -355,7 +363,7 @@ func _physics_process(_delta: float) -> void:
 	else:
 		MeshHelp.global_transform = MeshHelp.global_transform.interpolate_with(
 			MeshHelp.global_transform.looking_at(
-				grapple_pos * int(!not_grappling) + grapple_pos2 * int(!L_not_grapplin),
+				(grapple_pos * int(!not_grappling) + grapple_pos2 * int(!L_not_grapplin)) / 2,
 				transform.basis.y
 				), 
 			.2
@@ -446,8 +454,10 @@ puppetsync func f() -> void:
 	p.monitoring = true
 	p.visible = true
 	p.rot = b
+	p.player = self
 
 #	AnimTree.set("parameters/Firing/active", false)
+	AnimTree.set("parameters/Reloading/blend_amount", 0)
 	AnimTree.set("parameters/Firing/active", true)
 
 	# Audio
