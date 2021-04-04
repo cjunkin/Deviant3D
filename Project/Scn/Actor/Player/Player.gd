@@ -23,6 +23,7 @@ var newest_normal := Vector3.UP
 
 # Shooting
 puppetsync var b : float = 0.0 # Bendiness of bullet
+export var throwable_s: PackedScene
 
 # Grappling
 const MAX_GRAPPLE_SPEED := 3
@@ -85,7 +86,8 @@ func _ready() -> void:
 		# Regular cam
 		if OS.get_name() != "Android" and OS.get_name() != "iOS":
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-			var CamHolder :Spatial = CamY.get_node("CamHolder")
+			# TODO: Find way to animate camera without using CamHolder 
+			var CamHolder :Spatial = CamY.get_node("CamHolder") # So that walking doesn't affect gun rotation (yet)
 			CamHolder.add_child(load(cam_path).instance())
 			Cam = CamHolder.get_node("Spring/Cam")
 			CamSpring = CamHolder.get_node("Spring")
@@ -193,10 +195,12 @@ func _input(event: InputEvent) -> void:
 			local_grapple(true)
 		elif event.is_action_released("grapple1"):
 			rpc("R")
+			Cam.stress = 0.2
 		if event.is_action_pressed("grapple2"):
 			local_grapple(false)
 		elif event.is_action_released("grapple2"):
 			rpc("L")
+			Cam.stress = 0.2
 
 		# Crouching
 		if event.is_action_pressed("crouch"):
@@ -237,6 +241,13 @@ func _input(event: InputEvent) -> void:
 		if event.is_action("respawn") and RespawnTime.is_stopped():
 			rpc("respawn")
 			RespawnTime.start()
+		
+		if event.is_action_pressed("throw"):
+			var proj : RigidBody = throwable_s.instance()
+			proj.rotation = Vector3(randf(), randf(), randf())
+			proj.translation = translation - Muzzle.global_transform.basis.z * (2 + vel.length() / 12)
+			proj.apply_central_impulse(-Muzzle.global_transform.basis.z * 64)
+			get_parent().add_child(proj)
 	else:
 		# Scroll
 		if event is InputEventMouseButton: # and event.is_pressed():
@@ -252,6 +263,16 @@ func _input(event: InputEvent) -> void:
 				-PI/2, 
 				PI/2
 				) # Up down
+#			CamY.rotation.x = CamY.rotation.x + (event.relative.y * SENS_Y)
+#			if CamY.rotation.x < -PI/2 or CamY.rotation.x > PI/2:
+#				SENS_X = -SENS_Y
+#				CamY.rotation.x = wrapf(
+#					CamY.rotation.x,
+#					-PI, 
+#					PI
+#					) # Up down
+#			else:
+#				SENS_X = SENS_Y
 			rpc_unreliable("A", event.relative)
 		
 		# Zoom
@@ -311,12 +332,18 @@ func _physics_process(_delta: float) -> void:
 		AnimTree.set("parameters/Move/blend_amount", 0)
 
 	# apply gravity, inputs, physics
-	vel -= int(g) * (int(not_grappling)) * (int(L_not_grapplin)) * transform.basis.y * grav
+	vel -= int(g) * (int(not_grappling)) * (int(L_not_grapplin)) * grav * transform.basis.y#CamY.global_transform.basis.y
 	vel = move_and_slide(vel, transform.basis.y, false, 4, .75, false)
 	
+	
 	global_transform = global_transform.interpolate_with(
-		align_with_y(global_transform, newest_normal), .15
+		align_with_y(global_transform, newest_normal), .125
 		)
+#	if !FlipTime.is_stopped():
+#		print(FlipTime.time_left)
+#		CamX.global_transform.basis = old_camx.basis
+#		CamY.global_transform.basis = old_camy.basis
+
 
 	# Grappling logic
 	var air_resistance := 1.0
@@ -368,8 +395,9 @@ func _physics_process(_delta: float) -> void:
 				), 
 			.2
 			)
+#		CamHolder.rotation.z = MeshHelp.rotation.z
 
-
+onready var CamHolder :Spatial = CamY.get_node("CamHolder")
 
 # Call only on self so that sounds follow TPS/FPS camera
 func reparent_sound(sfx: AudioStreamPlayer3D) -> void:
@@ -391,6 +419,7 @@ func hook(hook_name: String) -> void:
 	else:
 		LGLine.visible = true
 		L_not_grapplin = false
+	Cam.stress = 0.28
 
 # =-----------------------------------------------------------=
 # Multiplayer Functions (single letters to save network usage)
@@ -485,6 +514,8 @@ puppet func s(trans: Vector3, y: float, x: float, velocity: Vector3, norm := new
 # Sync transform (during flip)
 puppetsync func t(normal: Vector3, trans: Vector3) -> void:
 	translation = trans
+	CamY.rotation.x = 0
+#	CamX.rotation.y = 0
 	newest_normal = normal
 	vel *= .25
 	FlipTime.start()

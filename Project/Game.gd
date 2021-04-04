@@ -6,7 +6,7 @@ const PROJ_PER_PLAYER := 10
 const EXP_PER_PLAYER := 10
 var num_lasers := PROJ_PER_PLAYER
 var num_explosions := EXP_PER_PLAYER
-const num_enemies := 12
+const num_enemies := 1
 #const num_laser_audio := 8
 #const num_grapple_sounds := 6
 
@@ -85,6 +85,7 @@ func _ready()->void:
 #	$Enemy2.set_target(players[0])
 #	$Enemy3.set_target(players[0])
 #	$Enemy4.set_target(players[0])
+	$Worm.set_target(players[0])
 
 #onready var TimeLeft := $Label
 #onready var EnemySpawnTime : Timer = get_node(enemy_spawn_time)
@@ -105,10 +106,12 @@ func _physics_process(delta: float) -> void:
 				e.look_at(e.target.global_transform.origin, Vector3.UP)
 				e.rotation.x = 0
 			
-			e.acc = e.transform.basis.z * e.speed #* int(e.global_transform.origin.distance_squared_to(e.target.global_transform.origin) > 1)
+			e.acc = e.transform.basis.z * e.speed 
+			#* int(e.global_transform.origin.distance_squared_to(e.target.global_transform.origin) > 1)
 			e.vel.z = e.vel.z * .8 + e.acc.z
 			e.vel.x = e.vel.x * .8 + e.acc.x
 			e.vel += Vector3.DOWN * e.grav
+#			e.vel -= players[0].transform.basis.y * e.grav
 			
 			e.vel = e.move_and_slide(e.vel , Vector3.UP, false, 1, .75, false)
 			# If fallen too low, die
@@ -146,11 +149,11 @@ func gen_boxes(my_seed: int) -> void:
 	mat.albedo_color -= Color(rng.randf(), rng.randf(), rng.randf()) / 10
 	
 	var static_box_s := load(rock_path)
-	for x in range(-400, 400, 40):
-		for z in range(-400, 400, 40):
+	for x in range(-400, 400, 58):
+		for z in range(-400, 400, 58):
 			if (noise.get_noise_3d(x, x, z) > 0):
 				var b : Spatial = static_box_s.instance()
-				b.translation = Vector3(x, 64 + rng.randf() * 1000, z)
+				b.translation = Vector3(x, 64 + rng.randf() * 800, z)
 				b.rotation = Vector3(rng.randf(), rng.randf(), rng.randf()) * 2 * PI
 				b.scale = Vector3(1, 1, 1) * rng.randf_range(8, 16)
 				if rng.randf() > .5:

@@ -1,7 +1,7 @@
 class_name Projectile
 extends Area
 
-export var speed := 256
+export var speed := 512
 onready var timer := $Timer
 
 var player

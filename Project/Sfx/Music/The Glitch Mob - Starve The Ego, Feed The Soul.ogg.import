@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/The Glitch Mob - Starve The Ego, Feed The Soul.ogg-8f0dd8ac66dc66e4f6d7cd48bb5cf0d1.oggstr"
+
+[deps]
+
+source_file="res://Sfx/Music/The Glitch Mob - Starve The Ego, Feed The Soul.ogg"
+dest_files=[ "res://.import/The Glitch Mob - Starve The Ego, Feed The Soul.ogg-8f0dd8ac66dc66e4f6d7cd48bb5cf0d1.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/The Glitch Mob - We Swarm (2020 Remaster).ogg-bda0e43961e85c046cd557b5beabd59a.oggstr"
+
+[deps]
+
+source_file="res://Sfx/Music/The Glitch Mob - We Swarm (2020 Remaster).ogg"
+dest_files=[ "res://.import/The Glitch Mob - We Swarm (2020 Remaster).ogg-bda0e43961e85c046cd557b5beabd59a.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

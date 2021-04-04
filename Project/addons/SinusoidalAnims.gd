@@ -1,7 +1,7 @@
 extends AnimationPlayer
 tool
 
-var ignored : PoolStringArray = ["Fire"]
+var ignored : PoolStringArray = ["Fire", "Reload"]
 
 """
 To use, slap this on an animation player, and it'll make all your bezier curves sinusoidal.

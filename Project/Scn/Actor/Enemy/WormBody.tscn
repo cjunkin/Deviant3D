@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=2]
+
+[sub_resource type="SphereMesh" id=1]
+radius = 10.0
+height = 20.0
+radial_segments = 12
+rings = 8
+
+[sub_resource type="SphereShape" id=2]
+radius = 10.0
+
+[node name="WormBody" type="KinematicBody"]
+
+[node name="WormBody" type="MeshInstance" parent="."]
+mesh = SubResource( 1 )
+material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 2 )
