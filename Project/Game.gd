@@ -85,7 +85,8 @@ func _ready()->void:
 #	$Enemy2.set_target(players[0])
 #	$Enemy3.set_target(players[0])
 #	$Enemy4.set_target(players[0])
-	$Worm.set_target(players[0])
+#	$Worm.set_target(players[0])
+	$Worm.set_target(get_node("1")) # TODO SYNC UP PROPERLY WORM
 
 #onready var TimeLeft := $Label
 #onready var EnemySpawnTime : Timer = get_node(enemy_spawn_time)
@@ -247,6 +248,7 @@ puppet func set_time(spawn_time_left: float) -> void:
 		# Reset wait_time (since timer should go back to 4 seconds)
 		yield(enemy_spawn, "timeout")
 		enemy_spawn.start(spawn_time)
+		$Worm.set_target(get_node("1")) # TODO: sync up properly worm
 
 
 # Spawn player with id PLAYER TODO: use get_rpc_sender_id to avoid hack
