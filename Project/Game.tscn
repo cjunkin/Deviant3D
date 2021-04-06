@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Scn/StaticBox.tscn" type="PackedScene" id=2]
@@ -17,7 +17,6 @@
 [ext_resource path="res://Gfx/Font/Typori-Regular.ttf" type="DynamicFontData" id=15]
 [ext_resource path="res://Gfx/2D/Hitmark.svg" type="Texture" id=16]
 [ext_resource path="res://Gfx/Model/Unused/food/banana.glb" type="PackedScene" id=17]
-[ext_resource path="res://Scn/Actor/Enemy/Worm.tscn" type="PackedScene" id=18]
 
 [sub_resource type="SpatialMaterial" id=1]
 metallic_specular = 0.0
@@ -419,7 +418,7 @@ shape = SubResource( 5 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -31.8054, 15.2132, 11.871 )
 
 [node name="Island1" parent="." instance=ExtResource( 8 )]
-transform = Transform( 16, 0, 0, 0, 16, 0, 0, 0, 16, 137.756, 483.134, -351.662 )
+transform = Transform( -15.1303, 0, -5.20328, 0, 16, 0, 5.20328, 0, -15.1303, 50.5629, -28.5269, -414.994 )
 
 [node name="Text" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9717, 3.47361, -42.4121 )
@@ -451,6 +450,7 @@ __meta__ = {
 }
 
 [node name="Hitmark" type="TextureRect" parent="HUD/Reticule"]
+visible = false
 self_modulate = Color( 1, 0, 0, 0.686275 )
 anchor_left = 0.5
 anchor_top = 0.5
@@ -468,13 +468,14 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="HUD"]
+modulate = Color( 1, 1, 1, 0 )
 anchor_top = 0.025
 anchor_right = 1.0
 anchor_bottom = 0.025
 margin_bottom = 39.0
 custom_fonts/font = SubResource( 6 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 1, 0.956863, 0.635294, 1 )
+custom_colors/font_outline_modulate = Color( 0.0196078, 0.054902, 0.211765, 1 )
 text = "Nice shot!"
 align = 1
 valign = 1
@@ -492,9 +493,5 @@ playback_process_mode = 0
 anims/DNC = SubResource( 8 )
 
 [node name="banana" parent="." instance=ExtResource( 17 )]
-transform = Transform( 16, 0, 0, 0, 16, 0, 0, 0, 16, 100.727, 4.59187, -69.9285 )
-
-[node name="Worm" parent="." instance=ExtResource( 18 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 361.867, -846.078 )
-target_path = NodePath("../Island1")
+transform = Transform( 7.22438, -14.2534, -0.805737, 12.8748, 6.1147, 7.26974, -6.16823, -3.93082, 14.2303, 38.4704, -12.8663, -252.978 )
 [connection signal="timeout" from="EnemySpawnTime" to="." method="_on_EnemySpawnTime_timeout"]

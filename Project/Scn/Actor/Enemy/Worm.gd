@@ -2,12 +2,12 @@ extends Spatial
 class_name Worm
 
 onready var Head := $Head
-export var target_path : NodePath
-onready var target : Spatial = get_node(target_path)
+#export var target_path : NodePath
+onready var target : Spatial
 export var body_seg_s : PackedScene
 const speed := 128
-const HALF_RADIUS := 5
-const NUM_BODY_SEGS := 32
+const HALF_RADIUS := 6
+const NUM_BODY_SEGS := 48
 func _ready():
 	for i in range(NUM_BODY_SEGS):
 		var body_seg := body_seg_s.instance()
@@ -53,3 +53,6 @@ func _physics_process(delta):
 			
 #			print(prev.global_transform.origin.distance_squared_to(child.global_transform.origin), " ", delta)
 			prev = child
+
+func get_class() -> String:
+	return "W"

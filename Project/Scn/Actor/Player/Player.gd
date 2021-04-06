@@ -14,8 +14,8 @@ puppet var g := true # gravity on/off
 puppet var a := Vector3.ZERO # acceleration
 var accel := Vector3.ZERO
 var vel := Vector3.ZERO
-export var grav : float= 64 / 60
-export var jump : float = grav * 42
+export var grav : float= 64
+export var jump : float = grav * .9
 export var friction : float = .825
 export var speed : float = 4 * friction
 const CROUCH_TIME := .05
@@ -176,13 +176,15 @@ func _input(event: InputEvent) -> void:
 				tween.interpolate_property(CamSpring, "spring_length", CamSpring.spring_length, 8, .25, Tween.TRANS_CUBIC)
 	#			tween.interpolate_property(Sfx, "translation", Sfx.translation, Vector3(3.5, 5, 0), .25, Tween.TRANS_CUBIC)
 				tween.start()
+#				PMesh.visible = true
 	#			CamSpring.spring_length = 8
 			else:
 	#			CamSpring.translation = Vector3(0, 1, 0)
-				tween.interpolate_property(CamSpring, "translation", CamSpring.translation, Vector3(0, 1, 0), .25, Tween.TRANS_CUBIC)
+				tween.interpolate_property(CamSpring, "translation", CamSpring.translation, Vector3(0, 1, -.25), .25, Tween.TRANS_CUBIC)
 				tween.interpolate_property(CamSpring, "spring_length", CamSpring.spring_length, 0, .25, Tween.TRANS_CUBIC)
 	#			tween.interpolate_property(Sfx, "translation", Sfx.translation, Vector3(0, 0, 0), .25, Tween.TRANS_CUBIC)
 				tween.start()
+#				PMesh.visible = false
 	#			CamSpring.spring_length = 0
 			fps = !fps
 
@@ -283,7 +285,7 @@ func _input(event: InputEvent) -> void:
 			tween.start()
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	# collision with boxes
 	for index in get_slide_count():
 		var collision := get_slide_collision(index)
@@ -332,17 +334,13 @@ func _physics_process(_delta: float) -> void:
 		AnimTree.set("parameters/Move/blend_amount", 0)
 
 	# apply gravity, inputs, physics
-	vel -= int(g) * (int(not_grappling)) * (int(L_not_grapplin)) * grav * transform.basis.y#CamY.global_transform.basis.y
+	vel -= int(g) * (int(not_grappling)) * (int(L_not_grapplin)) * grav * delta * transform.basis.y#CamY.global_transform.basis.y
 	vel = move_and_slide(vel, transform.basis.y, false, 4, .75, false)
 	
 	
 	global_transform = global_transform.interpolate_with(
 		align_with_y(global_transform, newest_normal), .125
 		)
-#	if !FlipTime.is_stopped():
-#		print(FlipTime.time_left)
-#		CamX.global_transform.basis = old_camx.basis
-#		CamY.global_transform.basis = old_camy.basis
 
 
 	# Grappling logic
@@ -419,7 +417,8 @@ func hook(hook_name: String) -> void:
 	else:
 		LGLine.visible = true
 		L_not_grapplin = false
-	Cam.stress = 0.28
+	if is_instance_valid(Cam):
+		Cam.stress = 0.28
 
 # =-----------------------------------------------------------=
 # Multiplayer Functions (single letters to save network usage)
@@ -517,7 +516,7 @@ puppetsync func t(normal: Vector3, trans: Vector3) -> void:
 	CamY.rotation.x = 0
 #	CamX.rotation.y = 0
 	newest_normal = normal
-	vel *= .25
+#	vel *= .25
 	FlipTime.start()
 
 # Uncrouch TODO: tween crouching

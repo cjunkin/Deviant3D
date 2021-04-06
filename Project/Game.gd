@@ -19,10 +19,12 @@ var enemies := []
 var enemy_i : int = 0
 var players := []
 var hooks := []
+var bosses := []
 
 # File Paths
 export(String, FILE) var rock_path
 export(String, FILE) var enemy_path
+export(String, FILE) var worm_path = "res://Scn/Actor/Enemy/Worm.tscn"
 
 # Node Paths
 export(NodePath) var enemy_spawn_time
@@ -61,6 +63,14 @@ func _ready()->void:
 		Network.register(get_tree().get_network_unique_id())
 		gen_boxes(TERRAIN_SEED)
 		get_node(enemy_spawn_time).start(spawn_time)
+		
+		# Spawn worm boss
+		var worm: Worm = load(worm_path).instance()
+		worm.translation = Vector3(0, 360, -850)
+		worm.rotation.y = -PI
+		add_child(worm)
+		worm.set_target(get_node("1")) # TODO SYNC UP PROPERLY WORM
+		bosses.append(worm)
 	else:
 		request_current_data()
 
@@ -86,7 +96,7 @@ func _ready()->void:
 #	$Enemy3.set_target(players[0])
 #	$Enemy4.set_target(players[0])
 #	$Worm.set_target(players[0])
-	$Worm.set_target(get_node("1")) # TODO SYNC UP PROPERLY WORM
+
 
 #onready var TimeLeft := $Label
 #onready var EnemySpawnTime : Timer = get_node(enemy_spawn_time)
@@ -201,11 +211,12 @@ func request_current_data() -> void:
 	latency = 4 - latency_timer.time_left
 
 	# Now that we have latency (TODO: average latency rather than just
-	# taking 1 sample), we can request the time 
+	# taking 1 sample), we can request the time using
 	rpc("sen_time")
 
 	# Cleanup timer
 	latency_timer.queue_free()
+	
 
 # Sends seed and current enemies, should only be called on hosts
 master func sen_seed() -> void:
@@ -218,14 +229,30 @@ master func sen_seed() -> void:
 # Sends enemy spawn timer's time_left
 master func sen_time() -> void:
 	rpc("set_time", get_node(enemy_spawn_time).time_left)
+	var sender := get_tree().get_rpc_sender_id()
 	# Sync up all existing enemies
 	for enemy in enemies:
 		if enemy.is_inside_tree() and enemy.target:
-			rpc("s", enemy.translation, enemy.vel, enemy.target.get_network_master())
+			rpc_id(sender, "s", enemy.translation, enemy.vel, enemy.target.get_network_master())
+	for boss in bosses:
+		if boss.is_inside_tree():
+			rpc_id(sender, "b", boss.Head.translation, boss.Head.rotation, boss.target.get_network_master()) #, get_class())
 	enemy_i = 0
 
 puppet func s(master_translation: Vector3, velocity: Vector3, target_i : int) -> void:
 	spawn_enemy(master_translation, velocity, str(target_i))
+
+puppet func b(master_translation: Vector3, master_rot: Vector3, target_i : int) -> void:
+	# TODO: generalize bosses
+	var boss : Spatial = load(worm_path).instance()
+	boss.translation = Vector3(0, 360, -850)
+	boss.rotation.y = -PI
+	add_child(boss)
+	boss.Head.translation = master_translation
+	boss.Head.rotation = master_rot
+
+	bosses.append(boss)
+	boss.set_target(get_node(str(target_i))) # TODO: sync up properly worm
 
 # Recieve current seeds, should only be called on non-host
 puppet func set_cur(terrain_seed: int, spawn_seed: int) -> void:
@@ -248,7 +275,6 @@ puppet func set_time(spawn_time_left: float) -> void:
 		# Reset wait_time (since timer should go back to 4 seconds)
 		yield(enemy_spawn, "timeout")
 		enemy_spawn.start(spawn_time)
-		$Worm.set_target(get_node("1")) # TODO: sync up properly worm
 
 
 # Spawn player with id PLAYER TODO: use get_rpc_sender_id to avoid hack
