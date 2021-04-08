@@ -27,7 +27,3 @@ cast_to = Vector3( 0.25, 0, 0 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.75, -1.25 )
 enabled = true
 cast_to = Vector3( 0, -1.25, 0 )
-
-[node name="Down" type="RayCast" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 4.996e-16, -3.19744e-14, 1, -0.0121706, -0.0527448, 1.29716 )
-cast_to = Vector3( 0, 0, 1 )

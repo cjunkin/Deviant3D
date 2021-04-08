@@ -4,5 +4,9 @@
 [ext_resource path="res://Scn/Projectile/Laser.gd" type="Script" id=2]
 
 [node name="Laser" instance=ExtResource( 1 )]
+monitorable = true
+collision_layer = 8
+collision_mask = 2147483655
 script = ExtResource( 2 )
+[connection signal="area_entered" from="." to="." method="_on_Laser_area_entered"]
 [connection signal="body_entered" from="." to="." method="_on_Laser_body_entered"]

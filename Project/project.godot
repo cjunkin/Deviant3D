@@ -53,6 +53,11 @@ _global_script_classes=[ {
 "class": "Worm",
 "language": "GDScript",
 "path": "res://Scn/Actor/Enemy/Worm.gd"
+}, {
+"base": "Spatial",
+"class": "WormGOPRO",
+"language": "GDScript",
+"path": "res://Unused/GOPRO_WORM/WormGO_PRO_MODE.gd"
 } ]
 _global_script_class_icons={
 "Enemy": "",
@@ -63,7 +68,8 @@ _global_script_class_icons={
 "Projectile": "",
 "ShakeCamera": "",
 "Text": "",
-"Worm": ""
+"Worm": "",
+"WormGOPRO": ""
 }
 
 [application]
@@ -268,6 +274,8 @@ throw={
 3d_physics/layer_1="Env"
 3d_physics/layer_2="Ally"
 3d_physics/layer_3="Foe"
+3d_physics/layer_4="AllyHarm"
+3d_physics/layer_5="FoeHarm"
 
 [physics]
 
@@ -280,4 +288,4 @@ quality/driver/fallback_to_gles2=true
 quality/filters/anisotropic_filter_level=8
 vram_compression/import_etc=true
 environment/default_clear_color=Color( 0.741176, 0.858824, 0.933333, 1 )
-environment/default_environment="res://Unused/default_env.tres"
+environment/default_environment="res://Unused/BetterWorldEnvironment.tres"

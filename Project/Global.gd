@@ -4,6 +4,7 @@ extends Node
 #const ENEMY := "E"
 const LASER := "L"
 const EXPL := "E"
+const WORM_BODY := "WB"
 
 # Settings
 const SFX_BUS := 1

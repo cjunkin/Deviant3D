@@ -33,3 +33,18 @@ func _on_Laser_body_entered(body) -> void:
 		# Disable self
 		set_deferred("monitoring", false)
 		visible = false
+
+
+func _on_Laser_area_entered(area: Area) -> void:
+#	print(area.name)
+	# For worm TODO: rpc damage
+	area.get_parent().d()
+	
+	# Disable self
+	set_deferred("monitoring", false)
+	visible = false
+	
+	# Update score GUI
+	if player == G.current_player:
+		G.game.score()
+	

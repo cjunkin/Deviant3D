@@ -65,6 +65,7 @@ var LaserSight : CSGCylinder
 var RespawnTime : Timer
 #onready var Flash : OmniLight = get_node(flash)
 
+#onready var CamHolder :Spatial = CamY.get_node("CamHolder")
 func _ready() -> void:
 	# Setup grappling hooks
 	var hook_s := load("res://Scn/Projectile/Hook.tscn")
@@ -244,12 +245,12 @@ func _input(event: InputEvent) -> void:
 			rpc("respawn")
 			RespawnTime.start()
 		
-		if event.is_action_pressed("throw"):
-			var proj : RigidBody = throwable_s.instance()
-			proj.rotation = Vector3(randf(), randf(), randf())
-			proj.translation = translation - Muzzle.global_transform.basis.z * (2 + vel.length() / 12)
-			proj.apply_central_impulse(-Muzzle.global_transform.basis.z * 64)
-			get_parent().add_child(proj)
+#		if event.is_action_pressed("throw"):
+#			var proj : RigidBody = throwable_s.instance()
+#			proj.rotation = Vector3(randf(), randf(), randf())
+#			proj.translation = translation - Muzzle.global_transform.basis.z * (2 + vel.length() / 12)
+#			proj.apply_central_impulse(-Muzzle.global_transform.basis.z * 64)
+#			get_parent().add_child(proj)
 	else:
 		# Scroll
 		if event is InputEventMouseButton: # and event.is_pressed():
@@ -395,7 +396,6 @@ func _physics_process(delta: float) -> void:
 			)
 #		CamHolder.rotation.z = MeshHelp.rotation.z
 
-onready var CamHolder :Spatial = CamY.get_node("CamHolder")
 
 # Call only on self so that sounds follow TPS/FPS camera
 func reparent_sound(sfx: AudioStreamPlayer3D) -> void:
@@ -600,6 +600,7 @@ func unregister() -> void:
 	G.game.hooks.erase(RHook)
 	queue_free()
 
+# TODO: Idk why this is causing glitch on multiplayer
 func local_grapple(right: bool) -> void:
 	if right and !RHook.is_inside_tree():
 		RHook.enabled = true

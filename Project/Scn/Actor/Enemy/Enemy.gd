@@ -50,6 +50,7 @@ remotesync func d() -> void:
 	G.game.exp_i = (G.game.exp_i + 1) % G.game.num_explosions
 	var e : Particles = G.game.explosions[G.game.exp_i]
 	e.translation = translation
+	e.scale = Vector3.ONE
 	e.emitting = true
 
 	# Remove self

@@ -66,9 +66,9 @@ func _ready()->void:
 		
 		# Spawn worm boss
 		var worm: Worm = load(worm_path).instance()
-		worm.translation = Vector3(0, 360, -850)
-		worm.rotation.y = -PI
 		add_child(worm)
+		worm.Head.translation = Vector3(0, 360, -850)
+		worm.Head.rotation.y = -PI
 		worm.set_target(get_node("1")) # TODO SYNC UP PROPERLY WORM
 		bosses.append(worm)
 	else:
@@ -245,8 +245,8 @@ puppet func s(master_translation: Vector3, velocity: Vector3, target_i : int) ->
 puppet func b(master_translation: Vector3, master_rot: Vector3, target_i : int) -> void:
 	# TODO: generalize bosses
 	var boss : Spatial = load(worm_path).instance()
-	boss.translation = Vector3(0, 360, -850)
-	boss.rotation.y = -PI
+#	boss.translation = Vector3(0, 360, -850)
+#	boss.rotation.y = -PI
 	add_child(boss)
 	boss.Head.translation = master_translation
 	boss.Head.rotation = master_rot

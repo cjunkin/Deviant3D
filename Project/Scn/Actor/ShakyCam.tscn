@@ -10,5 +10,6 @@ margin = 0.5
 [node name="Cam" type="Camera" parent="."]
 cull_mask = 524287
 current = true
+near = 0.01
 far = 512.0
 script = ExtResource( 1 )

@@ -1,9 +1,9 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Scn/StaticBox.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scn/UI/Text/Text3D.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Gfx/Material/tile.svg" type="Texture" id=4]
+[ext_resource path="res://Gfx/2D/tile.svg" type="Texture" id=4]
 [ext_resource path="res://Scn/Env/Sunlight.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Scn/Env/Env.gd" type="Script" id=6]
 [ext_resource path="res://Gfx/Material/Grid.tres" type="Material" id=7]
@@ -13,7 +13,6 @@
 [ext_resource path="res://WorldEnv.tres" type="Environment" id=11]
 [ext_resource path="res://Scn/Fx/Explosion.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Gfx/2D/Reticule.svg" type="Texture" id=13]
-[ext_resource path="res://Scn/Projectile/Throwable.tscn" type="PackedScene" id=14]
 [ext_resource path="res://Gfx/Font/Typori-Regular.ttf" type="DynamicFontData" id=15]
 [ext_resource path="res://Gfx/2D/Hitmark.svg" type="Texture" id=16]
 [ext_resource path="res://Gfx/Model/Unused/food/banana.glb" type="PackedScene" id=17]
@@ -413,9 +412,6 @@ collision_mask = 7
 
 [node name="CollisionShape" type="CollisionShape" parent="Ground/StaticBody"]
 shape = SubResource( 5 )
-
-[node name="Throwable" parent="Ground" instance=ExtResource( 14 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -31.8054, 15.2132, 11.871 )
 
 [node name="Island1" parent="." instance=ExtResource( 8 )]
 transform = Transform( -15.1303, 0, -5.20328, 0, 16, 0, 5.20328, 0, -15.1303, 50.5629, -28.5269, -414.994 )

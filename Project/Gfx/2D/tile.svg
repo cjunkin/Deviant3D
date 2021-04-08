@@ -1,0 +1,13 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created using Krita: https://krita.org -->
+<svg xmlns="http://www.w3.org/2000/svg" 
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:krita="http://krita.org/namespaces/svg/krita"
+    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+    width="648.72pt"
+    height="648.72pt"
+    viewBox="0 0 648.72 648.72">
+<defs/>
+<rect id="shape0" transform="matrix(2.00880001043748 0 0 2.00880001043748 1.263406965028 1.05926879556586)" fill="#1a1a1a" fill-rule="evenodd" stroke="#ffffff" stroke-width="2.88" stroke-linecap="square" stroke-linejoin="bevel" width="322.22221744942" height="322.22221744942"/><path id="shape0" transform="matrix(2.00880001043748 0 0 2.00880001043748 4.18954882668925 324.699265683357)" fill="none" stroke="#ffffff" stroke-width="1.44" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2" d="M0 0L319.471 0"/><path id="shape1" transform="matrix(2.00880001043748 0 0 2.00880001043748 325.066073388996 3.56054306827452)" fill="none" stroke="#ffffff" stroke-width="1.44" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2" d="M0 0L0 319.732"/><rect id="shape2" transform="matrix(2.00880001043748 0 0 2.00880001043748 320.322742374293 319.955934668654)" fill="none" stroke="#ffffff" stroke-width="2.88" stroke-linecap="square" stroke-linejoin="bevel" width="4.72255176230332" height="4.72255176230332"/><path id="shape3" transform="matrix(2.00880001043748 0 0 2.00880001043748 0.356392048132395 161.263296834164)" fill="none" stroke="#ffffff" stroke-width="0.72" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2" d="M323.287 0L0 4.26326e-14"/><path id="shape01" transform="matrix(2.00880003004092 0 0 2.00880003004092 0.356605733077304 486.688898525036)" fill="none" stroke="#ffffff" stroke-width="0.72" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2" d="M323.287 0L0 4.26326e-14"/><path id="shape4" transform="matrix(2.00880001043748 0 0 2.00880001043748 161.630004099802 3.61267201502997)" fill="none" stroke="#ffffff" stroke-width="0.72" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2" d="M0.0001 319.68L0 0"/><path id="shape02" transform="matrix(2.00879994068457 0 0 2.00879994068457 487.055605790678 3.61268316433505)" fill="none" stroke="#ffffff" stroke-width="0.72" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="2" d="M0.0001 319.68L0 0"/>
+</svg>
