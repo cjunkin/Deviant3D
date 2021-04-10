@@ -67,7 +67,8 @@ var RespawnTime : Timer
 
 #onready var CamHolder :Spatial = CamY.get_node("CamHolder")
 func _ready() -> void:
-	# Setup grappling hooks
+	# Setup grappling hooks, the name will be used to call the R and L functions in Game.physics_process 
+	# when hooks collide
 	var hook_s := load("res://Scn/Projectile/Hook.tscn")
 	RHook = hook_s.instance()
 	RHook.player = self
@@ -88,19 +89,19 @@ func _ready() -> void:
 		if OS.get_name() != "Android" and OS.get_name() != "iOS":
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 			# TODO: Find way to animate camera without using CamHolder 
-			var CamHolder :Spatial = CamY.get_node("CamHolder") # So that walking doesn't affect gun rotation (yet)
+			var CamHolder :Spatial = CamY.get_node("CamHolder") # This camholder is needed so walking anims doesn't affect gun rotation
 			CamHolder.add_child(load(cam_path).instance())
 			Cam = CamHolder.get_node("Spring/Cam")
 			CamSpring = CamHolder.get_node("Spring")
 			reparent_sound(Sfx)
 			reparent_sound(GrappleSfx)
 		
-		# AR CAM
+		# AR CAM (for mobile)
 		else:
 			add_child(load("res://Scn/AR/ARVROrigin.tscn").instance())
 			Cam = get_node("ARVROrigin")
 		
-		# Start syncing
+		# Start syncing (every timer.wait_time seconds, it will sync position)
 		var timer := Timer.new()
 		timer.name = "Sync"
 		add_child(timer)
@@ -110,15 +111,13 @@ func _ready() -> void:
 			print("ERROR: COULDN'T SETUP PERIODIC SYNC")
 		timer.start(0)
 		
-		# Setup Respawn Timer
+		# Setup Respawn Timer (limits how fast you can respawn using backspace)
 		RespawnTime = Timer.new()
 		RespawnTime.name = "Respawn"
 		add_child(RespawnTime)
 		RespawnTime.process_mode = Timer.TIMER_PROCESS_PHYSICS
 		RespawnTime.one_shot = true
 		RespawnTime.wait_time = 8
-#		if RespawnTime.connect("timeout", self, "_respawn_timeout") != OK:
-#			print("ERROR: COULDN'T SETUP PERIODIC SYNC")
 		
 		G.start_game(self)
 		
@@ -130,6 +129,7 @@ func _ready() -> void:
 		LaserSight.visible = true
 		Muzzle.add_child(LaserSight)
 		
+		# THis is to draw the vel, grapple_aim, etc vectors
 #		DebugOverlay.draw.add_vector(self, "vel", 1, 4, Color(0,1,0, 0.5))
 #		DebugOverlay.draw.add_vector(self, "grapple_aim", 1, 4, Color(0,1,1, 0.5))
 #		DebugOverlay.draw.add_vector(self, "global_transform:basis:x", 1, 4, Color(1,1,1, 0.5))
@@ -245,6 +245,7 @@ func _input(event: InputEvent) -> void:
 			rpc("respawn")
 			RespawnTime.start()
 		
+		# TODO: throw shit around lmao
 #		if event.is_action_pressed("throw"):
 #			var proj : RigidBody = throwable_s.instance()
 #			proj.rotation = Vector3(randf(), randf(), randf())
@@ -266,6 +267,9 @@ func _input(event: InputEvent) -> void:
 				-PI/2, 
 				PI/2
 				) # Up down
+				
+			# This was me playing around with rotation that wrapped around, rather than capping up/down
+			# as 90 degrees and -90 degrees
 #			CamY.rotation.x = CamY.rotation.x + (event.relative.y * SENS_Y)
 #			if CamY.rotation.x < -PI/2 or CamY.rotation.x > PI/2:
 #				SENS_X = -SENS_Y
@@ -473,7 +477,7 @@ puppetsync func L() -> void:
 	LHook.enabled = false
 	LHook.visible = true
 
-# Fire
+# Fire bullet at current orientation
 puppetsync func f() -> void:
 	G.game.laser_i = (G.game.laser_i + 1) % G.game.num_lasers
 	var p : Projectile = G.game.projectiles[G.game.laser_i]
@@ -568,7 +572,7 @@ puppetsync func respawn() -> void:
 
 
 
-# When other person calls this, send over my info
+# When other person calls this, send over my info to sync
 master func req_syn() -> void:
 	rpc("s", translation, CamX.rotation.y, CamY.rotation.x, vel, newest_normal)
 	rpc("ss", -SENS_X * 1000)
@@ -600,7 +604,7 @@ func unregister() -> void:
 	G.game.hooks.erase(RHook)
 	queue_free()
 
-# TODO: Idk why this is causing glitch on multiplayer
+# TODO: Idk why this is causing glitch on web version, for some reason pressing e will activate the q grappling hook
 func local_grapple(right: bool) -> void:
 	if right and !RHook.is_inside_tree():
 		RHook.enabled = true
@@ -621,6 +625,6 @@ func local_grapple(right: bool) -> void:
 	GrappleSfx.pitch_scale = rand_range(.5, .85)
 	GrappleSfx.play()
 
-
+# For when I add muzzle flash
 #func _on_ROF_timeout():
 #	Flash.visible = false

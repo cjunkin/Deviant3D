@@ -61,8 +61,8 @@
     <div class="container">
       <div class="row">
         <div class="col-xs-12">
-          <h1>3D Multiplayer (Math?) Game</h1>
-          <h4>Summary: A 3D multiplayer game, with custom physics interactions, other procedural animations, maybe some cool shaders, perhaps game-ifying very elementary introductions into some of the math skills needed to do graphics? <a  href="https://ctwobosius.github.io/TheWongFireside/Deviant/Deviant.html" target="_blank">Click here for an actual (2D) math game I made that I could build on</a> </h4>
+          <h1>CS184: Unnamed 3D Multiplayer Game</h1>
+          <h4>Summary: A <b>3D multiplayer game, </b>with <b> custom networked physics interactions, procedurally generated environments, stylized shaders, procedural or physically based animations, </b>perhaps game-ifying very elementary introductions into some of the math skills needed to do graphics? <a  href="https://ctwobosius.github.io/TheWongFireside/Deviant/Deviant.html" target="_blank"><em>Click here for a (2D) math game Calvin made that we could build on</em></a> </h4>
           <h3>Calvin Wong, Chris Park, Sambodh Mitra, Rafael Ostrea</h3>
 <!--          <br>
 
@@ -79,15 +79,122 @@
           <div class="text-center">
             <h2>Problem</h2>
             <p>
+            Game engines make creating games a lot easier. The Godot Game Engine is one such engine, and on Februrary 18th (a little less than two months before this proposal) Calvin started working on a 3D game in it (because why not, haha). <b> We plan to expand this game, using some of the animation and visual techniques we’ve learned in the course (details in deliverables). </b>
+            </p>
+            <p>
+            The major challenges of this project are that the engine is a bit lacking in terms of networking physics. This is because the physics engine for Godot (along with other engines such as Unity) are non-deterministic, so you’d have to send the position/velocity/etc. of each physics object every single frame for it to sync properly, for every object, which is terribly inefficient and also introduces visual jitter due to packet loss/corruption.
+            </p>
+            <p>
+            To avoid this, <b> for any physics we want to be synced across all players, we need to write the physics ourselves. </b> This poses a lot of work, but a lot of opportunity to learn about physics and the tricks that produce the relatively realistic yet fast physics simulations needed for real-time games.
+            </p>
+            <p>
+            Additionally, the 3D graphics engine is currently very scant; the current lighting/style is not as developed as we would like. To improve this, <b> we would either need to write shaders or dive into the (mostly) C++ source code and change the rendering engine. </b>
+            </p>
+            
+          </div>
+       </div>
+      </div>
+    </div>
+  </div>
+  
+    <div class="section-container">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-md-8 col-md-offset-2">
+          <div class="text-center">
+            <h2>Goals/Deliverables</h2>
+            <p>
+                <b> What we currently have </b> (on top of a somewhat working game):
+                <ol>
+                    <li> Physics Engine (handles <b>collision testing</b>) </li>
+                    <li> Graphics Engine <b>(rendering, lighting, post processing, basic geometry like cubes, spheres) </b></li>
+                    <li> Networking API <b>(avoids having to do low level networking) </b></li>
+                    <li> Basic map, sounds </li>
+                </ol>
+            </p>
             <br>
-            A lot of game engines make game creation, especially single player games, very streamlined. Features such as physics and graphics engines, , . 
-            The Godot Game Engine is one such engine, but it is lacking in terms of networking</p>
+            <br>
+            <p>
+     
+                <b> What we hope to deliver: </b>
+                <ol>
+                        <li>  <b>Shaders that will stylize the game,</b> for example cel or watercolor shading </li>
+                        <li> <b>Procedurally generated environments</b> (eg: asteroid fields, buildings, ground) </li>
+                        <li> <b>(Networked) relatively accurate physics interactions</b> (eg: player or projectiles pushing boxes) </li>
+                        <li> <b>Procedural/Physically based animations.</b> (eg: creating cool animated bosses, such as a flying worm, or being able to slice through meshes using a sword)</li>
+                </ol>
+                <p> For the character: </p>
+                <ol>
+                        <li> <b>Physics-based movement</b> </li>
+                        <li> Ability to <b>attach grapple hook and grapple to physics objects, </b>relatively realistically </li>
+                        <li> <b>“Gravity snapping” to surfaces </b>(ie: running into surface will flip your up direction to be the surface normal) </li>
+                </ol>
+            </p>
+            <br>
+            <br>
+            <p><b> What we plan to deliver: </b></p>
+            <p>
+            It may not be feasible to deliver on all of this, especially physics interactions since we’d essentially be rewriting the physics engine, and procedural/physically based animations in general may take a long time to first figure out how to manipulate meshes in the engine, then to do all the physics/math to get it working. However, below is our planned schedule:
+            </p>
+
+            
+          </div>
+       </div>
+      </div>
+    </div>
+  </div>
+  
+  
+      <div class="section-container">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-md-8 col-md-offset-2">
+          <div class="text-center">
+            <h2>Schedule</h2>
+            <p>
+            Week:
+                <ol>
+                    <li> Learning Godot Engine/working on shaders (probably overall style shader) </li>
+                    <li> Wrap up overall shader, procedural terrain, custom physics for player </b></li>
+                    <li> Shaders (if needed for custom meshes, or for example mesh deformation for slicing objects), procedural animation, custom physics for other objects </b></li>
+                    <li> More shaders, custom physics and procedural animations (bosses, such as worm) </li>
+                </ol>
+            </p>
+          </div>
+       </div>
+      </div>
+    </div>
+  </div>
+  
+        <div class="section-container">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-md-8 col-md-offset-2">
+          <div class="text-center">
+            <h2>Resources</h2>
+            <p>
+                <ol>
+                    <li> <a href="godotengine.org/" title=""> Godot Engine website</a></li>
+                    <li> <a href="https://docs.godotengine.org/en/stable/getting_started/step_by_step/index.html" title=""> Godot Docs</a></li>
+                    <li> <a href="https://www.youtube.com/channel/UCNaPQ5uLX5iIEHUCLmfAgKg" title=""> KidsCanCode (Godot Videos)</a></li>
+                    <li> <a href="https://www.toptal.com/game/video-game-physics-part-i-an-introduction-to-rigid-body-dynamics" title=""> Intro to Rigid Body Dynamics</a> </li>
+                    <li> <a href="http://www.andreasaristidou.com/publications/papers/FABRIK.pdf" title=""> FABRIK Inverse Kinematics</a> </li>
+                    <li> <a href="http://web.mit.edu/cesium/Public/terrain.pdf" title=""> Realtime Terrain Generation</a> </li>
+                    
+                </ol>
+            </p>
+
+
+            
           </div>
        </div>
       </div>
     </div>
   </div>
 
+
+
+<!--
   <div class="section-container">
     <div class="container">
       <div class="row">      
@@ -112,9 +219,7 @@
                             <span class="sr-only">Next</span>
                           </a>
                           <p>
-                            Sed id tellus in risus pre
-                            tium imperdiet eu lobortis dolor. Sed pellentesque, urna ac viverra lacinia, erat mauris venenatis purus, mollis egestas urna purus ac ex.
-                            Aenean nunc sem, lobortis at elit non, lobortis laoreet nibh. Maecenas at mi ipsum.
+                            SHUT THE FRICK UP
                           </p>
                           
                           <p>
@@ -304,7 +409,7 @@
         </div>  
       </div>
     </div>
-  </div>
+  </div>-->
 
 <script>
   document.addEventListener("DOMContentLoaded", function (event) {
@@ -318,14 +423,14 @@
 
      
       <div class="col-xs-12">
-        <h3>Mountain</h3>
+        <h3>© 2021 Diddly Doofer. All Laughs Reserved.</h3>
 
         <div class="row">
           <div class="col-xs-12 col-sm-7">
             <p><small>Website created with <a href="http://www.mashup-template.com/" title="Create website with free html template">Mashup Template</a>/<a href="https://www.unsplash.com/" title="Beautiful Free Images">Unsplash</a></small>
             </p>
           </div>
-          <div class="col-xs-12 col-sm-5">
+         <!-- <div class="col-xs-12 col-sm-5">
             <p class="text-right">
               <a href="https://facebook.com/" class="social-round-icon white-round-icon fa-icon" title="">
                 <i class="fa fa-facebook" aria-hidden="true"></i>
@@ -337,7 +442,7 @@
                 <i class="fa fa-linkedin" aria-hidden="true"></i>
               </a>
             </p>
-          </div>
+          </div>-->
         </div>
         
         

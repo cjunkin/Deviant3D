@@ -47,6 +47,7 @@ signal received_data
 var latency: float
 #var enemy_spawn_time_left : float
 
+# Here is where we'll cache enemies, projectiles, etc.
 func _ready()->void:
 	# Enemies
 	var enemy_s := load(enemy_path)
@@ -97,11 +98,12 @@ func _ready()->void:
 #	$Enemy4.set_target(players[0])
 #	$Worm.set_target(players[0])
 
-
 #onready var TimeLeft := $Label
 #onready var EnemySpawnTime : Timer = get_node(enemy_spawn_time)
 
+# Here is where we'll move things Unity DOTS style (for speedup)
 func _physics_process(delta: float) -> void:
+	# Projectiles
 	for p in projectiles:
 		if p.is_inside_tree():
 			p.translation -= p.speed * p.transform.basis.z * delta
@@ -122,7 +124,7 @@ func _physics_process(delta: float) -> void:
 			e.vel.z = e.vel.z * .8 + e.acc.z
 			e.vel.x = e.vel.x * .8 + e.acc.x
 			e.vel += Vector3.DOWN * e.grav
-#			e.vel -= players[0].transform.basis.y * e.grav
+#			e.vel -= players[0].transform.basis.y * e.grav # adjust to be player velocity
 			
 			e.vel = e.move_and_slide(e.vel , Vector3.UP, false, 1, .75, false)
 			# If fallen too low, die
@@ -144,7 +146,6 @@ func _physics_process(delta: float) -> void:
 
 #	TimeLeft.text =  str(EnemySpawnTime.time_left)
 #	for p in players:
-#		
 
 # Generate boxes using Simplex and Rngs with MY_SEED
 func gen_boxes(my_seed: int) -> void:
