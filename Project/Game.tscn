@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Scn/StaticBox.tscn" type="PackedScene" id=2]
@@ -11,55 +11,20 @@
 [ext_resource path="res://Scn/Env/Rock1.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Scn/Env/Rock1R.tscn" type="PackedScene" id=10]
 [ext_resource path="res://WorldEnv.tres" type="Environment" id=11]
-[ext_resource path="res://Scn/Fx/Explosion.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Gfx/2D/Reticule.svg" type="Texture" id=13]
 [ext_resource path="res://Gfx/Font/Typori-Regular.ttf" type="DynamicFontData" id=15]
 [ext_resource path="res://Gfx/2D/Hitmark.svg" type="Texture" id=16]
 [ext_resource path="res://Gfx/Model/Unused/food/banana.glb" type="PackedScene" id=17]
 
-[sub_resource type="SpatialMaterial" id=1]
-metallic_specular = 0.0
-emission_enabled = true
-emission = Color( 1, 0.890196, 0, 1 )
-emission_energy = 10.0
-emission_operator = 0
-emission_on_uv2 = false
-
-[sub_resource type="SpatialMaterial" id=2]
-flags_vertex_lighting = true
-flags_world_triplanar = true
-albedo_color = Color( 1.27, 2.23617, 2.76, 1 )
-albedo_texture = ExtResource( 4 )
-roughness = 0.6
-uv1_scale = Vector3( 0.1, 0.1, 0.1 )
-uv1_triplanar = true
-uv2_triplanar_sharpness = 0.784584
-
-[sub_resource type="SpatialMaterial" id=3]
-flags_vertex_lighting = true
-flags_world_triplanar = true
-albedo_color = Color( 1.27, 1.74727, 2.76, 1 )
-albedo_texture = ExtResource( 4 )
-roughness = 0.6
-uv1_scale = Vector3( 0.1, 0.1, 0.1 )
-uv1_triplanar = true
-uv2_triplanar_sharpness = 0.784584
-
-[sub_resource type="CubeMesh" id=4]
-size = Vector3( 400, 2, 400 )
-
-[sub_resource type="ConvexPolygonShape" id=5]
-points = PoolVector3Array( -200, 1, 200, 200, 1, -200, 200, 1, 200, -200, 1, -200, -200, -1, 200, 200, -1, -200, 200, -1, 200, -200, -1, -200, 200, 1, 200, -200, 1, -200, 200, 1, -200, -200, 1, 200, 200, -1, 200, -200, -1, -200, 200, -1, -200, -200, -1, 200, 200, 1, 200, -200, -1, 200, -200, 1, 200, 200, -1, 200, 200, 1, -200, -200, -1, -200, -200, 1, -200, 200, -1, -200 )
-
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=1]
 size = 32
 outline_size = 4
 font_data = ExtResource( 15 )
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=2]
 step = 0.05
 tracks/0/type = "bezier"
-tracks/0/path = NodePath("Label:custom_colors/font_color:r")
+tracks/0/path = NodePath("Msg:custom_colors/font_color:r")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -69,7 +34,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.063, 0.126, 0.189, 0.252, 0.315, 0.378, 0.441, 0.504, 0.567, 0.63, 0.693, 0.756, 0.819, 0.882, 0.945 )
 }
 tracks/1/type = "bezier"
-tracks/1/path = NodePath("Label:custom_colors/font_color:g")
+tracks/1/path = NodePath("Msg:custom_colors/font_color:g")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -79,7 +44,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 0.063, 0.126, 0.189, 0.252, 0.315, 0.378, 0.441, 0.504, 0.567, 0.63, 0.693, 0.756, 0.819, 0.882, 0.945 )
 }
 tracks/2/type = "bezier"
-tracks/2/path = NodePath("Label:custom_colors/font_color:b")
+tracks/2/path = NodePath("Msg:custom_colors/font_color:b")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -89,7 +54,7 @@ tracks/2/keys = {
 "times": PoolRealArray( 0, 0.063, 0.126, 0.189, 0.252, 0.315, 0.378, 0.441, 0.504, 0.567, 0.63, 0.693, 0.756, 0.819, 0.882, 0.945 )
 }
 tracks/3/type = "bezier"
-tracks/3/path = NodePath("Label:custom_colors/font_color:a")
+tracks/3/path = NodePath("Msg:custom_colors/font_color:a")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -99,7 +64,7 @@ tracks/3/keys = {
 "times": PoolRealArray( 0, 0.063, 0.126, 0.189, 0.252, 0.315, 0.378, 0.441, 0.504, 0.567, 0.63, 0.693, 0.756, 0.819, 0.882, 0.945 )
 }
 tracks/4/type = "bezier"
-tracks/4/path = NodePath("Label:custom_colors/font_outline_modulate:r")
+tracks/4/path = NodePath("Msg:custom_colors/font_outline_modulate:r")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/imported = false
@@ -109,7 +74,7 @@ tracks/4/keys = {
 "times": PoolRealArray( 0, 0.063, 0.126, 0.189, 0.252, 0.315, 0.378, 0.441, 0.504, 0.567, 0.63, 0.693, 0.756, 0.819, 0.882, 0.945 )
 }
 tracks/5/type = "bezier"
-tracks/5/path = NodePath("Label:custom_colors/font_outline_modulate:g")
+tracks/5/path = NodePath("Msg:custom_colors/font_outline_modulate:g")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/imported = false
@@ -119,7 +84,7 @@ tracks/5/keys = {
 "times": PoolRealArray( 0, 0.063, 0.126, 0.189, 0.252, 0.315, 0.378, 0.441, 0.504, 0.567, 0.63, 0.693, 0.756, 0.819, 0.882, 0.945 )
 }
 tracks/6/type = "bezier"
-tracks/6/path = NodePath("Label:custom_colors/font_outline_modulate:b")
+tracks/6/path = NodePath("Msg:custom_colors/font_outline_modulate:b")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/imported = false
@@ -129,7 +94,7 @@ tracks/6/keys = {
 "times": PoolRealArray( 0, 0.063, 0.126, 0.189, 0.252, 0.315, 0.378, 0.441, 0.504, 0.567, 0.63, 0.693, 0.756, 0.819, 0.882, 0.945 )
 }
 tracks/7/type = "bezier"
-tracks/7/path = NodePath("Label:custom_colors/font_outline_modulate:a")
+tracks/7/path = NodePath("Msg:custom_colors/font_outline_modulate:a")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/imported = false
@@ -139,7 +104,7 @@ tracks/7/keys = {
 "times": PoolRealArray( 0, 0.063, 0.126, 0.189, 0.252, 0.315, 0.378, 0.441, 0.504, 0.567, 0.63, 0.693, 0.756, 0.819, 0.882, 0.945 )
 }
 tracks/8/type = "bezier"
-tracks/8/path = NodePath("Label:modulate:r")
+tracks/8/path = NodePath("Msg:modulate:r")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/imported = false
@@ -149,7 +114,7 @@ tracks/8/keys = {
 "times": PoolRealArray( 0, 0.945, 1 )
 }
 tracks/9/type = "bezier"
-tracks/9/path = NodePath("Label:modulate:g")
+tracks/9/path = NodePath("Msg:modulate:g")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/imported = false
@@ -159,7 +124,7 @@ tracks/9/keys = {
 "times": PoolRealArray( 0, 0.945, 1 )
 }
 tracks/10/type = "bezier"
-tracks/10/path = NodePath("Label:modulate:b")
+tracks/10/path = NodePath("Msg:modulate:b")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/imported = false
@@ -169,7 +134,7 @@ tracks/10/keys = {
 "times": PoolRealArray( 0, 0.945, 1 )
 }
 tracks/11/type = "bezier"
-tracks/11/path = NodePath("Label:modulate:a")
+tracks/11/path = NodePath("Msg:modulate:a")
 tracks/11/interp = 1
 tracks/11/loop_wrap = true
 tracks/11/imported = false
@@ -191,7 +156,7 @@ tracks/12/keys = {
 "values": [ true, false ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=3]
 length = 10.0
 loop = true
 tracks/0/type = "value"
@@ -291,19 +256,124 @@ tracks/7/keys = {
 "values": [ 1.0, 0.0, 1.0 ]
 }
 
+[sub_resource type="SpatialMaterial" id=4]
+metallic_specular = 0.0
+emission_enabled = true
+emission = Color( 1, 0.890196, 0, 1 )
+emission_energy = 10.0
+emission_operator = 0
+emission_on_uv2 = false
+
+[sub_resource type="SpatialMaterial" id=5]
+flags_vertex_lighting = true
+flags_world_triplanar = true
+albedo_color = Color( 1.27, 2.23617, 2.76, 1 )
+albedo_texture = ExtResource( 4 )
+roughness = 0.6
+uv1_scale = Vector3( 0.1, 0.1, 0.1 )
+uv1_triplanar = true
+uv2_triplanar_sharpness = 0.784584
+
+[sub_resource type="SpatialMaterial" id=6]
+flags_vertex_lighting = true
+flags_world_triplanar = true
+albedo_color = Color( 1.27, 1.74727, 2.76, 1 )
+albedo_texture = ExtResource( 4 )
+roughness = 0.6
+uv1_scale = Vector3( 0.1, 0.1, 0.1 )
+uv1_triplanar = true
+uv2_triplanar_sharpness = 0.784584
+
+[sub_resource type="CubeMesh" id=7]
+size = Vector3( 400, 2, 400 )
+
+[sub_resource type="ConvexPolygonShape" id=8]
+points = PoolVector3Array( -200, 1, 200, 200, 1, -200, 200, 1, 200, -200, 1, -200, -200, -1, 200, 200, -1, -200, 200, -1, 200, -200, -1, -200, 200, 1, 200, -200, 1, -200, 200, 1, -200, -200, 1, 200, 200, -1, 200, -200, -1, -200, 200, -1, -200, -200, -1, 200, 200, 1, 200, -200, -1, 200, -200, 1, 200, 200, -1, 200, 200, 1, -200, -200, -1, -200, -200, 1, -200, 200, -1, -200 )
+
 [node name="Game" type="Spatial"]
 script = ExtResource( 1 )
-rock_path = "res://Scn/Env/Rock1.tscn"
-enemy_path = "res://Scn/Actor/Enemy/Enemy.tscn"
 enemy_spawn_time = NodePath("EnemySpawnTime")
-exp_s = ExtResource( 12 )
+
+[node name="EnemySpawnTime" type="Timer" parent="."]
+process_mode = 0
+wait_time = 4.0
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Reticule" type="TextureRect" parent="HUD"]
+self_modulate = Color( 1, 0, 0, 0.25098 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -16.0
+margin_top = -16.0
+margin_right = 16.0
+margin_bottom = 16.0
+rect_pivot_offset = Vector2( 16, 16 )
+texture = ExtResource( 13 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Hitmark" type="TextureRect" parent="HUD/Reticule"]
+visible = false
+self_modulate = Color( 1, 0, 0, 0.686275 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -16.0
+margin_top = -16.0
+margin_right = 16.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 32, 32 )
+texture = ExtResource( 16 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Msg" type="Label" parent="HUD"]
+modulate = Color( 1, 1, 1, 0 )
+anchor_top = 0.025
+anchor_right = 1.0
+anchor_bottom = 0.025
+margin_bottom = 39.0
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 1, 0.956863, 0.635294, 1 )
+custom_colors/font_outline_modulate = Color( 0.0196078, 0.054902, 0.211765, 1 )
+text = "Nice shot!"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Anim" type="AnimationPlayer" parent="HUD"]
+playback_process_mode = 0
+method_call_mode = 1
+anims/Score = SubResource( 2 )
+
+[node name="ColorRect" type="ColorRect" parent="HUD"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DayNight" type="AnimationPlayer" parent="."]
+playback_process_mode = 0
+anims/DNC = SubResource( 3 )
 
 [node name="Sun" type="CSGSphere" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -135.954, 412.666, -339.696 )
 visible = false
 layers = 524288
 radius = 50.0
-material = SubResource( 1 )
+material = SubResource( 4 )
 
 [node name="Sunlight" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, 0, 86.8753, 0 )
@@ -354,7 +424,7 @@ use_collision = true
 width = 88.0
 height = 50.0
 depth = 8.0
-material = SubResource( 2 )
+material = SubResource( 5 )
 
 [node name="RoomBACK" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 18, 146 )
@@ -363,7 +433,7 @@ use_collision = true
 width = 88.0
 height = 44.0
 depth = 8.0
-material = SubResource( 3 )
+material = SubResource( 6 )
 
 [node name="RoomWall2" type="CSGBox" parent="."]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 64, 18, 126 )
@@ -404,14 +474,14 @@ material = ExtResource( 7 )
 [node name="Ground" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0 )
 use_in_baked_light = true
-mesh = SubResource( 4 )
+mesh = SubResource( 7 )
 material/0 = ExtResource( 7 )
 
 [node name="StaticBody" type="StaticBody" parent="Ground"]
 collision_mask = 7
 
 [node name="CollisionShape" type="CollisionShape" parent="Ground/StaticBody"]
-shape = SubResource( 5 )
+shape = SubResource( 8 )
 
 [node name="Island1" parent="." instance=ExtResource( 8 )]
 transform = Transform( -15.1303, 0, -5.20328, 0, 16, 0, 5.20328, 0, -15.1303, 50.5629, -28.5269, -414.994 )
@@ -421,72 +491,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9717, 3.47361, -42.4121 )
 
 [node name="Rock" parent="." instance=ExtResource( 9 )]
 transform = Transform( 1.11542, 4.46487, -6.54376, 7.60949, 1.23349, 2.13871, 2.2026, -6.52253, -4.07494, -29.5906, 160.573, -84.4337 )
-
-[node name="EnemySpawnTime" type="Timer" parent="."]
-process_mode = 0
-wait_time = 4.0
-
-[node name="HUD" type="CanvasLayer" parent="."]
-
-[node name="Reticule" type="TextureRect" parent="HUD"]
-self_modulate = Color( 1, 0, 0, 0.25098 )
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -16.0
-margin_top = -16.0
-margin_right = 16.0
-margin_bottom = 16.0
-rect_pivot_offset = Vector2( 16, 16 )
-texture = ExtResource( 13 )
-expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Hitmark" type="TextureRect" parent="HUD/Reticule"]
-visible = false
-self_modulate = Color( 1, 0, 0, 0.686275 )
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -16.0
-margin_top = -16.0
-margin_right = 16.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 32, 32 )
-texture = ExtResource( 16 )
-expand = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="HUD"]
-modulate = Color( 1, 1, 1, 0 )
-anchor_top = 0.025
-anchor_right = 1.0
-anchor_bottom = 0.025
-margin_bottom = 39.0
-custom_fonts/font = SubResource( 6 )
-custom_colors/font_color = Color( 1, 0.956863, 0.635294, 1 )
-custom_colors/font_outline_modulate = Color( 0.0196078, 0.054902, 0.211765, 1 )
-text = "Nice shot!"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Anim" type="AnimationPlayer" parent="HUD"]
-playback_process_mode = 0
-method_call_mode = 1
-anims/Score = SubResource( 7 )
-
-[node name="DayNight" type="AnimationPlayer" parent="."]
-playback_process_mode = 0
-anims/DNC = SubResource( 8 )
 
 [node name="banana" parent="." instance=ExtResource( 17 )]
 transform = Transform( 7.22438, -14.2534, -0.805737, 12.8748, 6.1147, 7.26974, -6.16823, -3.93082, 14.2303, 38.4704, -12.8663, -252.978 )

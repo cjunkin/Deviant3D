@@ -20,13 +20,14 @@ export var friction : float = .825
 export var speed : float = 4 * friction
 const CROUCH_TIME := .05
 var newest_normal := Vector3.UP
+const AIR_DAMPING = .998
 
 # Shooting
 puppetsync var b : float = 0.0 # Bendiness of bullet
 export var throwable_s: PackedScene
 
 # Grappling
-const MAX_GRAPPLE_SPEED := 3
+const MAX_GRAPPLE_SPEED := 6
 var not_grappling := true
 var grapple_pos := Vector3.ZERO
 var L_not_grapplin := true
@@ -91,8 +92,9 @@ func _ready() -> void:
 			# TODO: Find way to animate camera without using CamHolder 
 			var CamHolder :Spatial = CamY.get_node("CamHolder") # This camholder is needed so walking anims doesn't affect gun rotation
 			CamHolder.add_child(load(cam_path).instance())
-			Cam = CamHolder.get_node("Spring/Cam")
 			CamSpring = CamHolder.get_node("Spring")
+#			Cam = CamSpring.get_node("ViewportContainer/Viewport/Cam")
+			Cam = CamSpring.get_node("Cam")
 			reparent_sound(Sfx)
 			reparent_sound(GrappleSfx)
 		
@@ -344,7 +346,7 @@ func _physics_process(delta: float) -> void:
 	
 	
 	global_transform = global_transform.interpolate_with(
-		align_with_y(global_transform, newest_normal), .125
+		align_with_y(global_transform, newest_normal), delta * 10
 		)
 
 
@@ -359,6 +361,7 @@ func _physics_process(delta: float) -> void:
 	# Hook hit
 	if !not_grappling:
 		var new_grapple_len := (grapple_pos - global_transform.origin).length()
+		# normalize grappling vel, and our rest length is 1
 		var grapple_vel := (global_transform.origin - grapple_pos) / new_grapple_len * min(
 			0, (1 - new_grapple_len)
 			) * .25
@@ -367,7 +370,7 @@ func _physics_process(delta: float) -> void:
 		vel += grapple_vel
 		# If near grappling point, slow down (and get pulled more towards the point)
 		var is_near := abs((grapple_pos - global_transform.origin).length_squared()) < 64
-		air_resistance = .95 * int(is_near) + .999 * int(!is_near)
+		air_resistance = .95 * int(is_near) + AIR_DAMPING * int(!is_near)
 
 	# if Left Hook shot
 	if LGLine.visible:
@@ -385,7 +388,7 @@ func _physics_process(delta: float) -> void:
 		vel += grapple_vel
 		# If near grappling point, slow down (and get pulled more towards the point)
 		var is_near2 := int(abs((grapple_pos2 - global_transform.origin).length_squared()) < 64)
-		air_resistance2 = .95 * int(is_near2) + .999 * int(!is_near2)
+		air_resistance2 = .95 * int(is_near2) + AIR_DAMPING * int(!is_near2)
 	vel *= air_resistance*air_resistance2
 	
 	if L_not_grapplin and not_grappling:

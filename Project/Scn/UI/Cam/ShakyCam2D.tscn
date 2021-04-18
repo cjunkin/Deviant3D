@@ -2,7 +2,6 @@
 
 [ext_resource path="res://Scn/UI/Cam/ShakyCam2D.gd" type="Script" id=1]
 
-
 [node name="shaky_cam" type="Camera2D"]
 current = true
 process_mode = 0

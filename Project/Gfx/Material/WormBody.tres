@@ -1,6 +1,9 @@
-[gd_resource type="SpatialMaterial" format=2]
+[gd_resource type="SpatialMaterial" load_steps=2 format=2]
+
+[ext_resource path="res://Gfx/Shader/multipass-sketchy-outline/sketchy.tres" type="Material" id=1]
 
 [resource]
+next_pass = ExtResource( 1 )
 flags_vertex_lighting = true
 albedo_color = Color( 0.662745, 0.231373, 0.231373, 1 )
 metallic = 0.5

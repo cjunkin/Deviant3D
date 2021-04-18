@@ -1,0 +1,14 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=2]
+
+[ext_resource path="res://Gfx/Shader/Dither.shader" type="Shader" id=1]
+[ext_resource path="res://Gfx/Shader/palette_moonlight.png" type="Texture" id=2]
+[ext_resource path="res://Gfx/Shader/bayer16tile2.png" type="Texture" id=3]
+
+[resource]
+shader = ExtResource( 1 )
+shader_param/u_bit_depth = 32
+shader_param/u_contrast = 1.0
+shader_param/u_offset = null
+shader_param/u_dither_size = 2
+shader_param/u_dither_tex = ExtResource( 3 )
+shader_param/u_color_tex = ExtResource( 2 )

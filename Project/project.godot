@@ -17,14 +17,14 @@ _global_script_classes=[ {
 "base": "Spatial",
 "class": "Game",
 "language": "GDScript",
-"path": "res://Game.gd"
+"path": "res://Scn/Lvl/Level.gd"
 }, {
 "base": "RayCast",
 "class": "Hook",
 "language": "GDScript",
 "path": "res://Scn/Projectile/Hook.gd"
 }, {
-"base": "Reference",
+"base": "ImmediateGeometry",
 "class": "Line",
 "language": "GDScript",
 "path": "res://addons/LineRenderer/Line.gd"

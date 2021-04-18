@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Fart Meme Sound.mp3-a58f8f4997467512b20b2736740123ea.mp3str"
+
+[deps]
+
+source_file="res://Scn/Actor/Enemy/Fart Meme Sound.mp3"
+dest_files=[ "res://.import/Fart Meme Sound.mp3-a58f8f4997467512b20b2736740123ea.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

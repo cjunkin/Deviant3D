@@ -2,7 +2,8 @@ extends Node
 
 const PORT := 8070
 const MENU_SCENE := "res://Scn/MainMenu.tscn"
-const GAME_SCENE := "res://Game.tscn"
+const GAME_SCENE := "res://Scn/Lvl/Level.tscn"
+#const GAME_SCENE := "res://Game.tscn"
 const GAME_PATH := "/root/Game"
 var players := {}
 

@@ -26,6 +26,13 @@ var gravity_changed := false
 # Game
 var game: Game
 var current_player : Player
+var combo_msgs : PoolStringArray = [
+	"Nice shot!",
+	"Wabam!",
+	"ReKt",
+	"DesTroiD",
+	"360 noSCope?"
+]
 
 # Theme
 var primary_color := Color("b4d2ff")
@@ -176,3 +183,4 @@ func _on_Grav_toggled(button_pressed: bool) -> void:
 		Grav.modulate = G.primary_color
 	else:
 		Grav.modulate = G.deactivated_color
+
