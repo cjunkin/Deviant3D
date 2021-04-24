@@ -24,7 +24,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scn/Projectile/Hook.gd"
 }, {
-"base": "ImmediateGeometry",
+"base": "Reference",
 "class": "Line",
 "language": "GDScript",
 "path": "res://addons/LineRenderer/Line.gd"
@@ -285,7 +285,7 @@ throw={
 [rendering]
 
 quality/driver/fallback_to_gles2=true
-quality/filters/anisotropic_filter_level=8
 vram_compression/import_etc=true
+quality/filters/anisotropic_filter_level=8
 environment/default_clear_color=Color( 0.741176, 0.858824, 0.933333, 1 )
 environment/default_environment="res://Unused/BetterWorldEnvironment.tres"

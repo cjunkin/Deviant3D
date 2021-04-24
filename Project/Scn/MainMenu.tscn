@@ -463,6 +463,7 @@ anims/ChooseGfx = SubResource( 3 )
 anims/Click = SubResource( 4 )
 
 [node name="shaky_cam" parent="." instance=ExtResource( 10 )]
+
 [connection signal="button_up" from="All/Margin/Menu/PlayMargin/Play/Host" to="." method="_on_Host_button_up"]
 [connection signal="button_up" from="All/Margin/Menu/PlayMargin/Play/Join" to="." method="_on_Join_button_up"]
 [connection signal="button_up" from="All/Margin/Menu/Center/Graphics" to="." method="_on_Graphics_button_up"]

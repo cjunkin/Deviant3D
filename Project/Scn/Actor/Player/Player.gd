@@ -486,6 +486,10 @@ puppetsync func f() -> void:
 	var p : Projectile = G.game.projectiles[G.game.laser_i]
 	G.game.add_child(p)
 	p.global_transform = Muzzle.global_transform
+	
+	# integrate our current velocity accounting for slow mo
+	p.translation += vel * Engine.time_scale / 60 
+	
 	p.monitoring = true
 	p.visible = true
 	p.rot = b
