@@ -196,6 +196,7 @@ text = "Quit to Main Menu"
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
 bus = "Music"
+
 [connection signal="value_changed" from="Menu/Center/Menu/Buttons/Sensitivity/SensSlider" to="." method="_on_SensSlider_value_changed"]
 [connection signal="toggled" from="Menu/Center/Menu/Buttons/Grav" to="." method="_on_Grav_toggled"]
 [connection signal="toggled" from="Menu/Center/Menu/Buttons/Flip" to="." method="_on_Flip_toggled"]

@@ -1,5 +1,6 @@
 extends Control
 
+# NodePaths
 export (NodePath) var overall_path
 export (NodePath) var shadows_path
 export (NodePath) var glow_path
@@ -8,6 +9,7 @@ export (NodePath) var spinner_path
 export (NodePath) var Graphics_path
 export (NodePath) var Menu_path
 
+# Actual Nodes
 onready var overall : OptionButton = get_node(overall_path)
 onready var shadows : OptionButton = get_node(shadows_path)
 onready var glow : OptionButton = get_node(glow_path)
@@ -18,7 +20,7 @@ onready var Menu : Control = get_node(Menu_path)
 onready var Anim := $Anim
 onready var ClickAnim := $ClickAnim
 
-
+# Setting constants
 const STANDARD := PoolStringArray(["Off", "Low", "Medium", "High"])
 const BINARY := PoolStringArray(["Off", "On"])
 const ALL_GFX_OPTIONS := PoolStringArray(["shadows", "glow", "bloom"]) # TODO: more graphics settings
@@ -84,6 +86,7 @@ func set_setting(setting: String, index: int) -> void:
 	# Visual update
 	get(setting).select(index)
 
+# Sets overall's text to "custom" unless we match a preset
 func update_overall_ui() -> void:
 	var first : int = G.get(ALL_GFX_OPTIONS[0])
 	var all_match := true
@@ -103,11 +106,13 @@ func add_options(button: OptionButton, options: PoolStringArray) -> void:
 		button.add_item(option, i)
 		i += 1
 
+# Host pressed
 func _on_Host_button_up() -> void:
 	start()
 	Network.host()
 #	spinner.show()
 
+# Join pressed
 func _on_Join_button_up() -> void:
 	start()
 	Network.join()

@@ -6,6 +6,11 @@ const LASER := "L"
 const EXPL := "E"
 const WORM_BODY := "WB"
 
+# Paths
+const MENU_SCENE := "res://Scn/MainMenu.tscn"
+#const GAME_SCENE := "res://Scn/Lvl/Level.tscn"
+const GAME_SCENE := "res://Game.tscn"
+
 # Settings
 const SFX_BUS := 1
 const MUSIC_BUS := 2

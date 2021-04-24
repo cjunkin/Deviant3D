@@ -9,8 +9,10 @@ func _ready():
 		e.name = "E" + str(i)
 		enemies.append(e)
 
+	# If we pressed Host
 	if is_network_master():
 		
+		# Generate random asteroids
 		randomize()
 		TERRAIN_SEED = randi() % 2048
 		gen_boxes(TERRAIN_SEED)
@@ -23,5 +25,6 @@ func _ready():
 		worm.Head.rotation.y = -PI
 		worm.set_target(players[0]) # TODO SYNC UP PROPERLY WORM
 		bosses.append(worm)
+	# Else send a network request to get host's data
 	else:
 		request_current_data()

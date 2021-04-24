@@ -28,7 +28,7 @@ puppetsync var b : float = 0.0 # Bendiness of bullet
 export var throwable_s: PackedScene
 
 # Grappling
-const MAX_GRAPPLE_SPEED := 6
+const MAX_GRAPPLE_SPEED := 4
 var not_grappling := true
 var grapple_pos := Vector3.ZERO
 var L_not_grapplin := true
@@ -40,7 +40,6 @@ export(String, FILE) var flippers_path
 
 # Cached Nodes
 #export(NodePath) var flash
-
 onready var CamSpring : SpringArm
 onready var Cam : Camera
 onready var CamX := $CamX
@@ -69,8 +68,8 @@ var RespawnTime : Timer
 
 #onready var CamHolder :Spatial = CamY.get_node("CamHolder")
 func _ready() -> void:
-	# Setup grappling hooks, the name will be used to call the R and L functions in Game.physics_process 
-	# when hooks collide
+	# Setup grappling hooks, the name will be used to call the R and L functions 
+	# in Game.physics_process when hooks collide
 	var hook_s := load("res://Scn/Projectile/Hook.tscn")
 	RHook = hook_s.instance()
 	RHook.player = self
@@ -91,7 +90,8 @@ func _ready() -> void:
 		if OS.get_name() != "Android" and OS.get_name() != "iOS":
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 			# TODO: Find way to animate camera without using CamHolder 
-			var CamHolder :Spatial = CamY.get_node("CamHolder") # This camholder is needed so walking anims doesn't affect gun rotation
+			var CamHolder :Spatial = CamY.get_node("CamHolder") 
+			# CamHolder is needed so walking anims doesn't affect gun rotation
 			CamHolder.add_child(load(cam_path).instance())
 			CamSpring = CamHolder.get_node("Spring")
 #			Cam = CamSpring.get_node("ViewportContainer/Viewport/Cam")
@@ -232,7 +232,7 @@ func _input(event: InputEvent) -> void:
 			AnimTree.set("parameters/Reloading/blend_amount", 1)
 			AnimTree.set("parameters/Firing/active", true)
 
-		# Slowdown time
+		# Slowdown time, like superhot
 		if event.is_action_pressed("slowmo"):
 			Engine.time_scale = int(Network.players.size() > 1) * .9 + .1
 		elif event.is_action_released("slowmo"):
@@ -244,6 +244,7 @@ func _input(event: InputEvent) -> void:
 	##			vel -= CamY.global_transform.basis.z
 	##			vel.y += 1
 
+		# Respawn
 		if event.is_action("respawn") and RespawnTime.is_stopped():
 			rpc("respawn")
 			RespawnTime.start()
@@ -285,7 +286,7 @@ func _input(event: InputEvent) -> void:
 #				SENS_X = SENS_Y
 			rpc_unreliable("A", event.relative)
 		
-		# Zoom
+		# Zoom/Aim
 		if event.is_action_pressed("aim"):
 			tween.interpolate_property(
 				Cam, "fov", Cam.fov, int(Cam.fov) % 70 + 35, .25, Tween.TRANS_CUBIC
@@ -294,11 +295,11 @@ func _input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	# collision with boxes
-	for index in get_slide_count():
-		var collision := get_slide_collision(index)
-		if collision.collider is RigidBody:
-			collision.collider.apply_central_impulse(-collision.normal * .05 * vel.length())
+	# collision with boxes, don't need anymore since we will be doing custom physics
+#	for index in get_slide_count():
+#		var collision := get_slide_collision(index)
+#		if collision.collider is RigidBody:
+#			collision.collider.apply_central_impulse(-collision.normal * .05 * vel.length())
 
 	if is_network_master():
 
@@ -345,7 +346,7 @@ func _physics_process(delta: float) -> void:
 	vel -= int(g) * (int(not_grappling)) * (int(L_not_grapplin)) * grav * delta * transform.basis.y#CamY.global_transform.basis.y
 	vel = move_and_slide(vel, transform.basis.y, false, 4, .75, false)
 	
-	
+	# Orient "up" normal with our newest_normal
 	global_transform = global_transform.interpolate_with(
 		align_with_y(global_transform, newest_normal), delta * 10
 		)
@@ -366,11 +367,13 @@ func _physics_process(delta: float) -> void:
 		var grapple_vel := (global_transform.origin - grapple_pos) / new_grapple_len * min(
 			0, (1 - new_grapple_len)
 			) * .25
+		# Set max grapple velocity
 		if grapple_vel.length() > MAX_GRAPPLE_SPEED:
 			grapple_vel = grapple_vel.normalized() * MAX_GRAPPLE_SPEED
 		vel += grapple_vel
 		# If near grappling point, slow down (and get pulled more towards the point)
 		var is_near := abs((grapple_pos - global_transform.origin).length_squared()) < 64
+		# If near hook, use DAMP_NEAR_HOOK, otherwise use AIR_DAMPING
 		air_resistance = DAMP_NEAR_HOOK * int(is_near) + AIR_DAMPING * int(!is_near)
 
 	# if Left Hook shot
@@ -384,16 +387,22 @@ func _physics_process(delta: float) -> void:
 		var grapple_vel := (global_transform.origin - grapple_pos2) / new_grapple_len * min(0, (
 			1 - new_grapple_len)
 			) * .25
+		# Set max grapple velocity
 		if grapple_vel.length() > MAX_GRAPPLE_SPEED:
 			grapple_vel = grapple_vel.normalized() * MAX_GRAPPLE_SPEED
 		vel += grapple_vel
 		# If near grappling point, slow down (and get pulled more towards the point)
 		var is_near2 := int(abs((grapple_pos2 - global_transform.origin).length_squared()) < 64)
+		# If near hook, use DAMP_NEAR_HOOK, otherwise use AIR_DAMPING
 		air_resistance2 = DAMP_NEAR_HOOK * int(is_near2) + AIR_DAMPING * int(!is_near2)
+		
+	# use our computed air_resistance dampings
 	vel *= air_resistance*air_resistance2
 	
+	# Cosmetic, if not hooked, make mesh rotate upright
 	if L_not_grapplin and not_grappling:
 		MeshHelp.rotation = lerp(MeshHelp.rotation, Vector3.ZERO, .2)
+	# Else rotate mesh towards hook point
 	else:
 		MeshHelp.global_transform = MeshHelp.global_transform.interpolate_with(
 			MeshHelp.global_transform.looking_at(
@@ -605,8 +614,7 @@ func align_with_y(xform: Transform, new_y: Vector3) -> Transform:
 func _sync_timeout() -> void:
 	rpc("s", translation, CamX.rotation.y, CamY.rotation.x, vel)
 
-
-
+# Called when a player quits to main menu
 func unregister() -> void:
 	G.game.hooks.erase(LHook)
 	G.game.hooks.erase(RHook)
