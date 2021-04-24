@@ -20,7 +20,8 @@ export var friction : float = .825
 export var speed : float = 4 * friction
 const CROUCH_TIME := .05
 var newest_normal := Vector3.UP
-const AIR_DAMPING = .998
+const AIR_DAMPING := .998
+const DAMP_NEAR_HOOK := .95
 
 # Shooting
 puppetsync var b : float = 0.0 # Bendiness of bullet
@@ -326,7 +327,7 @@ func _physics_process(delta: float) -> void:
 	# Grounded
 	if is_on_floor():
 		# Apply hard friction, unless grappling (then softer friction)
-		vel *= friction * int(not_grappling) + .95 * int(!not_grappling)
+		vel *= friction * int(not_grappling) + DAMP_NEAR_HOOK * int(!not_grappling)
 		vel += a
 		var vel_speed := a.length()
 		
@@ -370,7 +371,7 @@ func _physics_process(delta: float) -> void:
 		vel += grapple_vel
 		# If near grappling point, slow down (and get pulled more towards the point)
 		var is_near := abs((grapple_pos - global_transform.origin).length_squared()) < 64
-		air_resistance = .95 * int(is_near) + AIR_DAMPING * int(!is_near)
+		air_resistance = DAMP_NEAR_HOOK * int(is_near) + AIR_DAMPING * int(!is_near)
 
 	# if Left Hook shot
 	if LGLine.visible:
@@ -388,7 +389,7 @@ func _physics_process(delta: float) -> void:
 		vel += grapple_vel
 		# If near grappling point, slow down (and get pulled more towards the point)
 		var is_near2 := int(abs((grapple_pos2 - global_transform.origin).length_squared()) < 64)
-		air_resistance2 = .95 * int(is_near2) + AIR_DAMPING * int(!is_near2)
+		air_resistance2 = DAMP_NEAR_HOOK * int(is_near2) + AIR_DAMPING * int(!is_near2)
 	vel *= air_resistance*air_resistance2
 	
 	if L_not_grapplin and not_grappling:
