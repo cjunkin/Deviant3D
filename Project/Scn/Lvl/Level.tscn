@@ -330,4 +330,5 @@ width = 77.6236
 height = 23.5263
 depth = 76.9021
 material = ExtResource( 2 )
+
 [connection signal="timeout" from="EnemySpawnTime" to="." method="_on_EnemySpawnTime_timeout"]

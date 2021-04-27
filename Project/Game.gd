@@ -3,6 +3,7 @@ extends Game
 
 func _ready():
 	# Enemies
+#	enemies.resize(num_enemies)
 	var enemy_s := load(enemy_path)
 	for i in range(num_enemies):
 		var e : Enemy = enemy_s.instance()

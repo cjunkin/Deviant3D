@@ -27,7 +27,7 @@ func _on_Laser_body_entered(body) -> void:
 		visible = false
 		
 		# Push body
-		body.apply_impulse(global_transform.origin - body.global_transform.origin, -100 * transform.basis.z)
+		body.apply_impulse(global_transform.origin - body.global_transform.origin, -50 * transform.basis.z)
 
 	elif body is CSGBox or body is StaticBody:
 		# Disable self

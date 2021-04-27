@@ -106,17 +106,6 @@ func add_options(button: OptionButton, options: PoolStringArray) -> void:
 		button.add_item(option, i)
 		i += 1
 
-# Host pressed
-func _on_Host_button_up() -> void:
-	start()
-	Network.host()
-#	spinner.show()
-
-# Join pressed
-func _on_Join_button_up() -> void:
-	start()
-	Network.join()
-	spinner.show()
 
 func start() -> void:
 #	OS.set_low_processor_usage_mode(false)
@@ -132,3 +121,15 @@ func _on_DoneButton_button_up() -> void:
 	Anim.play_backwards("ChooseGfx")
 	Menu.show()
 	Graphics.hide()
+
+
+func _on_Host_pressed():
+	start()
+	Network.host()
+#	spinner.show()
+
+
+func _on_Join_pressed():
+	start()
+	Network.join()
+	spinner.show()

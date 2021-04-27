@@ -28,7 +28,7 @@ albedo_color = Color( 0.4, 0.176471, 0.741176, 1 )
 length = 0.125
 step = 0.005
 tracks/0/type = "bezier"
-tracks/0/path = NodePath("CamX/CamY/Gun:translation:z")
+tracks/0/path = NodePath("CamX/CamY/GunHolder/Gun:translation:z")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -38,7 +38,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.025, 0.125 )
 }
 tracks/1/type = "bezier"
-tracks/1/path = NodePath("CamX/CamY/Gun:rotation_degrees:x")
+tracks/1/path = NodePath("CamX/CamY/GunHolder/Gun:rotation_degrees:x")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -48,7 +48,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 0.03, 0.125 )
 }
 tracks/2/type = "bezier"
-tracks/2/path = NodePath("CamX/CamY/Gun:rotation_degrees:y")
+tracks/2/path = NodePath("CamX/CamY/GunHolder/Gun:rotation_degrees:y")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -58,7 +58,7 @@ tracks/2/keys = {
 "times": PoolRealArray( 0, 0.03, 0.125 )
 }
 tracks/3/type = "bezier"
-tracks/3/path = NodePath("CamX/CamY/Gun:rotation_degrees:z")
+tracks/3/path = NodePath("CamX/CamY/GunHolder/Gun:rotation_degrees:z")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -83,7 +83,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 1, 2 )
 }
 tracks/1/type = "bezier"
-tracks/1/path = NodePath("CamX/CamY/Gun:translation:y")
+tracks/1/path = NodePath("CamX/CamY/GunHolder/Gun:translation:y")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -97,7 +97,7 @@ tracks/1/keys = {
 length = 0.75
 step = 0.01
 tracks/0/type = "bezier"
-tracks/0/path = NodePath("CamX/CamY/Gun:rotation_degrees:x")
+tracks/0/path = NodePath("CamX/CamY/GunHolder/Gun:rotation_degrees:x")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -107,7 +107,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 0.21, 0.31, 0.46, 0.62, 0.76 )
 }
 tracks/1/type = "bezier"
-tracks/1/path = NodePath("CamX/CamY/Gun:rotation_degrees:y")
+tracks/1/path = NodePath("CamX/CamY/GunHolder/Gun:rotation_degrees:y")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -117,7 +117,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 0.1, 0.25, 0.38, 0.45, 0.5 )
 }
 tracks/2/type = "bezier"
-tracks/2/path = NodePath("CamX/CamY/Gun:rotation_degrees:z")
+tracks/2/path = NodePath("CamX/CamY/GunHolder/Gun:rotation_degrees:z")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -301,22 +301,25 @@ flippers_path = "res://Scn/Actor/Player/Flippers.tscn"
 [node name="CamX" type="Spatial" parent="."]
 
 [node name="CamY" type="Spatial" parent="CamX"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00990193, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00979729, 0 )
 
-[node name="Gun" parent="CamX/CamY" instance=ExtResource( 1 )]
-transform = Transform( 0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0.75, -0.00990193, -0.75 )
+[node name="GunHolder" type="Spatial" parent="CamX/CamY"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6.53061e-05, 0 )
 
-[node name="Muzzle" type="Position3D" parent="CamX/CamY/Gun"]
+[node name="Gun" parent="CamX/CamY/GunHolder" instance=ExtResource( 1 )]
+transform = Transform( 0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0.75, -0.00979729, -0.75 )
+
+[node name="Muzzle" type="Position3D" parent="CamX/CamY/GunHolder/Gun"]
 transform = Transform( 1.33333, -7.39705e-16, -1.59872e-14, 2.14688e-15, 1.33333, 1.98952e-13, 1.59872e-14, -1.98952e-13, 1.33333, 0.000968695, 0.820632, -2.52995 )
 
-[node name="FrontCast" type="RayCast" parent="CamX/CamY/Gun/Muzzle"]
+[node name="FrontCast" type="RayCast" parent="CamX/CamY/GunHolder/Gun/Muzzle"]
 transform = Transform( 1, 3.35002e-19, 0, 3.35002e-19, 1, 0, 0, 0, 1, 0, 0, 0 )
 enabled = true
 exclude_parent = false
 cast_to = Vector3( 0, 0, -400 )
 collision_mask = 7
 
-[node name="Sfx" parent="CamX/CamY/Gun/Muzzle" instance=ExtResource( 3 )]
+[node name="Sfx" parent="CamX/CamY/GunHolder/Gun/Muzzle" instance=ExtResource( 3 )]
 max_db = 0.0
 bus = "Sfx"
 
@@ -324,10 +327,10 @@ bus = "Sfx"
 
 [node name="MeshHelp" type="Spatial" parent="CamX"]
 
-[node name="PMesh" type="CSGMesh" parent="CamX/MeshHelp"]
+[node name="PMesh" type="MeshInstance" parent="CamX/MeshHelp"]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, 0 )
 mesh = SubResource( 1 )
-material = ExtResource( 8 )
+material/0 = ExtResource( 8 )
 
 [node name="GrappleSfx" type="AudioStreamPlayer3D" parent="CamX"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13213, 0 )

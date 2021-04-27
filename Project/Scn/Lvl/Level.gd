@@ -57,12 +57,16 @@ func _ready()->void:
 		Network.register(get_tree().get_network_unique_id())
 
 	# Projectiles
+#	projectiles.resize(num_lasers)
 	for i in range(num_lasers):
 		var p : Projectile = laser_s.instance()
 		p.name = G.LASER + str(i)
 		projectiles.append(p)
+		if p == null:
+			print(p)
 
 	# Explosions
+#	explosions.resize(num_explosions)
 	for i in range(num_explosions):
 		var e : Particles = exp_s.instance()
 		e.name = G.EXPL + str(i)

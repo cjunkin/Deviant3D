@@ -20,7 +20,7 @@ export var friction : float = .825
 export var speed : float = 4 * friction
 const CROUCH_TIME := .05
 var newest_normal := Vector3.UP
-const AIR_DAMPING := .998
+const AIR_DAMPING := .9985
 const DAMP_NEAR_HOOK := .95
 
 # Shooting
@@ -28,7 +28,7 @@ puppetsync var b : float = 0.0 # Bendiness of bullet
 export var throwable_s: PackedScene
 
 # Grappling
-const MAX_GRAPPLE_SPEED := 4
+const MAX_GRAPPLE_SPEED := 3.25
 var not_grappling := true
 var grapple_pos := Vector3.ZERO
 var L_not_grapplin := true
@@ -48,7 +48,8 @@ onready var MeshHelp := CamX.get_node("MeshHelp")
 onready var PMesh := MeshHelp.get_node("PMesh")
 onready var Flippers : Array
 onready var CamY := CamX.get_node("CamY")
-onready var Gun := CamY.get_node("Gun")
+onready var GunHolder := CamY.get_node("GunHolder")
+onready var Gun := GunHolder.get_node("Gun")
 onready var Muzzle := Gun.get_node("Muzzle")
 onready var Sfx := Muzzle.get_node("Sfx")
 onready var AnimTree := $AnimTree
@@ -68,6 +69,11 @@ var RespawnTime : Timer
 
 #onready var CamHolder :Spatial = CamY.get_node("CamHolder")
 func _ready() -> void:
+# THis is to draw the vel, grapple_aim, etc vectors don't need rn
+#	DebugOverlay.draw.add_vector(self, "vel", 1, 4, Color(0,1,0, 0.5))
+#	DebugOverlay.draw.add_vector(self, "grapple_aim", 1, 4, Color(0,1,1, 0.5))
+#	DebugOverlay.draw.add_vector(self, "global_transform:basis:x", 1, 4, Color(1,1,1, 0.5))
+	
 	# Setup grappling hooks, the name will be used to call the R and L functions 
 	# in Game.physics_process when hooks collide
 	var hook_s := load("res://Scn/Projectile/Hook.tscn")
@@ -114,7 +120,7 @@ func _ready() -> void:
 			print("ERROR: COULDN'T SETUP PERIODIC SYNC")
 		timer.start(0)
 		
-		# Setup Respawn Timer (limits how fast you can respawn using backspace)
+		# Setup Respawn Timer (limits how fast you can respawn)
 		RespawnTime = Timer.new()
 		RespawnTime.name = "Respawn"
 		add_child(RespawnTime)
@@ -124,18 +130,16 @@ func _ready() -> void:
 		
 		G.start_game(self)
 		
+		# Setup Flippers
 		var flippers : Spatial = load(flippers_path).instance()
 		CamX.add_child(flippers)
 		Flippers = flippers.get_children()
 		
+		# Setup LaserSight
 		LaserSight = load("res://Scn/Weaps/LaserSight.tscn").instance()
 		LaserSight.visible = true
 		Muzzle.add_child(LaserSight)
 		
-		# THis is to draw the vel, grapple_aim, etc vectors
-#		DebugOverlay.draw.add_vector(self, "vel", 1, 4, Color(0,1,0, 0.5))
-#		DebugOverlay.draw.add_vector(self, "grapple_aim", 1, 4, Color(0,1,1, 0.5))
-#		DebugOverlay.draw.add_vector(self, "global_transform:basis:x", 1, 4, Color(1,1,1, 0.5))
 	else:
 		set_process_input(false)
 		# Request sync from master
@@ -144,52 +148,82 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	# Ground Movement
 	a = (
+		# Sprinting multiplier
 		Input.get_action_strength("sprint") + 1) * speed * (
+			# Forward/backwards
 			CamX.global_transform.basis.z * (
 				Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
 				) 
 			+ 
+			# Right/Left
 			CamX.global_transform.basis.x * (
 				Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 				)
+		# Normalize direction
 		).normalized()
+	
 	# If our acceleration has changed, sync the new one
 	if a != accel:
 		accel = a
 		rset("a", a)
+	
+	# If keypress
 	if event is InputEventKey:
 		# Switch camera sides
 		if event.is_action_pressed("switch_tps"):
+			# This will be our camera position shifted to the other side
 			var next : Vector3 = CamSpring.translation
+			# Necessary because just multiplying by -1 could result in "convergence" effect
 			next.x = -3.5 * sign(next.x) # previously -3.75
 			tween.interpolate_property(
 				CamSpring, "translation", CamSpring.translation, next, .25, Tween.TRANS_CUBIC
 				)
+			# Shift the gun as well
 			next = Gun.translation
 			next.x = -.75 * sign(next.x)
 			tween.interpolate_property(
 				Gun, "translation", Gun.translation, next, .25, Tween.TRANS_CUBIC
 				)
 			tween.start()
+		
 		# Switch between TPS and FPS
 		if event.is_action_pressed("switch_view"):
-			# Switching to TPS TODO: reduce to no if/else
+			# TODO: reduce to no if/else
+			# Switching to TPS
 			if fps:
-	#			CamSpring.translation = Vector3(3.5, 1.5, 0) #Vector3(3.75, 1.5, 9)
-				tween.interpolate_property(CamSpring, "translation", CamSpring.translation, Vector3(3.5, 1.5, 0), .25, Tween.TRANS_CUBIC)
-				tween.interpolate_property(CamSpring, "spring_length", CamSpring.spring_length, 8, .25, Tween.TRANS_CUBIC)
-	#			tween.interpolate_property(Sfx, "translation", Sfx.translation, Vector3(3.5, 5, 0), .25, Tween.TRANS_CUBIC)
+				# previously Vector3(3.75, 1.5, 9)
+				# Bring camera to side
+				tween.interpolate_property(
+					CamSpring, 
+					"translation", 
+					CamSpring.translation, 
+					Vector3(3.5, 1.5, 0), 
+					.25, 
+					Tween.TRANS_CUBIC
+					)
+				# Spring length
+				tween.interpolate_property(
+					CamSpring, 
+					"spring_length", 
+					CamSpring.spring_length, 
+					8, 
+					.25, 
+					Tween.TRANS_CUBIC
+					)
 				tween.start()
-#				PMesh.visible = true
-	#			CamSpring.spring_length = 8
+				# TODO: unhide PMesh
 			else:
-	#			CamSpring.translation = Vector3(0, 1, 0)
-				tween.interpolate_property(CamSpring, "translation", CamSpring.translation, Vector3(0, 1, -.25), .25, Tween.TRANS_CUBIC)
-				tween.interpolate_property(CamSpring, "spring_length", CamSpring.spring_length, 0, .25, Tween.TRANS_CUBIC)
-	#			tween.interpolate_property(Sfx, "translation", Sfx.translation, Vector3(0, 0, 0), .25, Tween.TRANS_CUBIC)
+				# previously Vector3(0, 1, 0)
+				# Bring camera into head
+				tween.interpolate_property(
+					CamSpring, "translation", CamSpring.translation, Vector3(0, 1, -.25), .25, Tween.TRANS_CUBIC
+					)
+				# Spring length
+				tween.interpolate_property(
+					CamSpring, "spring_length", CamSpring.spring_length, 0, .25, Tween.TRANS_CUBIC
+					)
 				tween.start()
-#				PMesh.visible = false
-	#			CamSpring.spring_length = 0
+				# TODO: hide PMesh
 			fps = !fps
 
 		# Jumping
@@ -200,12 +234,12 @@ func _input(event: InputEvent) -> void:
 		if event.is_action_pressed("grapple1"):
 			local_grapple(true)
 		elif event.is_action_released("grapple1"):
-			rpc("R")
+			rpc("R") # release right grapple
 			Cam.stress = 0.2
 		if event.is_action_pressed("grapple2"):
 			local_grapple(false)
 		elif event.is_action_released("grapple2"):
-			rpc("L")
+			rpc("L")  # release left grapple
 			Cam.stress = 0.2
 
 		# Crouching
@@ -238,24 +272,25 @@ func _input(event: InputEvent) -> void:
 		elif event.is_action_released("slowmo"):
 			Engine.time_scale = 1
 
-	#		# Accelerate Hook
-	#		if Input.is_action_pressed("sprint"):
-	#			vel += (grapple_pos - global_transform.origin).normalized() * 3
-	##			vel -= CamY.global_transform.basis.z
-	##			vel.y += 1
+		# Accelerate Hook, TODO: sync with multiplayer and only work if grappling
+#		if Input.is_action_pressed("sprint"):
+#			vel += (grapple_pos - global_transform.origin).normalized() * 3
+##			vel -= CamY.global_transform.basis.z
+##			vel.y += 1
 
 		# Respawn
 		if event.is_action("respawn") and RespawnTime.is_stopped():
 			rpc("respawn")
 			RespawnTime.start()
 		
-		# TODO: throw shit around lmao
+		# TODO: throw stuff around lmao
 #		if event.is_action_pressed("throw"):
 #			var proj : RigidBody = throwable_s.instance()
 #			proj.rotation = Vector3(randf(), randf(), randf())
 #			proj.translation = translation - Muzzle.global_transform.basis.z * (2 + vel.length() / 12)
 #			proj.apply_central_impulse(-Muzzle.global_transform.basis.z * 64)
 #			get_parent().add_child(proj)
+
 	else:
 		# Scroll
 		if event is InputEventMouseButton: # and event.is_pressed():
@@ -271,9 +306,10 @@ func _input(event: InputEvent) -> void:
 				-PI/2, 
 				PI/2
 				) # Up down
+			
 				
-			# This was me playing around with rotation that wrapped around, rather than capping up/down
-			# as 90 degrees and -90 degrees
+		# This was me playing around with rotation that wrapped around, rather than 
+		# capping up/down as 90 degrees and -90 degrees
 #			CamY.rotation.x = CamY.rotation.x + (event.relative.y * SENS_Y)
 #			if CamY.rotation.x < -PI/2 or CamY.rotation.x > PI/2:
 #				SENS_X = -SENS_Y
@@ -301,23 +337,15 @@ func _physics_process(delta: float) -> void:
 #		if collision.collider is RigidBody:
 #			collision.collider.apply_central_impulse(-collision.normal * .05 * vel.length())
 
+	# If we control this guy
 	if is_network_master():
-
-		# Shooting
-		if Input.is_action_pressed("fire") and ROF.is_stopped():
-			# TODO: Muzzle flash
-			rpc("f") # fire
-			Cam.stress = 0.25
+		# Set laser sight alpha
+		if Input.is_action_pressed("fire"):
+			LaserSight.material.albedo_color.a = .25
 		else:
-			G.game.Reticule.rect_scale = Vector2(ROF.time_left + .2, ROF.time_left + .2) * 5
-#			print(G.game.Reticule.rect_scale, ROF.wait_time + 1)
+			LaserSight.material.albedo_color.a = .01
 
-		# "Run, the game" flipping
-		for ray in Flippers:
-			if ray.is_colliding() and FlipTime.is_stopped():
-				rpc("t", ray.get_collision_normal(), translation)
-
-		# Set crosshair
+		# Set lasersight's length
 		if FrontCast.is_colliding():
 			LaserSight.height = LaserSight.to_local(FrontCast.get_collision_point()).length()
 			LaserSight.translation.z = LaserSight.height / -2
@@ -325,10 +353,24 @@ func _physics_process(delta: float) -> void:
 			LaserSight.height = 256
 			LaserSight.translation.z = -128
 
+		# Shooting
+		if Input.is_action_pressed("fire") and ROF.is_stopped():
+			# TODO: Muzzle flash
+			rpc("f") # fire
+			Cam.stress = 0.25
+			
+		else:
+			G.game.Reticule.rect_scale = Vector2(ROF.time_left + .2, ROF.time_left + .2) * 5
+
+		# Check flippers for flipping
+		for ray in Flippers:
+			if ray.is_colliding() and FlipTime.is_stopped():
+				rpc("t", ray.get_collision_normal(), translation)
+
 	# Grounded
 	if is_on_floor():
 		# Apply hard friction, unless grappling (then softer friction)
-		vel *= friction * int(not_grappling) + DAMP_NEAR_HOOK * int(!not_grappling)
+#		vel *= friction * int(not_grappling) + DAMP_NEAR_HOOK * int(!not_grappling)
 		vel += a
 		var vel_speed := a.length()
 		
@@ -339,12 +381,15 @@ func _physics_process(delta: float) -> void:
 	# Midair
 	else:
 		# Reduce grounded movespeed
-		vel += .125 * a # BIG TODO: fix massive acceleration if jump while moving
+		vel += .125 * a # TODO: fix massive acceleration if jump while moving
 		AnimTree.set("parameters/Move/blend_amount", 0)
 
-	# apply gravity, inputs, physics
-	vel -= int(g) * (int(not_grappling)) * (int(L_not_grapplin)) * grav * delta * transform.basis.y#CamY.global_transform.basis.y
+	# apply gravity, g is whether gravity is on or off, we turn off gravity if we're grappling
+	vel -= int(g) * (int(not_grappling)) * (int(L_not_grapplin)) * grav * delta * transform.basis.y
+	# apply inputs, physics
 	vel = move_and_slide(vel, transform.basis.y, false, 4, .75, false)
+	# note: using CamY.global_transform.basis.y for line 385
+	# instead of transform.basis.y will move it in camera's down
 	
 	# Orient "up" normal with our newest_normal
 	global_transform = global_transform.interpolate_with(
@@ -355,11 +400,13 @@ func _physics_process(delta: float) -> void:
 	# Grappling logic
 	var air_resistance := 1.0
 	var air_resistance2 := 1.0
+
 	# if Hook shot
 	if GLine.visible:
 		grapple_pos = RHook.global_transform.origin
 		GLine.points[0] = grapple_pos
 		GLine.points[1] = FrontCast.global_transform.origin
+	
 	# Hook hit
 	if !not_grappling:
 		var new_grapple_len := (grapple_pos - global_transform.origin).length()
@@ -368,7 +415,7 @@ func _physics_process(delta: float) -> void:
 			0, (1 - new_grapple_len)
 			) * .25
 		# Set max grapple velocity
-		if grapple_vel.length() > MAX_GRAPPLE_SPEED:
+		if grapple_vel.length_squared() > MAX_GRAPPLE_SPEED * MAX_GRAPPLE_SPEED:
 			grapple_vel = grapple_vel.normalized() * MAX_GRAPPLE_SPEED
 		vel += grapple_vel
 		# If near grappling point, slow down (and get pulled more towards the point)
@@ -381,6 +428,7 @@ func _physics_process(delta: float) -> void:
 		grapple_pos2 = LHook.global_transform.origin
 		LGLine.points[0] = grapple_pos2
 		LGLine.points[1] = FrontCast.global_transform.origin
+	
 	# Left Hook hit
 	if !L_not_grapplin:
 		var new_grapple_len := (grapple_pos2 - global_transform.origin).length()
@@ -388,14 +436,14 @@ func _physics_process(delta: float) -> void:
 			1 - new_grapple_len)
 			) * .25
 		# Set max grapple velocity
-		if grapple_vel.length() > MAX_GRAPPLE_SPEED:
+		if grapple_vel.length_squared() > MAX_GRAPPLE_SPEED * MAX_GRAPPLE_SPEED:
 			grapple_vel = grapple_vel.normalized() * MAX_GRAPPLE_SPEED
 		vel += grapple_vel
 		# If near grappling point, slow down (and get pulled more towards the point)
 		var is_near2 := int(abs((grapple_pos2 - global_transform.origin).length_squared()) < 64)
 		# If near hook, use DAMP_NEAR_HOOK, otherwise use AIR_DAMPING
 		air_resistance2 = DAMP_NEAR_HOOK * int(is_near2) + AIR_DAMPING * int(!is_near2)
-		
+	
 	# use our computed air_resistance dampings
 	vel *= air_resistance*air_resistance2
 	
@@ -411,7 +459,8 @@ func _physics_process(delta: float) -> void:
 				), 
 			.2
 			)
-#		CamHolder.rotation.z = MeshHelp.rotation.z
+#	Attempt at rotating camera with mesh, kinda bad: 
+#	CamHolder.rotation.z = MeshHelp.rotation.z
 
 
 # Call only on self so that sounds follow TPS/FPS camera
