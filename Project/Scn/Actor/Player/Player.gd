@@ -370,7 +370,7 @@ func _physics_process(delta: float) -> void:
 	# Grounded
 	if is_on_floor():
 		# Apply hard friction, unless grappling (then softer friction)
-#		vel *= friction * int(not_grappling) + DAMP_NEAR_HOOK * int(!not_grappling)
+		vel *= friction * int(not_grappling) + DAMP_NEAR_HOOK * int(!not_grappling)
 		vel += a
 		var vel_speed := a.length()
 		
