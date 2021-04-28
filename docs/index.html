@@ -41,8 +41,8 @@
       </div>
 
       <div class="collapse navbar-collapse" id="navbar-collapse">
-        <ul class="nav navbar-nav navbar-right">
-  <!--        <li><a href="./index.html" title="">Home</a></li>-->
+        <ul class="nav navbar-nav ">
+         <li><a href="./og_prop.html" title="">Original Proposal</a></li>
 <!--          <li><a href="./project.html" title="">Project</a></li>-->
 <!--          <li>
             <p>
@@ -61,8 +61,8 @@
     <div class="container">
       <div class="row">
         <div class="col-xs-12">
-          <h1>CS184: Unnamed 3D Multiplayer Game</h1>
-          <h4>Summary: A <b>3D multiplayer game, </b>with <b> custom networked physics interactions, procedurally generated environments, stylized shaders, procedural or physically based animations, </b>perhaps game-ifying very elementary introductions into some of the math skills needed to do graphics? <a  href="https://ctwobosius.github.io/TheWongFireside/Deviant/Deviant.html" target="_blank"><em>Click here for a (2D) math game Calvin made that we could build on</em></a> </h4>
+          <h1>CS184: Deviant3D Progress</h1>
+<!--           <h4> </h4> -->
           <h3>Calvin Wong, Chris Park, Sambodh Mitra, Rafael Ostrea</h3>
 <!--          <br>
 
@@ -71,24 +71,122 @@
       </div>
     </div>
   </div>
-
+                             
+                                
+                                
+    <div class="section-container">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-md-8 col-md-offset-2">
+          <div class="text-center">
+            <h2>Videos</h2>
+            <p>Sorry, forgot to adjust recording downsampling, so it's a little low res</p>
+            <br>
+            <p>
+                Explanation of features:
+            </p>
+            <video autoplay loop muted controls playsinline width="50%"> 
+            <source src="asset/multi_compr.mp4" type="video/mp4">
+            Your browser doesn't support non-GIF videos :(
+            </video>
+            <br>
+            <p>
+                Multiplayer :
+            </p>
+            <video autoplay loop muted controls playsinline width="50%"> 
+            <source src="asset/multi_compr.mp4" type="video/mp4">
+            Your browser doesn't support non-GIF videos :(
+            </video>
+            <p>The worm is not fully synced yet but everything else should be!</p>
+          </div>
+       </div>
+      </div>
+    </div>
+  </div>
+  
+  
   <div class="section-container">
     <div class="container">
       <div class="row">
         <div class="col-xs-12 col-md-8 col-md-offset-2">
           <div class="text-center">
-            <h2>Problem</h2>
-            <p>
-            Game engines make creating games a lot easier. The Godot Game Engine is one such engine, and on Februrary 18th (a little less than two months before this proposal) Calvin started working on a 3D game in it (because why not, haha). <b> We plan to expand this game, using some of the animation and visual techniques we’ve learned in the course (details in deliverables). </b>
-            </p>
-            <p>
-            The major challenges of this project are that the engine is a bit lacking in terms of networking physics. This is because the physics engine for Godot (along with other engines such as Unity) are non-deterministic, so you’d have to send the position/velocity/etc. of each physics object every single frame for it to sync properly, for every object, which is terribly inefficient and also introduces visual jitter due to packet loss/corruption.
-            </p>
-            <p>
-            To avoid this, <b> for any physics we want to be synced across all players, we need to write the physics ourselves. </b> This poses a lot of work, but a lot of opportunity to learn about physics and the tricks that produce the relatively realistic yet fast physics simulations needed for real-time games.
-            </p>
-            <p>
-            Additionally, the 3D graphics engine is currently very scant; the current lighting/style is not as developed as we would like. To improve this, <b> we would either need to write shaders or dive into the (mostly) C++ source code and change the rendering engine. </b>
+            <h2>Accomplishments & Results</h2>
+        </div>
+        <div>            
+            <p> 
+                <ol>
+                    <li> 
+                        Blur shader for menu (takes advantage of mipmaps)
+                    </li>
+                    <li> 
+                        WIP sketch shader (borrowed from <a target="_new" href="https://godotshaders.com/shader/animated-sketchy-line/">here</a>, aiming for edge detection type of shader as described in lecture)
+                    </li>
+                    <li>
+                        Random asteroid position generation (synced over multiplayer)
+                        <ul>
+                            <li>
+                                Syncs random number generation seed before generation
+                            </li>
+                            <li>
+                                Then uses open simplex noise where if noise value is over a certain amount, spawns an asteroid
+                                with random height
+                            </li>
+                        </ul>
+                    </li>
+                    <li> 
+                        Surfaces act as magnets (using surface normals and a series of raycasts, reorient the player’s basis if raycasts hit a surface)
+                    </li>
+                    <li>
+                        No gravity option (nothing fancy, just didn't apply gravity force, but it was pretty cool to see it sync in multiplayer)
+                    </li>
+                    <li>
+                        Worm boss
+                        <ul>
+                            <li>
+                                Uses a “follow the leader” sort of procedural animation
+                            </li>
+                            <li>
+                                Idea is head moves freely, and joints rotate towards successive joints while keeping a set distance between the joints
+                            </li>
+                        </ul>
+                        
+                        
+                    </li>
+                    <li>Player physics
+                        <ul>
+                            <li>
+                                Uses similar approach to Verlet by using WASD inputs as acceleration forces
+                            </li>
+                            <li>
+                                Also applies constant downward force for gravity (if gravity is on)
+                            </li>
+                            <li>
+                                Adds acceleration to the velocity, then applies “friction” by damping the velocity (if on ground)
+                            </li>
+                            <li>
+                                lastly move the player by the velocity
+                            </li>
+                            
+                        </ul>
+                    </li>
+                    <li>Grappling physics
+                        <ul>
+                            <li>
+                                Uses Hooke’s law and raycast collisions to detect where to grapple to
+                            </li>
+                            <li>
+                                Slightly dampens current velocity so that player doesn’t circle around grappling point forever
+                            </li>
+                            <li>
+                                Uses Hooke’s law
+                            </li>
+                            <li>
+                                Once player gets within certain distance to grappling point,
+                        applies a relatively strong damping to current velocity so player “magnets” to point
+                            </li>
+                        </ul>
+                    </li>
+                </ol>
             </p>
             
           </div>
@@ -102,49 +200,12 @@
       <div class="row">
         <div class="col-xs-12 col-md-8 col-md-offset-2">
           <div class="text-center">
-            <h2>Goals/Deliverables</h2>
-            <p>
-                <b> What we currently have </b> (on top of a somewhat working game):
-                <ol>
-                    <li> Physics Engine (handles <b>collision testing</b>) </li>
-                    <li> Graphics Engine <b>(rendering, lighting, post processing, basic geometry like cubes, spheres) </b></li>
-                    <li> Networking API <b>(avoids having to do low level networking) </b></li>
-                    <li> Basic map, sounds </li>
-                </ol>
-            </p>
-            <br>
-            <br>
-            <p>
-     
-                <b> What we hope to deliver: </b>
-                <ol>
-                        <li>  <b>Shaders that will stylize the game,</b> for example cel or watercolor shading </li>
-                        <li> <b>Procedurally generated environments</b> (eg: asteroid fields, buildings, ground) </li>
-                        <li> <b>(Networked) relatively accurate physics interactions</b> (eg: player or projectiles pushing boxes) </li>
-                        <li> <b>Procedural/Physically based animations.</b> (eg: creating cool animated bosses, such as a flying worm, or being able to slice through meshes using a sword)</li>
-                </ol>
-                <p> For the character: </p>
-                <ol>
-                        <li> <b>Physics-based movement</b> </li>
-                        <li> Ability to <b>attach grapple hook and grapple to physics objects, </b>relatively realistically </li>
-                        <li> <b>“Gravity snapping” to surfaces </b>(ie: running into surface will flip your up direction to be the surface normal) </li>
-                </ol>
-            </p>
+            <h2>
+                <a href="https://docs.google.com/presentation/d/1AGNqRn18wQXYfcWwRnpRfwFbBYm0yIN2ywUvcIQo9uQ/edit?usp=sharing" target="_new">
+                    Slides (click me)
+                </a>
+            </h2>
 
-                   <p>
-            As for performance, of course we can measure framerate of the game to ensure we keep the game playable, but also number of draw calls, function calls, etc. using the Godot profiler (the less, the better).
-            </p>
-                        <br>
-            <br>
-            <p><b> What we plan to deliver: </b></p>
-            <p>
-            It may not be feasible to deliver on all of this, especially physics interactions since we’d essentially be rewriting the physics engine, and procedural/physically based animations in general may take a long time to first figure out how to manipulate meshes in the engine, then to do all the physics/math to get it working.
-            </p>
-            <p>
-            However, at a baseline we should do <b> networked physics for the player, shaders, procedurally generated environments, and at least a single boss with some procedurally animations.</b> Below is our planned schedule:
-
-            </p>
-     
             
           </div>
        </div>
@@ -158,14 +219,19 @@
       <div class="row">
         <div class="col-xs-12 col-md-8 col-md-offset-2">
           <div class="text-center">
-            <h2>Schedule</h2>
+            <h2>Reflection and Schedule (Modified)</h2>
+            <p>
+                So learning Godot took a little bit more time than expected (time conflicts and all), but we wrapped up custom physics for the player, and it is pretty much multiplayer ready. We also did some relatively simple random asteroid generation, and
+                wrapped up procedural animations for the worm, and some other shaders.
+                Overall we are on schedule, with some slight setbacks.
+            </p>
             <p>
             Week:
                 <ol>
-                    <li> Learning Godot Engine/working on shaders (probably overall style shader) </li>
-                    <li> Wrap up overall shader, procedural terrain, custom physics for player </b></li>
-                    <li> Shaders (if needed for custom meshes, or for example mesh deformation for slicing objects), procedural animation, custom physics for other objects </b></li>
-                    <li> More shaders, custom physics and procedural animations (bosses, such as worm) </li>
+                    <li> Learning Godot Engine/working on shaders <em>DONE</em> </li>
+                    <li> Some shaders, custom physics for player, some procedural animation (worm) <em>DONE</em></li>
+                    <li> Shaders, procedural terrain and animation, custom physics for other objects </b></li>
+                    <li> More shaders, custom physics and procedural animations (other bosses) </li>
                 </ol>
             </p>
           </div>
@@ -174,32 +240,6 @@
     </div>
   </div>
   
-        <div class="section-container">
-    <div class="container">
-      <div class="row">
-        <div class="col-xs-12 col-md-8 col-md-offset-2">
-          <div class="text-center">
-            <h2>Resources</h2>
-            <p>
-                <ol>
-                    <li> <a href="godotengine.org/" title=""> Godot Engine website</a></li>
-                    <li> <a href="https://docs.godotengine.org/en/stable/getting_started/step_by_step/index.html" title=""> Godot Docs</a></li>
-                    <li> <a href="https://www.youtube.com/channel/UCNaPQ5uLX5iIEHUCLmfAgKg" title=""> KidsCanCode (Godot Videos)</a></li>
-                    <li> <a href="https://www.toptal.com/game/video-game-physics-part-i-an-introduction-to-rigid-body-dynamics" title=""> Intro to Rigid Body Dynamics</a> </li>
-                    <li> <a href="http://www.andreasaristidou.com/publications/papers/FABRIK.pdf" title=""> FABRIK Inverse Kinematics</a> </li>
-                    <li> <a href="http://web.mit.edu/cesium/Public/terrain.pdf" title=""> Realtime Terrain Generation</a> </li>
-                    
-                </ol>
-            </p>
-
-
-            
-          </div>
-       </div>
-      </div>
-    </div>
-  </div>
-
 
 
 <!--
