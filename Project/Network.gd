@@ -2,11 +2,10 @@ extends Node
 
 const PORT := 8070
 
-
 const GAME_PATH := "/root/Game"
 var players := {}
 
-func host() -> void:
+func host(game_scene := G.GAME_SCENE) -> void:
 	
 	# Standard
 	var peer = NetworkedMultiplayerENet.new()
@@ -26,7 +25,7 @@ func host() -> void:
 #	var world = load(GAME_SCENE).instance()
 #	get_tree().get_root().add_child(world)
 #	get_node("/root/MainMenu").queue_free()
-	if get_tree().change_scene(G.GAME_SCENE) != OK:
+	if get_tree().change_scene(game_scene) != OK:
 		print("ERROR: COULDN'T LOAD GAME")
 
 

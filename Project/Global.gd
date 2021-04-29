@@ -1,7 +1,7 @@
 extends Node
 
 # Groups
-#const ENEMY := "E"
+const ENEMY := "EN"
 const LASER := "L"
 const EXPL := "E"
 const WORM_BODY := "WB"

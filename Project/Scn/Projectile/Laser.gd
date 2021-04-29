@@ -3,9 +3,9 @@ extends Projectile
 var rot := .05
 
 func _on_Laser_body_entered(body) -> void:
-	if body.is_in_group("Enemy"):
-		# Kill enemy
-		body.rpc("d")
+	if body.is_in_group(G.ENEMY):
+		# Damage enemy
+		body.dmg(global_transform.origin)
 		
 #		# Get a particle going
 #		G.game.exp_i = (G.game.exp_i + 1) % G.game.num_explosions

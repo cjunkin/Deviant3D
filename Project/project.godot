@@ -10,6 +10,11 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "KinematicBody",
+"class": "Box",
+"language": "GDScript",
+"path": "res://TODO_PHYSICS/Box.gd"
+}, {
+"base": "KinematicBody",
 "class": "Enemy",
 "language": "GDScript",
 "path": "res://Scn/Actor/Enemy/Enemy.gd"
@@ -60,6 +65,7 @@ _global_script_classes=[ {
 "path": "res://Unused/GOPRO_WORM/WormGO_PRO_MODE.gd"
 } ]
 _global_script_class_icons={
+"Box": "",
 "Enemy": "",
 "Game": "",
 "Hook": "",

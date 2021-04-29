@@ -37,7 +37,7 @@ var rng := RandomNumberGenerator.new()
 func gen_terrain():
 	rng.seed = G.TERRAIN_SEED
 	
-	var start : float = -NUM_PTS * SPACING / 2
+	var start : float = -NUM_PTS * SPACING / 2.0
 	var pts := PoolVector2Array([])
 	for y in range(start, SPACING * NUM_PTS + start, SPACING):
 		for x in range(start, SPACING * NUM_PTS + start, SPACING):

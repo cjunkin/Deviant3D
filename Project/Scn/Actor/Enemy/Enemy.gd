@@ -9,7 +9,7 @@ var speed := -2
 var grav := 1
 var acc := Vector3()
 export var friction := .125
-
+var hp := 1
 
 func _ready() -> void:
 	add_to_group("Enemy")
@@ -35,6 +35,12 @@ func set_target(t) -> void:
 #		rpc("d")
 
 # MULTIPLAYER STUFF --------------------------------------------
+
+# Damage
+func dmg(_hitpoint: Vector3, dmg := 1) -> void:
+	hp -= dmg
+	if hp <= 0:
+		rpc("d")
 
 # Die
 remotesync func d() -> void:
