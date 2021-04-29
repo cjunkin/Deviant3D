@@ -1,12 +1,12 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Scn/Lvl/Land.gd" type="Script" id=1]
-[ext_resource path="res://Gfx/Material/land.tres" type="Material" id=2]
+[ext_resource path="res://Gfx/Material/land.material" type="Material" id=2]
 [ext_resource path="res://Gfx/Model/Island/Material_009.material" type="Material" id=3]
-[ext_resource path="res://Gfx/Model/Island/Material_008.material" type="Material" id=4]
+[ext_resource path="res://Gfx/Material/grass.material" type="Material" id=4]
 
 [node name="Land" type="Spatial"]
 script = ExtResource( 1 )
-land_mat = ExtResource( 4 )
-grass_mat = ExtResource( 2 )
+land_mat = ExtResource( 2 )
+grass_mat = ExtResource( 4 )
 water_mat = ExtResource( 3 )

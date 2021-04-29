@@ -30,9 +30,11 @@ var points := PoolIntArray([
 	5, 14, 23  # h
 	])
 
+var rng := RandomNumberGenerator.new()
+
+# TODO: make it a plane
 
 func gen_terrain():
-	var rng := RandomNumberGenerator.new()
 	rng.seed = G.TERRAIN_SEED
 	
 	var start : float = -NUM_PTS * SPACING / 2
@@ -74,6 +76,7 @@ func gen_terrain():
 			)
 
 func create_cube_from(a, b, c, d, start := 0.0, height := 5.0, rand_offset := 0, mat = null) -> void:
+	
 	var cube_mesh := CubeMesh.new()
 	var cube_arrays := cube_mesh.get_mesh_arrays()
 
@@ -93,7 +96,7 @@ func create_cube_from(a, b, c, d, start := 0.0, height := 5.0, rand_offset := 0,
 			var index := points[i + j]
 			arrays[ArrayMesh.ARRAY_VERTEX][index] = pt
 			index = points[i + j + 3]
-			arrays[ArrayMesh.ARRAY_VERTEX][index] = pt + up
+			arrays[ArrayMesh.ARRAY_VERTEX][index] = pt + up # TODO: random slants + Vector3(0, rng.randf(), 0)
 		j += 6
 
 
