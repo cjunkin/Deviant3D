@@ -16,7 +16,6 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 # physics_process has a steady 60 fps, whereas process does it as fast as possible
 func _physics_process(delta: float) -> void:
-	
 	"""TODO: try uncommenting this/commenting this"""
 	acc += grav * delta
 #	vel += acc
@@ -45,7 +44,7 @@ func dmg(hitpt: Vector3, _amt := 1) -> void:
 	e.scale = Vector3.ONE
 	e.emitting = true
 
-	# Remove self 
+	# Remove self if hp <= 0
 #	get_parent().remove_child(self)
 
 	"""TODO: YOUR CODE HERE --------------------------------- get pushed around physics all that"""
