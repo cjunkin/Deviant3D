@@ -10,6 +10,7 @@ const WORM_BODY := "WB"
 const MENU_SCENE := "res://Scn/MainMenu.tscn"
 #const GAME_SCENE := "res://Scn/Lvl/Level.tscn"
 const GAME_SCENE := "res://Game.tscn"
+var TERRAIN_SEED : int
 
 # Settings
 const SFX_BUS := 1

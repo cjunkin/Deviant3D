@@ -627,7 +627,7 @@ puppetsync func v() -> void:
 
 # Respawn
 puppetsync func respawn() -> void:
-	translation = Vector3(0, 12, 0)
+	translation = Vector3(0, 100, 0)
 	vel = Vector3.ZERO
 	rotation = Vector3.ZERO
 	newest_normal = Vector3.UP

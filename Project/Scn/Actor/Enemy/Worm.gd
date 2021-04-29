@@ -9,6 +9,7 @@ const speed := 100
 const HALF_RADIUS := 6
 const NUM_BODY_SEGS := 48
 func _ready():
+	queue_free()
 	# Make NUM_BODY_SEGS body segments
 	for i in range(NUM_BODY_SEGS):
 		var body_seg := body_seg_s.instance()

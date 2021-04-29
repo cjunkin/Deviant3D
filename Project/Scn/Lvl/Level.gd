@@ -41,7 +41,6 @@ onready var Anim := $HUD/Anim
 onready var Msg := $HUD/Msg
 
 # RNG
-var TERRAIN_SEED : int
 var spawn_rng := RandomNumberGenerator.new()
 
 # Networking
@@ -211,7 +210,7 @@ func request_current_data() -> void:
 master func sen_seed() -> void:
 	# Send seed and our current spawn timer's time
 	var new_spawn_seed := randi() % 2048
-	rpc("set_cur", TERRAIN_SEED, new_spawn_seed)
+	rpc("set_cur", G.TERRAIN_SEED, new_spawn_seed)
 	spawn_rng.seed = new_spawn_seed
 
 
