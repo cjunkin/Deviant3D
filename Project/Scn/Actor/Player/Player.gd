@@ -298,7 +298,7 @@ func _physics_process(delta: float) -> void:
 	if is_network_master():
 		# Set laser sight alpha
 		if Input.is_action_pressed("fire"):
-			LaserSight.material.albedo_color.a = .25
+			LaserSight.material.albedo_color.a = .125
 		else:
 			LaserSight.material.albedo_color.a = .01
 

@@ -126,5 +126,9 @@ func create_cube_from(vertices: PoolVector2Array, points: PoolIntArray, start :=
 	mesh_inst.material_override = mat
 	add_child(mesh_inst)
 	mesh_inst.create_trimesh_collision()
+	for child in mesh_inst.get_children():
+		if child is StaticBody:
+			child.set_collision_mask_bit(1, true)
+			child.set_collision_mask_bit(2, true)
 
 
