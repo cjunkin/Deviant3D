@@ -249,6 +249,8 @@ puppet func set_cur(terrain_seed: int, spawn_seed: int) -> void:
 		emit_signal("received_data")
 		spawn_rng.seed = spawn_seed
 		gen_boxes(terrain_seed)
+		# Land
+		$Land.gen_terrain(terrain_seed)
 
 # Recieve current spawn_time, should only be called on non-host
 puppet func set_time(spawn_time_left: float) -> void:

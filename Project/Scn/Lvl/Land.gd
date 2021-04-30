@@ -5,14 +5,14 @@ export (Material) var land_mat : Material
 export (Material) var grass_mat : Material
 export (Material) var water_mat : Material
 const NUM_PTS := 35
-const SPACING := 8
-const RAND_OFFSET_MAX := SPACING / 4
+const SPACING := 8.0
+const RAND_OFFSET_MAX := SPACING / 4.0
 
 var rng := RandomNumberGenerator.new()
 
 # TODO: make it a plane
 
-func gen_terrain():
+func gen_terrain(s := G.TERRAIN_SEED) -> void:
 	# Cube looks like 
 	#    e-------f
 	#   /|      /|
@@ -35,16 +35,27 @@ func gen_terrain():
 	5, 14, 23  # h
 	])
 	
-	rng.seed = G.TERRAIN_SEED
+	rng.seed = s
 	
 	var start : float = -NUM_PTS * SPACING / 2.0
 	var pts := PoolVector2Array([])
+	var should_offset := false
 	for y in range(start, SPACING * NUM_PTS + start, SPACING):
 		for x in range(start, SPACING * NUM_PTS + start, SPACING):
-			pts.append(Vector2(x, y) + (Vector2(rng.randf(), rng.randf()) - Vector2.ONE * .5) * RAND_OFFSET_MAX * 2)
+			pts.append(
+				Vector2(
+					x, 
+					y )# + int(should_offset) * SPACING / 2)
+				 # initial point
+				+ (Vector2(
+					rng.randf(), 
+					rng.randf()
+				) - Vector2.ONE * .5) * RAND_OFFSET_MAX * 2 # random offset
+			)
+			should_offset = !should_offset
 	
 	var noise := OpenSimplexNoise.new()
-	noise.seed = G.TERRAIN_SEED
+	noise.seed = s
 	noise.octaves = 4
 	noise.period = 20
 	noise.persistence = .8
