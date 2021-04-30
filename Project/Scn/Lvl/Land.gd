@@ -4,19 +4,24 @@ export var grid_mat : Material = preload("res://Gfx/Material/Grid.tres")
 export (Material) var land_mat : Material
 export (Material) var grass_mat : Material
 export (Material) var water_mat : Material
-const NUM_PTS := 38
+const NUM_PTS := 35
 const SPACING := 8
 const RAND_OFFSET_MAX := SPACING / 4
 
-# Cube looks like 
-#    e-------f
-#   /|      /|
-#  / |     / |
-# a--|----b  |
-# |  g----|--h
-# | /     | /
-# c-------d
-var points := PoolIntArray([
+var rng := RandomNumberGenerator.new()
+
+# TODO: make it a plane
+
+func gen_terrain():
+	# Cube looks like 
+	#    e-------f
+	#   /|      /|
+	#  / |     / |
+	# a--|----b  |
+	# |  g----|--h
+	# | /     | /
+	# c-------d
+	var points := PoolIntArray([
 	0, 11, 18, # a
 	4, 15, 17, # c
 
@@ -29,12 +34,7 @@ var points := PoolIntArray([
 	1, 10, 20, # f
 	5, 14, 23  # h
 	])
-
-var rng := RandomNumberGenerator.new()
-
-# TODO: make it a plane
-
-func gen_terrain():
+	
 	rng.seed = G.TERRAIN_SEED
 	
 	var start : float = -NUM_PTS * SPACING / 2.0
@@ -49,9 +49,15 @@ func gen_terrain():
 	noise.period = 20
 	noise.persistence = .8
 	
+	var vertices := PoolVector2Array([Vector2.ZERO, Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
+	var ignored_normals := PoolIntArray([
+			8, 10, 12, 14, # right
+			9, 11, 13, 15 # left
+	])
+	# var top_bot := [16, 18, 20, 22, 17, 19, 21, 23]
 	for y in range(NUM_PTS - 1):
 		for x in range(NUM_PTS - 1):
-			var rand_height := (noise.get_noise_2d(x + rng.randf() - .5, y + rng.randf() - .5) + .9) * 4
+			var rand_height := (noise.get_noise_2d(x + rng.randf() - .5, y + rng.randf() - .5) + .9) * 4.0
 #			print(rand_height)
 			var mat: Material
 			if rand_height < 3.5:
@@ -64,27 +70,29 @@ func gen_terrain():
 			else:
 				mat = grass_mat
 				rand_height += .1
+			vertices[0] = pts[x + y * NUM_PTS]
+			vertices[1] = pts[x + 1 + y * NUM_PTS]
+			vertices[2] = pts[x + (y + 1) * NUM_PTS]
+			vertices[3] = pts[x + 1 + (y + 1) * NUM_PTS]
 			create_cube_from(
-				pts[x + y * NUM_PTS], 
-				pts[x + 1 + y * NUM_PTS], 
-				pts[x + (y + 1) * NUM_PTS], 
-				pts[x + 1 + (y + 1) * NUM_PTS],
-				-8,
-				4,
-				rand_height,
-				mat
+				vertices,
+				points,
+				-8.0,
+				4.0 + rand_height,
+				mat,
+				ignored_normals
 			)
 
-func create_cube_from(a, b, c, d, start := 0.0, height := 5.0, rand_offset := 0, mat = null) -> void:
+func create_cube_from(vertices: PoolVector2Array, points: PoolIntArray, start := 0.0, height := 5.0, mat = null, ignored_normals := PoolIntArray([])) -> void:
 	
 	var cube_mesh := CubeMesh.new()
 	var cube_arrays := cube_mesh.get_mesh_arrays()
 
-	a = Vector3(a.x, start, a.y)
-	b = Vector3(b.x, start, b.y)
-	c = Vector3(c.x, start, c.y)
-	d = Vector3(d.x, start, d.y)
-	var up := Vector3(0, height + rand_offset, 0)
+	var a := Vector3(vertices[0].x, start, vertices[0].y)
+	var b := Vector3(vertices[1].x, start, vertices[1].y)
+	var c := Vector3(vertices[2].x, start, vertices[2].y)
+	var d := Vector3(vertices[3].x, start, vertices[3].y)
+	var up := Vector3(0, height, 0)
 	var cube_vertices : PoolVector3Array = cube_arrays[ArrayMesh.ARRAY_VERTEX]
 	var arrays := []
 	arrays.resize(ArrayMesh.ARRAY_MAX)
@@ -103,9 +111,9 @@ func create_cube_from(a, b, c, d, start := 0.0, height := 5.0, rand_offset := 0,
 	arrays[ArrayMesh.ARRAY_NORMAL] = cube_arrays[ArrayMesh.ARRAY_NORMAL]
 
 
-	var top_bot := [16, 18, 20, 22, 17, 19, 21, 23]
+
 	for i in range(arrays[ArrayMesh.ARRAY_NORMAL].size()):
-		if (i in top_bot):
+		if !(i in ignored_normals):
 			arrays[ArrayMesh.ARRAY_NORMAL][i] *= -1
 
 	arrays[ArrayMesh.ARRAY_INDEX] = cube_arrays[ArrayMesh.ARRAY_INDEX]

@@ -3,7 +3,7 @@ extends Game
 
 func _ready():
 	# Land
-#	$Land.gen_terrain()
+	$Land.gen_terrain()
 	
 	# Enemies
 #	enemies.resize(num_enemies)
