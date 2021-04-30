@@ -1,4 +1,4 @@
-class_name ShakeCamera
+class_name ShakyCam
 extends Camera
 
 export var maxYaw : float = 25.0
@@ -8,6 +8,7 @@ export var shakeReduction : float = 1.0
 
 var stress : float = 0.0
 var shake : float = 0.0
+
 
 var n := OpenSimplexNoise.new()
 var camera_rotation_reset := Vector3()

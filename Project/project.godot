@@ -44,10 +44,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scn/Projectile/Projectile.gd"
 }, {
-"base": "Camera",
-"class": "ShakeCamera",
+"base": "Reference",
+"class": "ShakyCam",
 "language": "GDScript",
-"path": "res://Scn/Actor/ShakyCam.gd"
+"path": "res://Scn/Cam/ShakyCam.gd"
 }, {
 "base": "Spatial",
 "class": "Text",
@@ -72,7 +72,7 @@ _global_script_class_icons={
 "Line": "",
 "Player": "",
 "Projectile": "",
-"ShakeCamera": "",
+"ShakyCam": "",
 "Text": "",
 "Worm": "",
 "WormGOPRO": ""

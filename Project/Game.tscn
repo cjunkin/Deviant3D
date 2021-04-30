@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Scn/StaticBox.tscn" type="PackedScene" id=2]
@@ -11,7 +11,6 @@
 [ext_resource path="res://Scn/Env/Rock1.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Scn/Env/Rock1R.tscn" type="PackedScene" id=10]
 [ext_resource path="res://WorldEnv.tres" type="Environment" id=11]
-[ext_resource path="res://Scn/Lvl/Land.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Gfx/2D/Reticule.svg" type="Texture" id=13]
 [ext_resource path="res://Gfx/Model/Island/Material_012.material" type="Material" id=14]
 [ext_resource path="res://Gfx/Font/Typori-Regular.ttf" type="DynamicFontData" id=15]
@@ -496,8 +495,5 @@ transform = Transform( 1.11542, 4.46487, -6.54376, 7.60949, 1.23349, 2.13871, 2.
 
 [node name="banana" parent="." instance=ExtResource( 17 )]
 transform = Transform( 7.22438, -14.2534, -0.805737, 12.8748, 6.1147, 7.26974, -6.16823, -3.93082, 14.2303, 38.4704, -12.8663, -252.978 )
-
-[node name="Land" parent="." instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -117.876 )
 
 [connection signal="timeout" from="EnemySpawnTime" to="." method="_on_EnemySpawnTime_timeout"]

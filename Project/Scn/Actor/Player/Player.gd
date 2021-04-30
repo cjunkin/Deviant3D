@@ -35,13 +35,13 @@ var L_not_grapplin := true
 var grapple_pos2 := Vector3.ZERO
 
 # File Paths
-export(String, FILE) var cam_path
+export(String, FILE) var cam_spring_path
 export(String, FILE) var flippers_path
 
 # Cached Nodes
 #export(NodePath) var flash
 onready var CamSpring : SpringArm
-onready var Cam : Camera
+onready var Cam : ShakyCam
 onready var CamX := $CamX
 onready var GrappleSfx := CamX.get_node("GrappleSfx")
 onready var MeshHelp := CamX.get_node("MeshHelp")
@@ -66,11 +66,13 @@ onready var tween := $Tween
 var LaserSight : CSGCylinder
 var RespawnTime : Timer
 #onready var Flash : OmniLight = get_node(flash)
-
 #onready var CamHolder :Spatial = CamY.get_node("CamHolder")
+
+onready var forward : RayCast
+
 func _ready() -> void:
 # THis is to draw the vel, grapple_aim, etc vectors don't need rn
-#	DebugOverlay.draw.add_vector(self, "vel", 1, 4, Color(0,1,0, 0.5))
+#	DebugOverlay.draw.add_vector(self, "aim", 1, 4, Color(0,1,0, 0.5))
 #	DebugOverlay.draw.add_vector(self, "grapple_aim", 1, 4, Color(0,1,1, 0.5))
 #	DebugOverlay.draw.add_vector(self, "global_transform:basis:x", 1, 4, Color(1,1,1, 0.5))
 	
@@ -88,6 +90,17 @@ func _ready() -> void:
 	LHook.name = "L"
 	G.game.hooks.append(LHook)
 
+	# TODO: Find way to animate camera without using CamHolder 
+	var CamHolder :Spatial = CamY.get_node("CamHolder") 
+	# CamHolder is needed so walking anims doesn't affect gun rotation
+	CamSpring = load(cam_spring_path).instance()
+	CamHolder.add_child(CamSpring)
+#			Cam = CamSpring.get_node("ViewportContainer/Viewport/Cam")
+	Cam = load("res://Scn/Cam/ShakyCam.tscn").instance()
+	CamSpring.add_child(Cam)
+	forward = CamSpring.get_node("Forward")
+	forward.add_exception(self)
+
 	# TODO: implement wall climb (maybe not)
 #	Engine.time_scale = .1
 	translation = Vector3(7 + rand_range(-2, 2), 17, -14 + rand_range(-2, 2))
@@ -95,13 +108,6 @@ func _ready() -> void:
 		# Regular cam
 		if OS.get_name() != "Android" and OS.get_name() != "iOS":
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-			# TODO: Find way to animate camera without using CamHolder 
-			var CamHolder :Spatial = CamY.get_node("CamHolder") 
-			# CamHolder is needed so walking anims doesn't affect gun rotation
-			CamHolder.add_child(load(cam_path).instance())
-			CamSpring = CamHolder.get_node("Spring")
-#			Cam = CamSpring.get_node("ViewportContainer/Viewport/Cam")
-			Cam = CamSpring.get_node("Cam")
 			reparent_sound(Sfx)
 			reparent_sound(GrappleSfx)
 		
@@ -307,7 +313,6 @@ func _input(event: InputEvent) -> void:
 				PI/2
 				) # Up down
 			
-				
 		# This was me playing around with rotation that wrapped around, rather than 
 		# capping up/down as 90 degrees and -90 degrees
 #			CamY.rotation.x = CamY.rotation.x + (event.relative.y * SENS_Y)
@@ -352,6 +357,12 @@ func _physics_process(delta: float) -> void:
 		else:
 			LaserSight.height = 256
 			LaserSight.translation.z = -128
+
+		# Point at center
+		if forward.is_colliding():
+			GunHolder.look_at(forward.get_collision_point(), transform.basis.y)
+		else:
+			GunHolder.rotation = Vector3.ZERO
 
 		# Shooting
 		if Input.is_action_pressed("fire") and ROF.is_stopped():
