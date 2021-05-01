@@ -16,6 +16,7 @@ script = ExtResource( 1 )
 gravity = NodePath("Menu/Center/Menu/Buttons/Grav")
 
 [node name="Menu" type="MarginContainer" parent="."]
+pause_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 1
@@ -48,16 +49,48 @@ margin_left = 340.0
 margin_top = 135.0
 margin_right = 940.0
 margin_bottom = 585.0
-hint_tooltip = "sdfsdf"
 
 [node name="Buttons" type="VBoxContainer" parent="Menu/Center/Menu"]
 margin_right = 600.0
 margin_bottom = 450.0
 custom_constants/separation = 12
 
-[node name="Sensitivity" type="HBoxContainer" parent="Menu/Center/Menu/Buttons"]
+[node name="ViewDist" type="HBoxContainer" parent="Menu/Center/Menu/Buttons"]
 margin_right = 600.0
 margin_bottom = 39.0
+
+[node name="Label" type="Label" parent="Menu/Center/Menu/Buttons/ViewDist"]
+margin_right = 198.0
+margin_bottom = 39.0
+hint_tooltip = "Lowering helps y'all potato PCs"
+mouse_filter = 0
+mouse_default_cursor_shape = 16
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+text = "View Length "
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ViewSlider" type="HSlider" parent="Menu/Center/Menu/Buttons/ViewDist"]
+modulate = Color( 0.694118, 0.815686, 1, 1 )
+margin_left = 202.0
+margin_right = 600.0
+margin_bottom = 39.0
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+min_value = 64.0
+max_value = 8192.0
+step = 0.1
+value = 1536.0
+
+[node name="Sensitivity" type="HBoxContainer" parent="Menu/Center/Menu/Buttons"]
+margin_top = 51.0
+margin_right = 600.0
+margin_bottom = 90.0
 
 [node name="Label" type="Label" parent="Menu/Center/Menu/Buttons/Sensitivity"]
 margin_right = 198.0
@@ -89,10 +122,10 @@ value = 2.0
 
 [node name="Grav" type="CheckButton" parent="Menu/Center/Menu/Buttons"]
 modulate = Color( 0.705882, 0.823529, 1, 1 )
-margin_top = 51.0
+margin_top = 102.0
 margin_right = 600.0
-margin_bottom = 142.0
-hint_tooltip = "O.O"
+margin_bottom = 176.0
+hint_tooltip = "O_O wot"
 mouse_default_cursor_shape = 2
 size_flags_vertical = 3
 custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
@@ -106,9 +139,9 @@ align = 1
 
 [node name="Flip" type="CheckButton" parent="Menu/Center/Menu/Buttons"]
 modulate = Color( 0.705882, 0.823529, 1, 1 )
-margin_top = 154.0
+margin_top = 188.0
 margin_right = 600.0
-margin_bottom = 245.0
+margin_bottom = 262.0
 hint_tooltip = "Whether surfaces are magnets ;P"
 mouse_default_cursor_shape = 2
 size_flags_vertical = 3
@@ -122,9 +155,9 @@ text = "FlipDeeDoo Activator"
 align = 1
 
 [node name="Sound" type="HBoxContainer" parent="Menu/Center/Menu/Buttons"]
-margin_top = 257.0
+margin_top = 274.0
 margin_right = 600.0
-margin_bottom = 296.0
+margin_bottom = 313.0
 
 [node name="Label" type="Label" parent="Menu/Center/Menu/Buttons/Sound"]
 margin_right = 198.0
@@ -153,9 +186,9 @@ max_value = 1.0
 step = 0.01
 
 [node name="Music" type="HBoxContainer" parent="Menu/Center/Menu/Buttons"]
-margin_top = 308.0
+margin_top = 325.0
 margin_right = 600.0
-margin_bottom = 347.0
+margin_bottom = 364.0
 
 [node name="Label" type="Label" parent="Menu/Center/Menu/Buttons/Music"]
 margin_right = 198.0
@@ -185,7 +218,7 @@ step = 0.01
 
 [node name="Quit" type="Button" parent="Menu/Center/Menu/Buttons"]
 modulate = Color( 0.698039, 0.815686, 1, 1 )
-margin_top = 359.0
+margin_top = 376.0
 margin_right = 600.0
 margin_bottom = 450.0
 rect_min_size = Vector2( 0, 64 )
@@ -195,8 +228,10 @@ size_flags_vertical = 3
 text = "Quit to Main Menu"
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
 bus = "Music"
 
+[connection signal="value_changed" from="Menu/Center/Menu/Buttons/ViewDist/ViewSlider" to="." method="_on_ViewSlider_value_changed"]
 [connection signal="value_changed" from="Menu/Center/Menu/Buttons/Sensitivity/SensSlider" to="." method="_on_SensSlider_value_changed"]
 [connection signal="toggled" from="Menu/Center/Menu/Buttons/Grav" to="." method="_on_Grav_toggled"]
 [connection signal="toggled" from="Menu/Center/Menu/Buttons/Flip" to="." method="_on_Flip_toggled"]

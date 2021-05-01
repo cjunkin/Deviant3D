@@ -9,7 +9,7 @@ var rng := RandomNumberGenerator.new()
 
 # TODO: make it a plane
 
-func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 35, SPACING := 8.0) -> void:
+func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 35, SPACING := 32.0) -> void:
 	var RAND_OFFSET_MAX := SPACING / 4.0
 	# Cube looks like 
 	#    e-------f
@@ -70,38 +70,40 @@ func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 35, SPACING := 8.0) -> void:
 #			print(rand_height)
 			var mat: Material
 			if rand_height < 3.5:
-				mat = water_mat
-				rand_height -= 3
+				continue
+#				mat = water_mat
+#				rand_height -= 3
 			elif rand_height < 4.25:
 				mat = land_mat
 #			elif rand_height < 6:
 #				mat = land_mat
 			else:
 				mat = grass_mat
-				rand_height += .1
+				rand_height += .5
 			vertices[0] = pts[x + y * NUM_PTS]
 			vertices[1] = pts[x + 1 + y * NUM_PTS]
 			vertices[2] = pts[x + (y + 1) * NUM_PTS]
 			vertices[3] = pts[x + 1 + (y + 1) * NUM_PTS]
+			var rand_bottom := rng.randf() * 5
 			create_cube_from(
 				vertices,
 				points,
-				-8.0,
-				4.0 + rand_height,
+				rand_bottom,
+				rand_height + 5.5,
 				mat,
 				ignored_normals
 			)
 
-func create_cube_from(vertices: PoolVector2Array, points: PoolIntArray, start := 0.0, height := 5.0, mat = null, ignored_normals := PoolIntArray([])) -> void:
+const START := -8.0
+func create_cube_from(vertices: PoolVector2Array, points: PoolIntArray, bottom := 0.0, height := 5.0, mat = null, ignored_normals := PoolIntArray([])) -> void:
 	
 	var cube_mesh := CubeMesh.new()
 	var cube_arrays := cube_mesh.get_mesh_arrays()
 
-	var a := Vector3(vertices[0].x, start, vertices[0].y)
-	var b := Vector3(vertices[1].x, start, vertices[1].y)
-	var c := Vector3(vertices[2].x, start, vertices[2].y)
-	var d := Vector3(vertices[3].x, start, vertices[3].y)
-	var up := Vector3(0, height, 0)
+	var a := Vector3(vertices[0].x, START, vertices[0].y)
+	var b := Vector3(vertices[1].x, START, vertices[1].y)
+	var c := Vector3(vertices[2].x, START, vertices[2].y)
+	var d := Vector3(vertices[3].x, START, vertices[3].y)
 	var cube_vertices : PoolVector3Array = cube_arrays[ArrayMesh.ARRAY_VERTEX]
 	var arrays := []
 	arrays.resize(ArrayMesh.ARRAY_MAX)
@@ -111,9 +113,10 @@ func create_cube_from(vertices: PoolVector2Array, points: PoolIntArray, start :=
 	for pt in [a,b,c,d]:
 		for i in range(3):
 			var index := points[i + j]
-			arrays[ArrayMesh.ARRAY_VERTEX][index] = pt
+			arrays[ArrayMesh.ARRAY_VERTEX][index] = pt - Vector3(0, bottom, 0)
 			index = points[i + j + 3]
-			arrays[ArrayMesh.ARRAY_VERTEX][index] = pt + up # TODO: random slants + Vector3(0, rng.randf(), 0)
+			arrays[ArrayMesh.ARRAY_VERTEX][index] = pt + Vector3(0, height, 0)
+			# TODO: random slants + Vector3(0, rng.randf(), 0)
 		j += 6
 
 

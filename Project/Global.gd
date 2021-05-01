@@ -74,16 +74,25 @@ func _ready() -> void:
 				if c is Slider:
 					c.connect("mouse_exited", self, "mouse_exit", [c])
 
+func pause(enabled := true) -> void:
+	current_player.set_process_input(!enabled)
+	game.set_physics_process(!enabled)
+	current_player.set_physics_process(!enabled)
+	for boss in game.bosses:
+		if is_instance_valid(boss):
+			boss.set_physics_process(!enabled)
+
 func _input(event: InputEvent) -> void:
 	# Pause
 	if event.is_action_pressed("ui_cancel"):
 		# TODO: reduce to no if/else
 		# Pause
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-			current_player.set_process_input(false)
+			
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			Menu.visible = true
-			get_tree().paused = Network.players.size() <= 1
+			# Pause
+			pause(Network.players.size() <= 1)
 			current_player.rpc("R")
 			current_player.rpc("L")
 #			print(ProjectSettings.get_setting("gui/timers/tooltip_delay_sec"))
@@ -102,8 +111,8 @@ func _input(event: InputEvent) -> void:
 				gravity_changed = false
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 			Menu.visible = false
-			current_player.set_process_input(true)
-			get_tree().paused = false
+			# Unpause
+			pause(false)
 
 	# Fullscreen
 	elif event.is_action_pressed("fullscreen"):
@@ -115,6 +124,7 @@ func start_game(player: Player) -> void:
 	SSlider.value = db2linear(AudioServer.get_bus_volume_db(SFX_BUS))
 	MSlider.value = db2linear(AudioServer.get_bus_volume_db(MUSIC_BUS))
 	current_player = player
+	player.Cam.far = $Menu/Center/Menu/Buttons/ViewDist/ViewSlider.value
 	$Menu/Center/Menu/Buttons/Grav.pressed = current_player.g
 	Flip.pressed = true # TODO: Fix hardcode
 	set_process_input(true)
@@ -194,3 +204,7 @@ func _on_Grav_toggled(button_pressed: bool) -> void:
 	else:
 		Grav.modulate = G.deactivated_color
 
+
+
+func _on_ViewSlider_value_changed(value: float) -> void:
+	current_player.Cam.far = value

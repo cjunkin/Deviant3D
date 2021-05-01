@@ -6,5 +6,5 @@
 cull_mask = 524287
 current = true
 near = 0.01
-far = 8192.0
+far = 4096.0
 script = ExtResource( 1 )

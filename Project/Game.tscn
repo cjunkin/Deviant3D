@@ -379,37 +379,37 @@ void fragment(){
 	SPECULAR = 1f;
 }"
 
-[sub_resource type="OpenSimplexNoise" id=13]
+[sub_resource type="OpenSimplexNoise" id=12]
 octaves = 1
 period = 8.0
 
-[sub_resource type="NoiseTexture" id=14]
-noise = SubResource( 13 )
+[sub_resource type="NoiseTexture" id=13]
+noise = SubResource( 12 )
 
-[sub_resource type="OpenSimplexNoise" id=15]
+[sub_resource type="OpenSimplexNoise" id=14]
 octaves = 1
 period = 0.1
 
-[sub_resource type="NoiseTexture" id=16]
-noise = SubResource( 15 )
+[sub_resource type="NoiseTexture" id=15]
+noise = SubResource( 14 )
 
-[sub_resource type="OpenSimplexNoise" id=17]
+[sub_resource type="OpenSimplexNoise" id=16]
 seed = 30
 octaves = 1
 period = 256.0
 
-[sub_resource type="NoiseTexture" id=18]
+[sub_resource type="NoiseTexture" id=17]
 seamless = true
 as_normalmap = true
-noise = SubResource( 17 )
+noise = SubResource( 16 )
 
-[sub_resource type="ShaderMaterial" id=12]
+[sub_resource type="ShaderMaterial" id=18]
 shader = SubResource( 11 )
 shader_param/color = Color( 0.239216, 0.427451, 0.490196, 0.466667 )
 shader_param/edge_color = Color( 0.831373, 0.831373, 0.831373, 1 )
-shader_param/noise1 = SubResource( 14 )
-shader_param/noise2 = SubResource( 16 )
-shader_param/normalmap = SubResource( 18 )
+shader_param/noise1 = SubResource( 13 )
+shader_param/noise2 = SubResource( 15 )
+shader_param/normalmap = SubResource( 17 )
 
 [node name="Game" type="Spatial"]
 script = ExtResource( 1 )
@@ -615,7 +615,6 @@ transform = Transform( 7.22438, -14.2534, -0.805737, 12.8748, 6.1147, 7.26974, -
 
 [node name="Land" parent="." instance=ExtResource( 12 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -64 )
-visible = false
 
 [node name="Rocks" type="MultiMeshInstance" parent="."]
 material_override = ExtResource( 18 )
@@ -624,6 +623,6 @@ multimesh = SubResource( 9 )
 [node name="Water" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0 )
 mesh = SubResource( 10 )
-material/0 = SubResource( 12 )
+material/0 = SubResource( 18 )
 
 [connection signal="timeout" from="EnemySpawnTime" to="." method="_on_EnemySpawnTime_timeout"]
