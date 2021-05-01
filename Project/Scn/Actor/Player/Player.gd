@@ -10,11 +10,11 @@ var SENS_Y := -.002
 var SENS_X := -.002
 
 # Physics
-puppet var g := true # gravity on/off
+puppetsync var g := true # gravity on/off
 puppet var a := Vector3.ZERO # acceleration
 var accel := Vector3.ZERO
 var vel := Vector3.ZERO
-export var grav : float= 64
+export var grav : float = 64
 export var jump : float = grav * .9
 export var friction : float = .825
 export var speed : float = 4 * friction
@@ -33,6 +33,7 @@ var not_grappling := true
 var grapple_pos := Vector3.ZERO
 var L_not_grapplin := true
 var grapple_pos2 := Vector3.ZERO
+const GEAR_MAX_ANGLE := .384 # 22 degrees
 
 # File Paths
 export(String, FILE) var cam_spring_path
@@ -65,6 +66,10 @@ onready var Hitbox := $Hitbox
 onready var tween := $Tween
 var LaserSight : CSGCylinder
 var RespawnTime : Timer
+onready var GearR := $CamX/GearR
+onready var GearL := $CamX/GearL
+onready var GearRMuzzle := GearR.get_node("Muzzle")
+onready var GearLMuzzle := GearL.get_node("Muzzle")
 #onready var Flash : OmniLight = get_node(flash)
 #onready var CamHolder :Spatial = CamY.get_node("CamHolder")
 
@@ -364,11 +369,18 @@ func _physics_process(delta: float) -> void:
 	var air_resistance := 1.0
 	var air_resistance2 := 1.0
 
-	# if Hook shot
+	# if Right Hook shot
 	if GLine.visible:
 		grapple_pos = RHook.global_transform.origin
+		GearR.global_transform = GearR.global_transform.interpolate_with(
+			GearR.global_transform.looking_at(grapple_pos, transform.basis.y), 
+			delta * 16
+		)
+		GearR.rotation.y = clamp(GearR.rotation.y, -GEAR_MAX_ANGLE, GEAR_MAX_ANGLE)
 		GLine.points[0] = grapple_pos
-		GLine.points[1] = FrontCast.global_transform.origin
+		GLine.points[1] = GearRMuzzle.global_transform.origin
+	else:
+		GearR.rotation = GearR.rotation.linear_interpolate(Vector3.ZERO, 16 * delta)
 	
 	# Hook hit
 	if !not_grappling:
@@ -389,8 +401,15 @@ func _physics_process(delta: float) -> void:
 	# if Left Hook shot
 	if LGLine.visible:
 		grapple_pos2 = LHook.global_transform.origin
+		GearL.global_transform = GearL.global_transform.interpolate_with(
+			GearL.global_transform.looking_at(grapple_pos2, transform.basis.y), 
+			delta * 16
+		)
+		GearL.rotation.y = clamp(GearL.rotation.y, -GEAR_MAX_ANGLE, GEAR_MAX_ANGLE)
 		LGLine.points[0] = grapple_pos2
-		LGLine.points[1] = FrontCast.global_transform.origin
+		LGLine.points[1] = GearLMuzzle.global_transform.origin
+	else:
+		GearL.rotation = GearL.rotation.linear_interpolate(Vector3.ZERO, 16 * delta)
 	
 	# Left Hook hit
 	if !L_not_grapplin:
@@ -463,7 +482,6 @@ puppet func r(trans: Vector3, y: float, cam_help_x: float, v: Vector3) -> void:
 	s(trans, y, cam_help_x, v)
 	RHook.enabled = true
 	RHook.global_transform = FrontCast.global_transform
-	GLine.points[1] = Muzzle.global_transform.origin
 	G.game.add_child(RHook)
 	GLine.visible = true
 
@@ -485,7 +503,6 @@ puppet func l(trans: Vector3, y: float, cam_help_x: float, v: Vector3) -> void:
 	s(trans, y, cam_help_x, v)
 	LHook.enabled = true
 	LHook.global_transform = FrontCast.global_transform
-	LGLine.points[1] = Muzzle.global_transform.origin
 	LGLine.visible = true
 	G.game.add_child(LHook)
 
@@ -701,14 +718,14 @@ func local_grapple(right: bool) -> void:
 	if right and !RHook.is_inside_tree():
 		RHook.enabled = true
 		RHook.global_transform = FrontCast.global_transform
-		GLine.points[1] = Muzzle.global_transform.origin
+		GLine.points[1] = global_transform.origin
 		GLine.visible = true
 		G.game.add_child(RHook)
 		rpc("r", translation, CamX.rotation.y, CamY.rotation.x, vel)
 	elif !LHook.is_inside_tree():
 		LHook.enabled = true
 		LHook.global_transform = FrontCast.global_transform
-		LGLine.points[1] = Muzzle.global_transform.origin
+		LGLine.points[1] = global_transform.origin
 		LGLine.visible = true
 		G.game.add_child(LHook)
 		rpc("l", translation, CamX.rotation.y, CamY.rotation.x, vel)

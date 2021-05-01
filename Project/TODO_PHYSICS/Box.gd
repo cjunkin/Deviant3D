@@ -53,5 +53,3 @@ func dmg(hitpt: Vector3, _amt := 1) -> void:
 	# translation    gives you local coordinates (relative to parent node)
 	# TODO: END YOUR CODE HERE------------------------------------------------------------------------
 
-
-

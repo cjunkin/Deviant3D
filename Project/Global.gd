@@ -92,9 +92,11 @@ func _input(event: InputEvent) -> void:
 		# Unpause
 		else:
 			if sens_changed:
+				# Network sensitivity
 				current_player.rpc("ss", -current_player.SENS_X/1000)
 				sens_changed = false
 			if gravity_changed:
+				# Network gravity/on/off
 				current_player.rset("g", current_player.g)
 				gravity_changed = false
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -174,7 +176,7 @@ static func load_files(dir: String, ext: String = ".ogg") -> Array:
 func _on_Music_finished() -> void:
 	play_music()
 
-# Actually changes player's flip
+# Actually changes player's flip, but only locally
 func _on_Flip_toggled(button_pressed: bool) -> void:
 	current_player.toggle_flippers(button_pressed)
 	if button_pressed:
@@ -182,7 +184,7 @@ func _on_Flip_toggled(button_pressed: bool) -> void:
 	else:
 		Flip.modulate = G.deactivated_color
 
-# Actually changes player's gravity
+# Actually changes player's gravity, but only locally
 func _on_Grav_toggled(button_pressed: bool) -> void:
 	gravity_changed = true
 	current_player.g = button_pressed

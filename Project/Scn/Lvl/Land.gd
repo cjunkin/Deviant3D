@@ -4,15 +4,13 @@ export var grid_mat : Material = preload("res://Gfx/Material/Grid.tres")
 export (Material) var land_mat : Material
 export (Material) var grass_mat : Material
 export (Material) var water_mat : Material
-const NUM_PTS := 35
-const SPACING := 8.0
-const RAND_OFFSET_MAX := SPACING / 4.0
 
 var rng := RandomNumberGenerator.new()
 
 # TODO: make it a plane
 
-func gen_terrain(s := G.TERRAIN_SEED) -> void:
+func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 35, SPACING := 8.0) -> void:
+	var RAND_OFFSET_MAX := SPACING / 4.0
 	# Cube looks like 
 	#    e-------f
 	#   /|      /|

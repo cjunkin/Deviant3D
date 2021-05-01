@@ -38,7 +38,7 @@ func _on_Laser_body_entered(body) -> void:
 func _on_Laser_area_entered(area: Area) -> void:
 #	print(area.name)
 	# For worm TODO: rpc damage
-	area.get_parent().d()
+	area.get_parent().dmg()
 	
 	# Disable self
 	set_deferred("monitoring", false)

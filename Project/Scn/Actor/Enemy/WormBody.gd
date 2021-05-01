@@ -6,7 +6,7 @@ func _ready():
 	add_to_group(G.WORM_BODY)
 
 # Damage
-func dmg(_hitpoint: Vector3, dmg := 1) -> void:
+func dmg(_hitpoint := Vector3.ZERO, dmg := 1) -> void:
 	hp -= dmg
 	if hp <= 0:
 		rpc("d")

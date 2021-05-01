@@ -22,7 +22,7 @@ func _ready():
 		get_node(enemy_spawn_time).start(spawn_time)
 		
 		# Land
-		$Land.gen_terrain()
+		$Land.gen_terrain(G.TERRAIN_SEED)
 		
 		# Spawn worm boss
 		var worm: Worm = load(worm_path).instance()

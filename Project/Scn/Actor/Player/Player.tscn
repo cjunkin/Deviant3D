@@ -1,8 +1,9 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://Gfx/Model/AR/AR.glb" type="PackedScene" id=1]
 [ext_resource path="res://Scn/Actor/Player/Player.gd" type="Script" id=2]
 [ext_resource path="res://Scn/Fx/Sound/Sfx.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Gfx/Material/metal.tres" type="Material" id=4]
 [ext_resource path="res://addons/LineRenderer/Line.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Sfx/Slap.wav" type="AudioStream" id=6]
 [ext_resource path="res://Scn/Projectile/Throwable.tscn" type="PackedScene" id=7]
@@ -10,6 +11,9 @@
 
 [sub_resource type="CapsuleMesh" id=1]
 radial_segments = 16
+
+[sub_resource type="CubeMesh" id=19]
+size = Vector3( 0.3, 0.3, 1.5 )
 
 [sub_resource type="CapsuleShape" id=2]
 
@@ -33,7 +37,7 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"points": PoolRealArray( -0.75, -0.25, 0, 0.0125, 0, 0.5, -0.0125, 0, 0.05, 0, 0.25, -0.05, 0, 0.0293829, -0.013368 ),
+"points": PoolRealArray( 0.25, -0.25, 0, 0.0125, 0, 0.5, -0.0125, 0, 0.05, 0, 0.25, -0.05, 0, 0.0293829, -0.013368 ),
 "times": PoolRealArray( 0, 0.025, 0.125 )
 }
 tracks/1/type = "bezier"
@@ -249,7 +253,7 @@ animation = "Fire"
 
 [sub_resource type="AnimationNodeOneShot" id=11]
 filter_enabled = true
-filters = [ "CamX/CamY/CamHolder:rotation_degrees:x", "CamX/CamY/CamHolder:rotation_degrees:y", "CamX/CamY/CamHolder:rotation_degrees:z", "CamX/CamY/CamHolder:translation:y", "CamX/CamY/CamHolder:translation:z", "CamX/CamY/Gun:rotation_degrees:x", "CamX/CamY/Gun:rotation_degrees:y", "CamX/CamY/Gun:rotation_degrees:z", "CamX/CamY/Gun:translation:y", "CamX/CamY/Gun:translation:z", "CamX/CamY:translation:y" ]
+filters = [ "CamX/CamY/CamHolder:rotation_degrees:x", "CamX/CamY/CamHolder:rotation_degrees:y", "CamX/CamY/CamHolder:rotation_degrees:z", "CamX/CamY/CamHolder:translation:y", "CamX/CamY/CamHolder:translation:z", "CamX/CamY/Gun:rotation_degrees:x", "CamX/CamY/Gun:rotation_degrees:y", "CamX/CamY/Gun:rotation_degrees:z", "CamX/CamY/Gun:translation:y", "CamX/CamY/Gun:translation:z", "CamX/CamY/GunHolder/Gun:rotation_degrees:x", "CamX/CamY/GunHolder/Gun:rotation_degrees:y", "CamX/CamY/GunHolder/Gun:rotation_degrees:z", "CamX/CamY/GunHolder/Gun:translation:y", "CamX/CamY/GunHolder/Gun:translation:z", "CamX/CamY:translation:y" ]
 
 [sub_resource type="AnimationNodeAnimation" id=12]
 animation = "Idle"
@@ -269,7 +273,7 @@ animation = "Reload"
 animation = "WalkCam"
 
 [sub_resource type="AnimationNodeBlendTree" id=18]
-graph_offset = Vector2( -237, 14 )
+graph_offset = Vector2( -178, 95.5 )
 nodes/Fire/node = SubResource( 10 )
 nodes/Fire/position = Vector2( 140, 340 )
 nodes/Firing/node = SubResource( 11 )
@@ -287,7 +291,7 @@ nodes/SprintFactor/position = Vector2( 80, 220 )
 nodes/Walk/node = SubResource( 17 )
 nodes/Walk/position = Vector2( -140, 220 )
 nodes/output/position = Vector2( 860, 240 )
-node_connections = [ "output", 0, "Firing", "Reloading", 0, "Fire", "Reloading", 1, "Reload", "SprintFactor", 0, "Walk", "Firing", 0, "Move", "Firing", 1, "Reloading", "Move", 0, "Idle", "Move", 1, "SprintFactor" ]
+node_connections = [ "output", 0, "Firing", "Firing", 0, "Move", "Firing", 1, "Reloading", "Move", 0, "Idle", "Move", 1, "SprintFactor", "Reloading", 0, "Fire", "Reloading", 1, "Reload", "SprintFactor", 0, "Walk" ]
 
 [node name="Player" type="KinematicBody"]
 collision_layer = 2
@@ -300,13 +304,13 @@ flippers_path = "res://Scn/Actor/Player/Flippers.tscn"
 [node name="CamX" type="Spatial" parent="."]
 
 [node name="CamY" type="Spatial" parent="CamX"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00500214, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00708698, 0 )
 
 [node name="GunHolder" type="Spatial" parent="CamX/CamY"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.6, -1 )
 
 [node name="Gun" parent="CamX/CamY/GunHolder" instance=ExtResource( 1 )]
-transform = Transform( 0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, -0.605002, 0.25 )
+transform = Transform( 0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, -0.607087, 0.25 )
 
 [node name="Muzzle" type="Position3D" parent="CamX/CamY/GunHolder/Gun"]
 transform = Transform( 1.33333, -7.39705e-16, -1.59872e-14, 2.14688e-15, 1.33333, 1.98952e-13, 1.59872e-14, -1.98952e-13, 1.33333, 0.000968695, 0.820632, -2.52995 )
@@ -337,6 +341,28 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.13213, 0 )
 stream = ExtResource( 6 )
 max_db = 0.0
 bus = "Sfx"
+
+[node name="GearR" type="Position3D" parent="CamX"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, -0.25, 0 )
+
+[node name="Mesh" type="MeshInstance" parent="CamX/GearR"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.25 )
+mesh = SubResource( 19 )
+material/0 = ExtResource( 4 )
+
+[node name="Muzzle" type="Position3D" parent="CamX/GearR"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5 )
+
+[node name="GearL" type="Position3D" parent="CamX"]
+transform = Transform( 0.999482, 0, 0.0321783, 0, 1, 0, -0.0321783, 0, 0.999482, -1.15, -0.25, 0 )
+
+[node name="Mesh" type="MeshInstance" parent="CamX/GearL"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.25 )
+mesh = SubResource( 19 )
+material/0 = ExtResource( 4 )
+
+[node name="Muzzle" type="Position3D" parent="CamX/GearL"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5 )
 
 [node name="Hitbox" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )

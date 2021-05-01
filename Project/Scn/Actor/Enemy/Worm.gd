@@ -5,11 +5,10 @@ onready var Head := $Head
 #export var target_path : NodePath
 onready var target : Spatial
 export var body_seg_s : PackedScene
-const speed := 100
+const speed := 1
 const HALF_RADIUS := 6
 const NUM_BODY_SEGS := 48
 func _ready():
-	queue_free()
 	# Make NUM_BODY_SEGS body segments
 	for i in range(NUM_BODY_SEGS):
 		var body_seg := body_seg_s.instance()
