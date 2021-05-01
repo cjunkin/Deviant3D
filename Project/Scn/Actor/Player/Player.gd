@@ -188,6 +188,7 @@ func _input(event: InputEvent) -> void:
 		# Switch between TPS and FPS
 		if event.is_action_pressed("switch_view"):
 			rpc("y")
+			
 
 		# Jumping
 		if event.is_action_pressed("jump") and is_on_floor():
@@ -431,7 +432,7 @@ func _physics_process(delta: float) -> void:
 	
 	# Cosmetic, if not hooked, make mesh rotate upright
 	if L_not_grapplin and not_grappling:
-		MeshHelp.rotation = lerp(MeshHelp.rotation, Vector3.ZERO, .2)
+		MeshHelp.rotation = lerp(MeshHelp.rotation, Vector3.ZERO, 16 * delta)
 	# Else rotate mesh towards hook point
 	else:
 		MeshHelp.global_transform = MeshHelp.global_transform.interpolate_with(
@@ -439,7 +440,7 @@ func _physics_process(delta: float) -> void:
 				(grapple_pos * int(!not_grappling) + grapple_pos2 * int(!L_not_grapplin)) / 2,
 				transform.basis.y
 				), 
-			.2
+			16 * delta
 			)
 #	Attempt at rotating camera with mesh, kinda bad: 
 #	CamHolder.rotation.z = MeshHelp.rotation.z
@@ -630,7 +631,7 @@ puppetsync func y() -> void:
 			Tween.TRANS_CUBIC
 			)
 		tween.start()
-		# TODO: unhide PMesh
+		PMesh.visible = true
 	else:
 		# previously Vector3(0, 1, 0)
 		# Bring camera into head
@@ -643,6 +644,8 @@ puppetsync func y() -> void:
 			)
 		tween.start()
 		# TODO: hide PMesh
+		yield(tween, "tween_all_completed")
+		PMesh.visible = false
 	fps = !fps
 
 # Shift camera position left/right

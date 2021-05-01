@@ -72,6 +72,58 @@
     </div>
   </div>
   
+  
+      <div class="section-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                    <div class="text-center">
+                        <h2>4/30 Progress - Way better grappling animation, multimesh (GPU efficient) asteroid generation! </h2>
+                        <p>
+                            There wasn't too much of a challenge for the better grappling animation, it was basically add two
+                            cuboids, linearly interpolate it to rotate towards the grappling position, then do some clever parenting
+                            so it rotated with the player mesh. However, the result was a very satisfying procedural animation.
+                        </p>
+                        <p>
+                            No real cosmetic changes to asteroids. Unfortunately, multimeshes don't handle collisions for us, so we did
+                            need to instantiate many collision shapes for each asteroid, but now there was a single draw call
+                            instead of dozens. Hopefully we can find a similar solution to other procedurally generated terrain,
+                            since our current approach uses multiple different meshes so we can't just convert it to a multimesh.
+                        </p>
+                        <p>
+                            The hardest part was manipulating transforms, since for multimeshes, we needed to directly set the 
+                            Transform (which was a bit more involved than simple Euler angles).
+                            This involved setting basis vectors, rotating along the three basis vectors, then finally figuring out
+                            how to do a simple translate (since the built in Transform.translate translated along the basis vectors,
+                            rather than adding to the origin).
+                        <p>
+                        <p>
+                            Todos for this: make a second multimesh so we have a variant on the color, improve hook graphics maybe,
+                            hook rope physics (right now it's just a 3D line)
+                        </p>
+                        
+                        <p>
+                            Video todo
+                        </p>
+                        
+                       <!-- <video autoplay loop muted controls playsinline width="95%"> 
+                        <source src="asset/aim_center_compr.mp4" type="video/mp4">
+                        Your browser doesn't support non-GIF videos :(
+                        </video>
+                        
+                        <p>
+                            Notice how switching between third person and first person doesn't change the fact that we shoot at the center,
+                            it was very satisfying :3
+                        </p>-->
+                        
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+  
     <div class="section-container">
         <div class="container">
             <div class="row">
