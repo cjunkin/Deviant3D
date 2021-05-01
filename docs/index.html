@@ -71,46 +71,79 @@
       </div>
     </div>
   </div>
-                             
-      <div class="section-container">
-    <div class="container">
-      <div class="row">
-        <div class="col-xs-12 col-md-8 col-md-offset-2">
-          <div class="text-center">
-            <h2>4/28 Progress</h2>
-        
-            <p>
-                Procedural Terrain! This was done by first generating a 2D grid, then randomly adding offsets to the grid,
-                then using OpenSimplex Noise to get a height value, then setting material appropriately.
-            <p>
-            <p>
-                The biggest challenges were actually generating a cuboid mesh, and making sure normals and everything were
-                correct. Using the default cuboid and modifying it was a pain, since we had to figure out which
-                vertex was indexed to which number, where normals pointed after modifications, etc.
-            </p>
-            <p>
-                Current todos for this are syncing over multiplayer and creating sloped rather than flat surfaces.
-            </p>
-            </p>
-                There's also a lot of optimizations to be done, since our current approach is literally using a cuboid for each
-                "square" of the grid. Consolidating these into a single mesh rather than multiple cuboids is definitely something
-                we want to do, as well as getting rid of extraneous faces similar to how Minecraft or other voxel engines do it.
-            </p>
-            <video autoplay loop muted controls playsinline width="95%"> 
-            <source src="asset/terrain_v1_compr.mp4" type="video/mp4">
-            Your browser doesn't support non-GIF videos :(
-            </video>
-            
-            <video autoplay loop muted controls playsinline width="95%"> 
-            <source src="asset/terrain_v1_grid_compr.mp4" type="video/mp4">
-            Your browser doesn't support non-GIF videos :(
-            </video>
-        
-          </div>
-       </div>
-      </div>
+  
+    <div class="section-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                    <div class="text-center">
+                        <h2>4/29 Progress - Aim centering! </h2>
+                        <p>
+                            What we did was project a ray from the center of the camera directly forward, then rotate the
+                            gun towards the intersection point. 
+                        </p>
+                        <p>
+                            The most difficult part was simply making sure the rotation was correct
+                            and syncing it in multiplayer, since we wanted it to be pretty accurate but also not add any extra network
+                            usage to sync it up, so we ended up having the camera gimbal system be its parent, so existing syncing
+                            of the camera rotation rotated the ray without extra network usage.
+                        <p>
+                        
+                        <video autoplay loop muted controls playsinline width="95%"> 
+                        <source src="asset/aim_center_compr.mp4" type="video/mp4">
+                        Your browser doesn't support non-GIF videos :(
+                        </video>
+                        
+                        <p>
+                            Notice how switching between third person and first person doesn't change the fact that we shoot at the center,
+                            it was very satisfying :3
+                        </p>
+                        
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+    
+    <div class="section-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                    <div class="text-center">
+                        <h2>4/28 Progress - Procedural Terrain!</h2>
+                    
+                        <p>
+                            This was done by first generating a 2D grid, then randomly adding offsets to the grid,
+                            then using OpenSimplex Noise to get a height value, then setting material appropriately.
+                        <p>
+                        <p>
+                            The biggest challenges were actually generating a cuboid mesh, and making sure normals and everything were
+                            correct. Using the default cuboid and modifying it was a pain, since we had to figure out which
+                            vertex was indexed to which number, where normals pointed after modifications, etc.
+                        </p>
+                        <p>
+                            Current todos for this are syncing over multiplayer and creating sloped rather than flat surfaces.
+                        </p>
+                        </p>
+                            There's also a lot of optimizations to be done, since our current approach is literally using a cuboid for each
+                            "square" of the grid. Consolidating these into a single mesh rather than multiple cuboids is definitely something
+                            we want to do, as well as getting rid of extraneous faces similar to how Minecraft or other voxel engines do it.
+                        </p>
+                        <video autoplay loop muted controls playsinline width="95%"> 
+                        <source src="asset/terrain_v1_compr.mp4" type="video/mp4">
+                        Your browser doesn't support non-GIF videos :(
+                        </video>
+                        
+                        <video autoplay loop muted controls playsinline width="95%"> 
+                        <source src="asset/terrain_v1_grid_compr.mp4" type="video/mp4">
+                        Your browser doesn't support non-GIF videos :(
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
                                 
                                 
     <div class="section-container">
@@ -118,7 +151,7 @@
       <div class="row">
         <div class="col-xs-12 col-md-8 col-md-offset-2">
           <div class="text-center">
-            <h2>Videos</h2>
+            <h2>4/27 Videos</h2>
             <p>Sorry, forgot to adjust recording downsampling, so it's a little low res</p>
             <br>
             <p>
@@ -149,7 +182,7 @@
       <div class="row">
         <div class="col-xs-12 col-md-8 col-md-offset-2">
           <div class="text-center">
-            <h2>Accomplishments & Results</h2>
+            <h2>4/27 Accomplishments & Results</h2>
         </div>
         <div>            
             <p> 

@@ -35,13 +35,13 @@ var L_not_grapplin := true
 var grapple_pos2 := Vector3.ZERO
 
 # File Paths
-export(String, FILE) var cam_path
+export(String, FILE) var cam_spring_path
 export(String, FILE) var flippers_path
 
 # Cached Nodes
 #export(NodePath) var flash
 onready var CamSpring : SpringArm
-onready var Cam : Camera
+onready var Cam : ShakyCam
 onready var CamX := $CamX
 onready var GrappleSfx := CamX.get_node("GrappleSfx")
 onready var MeshHelp := CamX.get_node("MeshHelp")
@@ -66,11 +66,13 @@ onready var tween := $Tween
 var LaserSight : CSGCylinder
 var RespawnTime : Timer
 #onready var Flash : OmniLight = get_node(flash)
-
 #onready var CamHolder :Spatial = CamY.get_node("CamHolder")
+
+onready var forward : RayCast
+
 func _ready() -> void:
 # THis is to draw the vel, grapple_aim, etc vectors don't need rn
-#	DebugOverlay.draw.add_vector(self, "vel", 1, 4, Color(0,1,0, 0.5))
+#	DebugOverlay.draw.add_vector(self, "aim", 1, 4, Color(0,1,0, 0.5))
 #	DebugOverlay.draw.add_vector(self, "grapple_aim", 1, 4, Color(0,1,1, 0.5))
 #	DebugOverlay.draw.add_vector(self, "global_transform:basis:x", 1, 4, Color(1,1,1, 0.5))
 	
@@ -88,6 +90,16 @@ func _ready() -> void:
 	LHook.name = "L"
 	G.game.hooks.append(LHook)
 
+	# Setup Forward so that we can aim dead center
+	# TODO: Find way to animate camera without using CamHolder 
+	var CamHolder :Spatial = CamY.get_node("CamHolder") 
+	# CamHolder is needed so walking anims doesn't affect gun rotation
+	CamSpring = load(cam_spring_path).instance()
+	CamHolder.add_child(CamSpring)
+#			Cam = CamSpring.get_node("ViewportContainer/Viewport/Cam")
+	forward = CamSpring.get_node("Forward")
+	forward.add_exception(self)
+
 	# TODO: implement wall climb (maybe not)
 #	Engine.time_scale = .1
 	translation = Vector3(7 + rand_range(-2, 2), 17, -14 + rand_range(-2, 2))
@@ -95,13 +107,8 @@ func _ready() -> void:
 		# Regular cam
 		if OS.get_name() != "Android" and OS.get_name() != "iOS":
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-			# TODO: Find way to animate camera without using CamHolder 
-			var CamHolder :Spatial = CamY.get_node("CamHolder") 
-			# CamHolder is needed so walking anims doesn't affect gun rotation
-			CamHolder.add_child(load(cam_path).instance())
-			CamSpring = CamHolder.get_node("Spring")
-#			Cam = CamSpring.get_node("ViewportContainer/Viewport/Cam")
-			Cam = CamSpring.get_node("Cam")
+			Cam = load("res://Scn/Cam/ShakyCam.tscn").instance()
+			CamSpring.add_child(Cam)
 			reparent_sound(Sfx)
 			reparent_sound(GrappleSfx)
 		
@@ -171,60 +178,11 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventKey:
 		# Switch camera sides
 		if event.is_action_pressed("switch_tps"):
-			# This will be our camera position shifted to the other side
-			var next : Vector3 = CamSpring.translation
-			# Necessary because just multiplying by -1 could result in "convergence" effect
-			next.x = -3.5 * sign(next.x) # previously -3.75
-			tween.interpolate_property(
-				CamSpring, "translation", CamSpring.translation, next, .25, Tween.TRANS_CUBIC
-				)
-			# Shift the gun as well
-			next = Gun.translation
-			next.x = -.75 * sign(next.x)
-			tween.interpolate_property(
-				Gun, "translation", Gun.translation, next, .25, Tween.TRANS_CUBIC
-				)
-			tween.start()
+			rpc("z")
 		
 		# Switch between TPS and FPS
 		if event.is_action_pressed("switch_view"):
-			# TODO: reduce to no if/else
-			# Switching to TPS
-			if fps:
-				# previously Vector3(3.75, 1.5, 9)
-				# Bring camera to side
-				tween.interpolate_property(
-					CamSpring, 
-					"translation", 
-					CamSpring.translation, 
-					Vector3(3.5, 1.5, 0), 
-					.25, 
-					Tween.TRANS_CUBIC
-					)
-				# Spring length
-				tween.interpolate_property(
-					CamSpring, 
-					"spring_length", 
-					CamSpring.spring_length, 
-					8, 
-					.25, 
-					Tween.TRANS_CUBIC
-					)
-				tween.start()
-				# TODO: unhide PMesh
-			else:
-				# previously Vector3(0, 1, 0)
-				# Bring camera into head
-				tween.interpolate_property(
-					CamSpring, "translation", CamSpring.translation, Vector3(0, 1, -.25), .25, Tween.TRANS_CUBIC
-					)
-				# Spring length
-				tween.interpolate_property(
-					CamSpring, "spring_length", CamSpring.spring_length, 0, .25, Tween.TRANS_CUBIC
-					)
-				tween.start()
-				# TODO: hide PMesh
-			fps = !fps
+			rpc("y")
 
 		# Jumping
 		if event.is_action_pressed("jump") and is_on_floor():
@@ -307,7 +265,6 @@ func _input(event: InputEvent) -> void:
 				PI/2
 				) # Up down
 			
-				
 		# This was me playing around with rotation that wrapped around, rather than 
 		# capping up/down as 90 degrees and -90 degrees
 #			CamY.rotation.x = CamY.rotation.x + (event.relative.y * SENS_Y)
@@ -341,7 +298,7 @@ func _physics_process(delta: float) -> void:
 	if is_network_master():
 		# Set laser sight alpha
 		if Input.is_action_pressed("fire"):
-			LaserSight.material.albedo_color.a = .25
+			LaserSight.material.albedo_color.a = .125
 		else:
 			LaserSight.material.albedo_color.a = .01
 
@@ -366,6 +323,12 @@ func _physics_process(delta: float) -> void:
 		for ray in Flippers:
 			if ray.is_colliding() and FlipTime.is_stopped():
 				rpc("t", ray.get_collision_normal(), translation)
+
+	# Point at center
+	if forward.is_colliding():
+		GunHolder.look_at(forward.get_collision_point(), transform.basis.y)
+	else:
+		GunHolder.rotation = Vector3.ZERO
 
 	# Grounded
 	if is_on_floor():
@@ -625,6 +588,63 @@ puppetsync func v() -> void:
 		)
 	tween.start()
 
+# Switch between FPS and TPS
+puppetsync func y() -> void:
+	# TODO: reduce to no if/else
+	# Switching to TPS
+	if fps:
+		# previously Vector3(3.75, 1.5, 9)
+		# Bring camera to side
+		tween.interpolate_property(
+			CamSpring, 
+			"translation", 
+			CamSpring.translation, 
+			Vector3(3.5, 1.5, 0), 
+			.25, 
+			Tween.TRANS_CUBIC
+			)
+		# Spring length
+		tween.interpolate_property(
+			CamSpring, 
+			"spring_length", 
+			CamSpring.spring_length, 
+			8, 
+			.25, 
+			Tween.TRANS_CUBIC
+			)
+		tween.start()
+		# TODO: unhide PMesh
+	else:
+		# previously Vector3(0, 1, 0)
+		# Bring camera into head
+		tween.interpolate_property(
+			CamSpring, "translation", CamSpring.translation, Vector3(0, 1, -.25), .25, Tween.TRANS_CUBIC
+			)
+		# Spring length
+		tween.interpolate_property(
+			CamSpring, "spring_length", CamSpring.spring_length, 0, .25, Tween.TRANS_CUBIC
+			)
+		tween.start()
+		# TODO: hide PMesh
+	fps = !fps
+
+# Shift camera position left/right
+puppetsync func z() -> void:
+	# This will be our camera position shifted to the other side
+	var next : Vector3 = CamSpring.translation
+	# Necessary because just multiplying by -1 could result in "convergence" effect
+	next.x = -3.5 * sign(next.x) # previously -3.75
+	tween.interpolate_property(
+		CamSpring, "translation", CamSpring.translation, next, .25, Tween.TRANS_CUBIC
+		)
+	# Shift the gun as well
+	next = GunHolder.translation
+	next.x = -.75 * sign(next.x)
+	tween.interpolate_property(
+		GunHolder, "translation", GunHolder.translation, next, .25, Tween.TRANS_CUBIC
+		)
+	tween.start()
+
 # Respawn
 puppetsync func respawn() -> void:
 	translation = Vector3(0, 100, 0)
@@ -642,6 +662,13 @@ puppetsync func respawn() -> void:
 master func req_syn() -> void:
 	rpc("s", translation, CamX.rotation.y, CamY.rotation.x, vel, newest_normal)
 	rpc("ss", -SENS_X * 1000)
+	rpc("sync_cam", fps, CamSpring.translation, CamSpring.spring_length, GunHolder.translation)
+
+puppet func sync_cam(is_fps_mode, camspring_trans, camspring_length, gun_trans) -> void:
+	fps = is_fps_mode
+	CamSpring.translation = camspring_trans
+	CamSpring.spring_length = camspring_length
+	GunHolder.translation = gun_trans
 
 # Set Sensitivity
 puppet func ss(sens: float) -> void:

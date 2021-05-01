@@ -12,7 +12,7 @@ export var friction := .125
 var hp := 1
 
 func _ready() -> void:
-	add_to_group("Enemy")
+	add_to_group(G.ENEMY)
 
 func set_target(t) -> void:
 	target = t

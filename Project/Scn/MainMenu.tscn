@@ -95,6 +95,7 @@ overall_path = NodePath("All/Margin/Center/Graphics/Buttons/Options/Overall/Butt
 shadows_path = NodePath("All/Margin/Center/Graphics/Buttons/Options/shadows/Button")
 glow_path = NodePath("All/Margin/Center/Graphics/Buttons/Options/glow/Button")
 bloom_path = NodePath("All/Margin/Center/Graphics/Buttons/Options/bloom/Button")
+ssao_path = NodePath("All/Margin/Center/Graphics/Buttons/Options/ssao/Button")
 spinner_path = NodePath("All/Margin/Menu/PlayMargin/Play/SpinCenter/Spinner")
 Graphics_path = NodePath("All/Margin/Center/Graphics")
 Menu_path = NodePath("All/Margin/Menu")
@@ -308,9 +309,9 @@ margin_right = 600.0
 margin_bottom = 450.0
 
 [node name="Label" type="Label" parent="All/Margin/Center/Graphics/Buttons"]
-margin_top = 32.0
+margin_top = 16.0
 margin_right = 600.0
-margin_bottom = 71.0
+margin_bottom = 55.0
 hint_tooltip = "Choose how to set your eyeballs on fire"
 mouse_filter = 1
 mouse_default_cursor_shape = 16
@@ -319,9 +320,9 @@ text = "Graphics Settings:"
 align = 1
 
 [node name="Options" type="VBoxContainer" parent="All/Margin/Center/Graphics/Buttons"]
-margin_top = 107.0
+margin_top = 75.0
 margin_right = 600.0
-margin_bottom = 343.0
+margin_bottom = 374.0
 size_flags_vertical = 3
 custom_constants/separation = 16
 
@@ -436,8 +437,36 @@ hint_tooltip = "Makes everything brighter. Say no to derpreshun!"
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
+[node name="ssao" type="HBoxContainer" parent="All/Margin/Center/Graphics/Buttons/Options"]
+margin_top = 252.0
+margin_right = 600.0
+margin_bottom = 299.0
+size_flags_horizontal = 3
+
+[node name="Txt" type="Label" parent="All/Margin/Center/Graphics/Buttons/Options/ssao"]
+margin_right = 198.0
+margin_bottom = 47.0
+hint_tooltip = "Make corners darker using Screen Space Ambient Occlusion (what a mouthful)"
+mouse_filter = 0
+mouse_default_cursor_shape = 16
+size_flags_horizontal = 3
+size_flags_vertical = 5
+size_flags_stretch_ratio = 0.5
+text = "SSAO"
+align = 1
+
+[node name="Button" type="OptionButton" parent="All/Margin/Center/Graphics/Buttons/Options/ssao"]
+modulate = Color( 0.619608, 0.721569, 0.882353, 1 )
+margin_left = 202.0
+margin_right = 600.0
+margin_bottom = 47.0
+rect_min_size = Vector2( 0, 42 )
+hint_tooltip = "Make corners darker using Screen Space Ambient Occlusion (what a mouthful)"
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 3
+
 [node name="Done" type="CenterContainer" parent="All/Margin/Center/Graphics/Buttons"]
-margin_top = 347.0
+margin_top = 378.0
 margin_right = 600.0
 margin_bottom = 450.0
 size_flags_vertical = 3
@@ -448,9 +477,9 @@ __meta__ = {
 [node name="DoneButton" type="Button" parent="All/Margin/Center/Graphics/Buttons/Done"]
 modulate = Color( 0.619608, 0.721569, 0.882353, 1 )
 margin_left = 236.0
-margin_top = 28.0
+margin_top = 12.0
 margin_right = 364.0
-margin_bottom = 75.0
+margin_bottom = 59.0
 rect_min_size = Vector2( 128, 42 )
 hint_tooltip = "Finish searing those eyeballs"
 mouse_default_cursor_shape = 2

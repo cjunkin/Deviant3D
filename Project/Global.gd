@@ -24,6 +24,7 @@ enum {OFF, LOW, MED, HIGH}
 var shadows := OFF
 var glow := OFF
 var bloom := OFF
+var ssao := OFF
 
 # Pause Settings
 var sens_changed := false

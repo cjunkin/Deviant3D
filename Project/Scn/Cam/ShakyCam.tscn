@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scn/Cam/ShakyCam.gd" type="Script" id=1]
+
+[node name="Cam" type="Camera"]
+cull_mask = 524287
+current = true
+near = 0.01
+far = 8192.0
+script = ExtResource( 1 )

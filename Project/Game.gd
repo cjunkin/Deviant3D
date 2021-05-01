@@ -2,8 +2,7 @@ extends Game
 
 
 func _ready():
-	# Land
-	$Land.gen_terrain()
+
 	
 	# Enemies
 #	enemies.resize(num_enemies)
@@ -21,6 +20,9 @@ func _ready():
 		G.TERRAIN_SEED = randi() % 2048
 		gen_boxes(G.TERRAIN_SEED)
 		get_node(enemy_spawn_time).start(spawn_time)
+		
+		# Land
+		$Land.gen_terrain()
 		
 		# Spawn worm boss
 		var worm: Worm = load(worm_path).instance()

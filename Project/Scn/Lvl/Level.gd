@@ -220,10 +220,10 @@ master func sen_time() -> void:
 	var sender := get_tree().get_rpc_sender_id()
 	# Sync up all existing enemies
 	for enemy in enemies:
-		if enemy.is_inside_tree() and enemy.target:
+		if enemy.is_inside_tree() and is_instance_valid(enemy.target):
 			rpc_id(sender, "s", enemy.translation, enemy.vel, enemy.target.get_network_master())
 	for boss in bosses:
-		if boss.is_inside_tree():
+		if is_instance_valid(boss) && boss.is_inside_tree():
 			rpc_id(sender, "b", boss.Head.translation, boss.Head.rotation, boss.target.get_network_master()) #, get_class())
 	enemy_i = 0
 
@@ -249,6 +249,8 @@ puppet func set_cur(terrain_seed: int, spawn_seed: int) -> void:
 		emit_signal("received_data")
 		spawn_rng.seed = spawn_seed
 		gen_boxes(terrain_seed)
+		# Land
+		$Land.gen_terrain(terrain_seed)
 
 # Recieve current spawn_time, should only be called on non-host
 puppet func set_time(spawn_time_left: float) -> void:

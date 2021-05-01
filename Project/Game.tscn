@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Scn/StaticBox.tscn" type="PackedScene" id=2]
@@ -9,7 +9,6 @@
 [ext_resource path="res://Gfx/Material/Grid.tres" type="Material" id=7]
 [ext_resource path="res://Scn/Env/Island1.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Scn/Env/Rock1.tscn" type="PackedScene" id=9]
-[ext_resource path="res://Scn/Env/Rock1R.tscn" type="PackedScene" id=10]
 [ext_resource path="res://WorldEnv.tres" type="Environment" id=11]
 [ext_resource path="res://Scn/Lvl/Land.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Gfx/2D/Reticule.svg" type="Texture" id=13]
@@ -379,6 +378,7 @@ material = SubResource( 4 )
 
 [node name="Sunlight" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, 0, 86.8753, 0 )
+directional_shadow_mode = 0
 
 [node name="Env" type="WorldEnvironment" parent="."]
 environment = ExtResource( 11 )
@@ -402,9 +402,6 @@ width = 8.0
 height = 6.0
 depth = 6.0
 material = ExtResource( 7 )
-
-[node name="Rock1R" parent="." instance=ExtResource( 10 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -94.1456, 14.3448, -72.2908 )
 
 [node name="Wall10" parent="." instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -42, 92.4259, -14 )
@@ -475,6 +472,7 @@ material = ExtResource( 7 )
 
 [node name="Ground" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5, 0 )
+visible = false
 use_in_baked_light = true
 mesh = SubResource( 7 )
 material/0 = ExtResource( 7 )
@@ -484,9 +482,10 @@ collision_mask = 7
 
 [node name="CollisionShape" type="CollisionShape" parent="Ground/StaticBody"]
 shape = SubResource( 8 )
+disabled = true
 
 [node name="Island1" parent="." instance=ExtResource( 8 )]
-transform = Transform( -15.1303, 0, -5.20328, 0, 16, 0, 5.20328, 0, -15.1303, 50.5629, -28.5269, -414.994 )
+transform = Transform( -10.3113, 0, 12.2342, 0, 16, 0, -12.2342, 0, -10.3113, 50.5629, 67.0417, -414.994 )
 
 [node name="Text" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9717, 3.47361, -42.4121 )
@@ -498,6 +497,6 @@ transform = Transform( 1.11542, 4.46487, -6.54376, 7.60949, 1.23349, 2.13871, 2.
 transform = Transform( 7.22438, -14.2534, -0.805737, 12.8748, 6.1147, 7.26974, -6.16823, -3.93082, 14.2303, 38.4704, -12.8663, -252.978 )
 
 [node name="Land" parent="." instance=ExtResource( 12 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -117.876 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -64 )
 
 [connection signal="timeout" from="EnemySpawnTime" to="." method="_on_EnemySpawnTime_timeout"]

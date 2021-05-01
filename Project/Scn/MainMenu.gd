@@ -5,6 +5,7 @@ export (NodePath) var overall_path
 export (NodePath) var shadows_path
 export (NodePath) var glow_path
 export (NodePath) var bloom_path
+export (NodePath) var ssao_path
 export (NodePath) var spinner_path
 export (NodePath) var Graphics_path
 export (NodePath) var Menu_path
@@ -14,6 +15,7 @@ onready var overall : OptionButton = get_node(overall_path)
 onready var shadows : OptionButton = get_node(shadows_path)
 onready var glow : OptionButton = get_node(glow_path)
 onready var bloom : OptionButton = get_node(bloom_path)
+onready var ssao : OptionButton = get_node(ssao_path)
 onready var spinner : Control = get_node(spinner_path)
 onready var Graphics : Control = get_node(Graphics_path)
 onready var Menu : Control = get_node(Menu_path)
@@ -23,16 +25,17 @@ onready var ClickAnim := $ClickAnim
 # Setting constants
 const STANDARD := PoolStringArray(["Off", "Low", "Medium", "High"])
 const BINARY := PoolStringArray(["Off", "On"])
-const ALL_GFX_OPTIONS := PoolStringArray(["shadows", "glow", "bloom"]) # TODO: more graphics settings
+const ALL_GFX_OPTIONS := PoolStringArray(["shadows", "glow", "bloom", "ssao"]) # TODO: more graphics settings
 
 func _ready() -> void:
 #	OS.set_low_processor_usage_mode(true)
 
 	# Add options
-	add_options(overall, PoolStringArray(["Potato", "Low", "Medium", "High"]))
-	add_options(shadows, STANDARD)
-	add_options(glow, BINARY)
-	add_options(bloom, BINARY)
+	add_options_to_button(overall, PoolStringArray(["Potato", "Low", "Medium", "High"]))
+	add_options_to_button(shadows, STANDARD)
+	add_options_to_button(glow, BINARY)
+	add_options_to_button(bloom, BINARY)
+	add_options_to_button(ssao, STANDARD)
 
 	# Setup signals
 	setup_graphics_options_signals($All/Margin/Center/Graphics/Buttons/Options, "gfx_changed")
@@ -100,7 +103,7 @@ func update_overall_ui() -> void:
 		overall.text = "Custom"
 
 # Add all strings from OPTIONS as options for BUTTON
-func add_options(button: OptionButton, options: PoolStringArray) -> void:
+func add_options_to_button(button: OptionButton, options: PoolStringArray) -> void:
 	var i := 0
 	for option in options:
 		button.add_item(option, i)
