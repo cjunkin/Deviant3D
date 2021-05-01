@@ -16,10 +16,12 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 # physics_process has a steady 60 fps, whereas process does it as fast as possible
 func _physics_process(delta: float) -> void:
-	"""TODO: try uncommenting this/commenting this"""
+	"""TODO: try uncommenting this/commenting this
+			disabling lines 23 and 24 disable gravity on non player prefabs."""
+	
 	acc += grav * delta
-#	vel += acc
-#	vel = move_and_slide(vel, Vector3.UP) 
+	vel += acc
+	vel = move_and_slide(vel, Vector3.UP) 
 	
 	# control click the function if you're not sure how it works, 
 	# To play, open TODO_PHYSICS/TestScene.tscn 
