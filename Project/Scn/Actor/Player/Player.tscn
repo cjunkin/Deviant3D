@@ -12,22 +12,22 @@
 [sub_resource type="CapsuleMesh" id=1]
 radial_segments = 16
 
-[sub_resource type="CubeMesh" id=19]
+[sub_resource type="CubeMesh" id=2]
 size = Vector3( 0.3, 0.3, 1.5 )
 
-[sub_resource type="CapsuleShape" id=2]
-
-[sub_resource type="SpatialMaterial" id=3]
-flags_unshaded = true
-flags_vertex_lighting = true
-albedo_color = Color( 0.866667, 0.580392, 0.188235, 1 )
+[sub_resource type="CapsuleShape" id=3]
 
 [sub_resource type="SpatialMaterial" id=4]
 flags_unshaded = true
 flags_vertex_lighting = true
+albedo_color = Color( 0.866667, 0.580392, 0.188235, 1 )
+
+[sub_resource type="SpatialMaterial" id=5]
+flags_unshaded = true
+flags_vertex_lighting = true
 albedo_color = Color( 0.4, 0.176471, 0.741176, 1 )
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=6]
 length = 0.125
 step = 0.005
 tracks/0/type = "bezier"
@@ -71,7 +71,7 @@ tracks/3/keys = {
 "times": PoolRealArray( 0, 0.03, 0.125 )
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=7]
 length = 2.0
 loop = true
 step = 0.05
@@ -96,7 +96,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 1, 2 )
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=8]
 length = 0.75
 step = 0.01
 tracks/0/type = "bezier"
@@ -130,7 +130,7 @@ tracks/2/keys = {
 "times": PoolRealArray( 0, 0.1, 0.25, 0.38, 0.45, 0.5 )
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=9]
 length = 0.6
 loop = true
 step = 0.05
@@ -185,7 +185,7 @@ tracks/4/keys = {
 "times": PoolRealArray( 0, 0.15, 0.3, 0.45, 0.6 )
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=10]
 loop = true
 tracks/0/type = "bezier"
 tracks/0/path = NodePath("CamX/CamY/CamHolder:rotation_degrees:x")
@@ -248,47 +248,47 @@ tracks/5/keys = {
 "times": PoolRealArray( 0, 0.8, 1 )
 }
 
-[sub_resource type="AnimationNodeAnimation" id=10]
+[sub_resource type="AnimationNodeAnimation" id=11]
 animation = "Fire"
 
-[sub_resource type="AnimationNodeOneShot" id=11]
+[sub_resource type="AnimationNodeOneShot" id=12]
 filter_enabled = true
 filters = [ "CamX/CamY/CamHolder:rotation_degrees:x", "CamX/CamY/CamHolder:rotation_degrees:y", "CamX/CamY/CamHolder:rotation_degrees:z", "CamX/CamY/CamHolder:translation:y", "CamX/CamY/CamHolder:translation:z", "CamX/CamY/Gun:rotation_degrees:x", "CamX/CamY/Gun:rotation_degrees:y", "CamX/CamY/Gun:rotation_degrees:z", "CamX/CamY/Gun:translation:y", "CamX/CamY/Gun:translation:z", "CamX/CamY/GunHolder/Gun:rotation_degrees:x", "CamX/CamY/GunHolder/Gun:rotation_degrees:y", "CamX/CamY/GunHolder/Gun:rotation_degrees:z", "CamX/CamY/GunHolder/Gun:translation:y", "CamX/CamY/GunHolder/Gun:translation:z", "CamX/CamY:translation:y" ]
 
-[sub_resource type="AnimationNodeAnimation" id=12]
+[sub_resource type="AnimationNodeAnimation" id=13]
 animation = "Idle"
 
-[sub_resource type="AnimationNodeBlend2" id=13]
+[sub_resource type="AnimationNodeBlend2" id=14]
 filter_enabled = true
 filters = [ "CamX/CamY/CamHolder:rotation_degrees:x", "CamX/CamY/CamHolder:rotation_degrees:y", "CamX/CamY/CamHolder:rotation_degrees:z", "CamX/CamY/CamHolder:translation:y", "CamX/CamY/CamHolder:translation:z", "CamX/CamY/Gun:rotation_degrees:x", "CamX/CamY/Gun:rotation_degrees:y", "CamX/CamY/Gun:rotation_degrees:z", "CamX/CamY/Gun:translation:y", "CamX/CamY/Gun:translation:z", "CamX/CamY:translation:y" ]
 
-[sub_resource type="AnimationNodeAnimation" id=14]
+[sub_resource type="AnimationNodeAnimation" id=15]
 animation = "Reload"
 
-[sub_resource type="AnimationNodeBlend2" id=15]
+[sub_resource type="AnimationNodeBlend2" id=16]
 
-[sub_resource type="AnimationNodeTimeScale" id=16]
+[sub_resource type="AnimationNodeTimeScale" id=17]
 
-[sub_resource type="AnimationNodeAnimation" id=17]
+[sub_resource type="AnimationNodeAnimation" id=18]
 animation = "WalkCam"
 
-[sub_resource type="AnimationNodeBlendTree" id=18]
+[sub_resource type="AnimationNodeBlendTree" id=19]
 graph_offset = Vector2( -178, 95.5 )
-nodes/Fire/node = SubResource( 10 )
+nodes/Fire/node = SubResource( 11 )
 nodes/Fire/position = Vector2( 140, 340 )
-nodes/Firing/node = SubResource( 11 )
+nodes/Firing/node = SubResource( 12 )
 nodes/Firing/position = Vector2( 600, 160 )
-nodes/Idle/node = SubResource( 12 )
+nodes/Idle/node = SubResource( 13 )
 nodes/Idle/position = Vector2( -60, 80 )
-nodes/Move/node = SubResource( 13 )
+nodes/Move/node = SubResource( 14 )
 nodes/Move/position = Vector2( 280, 120 )
-nodes/Reload/node = SubResource( 14 )
+nodes/Reload/node = SubResource( 15 )
 nodes/Reload/position = Vector2( 140, 440 )
-nodes/Reloading/node = SubResource( 15 )
+nodes/Reloading/node = SubResource( 16 )
 nodes/Reloading/position = Vector2( 340, 300 )
-nodes/SprintFactor/node = SubResource( 16 )
+nodes/SprintFactor/node = SubResource( 17 )
 nodes/SprintFactor/position = Vector2( 80, 220 )
-nodes/Walk/node = SubResource( 17 )
+nodes/Walk/node = SubResource( 18 )
 nodes/Walk/position = Vector2( -140, 220 )
 nodes/output/position = Vector2( 860, 240 )
 node_connections = [ "output", 0, "Firing", "Firing", 0, "Move", "Firing", 1, "Reloading", "Move", 0, "Idle", "Move", 1, "SprintFactor", "Reloading", 0, "Fire", "Reloading", 1, "Reload", "SprintFactor", 0, "Walk" ]
@@ -304,13 +304,13 @@ flippers_path = "res://Scn/Actor/Player/Flippers.tscn"
 [node name="CamX" type="Spatial" parent="."]
 
 [node name="CamY" type="Spatial" parent="CamX"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.000496226, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00400645, 0 )
 
 [node name="GunHolder" type="Spatial" parent="CamX/CamY"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.6, -1 )
 
 [node name="Gun" parent="CamX/CamY/GunHolder" instance=ExtResource( 1 )]
-transform = Transform( 0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, -0.600496, 0.25 )
+transform = Transform( 0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, -0.604006, 0.25 )
 
 [node name="Muzzle" type="Position3D" parent="CamX/CamY/GunHolder/Gun"]
 transform = Transform( 1.33333, -7.39705e-16, -1.59872e-14, 2.14688e-15, 1.33333, 1.98952e-13, 1.59872e-14, -1.98952e-13, 1.33333, 0.000968695, 0.820632, -2.52995 )
@@ -341,7 +341,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, -0.25, 0 )
 
 [node name="Mesh" type="MeshInstance" parent="CamX/MeshHelp/GearR"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.25 )
-mesh = SubResource( 19 )
+mesh = SubResource( 2 )
 material/0 = ExtResource( 4 )
 
 [node name="Muzzle" type="Position3D" parent="CamX/MeshHelp/GearR"]
@@ -352,7 +352,7 @@ transform = Transform( 0.999482, 0, 0.0321783, 0, 1, 0, -0.0321783, 0, 0.999482,
 
 [node name="Mesh" type="MeshInstance" parent="CamX/MeshHelp/GearL"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.25 )
-mesh = SubResource( 19 )
+mesh = SubResource( 2 )
 material/0 = ExtResource( 4 )
 
 [node name="Muzzle" type="Position3D" parent="CamX/MeshHelp/GearL"]
@@ -366,7 +366,7 @@ bus = "Sfx"
 
 [node name="Hitbox" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 
 [node name="ROF" type="Timer" parent="."]
 process_mode = 0
@@ -383,7 +383,7 @@ playback_process_mode = 0
 [node name="Line" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.02375, 2.02893, 3.61047 )
 visible = false
-material_override = SubResource( 3 )
+material_override = SubResource( 4 )
 drawCaps = false
 drawCorners = false
 scaleTexture = false
@@ -391,7 +391,7 @@ scaleTexture = false
 [node name="Line2" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.02375, 2.02893, 3.61047 )
 visible = false
-material_override = SubResource( 4 )
+material_override = SubResource( 5 )
 drawCaps = false
 drawCorners = false
 scaleTexture = false
@@ -399,14 +399,14 @@ scaleTexture = false
 [node name="Anim" type="AnimationPlayer" parent="."]
 playback_process_mode = 0
 method_call_mode = 1
-anims/Fire = SubResource( 5 )
-anims/Idle = SubResource( 6 )
-anims/Reload = SubResource( 7 )
-anims/WalkCam = SubResource( 8 )
-anims/Yell = SubResource( 9 )
+anims/Fire = SubResource( 6 )
+anims/Idle = SubResource( 7 )
+anims/Reload = SubResource( 8 )
+anims/WalkCam = SubResource( 9 )
+anims/Yell = SubResource( 10 )
 
 [node name="AnimTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 18 )
+tree_root = SubResource( 19 )
 anim_player = NodePath("../Anim")
 active = true
 process_mode = 0

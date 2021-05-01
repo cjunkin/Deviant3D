@@ -355,6 +355,8 @@ func _physics_process(delta: float) -> void:
 
 	# apply gravity, g is whether gravity is on or off, we turn off gravity if we're grappling
 	vel -= int(g) * (int(not_grappling)) * (int(L_not_grapplin)) * grav * delta * transform.basis.y
+	if global_transform.origin.y < G.water_level:
+		vel = vel * .99 + Vector3.UP * 1.5
 	# apply inputs, physics
 	vel = move_and_slide(vel, transform.basis.y, false, 4, .75, false)
 	# note: using CamY.global_transform.basis.y for line 385

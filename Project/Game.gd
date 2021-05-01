@@ -4,7 +4,7 @@ extends Level
 
 func _ready():
 
-	
+	$Water.translation.y = G.water_level
 	# Enemies
 #	enemies.resize(num_enemies)
 	var enemy_s := load(enemy_path)

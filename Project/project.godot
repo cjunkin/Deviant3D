@@ -14,10 +14,20 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://TODO_PHYSICS/Box.gd"
 }, {
+"base": "ColorRect",
+"class": "ColorTile",
+"language": "GDScript",
+"path": "res://addons/color-palette/ColorTile.gd"
+}, {
 "base": "KinematicBody",
 "class": "Enemy",
 "language": "GDScript",
 "path": "res://Scn/Actor/Enemy/Enemy.gd"
+}, {
+"base": "Container",
+"class": "FlexGridContainer",
+"language": "GDScript",
+"path": "res://addons/color-palette/utilities/FlexGridContainer.gd"
 }, {
 "base": "Level",
 "class": "Game",
@@ -38,6 +48,16 @@ _global_script_classes=[ {
 "class": "Line",
 "language": "GDScript",
 "path": "res://addons/LineRenderer/Line.gd"
+}, {
+"base": "Reference",
+"class": "Palette",
+"language": "GDScript",
+"path": "res://addons/color-palette/Palette.gd"
+}, {
+"base": "Reference",
+"class": "PaletteImporter",
+"language": "GDScript",
+"path": "res://addons/color-palette/PaletteImporter.gd"
 }, {
 "base": "KinematicBody",
 "class": "Player",
@@ -71,11 +91,15 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "Box": "",
+"ColorTile": "",
 "Enemy": "",
+"FlexGridContainer": "res://addons/color-palette/utilities/FlexGridContainerIcon.png",
 "Game": "",
 "Hook": "",
 "Level": "",
 "Line": "",
+"Palette": "",
+"PaletteImporter": "",
 "Player": "",
 "Projectile": "",
 "ShakyCam": "",
@@ -106,7 +130,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "Todo_Manager" )
+enabled=PoolStringArray( "res://addons/Todo_Manager/plugin.cfg", "res://addons/color-palette/plugin.cfg" )
 
 [gui]
 
