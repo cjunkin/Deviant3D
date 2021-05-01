@@ -1,4 +1,4 @@
-extends Game
+extends Level
 
 
 # Declare member variables here. Examples:

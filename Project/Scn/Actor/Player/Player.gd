@@ -66,8 +66,8 @@ onready var Hitbox := $Hitbox
 onready var tween := $Tween
 var LaserSight : CSGCylinder
 var RespawnTime : Timer
-onready var GearR := $CamX/GearR
-onready var GearL := $CamX/GearL
+onready var GearR := $CamX/MeshHelp/GearR
+onready var GearL := $CamX/MeshHelp/GearL
 onready var GearRMuzzle := GearR.get_node("Muzzle")
 onready var GearLMuzzle := GearL.get_node("Muzzle")
 #onready var Flash : OmniLight = get_node(flash)

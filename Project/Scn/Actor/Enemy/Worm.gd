@@ -5,7 +5,7 @@ onready var Head := $Head
 #export var target_path : NodePath
 onready var target : Spatial
 export var body_seg_s : PackedScene
-const speed := 1
+const speed := 16
 const HALF_RADIUS := 6
 const NUM_BODY_SEGS := 48
 func _ready():

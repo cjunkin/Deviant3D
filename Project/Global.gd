@@ -31,7 +31,7 @@ var sens_changed := false
 var gravity_changed := false
 
 # Game
-var game: Game
+var game: Level
 var current_player : Player
 var combo_msgs : PoolStringArray = [
 	"Nice shot!",

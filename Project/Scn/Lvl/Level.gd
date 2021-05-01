@@ -1,4 +1,4 @@
-class_name Game
+class_name Level
 extends Spatial
 
 # Num Cached     TODO: make caches in C++ for efficiency
@@ -141,21 +141,39 @@ func gen_boxes(my_seed: int) -> void:
 
 	var rng := RandomNumberGenerator.new()
 	rng.seed = my_seed
-	var mat : SpatialMaterial = load("res://Gfx/Material/Rock1.tres").duplicate()
-	mat.albedo_color -= Color(rng.randf(), rng.randf(), rng.randf()) / 10
+#	var mat : SpatialMaterial = load("res://Gfx/Material/Rock1.tres").duplicate()
+#	mat.albedo_color -= Color(rng.randf(), rng.randf(), rng.randf()) / 10
 	
 	var static_box_s := load(rock_path)
+	var mm : MultiMesh = $Rocks.multimesh
+	var i := 0
 	for x in range(-400, 400, 58):
 		for z in range(-400, 400, 58):
 			if (noise.get_noise_3d(x, x, z) > 0):
-				var b : Spatial = static_box_s.instance()
-				b.translation = Vector3(x, 64 + rng.randf() * 800, z)
-				b.rotation = Vector3(rng.randf(), rng.randf(), rng.randf()) * 2 * PI
-				b.scale = Vector3(1, 1, 1) * rng.randf_range(8, 16)
-				if rng.randf() > .5:
-					b.get_node("Cube001").set_surface_material(0, mat)
+				var size := rng.randf_range(12, 24)
+				var t := Transform(
+					Vector3(size, 0, 0),
+					Vector3(0, size, 0),
+					Vector3(0, 0, size),
+					Vector3.ZERO
+					)
+				var rand_rot := rng.randf() * 2 * PI
+				t = t.rotated(Vector3.UP, rand_rot)
+				t = t.rotated(Vector3.RIGHT, rand_rot)
+				t = t.rotated(Vector3.FORWARD, rand_rot)
+				t.origin += (Vector3(x, 64 + rng.randf() * 640, z))
+				mm.set_instance_transform(i, t)
+				i += 1
 
+				var b : Spatial = static_box_s.instance()
+				b.transform = t
+#				b.translation = Vector3(x, 64 + rng.randf() * 800, z)
+#				b.rotation = Vector3(rng.randf(), rng.randf(), rng.randf()) * 2 * PI
+#				b.scale = Vector3.ONE * rng.randf_range(8, 16)
+#				if rng.randf() > .5:
+#					b.get_node("Cube001").set_surface_material(0, mat)
 				add_child(b)
+	mm.visible_instance_count = i
 
 func spawn_enemy(trans := Vector3.INF, velocity := Vector3.INF, target_name := "") -> void:
 	var enemy: Enemy = enemies[enemy_i]

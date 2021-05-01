@@ -1,4 +1,5 @@
-extends Game
+class_name Game
+extends Level
 
 
 func _ready():
@@ -19,6 +20,7 @@ func _ready():
 		randomize()
 		G.TERRAIN_SEED = randi() % 2048
 		gen_boxes(G.TERRAIN_SEED)
+
 		get_node(enemy_spawn_time).start(spawn_time)
 		
 		# Land
