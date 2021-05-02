@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/palette_moonlight.png-38672c06669feaf9da030aca397a7702.stex"
+path="res://.import/palette_moonlight.png-30d93e117cf4d0b386e731c1bd25c2a1.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Gfx/Shader/palette_moonlight.png"
-dest_files=[ "res://.import/palette_moonlight.png-38672c06669feaf9da030aca397a7702.stex" ]
+source_file="res://Gfx/Shader/Unused/Dither/palette_moonlight.png"
+dest_files=[ "res://.import/palette_moonlight.png-30d93e117cf4d0b386e731c1bd25c2a1.stex" ]
 
 [params]
 

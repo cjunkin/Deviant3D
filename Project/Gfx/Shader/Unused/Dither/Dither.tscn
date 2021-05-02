@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://Gfx/Shader/Dither.tres" type="Material" id=1]
+[ext_resource path="res://Gfx/Shader/Unused/Dither/Dither.tres" type="Material" id=1]
 
 [node name="ViewportContainer" type="ViewportContainer"]
 material = ExtResource( 1 )

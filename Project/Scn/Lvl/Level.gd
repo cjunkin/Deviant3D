@@ -73,9 +73,8 @@ func _ready()->void:
 		explosions.append(e)
 		add_child(e)
 	
-	
 	$Water.translation.y = G.water_level
-
+	set_water_gfx()
 
 #	for __ in range(num_grapple_sounds):
 #		var grapple_sfx := load("res://Sfx/Slap.wav")
@@ -88,6 +87,21 @@ func _ready()->void:
 
 #onready var TimeLeft := $Label
 #onready var EnemySpawnTime : Timer = get_node(enemy_spawn_time)
+
+func set_water_gfx() -> void:
+	var WaterMesh : MeshInstance = $Water
+	match G.water:
+		G.OFF:
+			WaterMesh.material_override = load("res://Gfx/Shader/water/water_low.tres")
+		G.LOW:
+			WaterMesh.material_override = load("res://Gfx/Shader/water/water.tres")
+			WaterMesh.material_override.set_shader_param("noise2", null)
+			WaterMesh.material_override.set_shader_param("normalmap", null)
+		G.MED:
+			WaterMesh.material_override = load("res://Gfx/Shader/water/water.tres")
+			WaterMesh.material_override.set_shader_param("noise2", null)
+		G.HIGH:
+			WaterMesh.material_override = load("res://Gfx/Shader/water/water.tres")
 
 # Here is where we'll move things Unity DOTS style (for speedup)
 func _physics_process(delta: float) -> void:

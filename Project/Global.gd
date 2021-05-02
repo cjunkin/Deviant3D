@@ -25,6 +25,7 @@ var shadows := OFF
 var glow := OFF
 var bloom := OFF
 var ssao := OFF
+var water := OFF
 
 # Pause Settings
 var sens_changed := false

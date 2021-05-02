@@ -1,8 +1,8 @@
 [gd_resource type="ShaderMaterial" load_steps=4 format=2]
 
-[ext_resource path="res://Gfx/Shader/Dither.shader" type="Shader" id=1]
-[ext_resource path="res://Gfx/Shader/palette_moonlight.png" type="Texture" id=2]
-[ext_resource path="res://Gfx/Shader/bayer16tile2.png" type="Texture" id=3]
+[ext_resource path="res://Gfx/Shader/Unused/Dither/Dither.shader" type="Shader" id=1]
+[ext_resource path="res://Gfx/Shader/Unused/Dither/palette_moonlight.png" type="Texture" id=2]
+[ext_resource path="res://Gfx/Shader/Unused/Dither/bayer16tile2.png" type="Texture" id=3]
 
 [resource]
 shader = ExtResource( 1 )

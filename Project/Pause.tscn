@@ -21,8 +21,6 @@ pause_mode = 2
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 1
-size_flags_horizontal = 3
-size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -47,31 +45,34 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 340.0
-margin_top = 135.0
+margin_top = 110.0
 margin_right = 940.0
-margin_bottom = 585.0
+margin_bottom = 610.0
+rect_min_size = Vector2( 600, 500 )
 
 [node name="Buttons" type="VBoxContainer" parent="Menu/GameOptions/Margin"]
 margin_right = 600.0
-margin_bottom = 450.0
+margin_bottom = 500.0
 custom_constants/separation = 12
 
 [node name="Gfx" type="Button" parent="Menu/GameOptions/Margin/Buttons"]
 modulate = Color( 0.709804, 0.827451, 1, 1 )
 margin_right = 600.0
-margin_bottom = 47.0
+margin_bottom = 65.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 text = "Graphics"
 
 [node name="ViewDist" type="HBoxContainer" parent="Menu/GameOptions/Margin/Buttons"]
 modulate = Color( 1, 0.92549, 0.843137, 1 )
-margin_top = 59.0
+margin_top = 77.0
 margin_right = 600.0
-margin_bottom = 98.0
+margin_bottom = 116.0
 
 [node name="Label" type="Label" parent="Menu/GameOptions/Margin/Buttons/ViewDist"]
 margin_right = 198.0
 margin_bottom = 39.0
-hint_tooltip = "Lowering helps y'all potato PCs"
+hint_tooltip = "Lowering helps y'all potato PCs (but your player gonna need glasses)"
 mouse_filter = 0
 mouse_default_cursor_shape = 16
 size_flags_horizontal = 3
@@ -98,14 +99,14 @@ value = 1536.0
 
 [node name="Sensitivity" type="HBoxContainer" parent="Menu/GameOptions/Margin/Buttons"]
 modulate = Color( 0.835294, 0.984314, 1, 1 )
-margin_top = 110.0
+margin_top = 128.0
 margin_right = 600.0
-margin_bottom = 149.0
+margin_bottom = 167.0
 
 [node name="Label" type="Label" parent="Menu/GameOptions/Margin/Buttons/Sensitivity"]
 margin_right = 198.0
 margin_bottom = 39.0
-hint_tooltip = "Haha mouse make player aim go skrrt"
+hint_tooltip = "Haha high sensitivity make player aim go skrrt"
 mouse_filter = 0
 mouse_default_cursor_shape = 16
 size_flags_horizontal = 3
@@ -132,9 +133,9 @@ value = 2.0
 
 [node name="Grav" type="CheckButton" parent="Menu/GameOptions/Margin/Buttons"]
 modulate = Color( 0.705882, 0.823529, 1, 1 )
-margin_top = 161.0
+margin_top = 179.0
 margin_right = 600.0
-margin_bottom = 210.0
+margin_bottom = 244.0
 hint_tooltip = "O_O wot"
 mouse_default_cursor_shape = 2
 size_flags_vertical = 3
@@ -149,9 +150,9 @@ align = 1
 
 [node name="Flip" type="CheckButton" parent="Menu/GameOptions/Margin/Buttons"]
 modulate = Color( 0.705882, 0.823529, 1, 1 )
-margin_top = 222.0
+margin_top = 256.0
 margin_right = 600.0
-margin_bottom = 272.0
+margin_bottom = 321.0
 hint_tooltip = "Whether surfaces are magnets ;P"
 mouse_default_cursor_shape = 2
 size_flags_vertical = 3
@@ -166,9 +167,9 @@ align = 1
 
 [node name="Sound" type="HBoxContainer" parent="Menu/GameOptions/Margin/Buttons"]
 modulate = Color( 0.886275, 0.847059, 1, 1 )
-margin_top = 284.0
+margin_top = 333.0
 margin_right = 600.0
-margin_bottom = 323.0
+margin_bottom = 372.0
 
 [node name="Label" type="Label" parent="Menu/GameOptions/Margin/Buttons/Sound"]
 margin_right = 198.0
@@ -198,14 +199,14 @@ step = 0.01
 
 [node name="Music" type="HBoxContainer" parent="Menu/GameOptions/Margin/Buttons"]
 modulate = Color( 0.835294, 1, 0.87451, 1 )
-margin_top = 335.0
+margin_top = 384.0
 margin_right = 600.0
-margin_bottom = 374.0
+margin_bottom = 423.0
 
 [node name="Label" type="Label" parent="Menu/GameOptions/Margin/Buttons/Music"]
 margin_right = 198.0
 margin_bottom = 39.0
-hint_tooltip = "Lets you disable my tunes to listen to your own, you spoons"
+hint_tooltip = "Disable my tunes, you spoons (and put on your own ig)"
 mouse_filter = 0
 mouse_default_cursor_shape = 16
 size_flags_horizontal = 3
@@ -230,11 +231,11 @@ step = 0.01
 
 [node name="Quit" type="Button" parent="Menu/GameOptions/Margin/Buttons"]
 modulate = Color( 1, 0.764706, 0.764706, 1 )
-margin_top = 386.0
+margin_top = 435.0
 margin_right = 600.0
-margin_bottom = 450.0
+margin_bottom = 500.0
 rect_min_size = Vector2( 0, 64 )
-hint_tooltip = "Ditch your friends"
+hint_tooltip = "Ditch your friends >:)"
 mouse_default_cursor_shape = 2
 size_flags_vertical = 3
 text = "Quit to Main Menu"
@@ -251,9 +252,11 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 340.0
-margin_top = 135.0
+margin_top = 85.0
 margin_right = 940.0
-margin_bottom = 585.0
+margin_bottom = 635.0
+size_flags_horizontal = 5
+size_flags_vertical = 5
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
 pause_mode = 2

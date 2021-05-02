@@ -6,18 +6,19 @@ const bloom_amt := .05
 func _ready() -> void:
 	var all_off := true
 	var sun : DirectionalLight = get_node(Sunlight)
-	print(G.shadows)
 	match G.shadows:
 		G.OFF:
 			sun.shadow_enabled = false
 		G.LOW:
-#			sun.shadow_enabled = false
+			sun.shadow_enabled = true
 			sun.directional_shadow_mode = DirectionalLight.SHADOW_ORTHOGONAL
 			all_off = false
 		G.MED:
+			sun.shadow_enabled = true
 			sun.directional_shadow_mode = DirectionalLight.SHADOW_PARALLEL_2_SPLITS
 			all_off = false
 		G.HIGH:
+			sun.shadow_enabled = true
 			sun.directional_shadow_mode = DirectionalLight.SHADOW_PARALLEL_4_SPLITS
 			all_off = false
 
@@ -27,8 +28,10 @@ func _ready() -> void:
 		G.LOW:
 			environment.ssao_enabled = false
 		G.MED:
+			environment.ssao_enabled = true
 			environment.ssao_quality = Environment.SSAO_QUALITY_LOW
 		G.HIGH:
+			environment.ssao_enabled = true
 			environment.ssao_quality = Environment.SSAO_QUALITY_MEDIUM
 
 	# Enable glow

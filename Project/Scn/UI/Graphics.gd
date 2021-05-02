@@ -7,11 +7,12 @@ onready var shadows : OptionButton = $Panel/Buttons/Options/shadows/Button
 onready var glow : OptionButton = $Panel/Buttons/Options/glow/Button
 onready var bloom : OptionButton = $Panel/Buttons/Options/bloom/Button
 onready var ssao : OptionButton = $Panel/Buttons/Options/ssao/Button
+onready var water : OptionButton = $Panel/Buttons/Options/water/Button
 
 # Setting constants
 const STANDARD := PoolStringArray(["Off", "Low", "Medium", "High"])
 const BINARY := PoolStringArray(["Off", "On"])
-const ALL_GFX_OPTIONS := PoolStringArray(["shadows", "glow", "bloom", "ssao"]) # TODO: more graphics settings
+const ALL_GFX_OPTIONS := PoolStringArray(["shadows", "glow", "bloom", "water", "ssao"]) # TODO: more graphics settings
 
 func _ready() -> void:
 	# Add options
@@ -20,6 +21,7 @@ func _ready() -> void:
 	add_options_to_button(glow, BINARY)
 	add_options_to_button(bloom, BINARY)
 	add_options_to_button(ssao, STANDARD)
+	add_options_to_button(water, STANDARD)
 
 	# Setup signals
 	setup_graphics_options_signals($Panel/Buttons/Options, "gfx_changed")
@@ -53,6 +55,10 @@ func set_setting(setting: String, index: int) -> void:
 	G.set(setting, index)
 	# Visual update
 	get(setting).select(index)
+	if is_instance_valid(G.game):
+		G.game.get_node("Env")._ready()
+		if setting == "water":
+			G.game.set_water_gfx()
 
 # Sets overall's text to "custom" unless we match a preset
 func update_overall_ui() -> void:
@@ -88,9 +94,6 @@ func gfx_changed(index: int, setting: String) -> void: #, button: OptionButton
 	else:
 		set_setting(setting, index)
 		overall.text = "Custom"
-	if is_instance_valid(G.game):
-		print(setting)
-		G.game.get_node("Env")._ready()
 
 func _on_DoneButton_pressed():
 	emit_signal("graphics_set")

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/bayer16tile2.png-aff82729df996b35d923210f7e077b9e.stex"
+path="res://.import/yeet.png-b5cb19c0fc932832de4c34d8d89578cb.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Gfx/Shader/bayer16tile2.png"
-dest_files=[ "res://.import/bayer16tile2.png-aff82729df996b35d923210f7e077b9e.stex" ]
+source_file="res://Gfx/2D/yeet.png"
+dest_files=[ "res://.import/yeet.png-b5cb19c0fc932832de4c34d8d89578cb.stex" ]
 
 [params]
 

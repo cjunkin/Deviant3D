@@ -4,12 +4,13 @@
 [ext_resource path="res://Scn/UI/Graphics.gd" type="Script" id=2]
 
 [node name="Graphics" instance=ExtResource( 1 )]
-margin_top = -265.5
-margin_bottom = 265.5
+margin_top = -275.0
+margin_bottom = 275.0
+rect_min_size = Vector2( 600, 550 )
 script = ExtResource( 2 )
 
 [node name="Panel" parent="." index="0"]
-margin_bottom = 531.0
+margin_bottom = 550.0
 
 [node name="Buttons" type="VBoxContainer" parent="Panel" index="0"]
 anchor_right = 1.0
@@ -21,9 +22,9 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="Panel/Buttons" index="0"]
-margin_top = 36.0
+margin_top = 25.0
 margin_right = 600.0
-margin_bottom = 75.0
+margin_bottom = 64.0
 hint_tooltip = "Choose how to set your eyeballs on fire"
 mouse_filter = 1
 mouse_default_cursor_shape = 16
@@ -32,13 +33,14 @@ text = "Graphics Settings:"
 align = 1
 
 [node name="Options" type="VBoxContainer" parent="Panel/Buttons" index="1"]
-margin_top = 116.0
+margin_top = 94.0
 margin_right = 600.0
-margin_bottom = 415.0
+margin_bottom = 456.0
 size_flags_vertical = 3
 custom_constants/separation = 16
 
 [node name="Overall" type="HBoxContainer" parent="Panel/Buttons/Options" index="0"]
+modulate = Color( 0.592157, 0.898039, 1, 1 )
 margin_right = 600.0
 margin_bottom = 47.0
 size_flags_horizontal = 3
@@ -65,7 +67,7 @@ mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
 [node name="shadows" type="HBoxContainer" parent="Panel/Buttons/Options" index="1"]
-modulate = Color( 0.905882, 0.823529, 0.952941, 1 )
+modulate = Color( 0.933333, 0.72549, 0.482353, 1 )
 margin_top = 63.0
 margin_right = 600.0
 margin_bottom = 110.0
@@ -93,7 +95,7 @@ mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
 [node name="glow" type="HBoxContainer" parent="Panel/Buttons/Options" index="2"]
-modulate = Color( 0.713726, 0.788235, 0.901961, 1 )
+modulate = Color( 0.494118, 0.807843, 0.568627, 1 )
 margin_top = 126.0
 margin_right = 600.0
 margin_bottom = 173.0
@@ -121,7 +123,7 @@ mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
 [node name="bloom" type="HBoxContainer" parent="Panel/Buttons/Options" index="3"]
-modulate = Color( 0.878431, 1, 0.909804, 1 )
+modulate = Color( 0.811765, 0.890196, 0.560784, 1 )
 margin_top = 189.0
 margin_right = 600.0
 margin_bottom = 236.0
@@ -148,17 +150,45 @@ hint_tooltip = "Makes everything brighter. Say no to derpreshun!"
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
-[node name="ssao" type="HBoxContainer" parent="Panel/Buttons/Options" index="4"]
-modulate = Color( 1, 0.945098, 0.878431, 1 )
+[node name="water" type="HBoxContainer" parent="Panel/Buttons/Options" index="4"]
+modulate = Color( 0.545098, 0.8, 0.984314, 1 )
 margin_top = 252.0
 margin_right = 600.0
 margin_bottom = 299.0
 size_flags_horizontal = 3
 
+[node name="Txt" type="Label" parent="Panel/Buttons/Options/water" index="0"]
+margin_right = 198.0
+margin_bottom = 47.0
+hint_tooltip = "You can turn water OFF??? Haha, jk, I jest. Unless?"
+mouse_filter = 0
+mouse_default_cursor_shape = 16
+size_flags_horizontal = 3
+size_flags_vertical = 5
+size_flags_stretch_ratio = 0.5
+text = "Water"
+align = 1
+
+[node name="Button" type="OptionButton" parent="Panel/Buttons/Options/water" index="1"]
+margin_left = 202.0
+margin_right = 600.0
+margin_bottom = 47.0
+rect_min_size = Vector2( 0, 42 )
+hint_tooltip = "You can turn water OFF??? Haha, jk, I jest. Unless?"
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 3
+
+[node name="ssao" type="HBoxContainer" parent="Panel/Buttons/Options" index="5"]
+modulate = Color( 0.945098, 0.827451, 0.47451, 1 )
+margin_top = 315.0
+margin_right = 600.0
+margin_bottom = 362.0
+size_flags_horizontal = 3
+
 [node name="Txt" type="Label" parent="Panel/Buttons/Options/ssao" index="0"]
 margin_right = 198.0
 margin_bottom = 47.0
-hint_tooltip = "Make corners darker using Screen Space Ambient Occlusion (what a mouthful)"
+hint_tooltip = "Make corners darker, also this super bad for potato PCs"
 mouse_filter = 0
 mouse_default_cursor_shape = 16
 size_flags_horizontal = 3
@@ -172,25 +202,25 @@ margin_left = 202.0
 margin_right = 600.0
 margin_bottom = 47.0
 rect_min_size = Vector2( 0, 42 )
-hint_tooltip = "Make corners darker using Screen Space Ambient Occlusion (what a mouthful)"
+hint_tooltip = "Make corners darker, also this super bad for potato PCs"
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
 [node name="Done" type="CenterContainer" parent="Panel/Buttons" index="2"]
-margin_top = 419.0
+margin_top = 460.0
 margin_right = 600.0
-margin_bottom = 531.0
+margin_bottom = 550.0
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="DoneButton" type="Button" parent="Panel/Buttons/Done" index="0"]
-modulate = Color( 1, 0.819608, 0.819608, 1 )
+modulate = Color( 1, 0.737255, 0.737255, 1 )
 margin_left = 236.0
-margin_top = 32.0
+margin_top = 21.0
 margin_right = 364.0
-margin_bottom = 79.0
+margin_bottom = 68.0
 rect_min_size = Vector2( 128, 42 )
 hint_tooltip = "Finish searing those eyeballs"
 mouse_default_cursor_shape = 2
