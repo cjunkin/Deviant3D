@@ -45,6 +45,7 @@ func _on_Join_pressed():
 func _on_Graphics_graphics_set() -> void:
 	Anim.play_backwards("ChooseGfx")
 	Menu.show()
+	G.Menu.hide()
 
 
 

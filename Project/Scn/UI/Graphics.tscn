@@ -4,16 +4,26 @@
 [ext_resource path="res://Scn/UI/Graphics.gd" type="Script" id=2]
 
 [node name="Graphics" instance=ExtResource( 1 )]
+margin_top = -265.5
+margin_bottom = 265.5
 script = ExtResource( 2 )
 
+[node name="Panel" parent="." index="0"]
+margin_bottom = 531.0
+
 [node name="Buttons" type="VBoxContainer" parent="Panel" index="0"]
-margin_right = 600.0
-margin_bottom = 450.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Label" type="Label" parent="Panel/Buttons" index="0"]
-margin_top = 16.0
+margin_top = 36.0
 margin_right = 600.0
-margin_bottom = 55.0
+margin_bottom = 75.0
 hint_tooltip = "Choose how to set your eyeballs on fire"
 mouse_filter = 1
 mouse_default_cursor_shape = 16
@@ -22,9 +32,9 @@ text = "Graphics Settings:"
 align = 1
 
 [node name="Options" type="VBoxContainer" parent="Panel/Buttons" index="1"]
-margin_top = 75.0
+margin_top = 116.0
 margin_right = 600.0
-margin_bottom = 374.0
+margin_bottom = 415.0
 size_flags_vertical = 3
 custom_constants/separation = 16
 
@@ -46,7 +56,6 @@ text = "Overall "
 align = 1
 
 [node name="Button" type="OptionButton" parent="Panel/Buttons/Options/Overall" index="1"]
-modulate = Color( 0.619608, 0.721569, 0.882353, 1 )
 margin_left = 202.0
 margin_right = 600.0
 margin_bottom = 47.0
@@ -56,6 +65,7 @@ mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
 [node name="shadows" type="HBoxContainer" parent="Panel/Buttons/Options" index="1"]
+modulate = Color( 0.905882, 0.823529, 0.952941, 1 )
 margin_top = 63.0
 margin_right = 600.0
 margin_bottom = 110.0
@@ -74,7 +84,6 @@ text = "Shadows "
 align = 1
 
 [node name="Button" type="OptionButton" parent="Panel/Buttons/Options/shadows" index="1"]
-modulate = Color( 0.619608, 0.721569, 0.882353, 1 )
 margin_left = 202.0
 margin_right = 600.0
 margin_bottom = 47.0
@@ -84,6 +93,7 @@ mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
 [node name="glow" type="HBoxContainer" parent="Panel/Buttons/Options" index="2"]
+modulate = Color( 0.713726, 0.788235, 0.901961, 1 )
 margin_top = 126.0
 margin_right = 600.0
 margin_bottom = 173.0
@@ -102,7 +112,6 @@ text = "Glow "
 align = 1
 
 [node name="Button" type="OptionButton" parent="Panel/Buttons/Options/glow" index="1"]
-modulate = Color( 0.619608, 0.721569, 0.882353, 1 )
 margin_left = 202.0
 margin_right = 600.0
 margin_bottom = 47.0
@@ -112,6 +121,7 @@ mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
 [node name="bloom" type="HBoxContainer" parent="Panel/Buttons/Options" index="3"]
+modulate = Color( 0.878431, 1, 0.909804, 1 )
 margin_top = 189.0
 margin_right = 600.0
 margin_bottom = 236.0
@@ -130,7 +140,6 @@ text = "Bloom "
 align = 1
 
 [node name="Button" type="OptionButton" parent="Panel/Buttons/Options/bloom" index="1"]
-modulate = Color( 0.619608, 0.721569, 0.882353, 1 )
 margin_left = 202.0
 margin_right = 600.0
 margin_bottom = 47.0
@@ -140,6 +149,7 @@ mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
 [node name="ssao" type="HBoxContainer" parent="Panel/Buttons/Options" index="4"]
+modulate = Color( 1, 0.945098, 0.878431, 1 )
 margin_top = 252.0
 margin_right = 600.0
 margin_bottom = 299.0
@@ -158,7 +168,6 @@ text = "SSAO"
 align = 1
 
 [node name="Button" type="OptionButton" parent="Panel/Buttons/Options/ssao" index="1"]
-modulate = Color( 0.619608, 0.721569, 0.882353, 1 )
 margin_left = 202.0
 margin_right = 600.0
 margin_bottom = 47.0
@@ -168,20 +177,20 @@ mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
 [node name="Done" type="CenterContainer" parent="Panel/Buttons" index="2"]
-margin_top = 378.0
+margin_top = 419.0
 margin_right = 600.0
-margin_bottom = 450.0
+margin_bottom = 531.0
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="DoneButton" type="Button" parent="Panel/Buttons/Done" index="0"]
-modulate = Color( 0.619608, 0.721569, 0.882353, 1 )
+modulate = Color( 1, 0.819608, 0.819608, 1 )
 margin_left = 236.0
-margin_top = 12.0
+margin_top = 32.0
 margin_right = 364.0
-margin_bottom = 59.0
+margin_bottom = 79.0
 rect_min_size = Vector2( 128, 42 )
 hint_tooltip = "Finish searing those eyeballs"
 mouse_default_cursor_shape = 2
