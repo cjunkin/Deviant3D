@@ -51,24 +51,30 @@ export (NodePath) var gravity
 
 onready var Grav := get_node(gravity)
 onready var Menu := $Menu
-onready var SSlider := Menu.get_node("Center/Menu/Buttons/Sound/SSlider")
-onready var MSlider := Menu.get_node("Center/Menu/Buttons/Music/MSlider")
-onready var SensSlider := Menu.get_node("Center/Menu/Buttons/Sensitivity/SensSlider")
-onready var Flip := Menu.get_node("Center/Menu/Buttons/Flip")
+onready var GameOptions := $Menu/GameOptions
+onready var SSlider := GameOptions.get_node("Margin/Buttons/Sound/SSlider")
+onready var MSlider := GameOptions.get_node("Margin/Buttons/Music/MSlider")
+onready var SensSlider := GameOptions.get_node("Margin/Buttons/Sensitivity/SensSlider")
+onready var Flip := GameOptions.get_node("Margin/Buttons/Flip")
 onready var Music := $Music
+onready var Graphics := $Menu/GfxCenter/Graphics
+onready var GfxCenter := $Menu/GfxCenter
+
 
 # Music
 var music := load_files("Sfx/Music")
 
 func _ready() -> void:
-	Menu.hide()
+	Graphics.connect("graphics_set", self, "_on_Graphics_graphics_set")
+	$Menu/Blur.hide()
+	GameOptions.hide()
 	set_process_input(false)
 	SSlider.value = db2linear(AudioServer.get_bus_volume_db(SFX_BUS))
 	MSlider.value = db2linear(AudioServer.get_bus_volume_db(MUSIC_BUS))
 	SensSlider.value = 2
 
 	# Sliders should lose focus when mouse exits
-	for child in $Menu/Center/Menu/Buttons.get_children():
+	for child in GameOptions.get_node("Margin/Buttons").get_children():
 		if child is HBoxContainer:
 			for c in child.get_children():
 				if c is Slider:
@@ -121,11 +127,14 @@ func _input(event: InputEvent) -> void:
 
 func start_game(player: Player) -> void:
 	Menu.hide()
+	$Menu/Blur.show()
+	GameOptions.show()
+	GfxCenter.hide()
 	SSlider.value = db2linear(AudioServer.get_bus_volume_db(SFX_BUS))
 	MSlider.value = db2linear(AudioServer.get_bus_volume_db(MUSIC_BUS))
 	current_player = player
-	player.Cam.far = $Menu/Center/Menu/Buttons/ViewDist/ViewSlider.value
-	$Menu/Center/Menu/Buttons/Grav.pressed = current_player.g
+	player.Cam.far = $Menu/GameOptions/Margin/Buttons/ViewDist/ViewSlider.value
+	Grav.pressed = current_player.g
 	Flip.pressed = true # TODO: Fix hardcode
 	set_process_input(true)
 	play_music()
@@ -137,12 +146,6 @@ func _on_MSlider_value_changed(value: float) -> void:
 func _on_SSlider_value_changed(value: float) -> void:
 	AudioServer.set_bus_volume_db(SFX_BUS, linear2db(value))
 
-
-func _on_Quit_button_up() -> void:
-	get_tree().paused = false
-	Menu.visible = false
-	set_process_input(false)
-	Network.disconnect_from_server()
 
 func mouse_exit(slider: Control) -> void:
 	slider.release_focus()
@@ -204,7 +207,23 @@ func _on_Grav_toggled(button_pressed: bool) -> void:
 	else:
 		Grav.modulate = G.deactivated_color
 
+func _on_Graphics_graphics_set() -> void:
+	GfxCenter.hide()
+	GameOptions.show()
+
+func _on_Gfx_pressed() -> void:
+	GameOptions.hide()
+	GfxCenter.show()
 
 
 func _on_ViewSlider_value_changed(value: float) -> void:
 	current_player.Cam.far = value
+
+
+func _on_Quit_pressed() -> void:
+	get_tree().paused = false
+	Menu.hide()
+	set_process_input(false)
+	Network.disconnect_from_server()
+
+

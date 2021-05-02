@@ -1,113 +1,23 @@
 extends Control
 
-# NodePaths
-export (NodePath) var overall_path
-export (NodePath) var shadows_path
-export (NodePath) var glow_path
-export (NodePath) var bloom_path
-export (NodePath) var ssao_path
-export (NodePath) var spinner_path
-export (NodePath) var Graphics_path
-export (NodePath) var Menu_path
-
-# Actual Nodes
-onready var overall : OptionButton = get_node(overall_path)
-onready var shadows : OptionButton = get_node(shadows_path)
-onready var glow : OptionButton = get_node(glow_path)
-onready var bloom : OptionButton = get_node(bloom_path)
-onready var ssao : OptionButton = get_node(ssao_path)
-onready var spinner : Control = get_node(spinner_path)
-onready var Graphics : Control = get_node(Graphics_path)
-onready var Menu : Control = get_node(Menu_path)
+onready var spinner : Control = $All/Margin/Menu/PlayMargin/Play/SpinCenter/Spinner
+onready var Menu : Control = $All/Margin
 onready var Anim := $Anim
 onready var ClickAnim := $ClickAnim
-
-# Setting constants
-const STANDARD := PoolStringArray(["Off", "Low", "Medium", "High"])
-const BINARY := PoolStringArray(["Off", "On"])
-const ALL_GFX_OPTIONS := PoolStringArray(["shadows", "glow", "bloom", "ssao"]) # TODO: more graphics settings
+onready var GfxCenter : Control
 
 func _ready() -> void:
 #	OS.set_low_processor_usage_mode(true)
+	GfxCenter = G.Graphics.get_parent()
+	if G.Graphics.connect("graphics_set", self, "_on_Graphics_graphics_set") != OK:
+		print("Error: Couldn't connect graphics!")
 
-	# Add options
-	add_options_to_button(overall, PoolStringArray(["Potato", "Low", "Medium", "High"]))
-	add_options_to_button(shadows, STANDARD)
-	add_options_to_button(glow, BINARY)
-	add_options_to_button(bloom, BINARY)
-	add_options_to_button(ssao, STANDARD)
-
-	# Setup signals
-	setup_graphics_options_signals($All/Margin/Center/Graphics/Buttons/Options, "gfx_changed")
-
+	# Center background
 	var screen : float = get_viewport().size.x
 	var bg_img := $BG/Img
 	screen /= 1920
 	bg_img._set_size(bg_img.rect_size * screen)
 	bg_img.rect_position = bg_img.rect_size / -2
-
-
-# Connects all OptionButtons under parent GFX_CONTROL to FUNCTION_NAME
-# (Note: OptionButtons must be children of an HBoxContainer under GFX_CONTROL)
-func setup_graphics_options_signals(gfx_control: Control, function_name: String) -> void:
-	for child in gfx_control.get_children():
-		# Specific to this game
-		if child is HBoxContainer:
-			var button : OptionButton = child.get_node("Button")
-			var setting : String = child.name
-			# Connect signal
-			if (button.connect("item_selected", self, function_name, [setting]) != OK): # , button
-				print("ERROR: COULDN'T CONNECT " + setting)
-			# Default overall is high
-			if setting == "Overall":
-				update_overall_ui()
-			# Set other defaults
-			else:
-				set_setting(setting, G.get(setting))
-
-# If setup_graphics_options_signals connects BUTTON to this, sets SETTING
-# anytime the BUTTON's option is changed.
-func gfx_changed(index: int, setting: String) -> void: #, button: OptionButton
-	# Overall setting
-	if setting == "Overall":
-		for option in ALL_GFX_OPTIONS: 
-			set_setting(option, index)
-	# Custom setting overall
-	elif index == 4:
-		return
-	# Specific setting
-	else:
-		set_setting(setting, index)
-		overall.text = "Custom"
-
-# Sets SETTING in G to INDEX (off, low, med, high), corrects overbounds INDEX
-func set_setting(setting: String, index: int) -> void:
-	# Bounds correction
-	index = int(min(index, get(setting).get_item_count() - 1))
-	# Set global variable
-	G.set(setting, index)
-	# Visual update
-	get(setting).select(index)
-
-# Sets overall's text to "custom" unless we match a preset
-func update_overall_ui() -> void:
-	var first : int = G.get(ALL_GFX_OPTIONS[0])
-	var all_match := true
-	for option in ALL_GFX_OPTIONS:
-		if first != G.get(option):
-			all_match = false
-			break
-	if all_match:
-		overall.select(first)
-	else:
-		overall.text = "Custom"
-
-# Add all strings from OPTIONS as options for BUTTON
-func add_options_to_button(button: OptionButton, options: PoolStringArray) -> void:
-	var i := 0
-	for option in options:
-		button.add_item(option, i)
-		i += 1
 
 
 func start() -> void:
@@ -117,22 +27,51 @@ func start() -> void:
 func _on_Graphics_button_up() -> void:
 	Anim.play("ChooseGfx")
 	Menu.hide()
-	Graphics.show()
-
-
-func _on_DoneButton_button_up() -> void:
-	Anim.play_backwards("ChooseGfx")
-	Menu.show()
-	Graphics.hide()
-
+	GfxCenter.show()
+	G.Graphics.show()
+	G.Menu.show()
+	G.GameOptions.hide()
 
 func _on_Host_pressed():
 	start()
 	Network.host()
 #	spinner.show()
 
-
 func _on_Join_pressed():
 	start()
 	Network.join()
 	spinner.show()
+
+func _on_Graphics_graphics_set() -> void:
+	Anim.play_backwards("ChooseGfx")
+	Menu.show()
+
+
+
+
+
+
+
+
+# IGNORE, may be useful later
+
+
+# NodePaths
+#export (NodePath) var overall_path
+#export (NodePath) var shadows_path
+#export (NodePath) var glow_path
+#export (NodePath) var bloom_path
+#export (NodePath) var ssao_path
+#export (NodePath) var spinner_path
+#export (NodePath) var Graphics_path
+#export (NodePath) var Menu_path
+
+# Actual Nodes
+#onready var overall : OptionButton = get_node(overall_path)
+#onready var shadows : OptionButton = get_node(shadows_path)
+#onready var glow : OptionButton = get_node(glow_path)
+#onready var bloom : OptionButton = get_node(bloom_path)
+#onready var ssao : OptionButton = get_node(ssao_path)
+#onready var spinner : Control = get_node(spinner_path)
+#onready var Graphics : Control = get_node(Graphics_path)
+#onready var Menu : Control = get_node(Menu_path)

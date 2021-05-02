@@ -34,6 +34,7 @@ var grapple_pos := Vector3.ZERO
 var L_not_grapplin := true
 var grapple_pos2 := Vector3.ZERO
 const GEAR_MAX_ANGLE := .384 # 22 degrees
+const GEAR_REST_ROT := .3
 
 # File Paths
 export(String, FILE) var cam_spring_path
@@ -292,7 +293,7 @@ func _input(event: InputEvent) -> void:
 				)
 			tween.start()
 
-
+var time_elapsed := 0.0
 func _physics_process(delta: float) -> void:
 	# collision with boxes, don't need anymore since we will be doing custom physics
 #	for index in get_slide_count():
@@ -343,6 +344,29 @@ func _physics_process(delta: float) -> void:
 		vel += a
 		var vel_speed := a.length()
 		
+		if vel_speed > 0:
+			# animation of gears walking
+			GearR.rotation = GearR.rotation.linear_interpolate(
+				Vector3(cos(time_elapsed) / 8 + GEAR_REST_ROT, 0, 0), 
+				4 * delta
+			)
+			GearR.translation = Vector3(1.15, sin(time_elapsed) / 16 - .25, 0)
+			GearL.rotation = GearL.rotation.linear_interpolate(
+				Vector3(sin(time_elapsed) / 8 + GEAR_REST_ROT, 0, 0), 
+				4 * delta
+			)
+			GearL.translation = Vector3(-1.15, sin(time_elapsed) / 16 - .25, 0)
+			time_elapsed += delta * accel.length() * 2.5
+		else:
+			GearR.rotation = GearR.rotation.linear_interpolate(
+				Vector3(GEAR_REST_ROT, 0, 0), 
+				4 * delta
+			)
+			GearL.rotation = GearL.rotation.linear_interpolate(
+				Vector3(GEAR_REST_ROT, 0, 0), 
+				4 * delta
+			)
+		
 		# Walking Anims
 		AnimTree.set("parameters/Move/blend_amount", vel_speed)
 		AnimTree.set("parameters/SprintFactor/scale", clamp(vel_speed * .3, 1, 1.25))
@@ -352,14 +376,31 @@ func _physics_process(delta: float) -> void:
 		# Reduce grounded movespeed
 		vel += .125 * a # TODO: fix massive acceleration if jump while moving
 		AnimTree.set("parameters/Move/blend_amount", 0)
+		
+		GearR.rotation = GearR.rotation.linear_interpolate(
+			Vector3(GEAR_REST_ROT, 0, 0), 
+			4 * delta
+		)
+		GearL.rotation = GearL.rotation.linear_interpolate(
+			Vector3(GEAR_REST_ROT, 0, 0), 
+			4 * delta
+		)
 
 	# apply gravity, g is whether gravity is on or off, we turn off gravity if we're grappling
 	vel -= int(g) * (int(not_grappling)) * (int(L_not_grapplin)) * grav * delta * transform.basis.y
 	# If underwater
 	if global_transform.origin.y < G.water_level:
-		vel = vel * .99 + Vector3.UP * min(G.water_level - global_transform.origin.y + 1, 1) * grav * delta
+		if Input.is_action_pressed("ui_up"):
+			vel -= CamY.global_transform.basis.z * (int(Input.get_action_strength("sprint")) + 1)
+		vel = vel * .95 + Vector3.UP * min(G.water_level - global_transform.origin.y + 1, 1) * grav * delta
 		if Input.is_action_pressed("jump"):
 			vel += Vector3.UP * grav * delta
+		
+	if Cam.global_transform.origin.y < G.water_level:
+		G.game.Water.visible = true
+	else:
+		G.game.Water.visible = false
+	
 	# apply inputs, physics
 	vel = move_and_slide(vel, transform.basis.y, false, 4, .75, false)
 	# note: using CamY.global_transform.basis.y for line 385
@@ -385,8 +426,6 @@ func _physics_process(delta: float) -> void:
 		GearR.rotation.y = clamp(GearR.rotation.y, -GEAR_MAX_ANGLE, GEAR_MAX_ANGLE)
 		GLine.points[0] = grapple_pos
 		GLine.points[1] = GearRMuzzle.global_transform.origin
-	else:
-		GearR.rotation = GearR.rotation.linear_interpolate(Vector3.ZERO, 16 * delta)
 	
 	# Hook hit
 	if !not_grappling:
@@ -414,8 +453,6 @@ func _physics_process(delta: float) -> void:
 		GearL.rotation.y = clamp(GearL.rotation.y, -GEAR_MAX_ANGLE, GEAR_MAX_ANGLE)
 		LGLine.points[0] = grapple_pos2
 		LGLine.points[1] = GearLMuzzle.global_transform.origin
-	else:
-		GearL.rotation = GearL.rotation.linear_interpolate(Vector3.ZERO, 16 * delta)
 	
 	# Left Hook hit
 	if !L_not_grapplin:

@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scn/Actor/Enemy/Worm.gd" type="Script" id=1]
 [ext_resource path="res://Scn/Actor/Enemy/WormBody.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Gfx/Material/WormBody.tres" type="Material" id=3]
+[ext_resource path="res://Scn/Actor/Enemy/WormHead.gd" type="Script" id=4]
 
 [sub_resource type="SphereShape" id=1]
 radius = 8.0
@@ -15,6 +16,7 @@ body_seg_s = ExtResource( 2 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.19846, 0, 0 )
 collision_layer = 4
 collision_mask = 7
+script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="Head"]
 shape = SubResource( 1 )

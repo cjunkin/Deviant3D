@@ -6,7 +6,7 @@ const bloom_amt := .05
 func _ready() -> void:
 	var all_off := true
 	var sun : DirectionalLight = get_node(Sunlight)
-
+	print(G.shadows)
 	match G.shadows:
 		G.OFF:
 			sun.shadow_enabled = false

@@ -1,9 +1,11 @@
+class_name WormBody
 extends KinematicBody
 
 var hp := 4
 
 func _ready():
 	add_to_group(G.WORM_BODY)
+	add_to_group(G.ENEMY)
 
 # Damage
 func dmg(_hitpoint := Vector3.ZERO, dmg := 1) -> void:

@@ -6,7 +6,7 @@ const PROJ_PER_PLAYER := 10
 const EXP_PER_PLAYER := 10
 var num_lasers := PROJ_PER_PLAYER
 var num_explosions := EXP_PER_PLAYER
-const num_enemies := 1
+const num_enemies := 8
 #const num_laser_audio := 8
 #const num_grapple_sounds := 6
 
@@ -39,6 +39,7 @@ const spawn_time := 1.0
 onready var Reticule : TextureRect = $HUD/Reticule
 onready var Anim := $HUD/Anim
 onready var Msg := $HUD/Msg
+onready var Water := $HUD/Water
 
 # RNG
 var spawn_rng := RandomNumberGenerator.new()
@@ -71,6 +72,9 @@ func _ready()->void:
 		e.name = G.EXPL + str(i)
 		explosions.append(e)
 		add_child(e)
+	
+	
+	$Water.translation.y = G.water_level
 
 
 #	for __ in range(num_grapple_sounds):

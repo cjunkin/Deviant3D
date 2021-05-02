@@ -72,4 +72,5 @@ material/0 = null
 [node name="SlideTimer" type="Timer" parent="."]
 wait_time = 0.5
 one_shot = true
+
 [connection signal="timeout" from="SlideTimer" to="." method="_on_SlideTimer_timeout"]

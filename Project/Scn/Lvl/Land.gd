@@ -9,7 +9,7 @@ var rng := RandomNumberGenerator.new()
 
 # TODO: make it a plane
 
-func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 35, SPACING := 32.0) -> void:
+func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 32, SPACING := 32.0) -> void:
 	var RAND_OFFSET_MAX := SPACING / 4.0
 	# Cube looks like 
 	#    e-------f
