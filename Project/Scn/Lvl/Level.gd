@@ -62,8 +62,6 @@ func _ready()->void:
 		var p : Projectile = laser_s.instance()
 		p.name = G.LASER + str(i)
 		projectiles.append(p)
-		if p == null:
-			print(p)
 
 	# Explosions
 #	explosions.resize(num_explosions)
