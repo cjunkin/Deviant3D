@@ -12,7 +12,7 @@
 [ext_resource path="res://Scn/UI/Cam/ShakyCam2D.tscn" type="PackedScene" id=10]
 [ext_resource path="res://Scn/UI/Instructions/Instructions.tscn" type="PackedScene" id=11]
 
-[sub_resource type="Shader" id=3]
+[sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
 
 uniform sampler2D flowMap; //Displacement map
@@ -36,28 +36,28 @@ void fragment(){
 //	VERTEX
 //}"
 
-[sub_resource type="OpenSimplexNoise" id=4]
+[sub_resource type="OpenSimplexNoise" id=2]
 octaves = 1
 period = 256.0
 
-[sub_resource type="NoiseTexture" id=5]
+[sub_resource type="NoiseTexture" id=3]
 seamless = true
-noise = SubResource( 4 )
+noise = SubResource( 2 )
 
-[sub_resource type="ShaderMaterial" id=6]
-shader = SubResource( 3 )
+[sub_resource type="ShaderMaterial" id=4]
+shader = SubResource( 1 )
 shader_param/strength = 0.01
 shader_param/speed = 24.0
 shader_param/frames = 10
-shader_param/flowMap = SubResource( 5 )
+shader_param/flowMap = SubResource( 3 )
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="DynamicFont" id=5]
 size = 20
 outline_size = 2
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 3 )
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=6]
 loop = true
 tracks/0/type = "bezier"
 tracks/0/path = NodePath(".:rect_scale:x")
@@ -80,14 +80,14 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 0.5, 1 )
 }
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=7]
 size = 64
 outline_size = 6
 outline_color = Color( 0, 0, 0, 1 )
 use_mipmaps = true
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=8]
 size = 24
 outline_size = 2
 outline_color = Color( 0, 0, 0, 1 )
@@ -200,7 +200,7 @@ __meta__ = {
 layer = 2
 
 [node name="yeet" type="TextureRect" parent="All"]
-material = SubResource( 6 )
+material = SubResource( 4 )
 margin_left = 1025.65
 margin_top = 24.2725
 margin_right = 1252.65
@@ -218,7 +218,7 @@ margin_bottom = 240.652
 rect_rotation = -25.4588
 rect_scale = Vector2( 1.09464, 1.09464 )
 rect_pivot_offset = Vector2( 108, 25 )
-custom_fonts/font = SubResource( 7 )
+custom_fonts/font = SubResource( 5 )
 text = "This text totally ain't 
 ripping off Minecraft"
 __meta__ = {
@@ -227,7 +227,7 @@ __meta__ = {
 
 [node name="Txt" type="AnimationPlayer" parent="All/Label"]
 autoplay = "Msg"
-anims/Msg = SubResource( 8 )
+anims/Msg = SubResource( 6 )
 script = ExtResource( 8 )
 
 [node name="Margin" type="MarginContainer" parent="All"]
@@ -270,7 +270,7 @@ margin_bottom = 176.0
 [node name="Txt" type="Label" parent="All/Margin/Menu/Title/VBox"]
 margin_right = 326.0
 margin_bottom = 77.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 7 )
 text = "Deviant 3D"
 align = 1
 __meta__ = {
@@ -281,7 +281,7 @@ __meta__ = {
 margin_top = 81.0
 margin_right = 326.0
 margin_bottom = 109.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 8 )
 text = "© 2021 Calvin Wong "
 align = 1
 valign = 2
@@ -370,24 +370,24 @@ margin_top = 53.0
 margin_right = 888.0
 margin_bottom = 141.0
 
-[node name="Graphics" type="Button" parent="All/Margin/Menu/Center/VBox"]
-modulate = Color( 0.709804, 0.827451, 1, 1 )
+[node name="How2Play" type="Button" parent="All/Margin/Menu/Center/VBox"]
+modulate = Color( 1, 0.85098, 0.988235, 1 )
 margin_right = 256.0
 margin_bottom = 88.0
 rect_min_size = Vector2( 256, 88 )
 hint_tooltip = "Choose how to set your eyeballs on fire"
 mouse_default_cursor_shape = 2
-text = "Graphics"
+text = "How 2 Play"
 
-[node name="How2Play" type="Button" parent="All/Margin/Menu/Center/VBox"]
-modulate = Color( 1, 0.85098, 0.988235, 1 )
+[node name="Graphics" type="Button" parent="All/Margin/Menu/Center/VBox"]
+modulate = Color( 0.709804, 0.827451, 1, 1 )
 margin_left = 260.0
 margin_right = 516.0
 margin_bottom = 88.0
 rect_min_size = Vector2( 256, 88 )
 hint_tooltip = "Choose how to set your eyeballs on fire"
 mouse_default_cursor_shape = 2
-text = "How 2 Play"
+text = "Graphics"
 
 [node name="Status" type="Label" parent="All/Margin/Menu"]
 margin_top = 644.0
@@ -411,5 +411,5 @@ anims/Click = SubResource( 10 )
 
 [connection signal="pressed" from="All/Margin/Menu/PlayMargin/Play/Host" to="." method="_on_Host_pressed"]
 [connection signal="pressed" from="All/Margin/Menu/PlayMargin/Play/Join" to="." method="_on_Join_pressed"]
-[connection signal="pressed" from="All/Margin/Menu/Center/VBox/Graphics" to="." method="_on_Graphics_pressed"]
 [connection signal="pressed" from="All/Margin/Menu/Center/VBox/How2Play" to="." method="_on_How2Play_pressed"]
+[connection signal="pressed" from="All/Margin/Menu/Center/VBox/Graphics" to="." method="_on_Graphics_pressed"]

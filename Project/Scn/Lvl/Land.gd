@@ -66,20 +66,21 @@ func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 32, SPACING := 32.0) -> void:
 	# var top_bot := [16, 18, 20, 22, 17, 19, 21, 23]
 	for y in range(NUM_PTS - 1):
 		for x in range(NUM_PTS - 1):
-			var rand_height := (noise.get_noise_2d(x + rng.randf() - .5, y + rng.randf() - .5) + .9) * 4.0
+			var rand_height := noise.get_noise_2d(x + rng.randf() - .5, y + rng.randf() - .5) + .9
 #			print(rand_height)
 			var mat: Material
-			if rand_height < 3.5:
+			if rand_height < .85:
 				continue
 #				mat = water_mat
 #				rand_height -= 3
-			elif rand_height < 4.25:
+			elif rand_height < 1.0:
 				mat = land_mat
 #			elif rand_height < 6:
 #				mat = land_mat
 			else:
 				mat = grass_mat
-				rand_height += .5
+				rand_height += .1
+			rand_height *= 6.0
 			vertices[0] = pts[x + y * NUM_PTS]
 			vertices[1] = pts[x + 1 + y * NUM_PTS]
 			vertices[2] = pts[x + (y + 1) * NUM_PTS]
