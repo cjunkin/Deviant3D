@@ -228,3 +228,10 @@ func _on_Quit_pressed() -> void:
 	Network.disconnect_from_server()
 
 
+func _on_How2Play_pressed() -> void:
+	$Menu/Instructions.show()
+	$Menu/GameOptions.hide()
+
+func _on_Back_pressed():
+	$Menu/Instructions.hide()
+	$Menu/GameOptions.show()

@@ -1,7 +1,8 @@
 extends Control
 
 onready var spinner : Control = $All/Margin/Menu/PlayMargin/Play/SpinCenter/Spinner
-onready var Menu : Control = $All/Margin
+onready var Menu : Control = $All/Margin/Menu
+onready var Margin : Control = $All/Margin
 onready var Anim := $Anim
 onready var ClickAnim := $ClickAnim
 onready var GfxCenter : Control
@@ -19,14 +20,13 @@ func _ready() -> void:
 	bg_img._set_size(bg_img.rect_size * screen)
 	bg_img.rect_position = bg_img.rect_size / -2
 
-
 func start() -> void:
 #	OS.set_low_processor_usage_mode(false)
 	$All/Margin/Menu/Status.text = "Connecting..."
 
-func _on_Graphics_button_up() -> void:
+func _on_Graphics_pressed() -> void:
 	Anim.play("ChooseGfx")
-	Menu.hide()
+	Margin.hide()
 	GfxCenter.show()
 	G.Graphics.show()
 	G.Menu.show()
@@ -44,10 +44,13 @@ func _on_Join_pressed():
 
 func _on_Graphics_graphics_set() -> void:
 	Anim.play_backwards("ChooseGfx")
-	Menu.show()
+	Margin.show()
 	G.Menu.hide()
 
-
+func _on_How2Play_pressed() -> void:
+	$All/Margin/Instructions.show()
+#	print($All/Margin/Instructions.visible)
+	Menu.hide()
 
 
 
@@ -76,3 +79,9 @@ func _on_Graphics_graphics_set() -> void:
 #onready var spinner : Control = get_node(spinner_path)
 #onready var Graphics : Control = get_node(Graphics_path)
 #onready var Menu : Control = get_node(Menu_path)
+
+
+
+
+
+
