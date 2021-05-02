@@ -72,6 +72,54 @@
     </div>
   </div>
   
+    
+    <div class="section-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-8 col-md-offset-2">
+                    <div class="text-center">
+                        <h2>5/1 Progress - More Animations, Water shader, Water Physics </h2>
+                        <p>
+                        Made the player's gear kind of tilt down when it's idle, and bob a little when walking, using sine and cosine and the time
+                        elapsed to smooth it out.
+                        </p>
+                        <p>
+                            So I'm too lazy to go into the details for the shader but using a tutorial and a subdivided plane mesh,
+                            we used depth testing to make foam and time displacement to make bobbing vertices (which made the plane
+                            look like it was waving) and used some noise and screen texture calculations to calculate a nice looking wave texture.
+                            We also optimized the shader by reducing if elses to boolean statements. 
+                        </p>
+                        <p>
+                            As for water physics, if the player fell below sea level, we applied an upwards force, which overnegated gravity by
+                            just a bit. However, to do actual swimming, we have to create a new set of controls/physics, which will also need to 
+                            be networked. Singleplayer wise, it's more or less working, but will need some work to get it multiplayer ready.
+                        <p>
+                        
+                        <p>
+                            Also color coded the menus and made the GUI a little nicer visually. You can now change graphics in game, and set view distance (ie: far), and buttons have color :D
+                        </p>
+                        
+                        <!--<video autoplay loop muted controls playsinline width="95%"> 
+                        <source src="asset/aim_center_compr.mp4" type="video/mp4">
+                        Your browser doesn't support non-GIF videos :(
+                        </video>-->
+                        
+                        <p>
+                            Todos: videos for this and better explanation for the shader, networking swimming, figuring out why shadows don't show up at long distances. Here's an image though :)
+                        </p>
+                        
+                    
+                    </div>
+                </div>
+                <img align="middle" src="../Project/Gfx/2D/Menu04.png" >
+                <img align="middle" src="asset/underwater.png" >
+                <img align="middle" src="asset/5_1.png" >
+                <img align="middle" src="asset/color_menus2.png" >
+                <img align="middle" src="asset/color_menus.png" >
+            </div>
+        </div>
+    </div>
+  
   
       <div class="section-container">
         <div class="container">

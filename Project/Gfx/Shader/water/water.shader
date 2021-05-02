@@ -53,7 +53,6 @@ void fragment(){
 	
 	float sum = (n1.r + n2.r) - 1f;
 	
-	
 	float z_depth = rim(texture(DEPTH_TEXTURE, SCREEN_UV).x);
 	float z_pos = rim(FRAGCOORD.z);
 	float diff = z_depth - z_pos;
@@ -61,13 +60,10 @@ void fragment(){
 	vec2 displacement = vec2(sum * 0.05);
 	diff += displacement.x * 50f;
 	
-
-	vec4 alpha = vec4(1.0);
-	alpha = texture(SCREEN_TEXTURE, SCREEN_UV + displacement);
+	vec4 alpha = texture(SCREEN_TEXTURE, SCREEN_UV + displacement);
 	
 	// optimized from if elses
 	float fin = 0.1 * float(sum > 0.0 && sum <= 0.4) + 1.0 * float(sum > 0.8);
-
 	
 	ALBEDO = vec3(fin) + mix(
 		alpha.rgb, 
