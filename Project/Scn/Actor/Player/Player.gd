@@ -330,6 +330,12 @@ func _physics_process(delta: float) -> void:
 		for ray in Flippers:
 			if ray.is_colliding() and FlipTime.is_stopped():
 				rpc("t", ray.get_collision_normal(), translation)
+		
+		# Underwater tint
+		if Cam.global_transform.origin.y < G.water_level:
+			G.game.Water.visible = true
+		else:
+			G.game.Water.visible = false
 
 	# Point at center
 	if forward.is_colliding():
@@ -396,10 +402,7 @@ func _physics_process(delta: float) -> void:
 		if Input.is_action_pressed("jump"):
 			vel += Vector3.UP * grav * delta
 		
-	if Cam.global_transform.origin.y < G.water_level:
-		G.game.Water.visible = true
-	else:
-		G.game.Water.visible = false
+
 	
 	# apply inputs, physics
 	vel = move_and_slide(vel, transform.basis.y, false, 4, .75, false)

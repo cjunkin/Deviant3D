@@ -48,8 +48,8 @@ func _on_Graphics_graphics_set() -> void:
 	G.Menu.hide()
 
 func _on_How2Play_pressed() -> void:
-	$All/Margin/Instructions.show()
-#	print($All/Margin/Instructions.visible)
+	$All/Margin/Controls.show()
+#	print($All/Margin/Controls.visible)
 	Menu.hide()
 
 

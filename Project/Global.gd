@@ -56,6 +56,7 @@ onready var GameOptions := $Menu/GameOptions
 onready var SSlider := GameOptions.get_node("Margin/Buttons/Sound/SSlider")
 onready var MSlider := GameOptions.get_node("Margin/Buttons/Music/MSlider")
 onready var SensSlider := GameOptions.get_node("Margin/Buttons/Sensitivity/SensSlider")
+onready var ViewSlider := GameOptions.get_node("Margin/Buttons/ViewDist/ViewSlider")
 onready var Flip := GameOptions.get_node("Margin/Buttons/Flip")
 onready var Music := $Music
 onready var Graphics := $Menu/GfxCenter/Graphics
@@ -134,7 +135,7 @@ func start_game(player: Player) -> void:
 	SSlider.value = db2linear(AudioServer.get_bus_volume_db(SFX_BUS))
 	MSlider.value = db2linear(AudioServer.get_bus_volume_db(MUSIC_BUS))
 	current_player = player
-	player.Cam.far = $Menu/GameOptions/Margin/Buttons/ViewDist/ViewSlider.value
+	_on_ViewSlider_value_changed(ViewSlider.value)
 	Grav.pressed = current_player.g
 	Flip.pressed = true # TODO: Fix hardcode
 	set_process_input(true)
@@ -218,7 +219,15 @@ func _on_Gfx_pressed() -> void:
 
 
 func _on_ViewSlider_value_changed(value: float) -> void:
-	current_player.Cam.far = value
+	if is_instance_valid(current_player):
+		current_player.Cam.far = value
+	var max_shadow_dist := 1024
+	if shadows == LOW:
+		max_shadow_dist = 160
+	elif shadows == MED:
+		max_shadow_dist = 288
+	game.get_node("Sunlight").directional_shadow_max_distance = min(value, max_shadow_dist)
+
 
 
 func _on_Quit_pressed() -> void:

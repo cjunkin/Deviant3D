@@ -34,3 +34,4 @@ func _ready():
 	# Else send a network request to get host's data
 	else:
 		request_current_data()
+	G._on_ViewSlider_value_changed(G.ViewSlider.value)

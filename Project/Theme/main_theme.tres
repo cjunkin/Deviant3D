@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=15 format=2]
+[gd_resource type="Theme" load_steps=16 format=2]
 
 [ext_resource path="res://Gfx/Font/Typori_Reg.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Theme/LineEdit/normal.tres" type="StyleBox" id=2]
@@ -89,6 +89,24 @@ expand_margin_left = 8.0
 expand_margin_right = 8.0
 anti_aliasing = false
 
+[sub_resource type="StyleBoxFlat" id=9]
+bg_color = Color( 1, 1, 1, 0.94902 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0.439216, 0.439216, 0.439216, 1 )
+border_blend = true
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+expand_margin_left = 4.0
+expand_margin_right = 4.0
+expand_margin_top = 4.0
+expand_margin_bottom = 4.0
+anti_aliasing = false
+
 [sub_resource type="StyleBoxEmpty" id=8]
 
 [resource]
@@ -143,6 +161,7 @@ LineEdit/styles/focus = SubResource( 3 )
 LineEdit/styles/normal = SubResource( 4 )
 LineEdit/styles/read_only = null
 Panel/styles/panel = SubResource( 5 )
+PanelContainer/styles/panel = SubResource( 5 )
 TabContainer/colors/font_color_bg = Color( 0.863281, 0.863281, 0.863281, 1 )
 TabContainer/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
 TabContainer/colors/font_color_fg = Color( 0.94, 0.94, 0.94, 1 )
@@ -162,6 +181,7 @@ TabContainer/styles/panel = SubResource( 6 )
 TabContainer/styles/tab_bg = ExtResource( 5 )
 TabContainer/styles/tab_disabled = ExtResource( 5 )
 TabContainer/styles/tab_fg = SubResource( 7 )
+TooltipPanel/styles/panel = SubResource( 9 )
 VScrollBar/icons/decrement = null
 VScrollBar/icons/decrement_highlight = null
 VScrollBar/icons/increment = null

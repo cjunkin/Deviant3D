@@ -6,7 +6,7 @@
 [ext_resource path="res://Scn/UI/Blur.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Scn/UI/Graphics.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Theme/main_theme.tres" type="Theme" id=6]
-[ext_resource path="res://Scn/UI/Instructions/Instructions.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Scn/UI/Controls/Controls.tscn" type="PackedScene" id=7]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 1 )
@@ -20,6 +20,7 @@ gravity = NodePath("Menu/GameOptions/Margin/Buttons/Grav")
 
 [node name="Menu" type="MarginContainer" parent="."]
 pause_mode = 2
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 1
@@ -274,6 +275,10 @@ size_flags_vertical = 5
 
 [node name="Instructions" parent="Menu" instance=ExtResource( 7 )]
 visible = false
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 1280.0
+margin_bottom = 720.0
 original = NodePath("../GameOptions")
 
 [node name="Music" type="AudioStreamPlayer" parent="."]

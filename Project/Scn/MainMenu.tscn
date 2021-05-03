@@ -10,7 +10,7 @@
 [ext_resource path="res://addons/SinusoidalAnims.gd" type="Script" id=8]
 [ext_resource path="res://Gfx/2D/yeet.png" type="Texture" id=9]
 [ext_resource path="res://Scn/UI/Cam/ShakyCam2D.tscn" type="PackedScene" id=10]
-[ext_resource path="res://Scn/UI/Instructions/Instructions.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Scn/UI/Controls/Controls.tscn" type="PackedScene" id=11]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -199,7 +199,7 @@ __meta__ = {
 [node name="All" type="CanvasLayer" parent="."]
 layer = 2
 
-[node name="yeet" type="TextureRect" parent="All"]
+[node name="Yeet" type="TextureRect" parent="All"]
 material = SubResource( 4 )
 margin_left = 1025.65
 margin_top = 24.2725
@@ -210,11 +210,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="All"]
-margin_left = 204.909
-margin_top = 189.652
-margin_right = 420.909
-margin_bottom = 240.652
+[node name="Msg" type="Label" parent="All"]
+margin_left = 167.534
+margin_top = 114.901
+margin_right = 383.534
+margin_bottom = 165.901
 rect_rotation = -25.4588
 rect_scale = Vector2( 1.09464, 1.09464 )
 rect_pivot_offset = Vector2( 108, 25 )
@@ -225,7 +225,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Txt" type="AnimationPlayer" parent="All/Label"]
+[node name="Txt" type="AnimationPlayer" parent="All/Msg"]
 autoplay = "Msg"
 anims/Msg = SubResource( 6 )
 script = ExtResource( 8 )
@@ -395,8 +395,10 @@ margin_right = 1260.0
 margin_bottom = 683.0
 align = 1
 
-[node name="Instructions" parent="All/Margin" instance=ExtResource( 11 )]
+[node name="Controls" parent="All/Margin" instance=ExtResource( 11 )]
 visible = false
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_right = 1260.0
 margin_bottom = 683.0
 original = NodePath("../Menu")

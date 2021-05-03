@@ -48,7 +48,7 @@ remotesync func register(id: int) -> void:
 		players[id] = 0
 		get_node(GAME_PATH).spawn(id)
 		get_tree().paused = false
-		G.game.set_physics_process(true)
+		G.pause(false)
 		Engine.time_scale = 1
 
 func player_connected(id: int) -> void:

@@ -21,6 +21,7 @@ func _ready() -> void:
 			sun.shadow_enabled = true
 			sun.directional_shadow_mode = DirectionalLight.SHADOW_PARALLEL_4_SPLITS
 			all_off = false
+			
 
 	match G.ssao:
 		G.OFF:
