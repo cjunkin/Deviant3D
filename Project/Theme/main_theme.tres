@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=16 format=2]
+[gd_resource type="Theme" load_steps=15 format=2]
 
 [ext_resource path="res://Gfx/Font/Typori_Reg.tres" type="DynamicFont" id=1]
 [ext_resource path="res://Theme/LineEdit/normal.tres" type="StyleBox" id=2]
@@ -107,8 +107,6 @@ expand_margin_top = 4.0
 expand_margin_bottom = 4.0
 anti_aliasing = false
 
-[sub_resource type="StyleBoxEmpty" id=8]
-
 [resource]
 default_font = ExtResource( 1 )
 Button/colors/font_color = Color( 0, 0, 0, 1 )
@@ -182,12 +180,3 @@ TabContainer/styles/tab_bg = ExtResource( 5 )
 TabContainer/styles/tab_disabled = ExtResource( 5 )
 TabContainer/styles/tab_fg = SubResource( 7 )
 TooltipPanel/styles/panel = SubResource( 9 )
-VScrollBar/icons/decrement = null
-VScrollBar/icons/decrement_highlight = null
-VScrollBar/icons/increment = null
-VScrollBar/icons/increment_highlight = null
-VScrollBar/styles/grabber = null
-VScrollBar/styles/grabber_highlight = null
-VScrollBar/styles/grabber_pressed = null
-VScrollBar/styles/scroll = SubResource( 8 )
-VScrollBar/styles/scroll_focus = null

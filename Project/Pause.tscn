@@ -63,10 +63,10 @@ custom_constants/separation = 12
 [node name="How2Play" type="Button" parent="Menu/GameOptions/Margin/Buttons"]
 margin_right = 600.0
 margin_bottom = 47.0
-hint_tooltip = "\"Read and learn, noob\" - Sun Tzu, Art of War"
+hint_tooltip = "\"Control yourself, you sick potato\" - Sun Tzu, Art of War"
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "How 2 Play"
+text = "Change Controls"
 
 [node name="Gfx" type="Button" parent="Menu/GameOptions/Margin/Buttons"]
 modulate = Color( 0.709804, 0.827451, 1, 1 )

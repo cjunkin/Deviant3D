@@ -165,12 +165,12 @@ func _input(event: InputEvent) -> void:
 		Input.get_action_strength("sprint") + 1) * speed * (
 			# Forward/backwards
 			CamX.global_transform.basis.z * (
-				Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+				Input.get_action_strength("back") - Input.get_action_strength("forward")
 				) 
 			+ 
 			# Right/Left
 			CamX.global_transform.basis.x * (
-				Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+				Input.get_action_strength("right") - Input.get_action_strength("left")
 				)
 		# Normalize direction
 		).normalized()
@@ -396,7 +396,7 @@ func _physics_process(delta: float) -> void:
 	vel -= int(g) * (int(not_grappling)) * (int(L_not_grapplin)) * grav * delta * transform.basis.y
 	# If underwater
 	if global_transform.origin.y < G.water_level:
-		if Input.is_action_pressed("ui_up"):
+		if Input.is_action_pressed("forward"):
 			vel -= CamY.global_transform.basis.z * (int(Input.get_action_strength("sprint")) + 1)
 		vel = vel * .95 + Vector3.UP * min(G.water_level - global_transform.origin.y + 1, 1) * grav * delta
 		if Input.is_action_pressed("jump"):

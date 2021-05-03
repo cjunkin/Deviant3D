@@ -375,9 +375,9 @@ modulate = Color( 1, 0.85098, 0.988235, 1 )
 margin_right = 256.0
 margin_bottom = 88.0
 rect_min_size = Vector2( 256, 88 )
-hint_tooltip = "Choose how to set your eyeballs on fire"
+hint_tooltip = "\"Control yourself, you sick potato\" - Sun Tzu, Art of War"
 mouse_default_cursor_shape = 2
-text = "How 2 Play"
+text = "Controls"
 
 [node name="Graphics" type="Button" parent="All/Margin/Menu/Center/VBox"]
 modulate = Color( 0.709804, 0.827451, 1, 1 )
