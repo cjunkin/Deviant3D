@@ -77,6 +77,7 @@ onready var GearLMuzzle := GearL.get_node("Muzzle")
 onready var forward : RayCast
 
 func _ready() -> void:
+	add_to_group(G.PLAYER)
 # THis is to draw the vel, grapple_aim, etc vectors don't need rn
 #	DebugOverlay.draw.add_vector(self, "aim", 1, 4, Color(0,1,0, 0.5))
 #	DebugOverlay.draw.add_vector(self, "grapple_aim", 1, 4, Color(0,1,1, 0.5))
