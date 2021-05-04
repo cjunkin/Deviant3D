@@ -4,16 +4,28 @@ export (NodePath) var original: NodePath
 
 func _ready() -> void:
 #	var wasd := PoolStringArray(["ui_up", "ui_right", "ui_left", "ui_down"])
+	var wasd := PoolStringArray(["forward", "left", "back", "right"])
 	var ignore := PoolStringArray(["fire", "toggle_debug", "aim"])
 	var binding_s := load("res://Scn/UI/Controls/Bind.tscn")
 	for action in InputMap.get_actions():
+		# WASD keys
+		if action in wasd:
+			for event in InputMap.get_action_list(action):
+				if !(event is InputEventJoypadButton):
+					var button :Button = $Controls/Scroll/Buttons/Movement/WASD.get_child(int(action != "forward")).get_node(action)
+					button.text = event.as_text()
+					
+					button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+					
+					if button.connect("pressed", self, "listen_for_rebind", [button]) != OK:
+						print("ERROR: check Controls.gd, button couldn't connect to listen_for_rebind")
+					bindings[button] = event
+	
 		# Custom controls
-		if !action.begins_with("ui") and !(action in ignore):
+		elif !action.begins_with("ui") and !(action in ignore):
 			add_binding(action, binding_s)
 			
-#		# WASD keys
-#		elif action in wasd:
-#			add_binding(action.replace("ui_", ""), action, binding_s)
+
 	set_process_unhandled_key_input(false)
 
 var bindings := {}

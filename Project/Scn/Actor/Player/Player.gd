@@ -28,7 +28,7 @@ puppetsync var b : float = 0.0 # Bendiness of bullet
 export var throwable_s: PackedScene
 
 # Grappling
-const MAX_GRAPPLE_SPEED := 3.25
+const MAX_GRAPPLE_SPEED := 3
 var not_grappling := true
 var grapple_pos := Vector3.ZERO
 var L_not_grapplin := true
@@ -330,7 +330,9 @@ func _physics_process(delta: float) -> void:
 		# Check flippers for flipping
 		for ray in Flippers:
 			if ray.is_colliding() and FlipTime.is_stopped():
-				rpc("t", ray.get_collision_normal(), translation)
+				var new_normal : Vector3 = ray.get_collision_normal()
+				if new_normal.dot(newest_normal) != new_normal.length_squared():
+					rpc("t", new_normal, translation)
 		
 		# Underwater tint
 		if Cam.global_transform.origin.y < G.water_level:
@@ -401,7 +403,7 @@ func _physics_process(delta: float) -> void:
 			vel -= CamY.global_transform.basis.z * (int(Input.get_action_strength("sprint")) + 1)
 		vel = vel * .95 + Vector3.UP * min(G.water_level - global_transform.origin.y + 1, 1) * grav * delta
 		if Input.is_action_pressed("jump"):
-			vel += Vector3.UP * grav * delta
+			vel += global_transform.basis.y * grav * delta
 		
 
 	
