@@ -15,14 +15,17 @@ var camera_rotation_reset := Vector3()
 
 # TODO: Add in some sort of rotation reset. Also disable physics process when not shaking
 func _physics_process(delta: float) -> void:
+#	if stress > 0:
+#		rotation_degrees = Vector3(randf(), randf(), randf()) * stress * 3
+#		stress = clamp(stress - delta, 0.0, 1.0)
+	
 	if stress == 0.0:
 		camera_rotation_reset = rotation_degrees
 	rotation_degrees = process_shake(camera_rotation_reset, delta)
 
 func process_shake(angle_center : Vector3, delta : float) -> Vector3:
-	shake = stress * stress
-	stress -= (shakeReduction / 100.0)
-	stress = clamp(stress, 0.0, 1.0)
+	shake = stress * stress * delta * 60
+	stress = clamp(stress - (shakeReduction * delta), 0.0, 1.0)
 	var newRotate = Vector3(
 		maxYaw * shake * get_noise(randi(), delta),
 		maxPitch * shake * get_noise(randi(), delta + 1.0),

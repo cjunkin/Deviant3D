@@ -1,23 +1,23 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Scn/UI/Controls/Controls.gd" type="Script" id=1]
 [ext_resource path="res://Gfx/Font/Typori_Outline.tres" type="DynamicFont" id=2]
-[ext_resource path="res://Theme/main_theme.tres" type="Theme" id=3]
 
 [node name="Panel" type="PanelContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource( 3 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Controls" type="VBoxContainer" parent="."]
-margin_right = 1280.0
-margin_bottom = 720.0
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 1273.0
+margin_bottom = 713.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 16
@@ -26,14 +26,14 @@ __meta__ = {
 }
 
 [node name="Scroll" type="ScrollContainer" parent="Controls"]
-margin_right = 1280.0
-margin_bottom = 612.0
+margin_right = 1266.0
+margin_bottom = 600.0
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
 [node name="Buttons" type="VBoxContainer" parent="Controls/Scroll"]
-margin_right = 1280.0
-margin_bottom = 612.0
+margin_right = 1266.0
+margin_bottom = 600.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -42,13 +42,13 @@ __meta__ = {
 
 [node name="Movement" type="HBoxContainer" parent="Controls/Scroll/Buttons"]
 modulate = Color( 0.878431, 0.945098, 1, 1 )
-margin_right = 1280.0
-margin_bottom = 98.0
+margin_right = 1266.0
+margin_bottom = 47.0
 size_flags_horizontal = 3
 
 [node name="Txt" type="Label" parent="Controls/Scroll/Buttons/Movement"]
-margin_right = 638.0
-margin_bottom = 98.0
+margin_right = 631.0
+margin_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
 custom_fonts/font = ExtResource( 2 )
@@ -57,64 +57,64 @@ align = 1
 valign = 1
 
 [node name="WASD" type="VBoxContainer" parent="Controls/Scroll/Buttons/Movement"]
-margin_left = 642.0
-margin_right = 1280.0
-margin_bottom = 98.0
+margin_left = 635.0
+margin_right = 1266.0
+margin_bottom = 47.0
 size_flags_horizontal = 3
 
 [node name="W" type="HBoxContainer" parent="Controls/Scroll/Buttons/Movement/WASD"]
-margin_right = 638.0
-margin_bottom = 47.0
+margin_right = 631.0
+margin_bottom = 20.0
 size_flags_horizontal = 3
 
 [node name="Spacer" type="Control" parent="Controls/Scroll/Buttons/Movement/WASD/W"]
-margin_right = 210.0
-margin_bottom = 47.0
+margin_right = 207.0
+margin_bottom = 20.0
 size_flags_horizontal = 3
 
 [node name="forward" type="Button" parent="Controls/Scroll/Buttons/Movement/WASD/W"]
-margin_left = 214.0
-margin_right = 424.0
-margin_bottom = 47.0
+margin_left = 211.0
+margin_right = 419.0
+margin_bottom = 20.0
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
 [node name="Spacer2" type="Control" parent="Controls/Scroll/Buttons/Movement/WASD/W"]
-margin_left = 428.0
-margin_right = 638.0
-margin_bottom = 47.0
+margin_left = 423.0
+margin_right = 631.0
+margin_bottom = 20.0
 size_flags_horizontal = 3
 
 [node name="ASD" type="HBoxContainer" parent="Controls/Scroll/Buttons/Movement/WASD"]
-margin_top = 51.0
-margin_right = 638.0
-margin_bottom = 98.0
+margin_top = 24.0
+margin_right = 631.0
+margin_bottom = 44.0
 size_flags_horizontal = 3
 
 [node name="left" type="Button" parent="Controls/Scroll/Buttons/Movement/WASD/ASD"]
-margin_right = 210.0
-margin_bottom = 47.0
+margin_right = 207.0
+margin_bottom = 20.0
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
 [node name="back" type="Button" parent="Controls/Scroll/Buttons/Movement/WASD/ASD"]
-margin_left = 214.0
-margin_right = 424.0
-margin_bottom = 47.0
+margin_left = 211.0
+margin_right = 419.0
+margin_bottom = 20.0
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
 [node name="right" type="Button" parent="Controls/Scroll/Buttons/Movement/WASD/ASD"]
-margin_left = 428.0
-margin_right = 638.0
-margin_bottom = 47.0
+margin_left = 423.0
+margin_right = 631.0
+margin_bottom = 20.0
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
 [node name="Back" type="Button" parent="Controls"]
-margin_top = 628.0
-margin_right = 1280.0
-margin_bottom = 720.0
+margin_top = 616.0
+margin_right = 1266.0
+margin_bottom = 706.0
 rect_min_size = Vector2( 0, 72 )
 hint_tooltip = "Control your destiny! (lame pun, ik)"
 mouse_default_cursor_shape = 2

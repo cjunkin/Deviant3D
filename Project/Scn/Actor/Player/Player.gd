@@ -96,7 +96,7 @@ func _ready() -> void:
 	LHook.name = "L"
 	G.game.hooks.append(LHook)
 
-	# Setup Forward so that we can aim dead center
+	# Sets up Forward so that we can aim dead center
 	# TODO: Find way to animate camera without using CamHolder 
 	var CamHolder :Spatial = CamY.get_node("CamHolder") 
 	# CamHolder is needed so walking anims doesn't affect gun rotation
@@ -341,9 +341,17 @@ func _physics_process(delta: float) -> void:
 
 	# Point at center
 	if forward.is_colliding():
-		GunHolder.look_at(forward.get_collision_point(), transform.basis.y)
+		GunHolder.global_transform = GunHolder.global_transform.interpolate_with(
+			GunHolder.global_transform.looking_at(
+				forward.get_collision_point(), transform.basis.y
+				), 
+			delta * 10
+		)
 	else:
-		GunHolder.rotation = Vector3.ZERO
+		GunHolder.rotation = GunHolder.rotation.linear_interpolate(
+			Vector3.ZERO,
+			delta * 10
+		)
 
 	# Grounded
 	if is_on_floor():
@@ -400,10 +408,9 @@ func _physics_process(delta: float) -> void:
 	if global_transform.origin.y < G.water_level:
 		if Input.is_action_pressed("forward"):
 			vel -= CamY.global_transform.basis.z * (int(Input.get_action_strength("sprint")) + 1)
-		vel = vel * .95 + Vector3.UP * min(G.water_level - global_transform.origin.y + 1, 1) * grav * delta
+		vel = vel * .98 + Vector3.UP * min(G.water_level - global_transform.origin.y + 1, 1) * grav * delta
 		if Input.is_action_pressed("jump"):
 			vel += global_transform.basis.y * grav * delta
-		
 
 	
 	# apply inputs, physics

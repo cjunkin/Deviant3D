@@ -294,7 +294,7 @@ nodes/SprintFactor/position = Vector2( 80, 220 )
 nodes/Walk/node = SubResource( 18 )
 nodes/Walk/position = Vector2( -140, 220 )
 nodes/output/position = Vector2( 860, 240 )
-node_connections = [ "output", 0, "Firing", "Reloading", 0, "Fire", "Reloading", 1, "Reload", "SprintFactor", 0, "Walk", "Firing", 0, "Move", "Firing", 1, "Reloading", "Move", 0, "Idle", "Move", 1, "SprintFactor" ]
+node_connections = [ "output", 0, "Firing", "Firing", 0, "Move", "Firing", 1, "Reloading", "Move", 0, "Idle", "Move", 1, "SprintFactor", "Reloading", 0, "Fire", "Reloading", 1, "Reload", "SprintFactor", 0, "Walk" ]
 
 [node name="Player" type="KinematicBody"]
 collision_layer = 2
@@ -307,13 +307,13 @@ flippers_path = "res://Scn/Actor/Player/Flippers.tscn"
 [node name="CamX" type="Spatial" parent="."]
 
 [node name="CamY" type="Spatial" parent="CamX"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.000904252, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00121932, 0 )
 
 [node name="GunHolder" type="Spatial" parent="CamX/CamY"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.6, -1 )
 
 [node name="Gun" parent="CamX/CamY/GunHolder" instance=ExtResource( 1 )]
-transform = Transform( 0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, -0.600904, 0.25 )
+transform = Transform( 0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, -0.601219, 0.25 )
 
 [node name="Muzzle" type="Position3D" parent="CamX/CamY/GunHolder/Gun"]
 transform = Transform( 1.33333, -7.39705e-16, -1.59872e-14, 2.14688e-15, 1.33333, 1.98952e-13, 1.59872e-14, -1.98952e-13, 1.33333, 0.000968695, 0.820632, -2.52995 )
