@@ -21,7 +21,6 @@ func _ready() -> void:
 			sun.shadow_enabled = true
 			sun.directional_shadow_mode = DirectionalLight.SHADOW_PARALLEL_4_SPLITS
 			all_off = false
-			
 
 	match G.ssao:
 		G.OFF:
@@ -56,3 +55,6 @@ func _ready() -> void:
 	# Only turn off adjustments if set to potato
 	if !all_off:
 		environment.adjustment_enabled = true
+
+func _physics_process(delta: float) -> void:
+	environment.background_sky_rotation = environment.background_sky_rotation.linear_interpolate(G.current_player.newest_normal, delta * 12)
