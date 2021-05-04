@@ -57,4 +57,4 @@ func _ready() -> void:
 		environment.adjustment_enabled = true
 
 func _physics_process(delta: float) -> void:
-	environment.background_sky_rotation = environment.background_sky_rotation.linear_interpolate(G.current_player.newest_normal, delta * 12)
+	environment.background_sky_rotation = environment.background_sky_rotation.linear_interpolate(G.current_player.rotation, delta * 12)
