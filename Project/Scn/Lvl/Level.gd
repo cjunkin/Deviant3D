@@ -164,8 +164,12 @@ func gen_asteroids(my_seed: int) -> void:
 	var rock_hitbox_s := load(rock_path) # Hitbox prefab
 	var mm : MultiMesh = $Rocks.multimesh
 	var i := 0
-	for x in range(-400, 400, 58):
-		for z in range(-400, 400, 58):
+	var start := 400
+	var step := 58
+	var max_num_asteroids := int(ceil(start * 2 / step) * ceil(start * 2 / step))
+	mm.instance_count = max_num_asteroids
+	for x in range(-start, start, step):
+		for z in range(-start, start, step):
 			if (noise.get_noise_3d(x, x, z) > 0):
 				# Scale
 				var size := rng.randf_range(12, 24)
@@ -195,7 +199,6 @@ func gen_asteroids(my_seed: int) -> void:
 #				if rng.randf() > .5:
 #					b.get_node("Cube001").set_surface_material(0, mat)
 				add_child(b)
-	mm.instance_count = i
 	mm.visible_instance_count = i
 
 # Spawn an enemy at position TRANSL with VELOCITY, targeting Node named TARGET_NAME
