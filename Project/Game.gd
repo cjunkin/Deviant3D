@@ -31,6 +31,7 @@ func _ready():
 		worm.Head.rotation.y = -PI
 		worm.set_target(players[0]) # TODO SYNC UP PROPERLY WORM
 		bosses.append(worm)
+		worm.set_network_master(get_tree().get_network_unique_id())
 	# Else send a network request to get host's data
 	else:
 		request_current_data()

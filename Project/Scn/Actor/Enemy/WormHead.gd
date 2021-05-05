@@ -22,3 +22,10 @@ remotesync func d() -> void:
 			child.player.call(child.name)
 	
 	get_parent().get_parent().remove_child(get_parent())
+
+puppetsync func t(transl: Vector3) -> void:
+	translation = transl
+
+
+func _on_Timer_timeout():
+	rpc("t", translation)

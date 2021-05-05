@@ -199,11 +199,14 @@ __meta__ = {
 [node name="All" type="CanvasLayer" parent="."]
 layer = 2
 
-[node name="AspectRatioContainer" type="ViewportContainer" parent="All"]
+[node name="ViewportContainer" type="ViewportContainer" parent="All"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Yeet" type="TextureRect" parent="All/AspectRatioContainer"]
+[node name="Yeet" type="TextureRect" parent="All/ViewportContainer"]
 material = SubResource( 4 )
 anchor_right = 0.155
 margin_left = 1000.0
@@ -215,7 +218,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Msg" type="Label" parent="All/AspectRatioContainer"]
+[node name="Msg" type="Label" parent="All/ViewportContainer"]
 margin_left = 128.0
 margin_top = 128.0
 margin_right = 848.0
@@ -229,7 +232,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Txt" type="AnimationPlayer" parent="All/AspectRatioContainer/Msg"]
+[node name="Txt" type="AnimationPlayer" parent="All/ViewportContainer/Msg"]
 autoplay = "Msg"
 anims/Msg = SubResource( 6 )
 script = ExtResource( 8 )
