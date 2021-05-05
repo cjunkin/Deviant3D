@@ -1,4 +1,4 @@
-class_name Powerup
+class_name LowFrictionPower
 extends Area
 
 
@@ -20,18 +20,13 @@ var currPlayer : Player
 func _on_Area_body_entered(body):
 	if body.is_in_group(G.PLAYER):
 		currPlayer = body # Cast
-		currPlayer.grav /= 2
-		print("Your Gravity is now cut in half!")
+		currPlayer.friction = 0.825 * 1.15
+		print("Friction Reduced!")
 		$Timer.start()
-		#print("")
 
-#onready var Availability: Timer = $Availability
-#get_node("Availability")
+
 func _on_Timer_timeout():
-	
-	currPlayer.grav *= 2
-	print("Your Gravity has now reset!")
+	currPlayer.friction = 0.825
+	print("Friction reset to normal")
 	
 	#pass # Replace with function body.
-
-
