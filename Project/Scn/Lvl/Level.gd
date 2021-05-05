@@ -164,8 +164,8 @@ func gen_asteroids(my_seed: int) -> void:
 	var rock_hitbox_s := load(rock_path) # Hitbox prefab
 	var mm : MultiMesh = $Rocks.multimesh
 	var i := 0
-	var start := 400
-	var step := 58
+	var start := 500
+	var step := 64
 	var max_num_asteroids := int(ceil(start * 2 / step) * ceil(start * 2 / step))
 	mm.instance_count = max_num_asteroids
 	for x in range(-start, start, step):
