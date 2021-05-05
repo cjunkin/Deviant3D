@@ -22,6 +22,7 @@ func _on_Area_body_entered(body):
 		currPlayer = body # Cast
 		currPlayer.grav /= 2
 		print("Your Gravity is now cut in half!")
+		G.game.announce("Your Gravity is now cut in half!")
 		$Timer.start()
 		#print("")
 

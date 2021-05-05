@@ -22,7 +22,7 @@ _global_script_classes=[ {
 "base": "Powerup",
 "class": "Deleteme",
 "language": "GDScript",
-"path": "res://TODO_PHYSICS/Sambodh/NewPowerup.gd"
+"path": "res://TODO_PHYSICS/EXAMPLES_BY_CALVIN/NewPowerup.gd"
 }, {
 "base": "KinematicBody",
 "class": "Enemy",
