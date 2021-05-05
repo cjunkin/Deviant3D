@@ -223,8 +223,8 @@ func score() -> void:
 	Msg.text = G.combo_msgs[randi() % G.combo_msgs.size()]
 
 # Announces MESSAGE as rainbow colored text on screen
-func announce(message: String) -> void:
-	Anim.play("Score")
+func announce(message: String, speed := .5) -> void:
+	Anim.play("Score", -1, speed)
 	Anim.seek(0)
 	Msg.text = message
 
