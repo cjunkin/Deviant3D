@@ -17,5 +17,5 @@ func _ready():
 
 
 func _on_Area_body_entered(body):
-	pass # Replace with function body.
+	#pass # Replace with function body.
 	print("This guy entered us: ", body.name)
