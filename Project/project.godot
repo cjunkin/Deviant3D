@@ -49,10 +49,15 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scn/Lvl/Level.gd"
 }, {
-"base": "Reference",
+"base": "ImmediateGeometry",
 "class": "Line",
 "language": "GDScript",
 "path": "res://addons/LineRenderer/Line.gd"
+}, {
+"base": "Area",
+"class": "LowFrictionPower",
+"language": "GDScript",
+"path": "res://TODO_PHYSICS/Rafael/Low_friction_powerup_2.gd"
 }, {
 "base": "Reference",
 "class": "Palette",
@@ -114,6 +119,7 @@ _global_script_class_icons={
 "Hook": "",
 "Level": "",
 "Line": "",
+"LowFrictionPower": "",
 "Palette": "",
 "PaletteImporter": "",
 "Player": "",
