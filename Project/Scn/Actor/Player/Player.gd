@@ -71,6 +71,7 @@ onready var GearR := $CamX/MeshHelp/GearR
 onready var GearL := $CamX/MeshHelp/GearL
 onready var GearRMuzzle := GearR.get_node("Muzzle")
 onready var GearLMuzzle := GearL.get_node("Muzzle")
+#var dmg := 1
 #onready var Flash : OmniLight = get_node(flash)
 #onready var CamHolder :Spatial = CamY.get_node("CamHolder")
 

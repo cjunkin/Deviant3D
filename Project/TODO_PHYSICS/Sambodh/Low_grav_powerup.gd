@@ -1,3 +1,4 @@
+class_name Powerup
 extends Area
 
 
@@ -21,11 +22,14 @@ func _on_Area_body_entered(body):
 		currPlayer = body # Cast
 		currPlayer.grav /= 2
 		print("Your Gravity is now cut in half!")
-		_on_Timer_timeout()
+		$Timer.start()
 		print("Your Gravity has now reset!")
 
 
 func _on_Timer_timeout():
 	currPlayer.grav *= 2
+	print("sdfkl")
 	
 	pass # Replace with function body.
+
+
