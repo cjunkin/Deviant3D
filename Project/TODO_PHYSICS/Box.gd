@@ -21,7 +21,14 @@ func _physics_process(delta: float) -> void:
 	
 	acc += grav * delta
 	vel += acc
-	vel = move_and_slide(vel, Vector3.UP) 
+	
+#	vel 
+	vel = move_and_slide(vel, Vector3.UP)
+	
+	if is_on_floor():
+		vel = Vector3.ZERO
+	
+#	translation = Vector3(0, 10, 0) 
 	
 	# control click the function if you're not sure how it works, 
 	# To play, open TODO_PHYSICS/TestScene.tscn 
@@ -48,9 +55,10 @@ func dmg(hitpt: Vector3, _amt := 1) -> void:
 
 	# Remove self if hp <= 0
 #	get_parent().remove_child(self)
-
+	vel += Vector3.UP * 100 # apply velocity
+	rotation += Vector3(3, 4, 5) # torque
 	"""TODO: YOUR CODE HERE --------------------------------- get pushed around physics all that"""
-	print("Hit at: ", hitpt)
+	print("Hit at: ", hitpt) # where it gets hit (global space)
 	print("I am centered at: ", global_transform.origin) # gives you global coordinates for this box
 	# translation    gives you local coordinates (relative to parent node)
 	# TODO: END YOUR CODE HERE------------------------------------------------------------------------

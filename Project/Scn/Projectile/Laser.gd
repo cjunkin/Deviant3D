@@ -33,6 +33,10 @@ func _on_Laser_body_entered(body) -> void:
 		# Disable self
 		set_deferred("monitoring", false)
 		visible = false
+	
+	# RAFAEL ----
+	
+	# RAFAEL END ----
 
 
 #func _on_Laser_area_entered(area: Area) -> void:

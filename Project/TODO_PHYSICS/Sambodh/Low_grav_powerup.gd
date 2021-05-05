@@ -25,8 +25,10 @@ func _on_Area_body_entered(body):
 		$Timer.start()
 		print("Your Gravity has now reset!")
 
-
+#onready var Availability: Timer = $Availability
+#get_node("Availability")
 func _on_Timer_timeout():
+	
 	currPlayer.grav *= 2
 	print("sdfkl")
 	

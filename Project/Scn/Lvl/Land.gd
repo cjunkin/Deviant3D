@@ -1,3 +1,4 @@
+class_name Land
 extends Spatial
 
 export var grid_mat : Material = preload("res://Gfx/Material/Grid.tres")
@@ -63,6 +64,7 @@ func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 32, SPACING := 32.0) -> void:
 			8, 10, 12, 14, # right
 			9, 11, 13, 15 # left
 	])
+
 	# var top_bot := [16, 18, 20, 22, 17, 19, 21, 23]
 	for y in range(NUM_PTS - 1):
 		for x in range(NUM_PTS - 1):
@@ -73,13 +75,17 @@ func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 32, SPACING := 32.0) -> void:
 				continue
 #				mat = water_mat
 #				rand_height -= 3
+			# Dirt
 			elif rand_height < 1.0:
 				mat = land_mat
+				
 #			elif rand_height < 6:
 #				mat = land_mat
+			# Grass
 			else:
 				mat = grass_mat
 				rand_height += .1
+				
 			rand_height *= 6.0
 			vertices[0] = pts[x + y * NUM_PTS]
 			vertices[1] = pts[x + 1 + y * NUM_PTS]

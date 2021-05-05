@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://TODO_PHYSICS/Box.gd" type="Script" id=1]
 
@@ -8,6 +8,9 @@ extents = Vector3( 2, 2, 2 )
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 4, 4, 4 )
 
+[sub_resource type="SpatialMaterial" id=3]
+albedo_color = Color( 1, 0, 0, 1 )
+
 [node name="Box" type="KinematicBody"]
 script = ExtResource( 1 )
 
@@ -16,4 +19,4 @@ shape = SubResource( 1 )
 
 [node name="Mesh" type="MeshInstance" parent="."]
 mesh = SubResource( 2 )
-material/0 = null
+material/0 = SubResource( 3 )

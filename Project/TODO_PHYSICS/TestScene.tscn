@@ -18,7 +18,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 26.1683, 0 )
 visible = true
 
 [node name="Box" parent="." index="7" instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 21.3197, 4.06565, -27.4387 )
+transform = Transform( 0.890479, -0.36024, 0.277982, 0.454193, 0.740604, -0.495192, -0.0274866, 0.567216, 0.82311, 21.32, 12.186, -27.439 )
 
 [node name="Water" parent="." index="8"]
 visible = false
