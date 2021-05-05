@@ -17,7 +17,7 @@ func _ready():
 		# Generate random asteroids
 		randomize()
 		G.TERRAIN_SEED = randi() % 2048
-		gen_boxes(G.TERRAIN_SEED)
+		gen_asteroids(G.TERRAIN_SEED)
 
 		get_node(enemy_spawn_time).start(spawn_time)
 		
