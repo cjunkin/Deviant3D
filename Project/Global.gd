@@ -5,6 +5,7 @@ const ENEMY := "EN"
 const LASER := "L"
 const EXPL := "E"
 const WORM_BODY := "WB"
+const PLAYER := "P"
 
 # Paths
 const MENU_SCENE := "res://Scn/MainMenu.tscn"
