@@ -131,7 +131,8 @@ func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 32, SPACING := 32.0) -> void:
 				
 			
 
-const START := -8.0 
+const START := -8.0 # Base height of terrain
+
 # Create a cube with the bottom face being vertices, starting from height START - bottom_offset to START + top_offset, with material MAT
 func create_cube_from(vertices: PoolVector2Array, points: PoolIntArray, bottom_offset := 0.0, top_offset := 5.0, mat = null, ignored_normals := PoolIntArray([])) -> void:
 	
