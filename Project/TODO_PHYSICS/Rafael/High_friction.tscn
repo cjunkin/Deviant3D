@@ -16,7 +16,7 @@ script = ExtResource( 1 )
 shape = SubResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="CollisionShape"]
-transform = Transform( 0.814926, 0.00138577, -0.579564, -0.579566, 0.00194853, -0.814923, 0, 0.999997, 0.00239105, 0.640427, 0.26363, -0.513979 )
+transform = Transform( 1.36388, 0.00231926, -0.969969, -0.938672, 0.00315587, -1.31986, 0, 0.999997, 0.00239105, 0.640427, 0.26363, -0.513979 )
 material_override = SubResource( 3 )
 mesh = SubResource( 4 )
 material/0 = null

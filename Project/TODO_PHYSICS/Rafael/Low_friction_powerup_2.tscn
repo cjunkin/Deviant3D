@@ -16,7 +16,7 @@ script = ExtResource( 1 )
 shape = SubResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="CollisionShape"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.341073, 0.414829, -0.444564 )
+transform = Transform( 1.98532, 0, 0, 0, 1.98264, 0, 0, 0, 1.98479, 0.341073, 0.414829, -0.444564 )
 mesh = SubResource( 2 )
 material/0 = SubResource( 3 )
 

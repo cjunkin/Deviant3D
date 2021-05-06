@@ -101,7 +101,7 @@ func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 32, SPACING := 32.0) -> void:
 			# TODO: SPAWN POWERUPS HERE
 			# Rafael's Code:
 			var powerup_check := rng.randi_range(0, 100)
-			var powerup_height_offset := rng.randf_range(10, 25)
+			var powerup_height_offset := rng.randf_range(5, 20)
 			
 			
 			if powerup_check < 51:
