@@ -37,15 +37,14 @@ func _on_Area_body_entered(body):
 #onready var Availability: Timer = $Availability
 #get_node("Availability")
 func _on_Timer_timeout():
-	
-	currPlayer.grav *= 2
-	print("Your Gravity has now reset!")
-	
-	#pass # Replace with function body.
+	if is_instance_valid(currPlayer):
+		currPlayer.grav *= 2
+		print("Your Gravity has now reset!")
+
 
 
 
 
 func _on_Availability_timeout():
 	available = true
-	#pass # Replace with function body.
+

@@ -32,12 +32,13 @@ func _on_Area_body_entered(body):
 
 
 func _on_Timer_timeout():
-	currPlayer.friction = 0.825
-	print("Friction reset to normal")
+	if is_instance_valid(currPlayer):
+		currPlayer.friction = 0.825
+		print("Friction reset to normal")
 	
 
 
 
 func _on_Availability_timeout():
 	available = true
-	#pass # Replace with function body.
+

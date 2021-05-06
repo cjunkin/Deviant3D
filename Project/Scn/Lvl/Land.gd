@@ -98,38 +98,29 @@ func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 32, SPACING := 32.0) -> void:
 				ignored_normals
 			)
 			# Height of terrain is rand_height_offset + START, 
-			# TODO: SPAWN POWERUPS HERE
-			# Rafael's Code:
+			# TODO: TWEAK SPAWN FREQUENCY, MAKE POWERUPS GLOW, HAVE BETTER MATERIAL
+			# Rafael's Code, spawns powerup: ---------------------------------
 			var powerup_check := rng.randi_range(0, 100)
-			var powerup_height_offset := rng.randf_range(10, 25)
+			var powerup_height_offset := rng.randf_range(5, 20)
 			
-			if powerup_check < 101:
+			if powerup_check < 15:
 				var power_up_height := rand_height_offset + START + powerup_height_offset
-				#var prefab : Resource
-				if powerup_check < 30:
+				if powerup_check < 5:
 					var prefab := preload("res://TODO_PHYSICS/Rafael/Low_friction_powerup_2.tscn")
 					var powerup := prefab.instance()
 					powerup.translation = Vector3(vertices[0][0], power_up_height, vertices[0][1])
 					get_tree().get_root().add_child(powerup)
-					
-				elif powerup_check < 60:
+				elif powerup_check < 10:
 					var prefab := preload("res://TODO_PHYSICS/Rafael/High_friction.tscn")
 					var powerup := prefab.instance()
-					powerup.translation = Vector3(x, power_up_height, y)
+					powerup.translation = Vector3(vertices[0][0], power_up_height, vertices[0][1])
 					get_tree().get_root().add_child(powerup)
-					
 				else:
 					var prefab := preload("res://TODO_PHYSICS/Sambodh/Low_grav_powerup.tscn")
 					var powerup := prefab.instance()
-					powerup.translation = Vector3(x, power_up_height, y)
+					powerup.translation = Vector3(vertices[0][0], power_up_height, vertices[0][1])
 					get_tree().get_root().add_child(powerup)
-					
-					
-				#Raf's code ends here
-			
-				
-				
-			
+			# End Raf's code ---------------------------------
 
 const START := -8.0 # Base height of terrain
 
