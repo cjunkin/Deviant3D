@@ -19,7 +19,7 @@ radial_segments = 8
 rings = 4
 
 [sub_resource type="BoxShape" id=3]
-extents = Vector3( 0.35, 0.35, 1.5 )
+extents = Vector3( 0.35, 0.35, 2.5 )
 
 [node name="Proj" type="Area"]
 monitorable = false

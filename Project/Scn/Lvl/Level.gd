@@ -5,8 +5,8 @@ extends Spatial
 const PROJ_PER_PLAYER := 10
 const EXP_PER_PLAYER := 10
 var num_lasers := PROJ_PER_PLAYER
-var num_explosions := EXP_PER_PLAYER
-const num_enemies := 8
+var num_explosions := EXP_PER_PLAYER + 46
+const num_enemies := 16
 #const num_laser_audio := 8
 #const num_grapple_sounds := 6
 
@@ -117,13 +117,18 @@ func _physics_process(delta: float) -> void:
 
 				# Look at target, but not looking up
 				e.look_at(e.target.global_transform.origin, Vector3.UP)
-				e.rotation.x = 0
+				if !e.flying:
+					e.rotation.x = 0
 			
-			e.acc = e.transform.basis.z * e.speed 
+			e.acc = e.transform.basis.z * e.speed
+			if e.flying:
+				e.vel = e.vel * .99 + e.acc  * .75
+			else:
 			#* int(e.global_transform.origin.distance_squared_to(e.target.global_transform.origin) > 1)
-			e.vel.z = e.vel.z * .8 + e.acc.z
-			e.vel.x = e.vel.x * .8 + e.acc.x
-			e.vel += Vector3.DOWN * e.grav
+				e.vel.z = e.vel.z * .8 + e.acc.z
+				e.vel.x = e.vel.x * .8 + e.acc.x
+
+				e.vel += Vector3.DOWN * e.grav
 #			e.vel -= players[0].transform.basis.y * e.grav # adjust to be player velocity
 			
 			e.vel = e.move_and_slide(e.vel , Vector3.UP, false, 1, .75, false)
@@ -148,7 +153,7 @@ func _physics_process(delta: float) -> void:
 #	for p in players:
 
 # Generate boxes using Simplex and Rngs with MY_SEED
-func gen_boxes(my_seed: int) -> void:
+func gen_asteroids(my_seed: int) -> void:
 	var noise := OpenSimplexNoise.new()
 	noise.seed = my_seed
 	noise.octaves = 4
@@ -160,28 +165,38 @@ func gen_boxes(my_seed: int) -> void:
 #	var mat : SpatialMaterial = load("res://Gfx/Material/Rock1.tres").duplicate()
 #	mat.albedo_color -= Color(rng.randf(), rng.randf(), rng.randf()) / 10
 	
-	var static_box_s := load(rock_path)
+	# Generate the rocks
+	var rock_hitbox_s := load(rock_path) # Hitbox prefab
 	var mm : MultiMesh = $Rocks.multimesh
 	var i := 0
-	for x in range(-400, 400, 58):
-		for z in range(-400, 400, 58):
+	var start := 500
+	var step := 64
+	var max_num_asteroids := int(ceil(start * 2 / step) * ceil(start * 2 / step))
+	mm.instance_count = max_num_asteroids
+	for x in range(-start, start, step):
+		for z in range(-start, start, step):
 			if (noise.get_noise_3d(x, x, z) > 0):
+				# Scale
 				var size := rng.randf_range(12, 24)
+				# Sets position to origin, scale to size
 				var t := Transform(
 					Vector3(size, 0, 0),
 					Vector3(0, size, 0),
 					Vector3(0, 0, size),
 					Vector3.ZERO
 					)
+				# Rotate randomly
 				var rand_rot := rng.randf() * 2 * PI
 				t = t.rotated(Vector3.UP, rand_rot)
 				t = t.rotated(Vector3.RIGHT, rand_rot)
 				t = t.rotated(Vector3.FORWARD, rand_rot)
+				# Offset from origin
 				t.origin += (Vector3(x, 64 + rng.randf() * 640, z))
 				mm.set_instance_transform(i, t)
 				i += 1
-
-				var b : Spatial = static_box_s.instance()
+				
+				# Create hitbox for the mesh
+				var b : Spatial = rock_hitbox_s.instance()
 				b.transform = t
 #				b.translation = Vector3(x, 64 + rng.randf() * 800, z)
 #				b.rotation = Vector3(rng.randf(), rng.randf(), rng.randf()) * 2 * PI
@@ -191,28 +206,37 @@ func gen_boxes(my_seed: int) -> void:
 				add_child(b)
 	mm.visible_instance_count = i
 
-func spawn_enemy(trans := Vector3.INF, velocity := Vector3.INF, target_name := "") -> void:
+# Spawn an enemy at position TRANSL with VELOCITY, targeting Node named TARGET_NAME
+func spawn_enemy(transl := Vector3.INF, velocity := Vector3.INF, target_name := "") -> void:
 	var enemy: Enemy = enemies[enemy_i]
 	enemy_i = (enemy_i + 1) % num_enemies
 	# If enemy isn't already spawned in
 	if !enemy.is_inside_tree():
 		# Not syncing
-		if trans == Vector3.INF:
+		if transl == Vector3.INF:
 			enemy.translation = Vector3(spawn_rng.randf(), .5 + spawn_rng.randf() / 16, spawn_rng.randf()) * 100
 			enemy.set_target(players[spawn_rng.randi() % players.size()])
 		# Called via rpc
 		else:
-			enemy.translation = trans
+			enemy.translation = transl
 			enemy.vel = velocity
 			enemy.set_target(get_node(target_name))
 
 		call_deferred("add_child", enemy)
 
+# Announces you've hit something as rainbow colored text on screen
 func score() -> void:
 	Anim.play("Score")
 	Anim.seek(0)
 	Msg.text = G.combo_msgs[randi() % G.combo_msgs.size()]
 
+# Announces MESSAGE as rainbow colored text on screen
+func announce(message: String, speed := .5) -> void:
+	Anim.play("Score", -1, speed)
+	Anim.seek(0)
+	Msg.text = message
+
+# If we have 1 or more cached enemies, spawn them
 func _on_EnemySpawnTime_timeout():
 	if enemies.size() > 0:
 		spawn_enemy()
@@ -275,6 +299,7 @@ puppet func b(master_translation: Vector3, master_rot: Vector3, target_i : int) 
 
 	bosses.append(boss)
 	boss.set_target(get_node(str(target_i))) # TODO: sync up properly worm
+	boss.set_network_master(1)
 
 # Recieve current seeds, should only be called on non-host
 puppet func set_cur(terrain_seed: int, spawn_seed: int) -> void:
@@ -282,7 +307,7 @@ puppet func set_cur(terrain_seed: int, spawn_seed: int) -> void:
 	if get_tree().get_rpc_sender_id() == 1:
 		emit_signal("received_data")
 		spawn_rng.seed = spawn_seed
-		gen_boxes(terrain_seed)
+		gen_asteroids(terrain_seed)
 		# Land
 		$Land.gen_terrain(terrain_seed)
 

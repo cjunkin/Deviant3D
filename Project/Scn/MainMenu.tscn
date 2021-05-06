@@ -199,24 +199,32 @@ __meta__ = {
 [node name="All" type="CanvasLayer" parent="."]
 layer = 2
 
-[node name="Yeet" type="TextureRect" parent="All"]
+[node name="ViewportContainer" type="ViewportContainer" parent="All"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Yeet" type="TextureRect" parent="All/ViewportContainer"]
 material = SubResource( 4 )
-margin_left = 1025.65
-margin_top = 24.2725
-margin_right = 1252.65
-margin_bottom = 104.272
+anchor_right = 0.155
+margin_left = 1000.0
+margin_top = 42.0
+margin_right = 1028.6
+margin_bottom = 122.0
 texture = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Msg" type="Label" parent="All"]
-margin_left = 167.534
-margin_top = 114.901
-margin_right = 383.534
-margin_bottom = 165.901
-rect_rotation = -25.4588
-rect_scale = Vector2( 1.09464, 1.09464 )
+[node name="Msg" type="Label" parent="All/ViewportContainer"]
+margin_left = 128.0
+margin_top = 128.0
+margin_right = 848.0
+margin_bottom = 179.0
+rect_rotation = -27.9
 rect_pivot_offset = Vector2( 108, 25 )
 custom_fonts/font = SubResource( 5 )
 text = "This text totally ain't 
@@ -225,7 +233,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Txt" type="AnimationPlayer" parent="All/Msg"]
+[node name="Txt" type="AnimationPlayer" parent="All/ViewportContainer/Msg"]
 autoplay = "Msg"
 anims/Msg = SubResource( 6 )
 script = ExtResource( 8 )

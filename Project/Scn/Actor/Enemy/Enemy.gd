@@ -10,9 +10,14 @@ var grav := 1
 var acc := Vector3()
 export var friction := .125
 var hp := 1
+var flying := randf() > .4
 
 func _ready() -> void:
 	add_to_group(G.ENEMY)
+	if flying:
+		$Mesh.material_override = load("res://Gfx/Material/Grid.tres")
+	else:
+		$Mesh.material_override = load("res://Gfx/Material/metal.tres")
 
 func set_target(t) -> void:
 	target = t

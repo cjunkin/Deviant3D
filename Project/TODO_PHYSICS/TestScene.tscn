@@ -4,7 +4,7 @@
 [ext_resource path="res://TODO_PHYSICS/TestScene.gd" type="Script" id=2]
 [ext_resource path="res://TODO_PHYSICS/Box.tscn" type="PackedScene" id=3]
 [ext_resource path="res://TODO_PHYSICS/Sambodh/Low_grav_powerup.tscn" type="PackedScene" id=4]
-[ext_resource path="res://TODO_PHYSICS/Sambodh/NewPowerup.tscn" type="PackedScene" id=5]
+[ext_resource path="res://TODO_PHYSICS/EXAMPLES_BY_CALVIN/NewPowerup.tscn" type="PackedScene" id=5]
 [ext_resource path="res://TODO_PHYSICS/Rafael/Low_friction_powerup_2.tscn" type="PackedScene" id=6]
 [ext_resource path="res://TODO_PHYSICS/Rafael/High_friction.tscn" type="PackedScene" id=7]
 
@@ -26,7 +26,7 @@ transform = Transform( 0.890479, -0.36024, 0.277982, 0.454193, 0.740604, -0.4951
 visible = false
 
 [node name="Area" parent="." index="9" instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.0462, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 54.1897, 12.1706 )
 
 [node name="LowFriction" parent="." index="10" instance=ExtResource( 6 )]
 transform = Transform( 3.04993, 0, 0, 0, 7.03002, 0, 0, 0, 1.94075, -13.3002, 3.2953, -14.7421 )

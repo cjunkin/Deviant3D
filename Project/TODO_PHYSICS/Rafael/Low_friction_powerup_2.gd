@@ -22,6 +22,7 @@ func _on_Area_body_entered(body):
 		currPlayer = body # Cast
 		currPlayer.friction = 0.825 * 1.15
 		print("Friction Reduced!")
+		G.game.announce("Friction Reduced!")
 		$Timer.start()
 
 
@@ -29,4 +30,3 @@ func _on_Timer_timeout():
 	currPlayer.friction = 0.825
 	print("Friction reset to normal")
 	
-	#pass # Replace with function body.

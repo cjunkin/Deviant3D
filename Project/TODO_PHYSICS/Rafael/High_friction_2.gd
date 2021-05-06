@@ -22,6 +22,7 @@ func _on_Area_body_entered(body):
 			currPlayer = body # Cast
 			currPlayer.friction = 0.825 * 0.8695
 			print("Friction Increased!")
+			G.game.announce("Friction Increased!")
 			$Timer.start()
 			$Availability.start()
 			available = false
