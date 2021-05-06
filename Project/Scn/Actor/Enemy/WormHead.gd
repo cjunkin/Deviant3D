@@ -1,11 +1,14 @@
 extends KinematicBody
 
+var hp := 10
 
 func _ready() -> void:
 	add_to_group(G.ENEMY)
 
 func dmg(_pos: Vector3, amt := 1) -> void:
-	rpc("d")
+	hp -= 1
+	if hp <= 0:
+		rpc("d")
 
 remotesync func d() -> void:
 	# Particle

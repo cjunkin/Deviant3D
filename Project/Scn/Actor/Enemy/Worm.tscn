@@ -25,9 +25,9 @@ shape = SubResource( 1 )
 radius = 8.0
 material = ExtResource( 3 )
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="Head"]
 process_mode = 0
 wait_time = 10.0
 autostart = true
 
-[connection signal="timeout" from="Timer" to="Head" method="_on_Timer_timeout"]
+[connection signal="timeout" from="Head/Timer" to="Head" method="_on_Timer_timeout"]

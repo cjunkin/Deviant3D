@@ -6,7 +6,7 @@ const PROJ_PER_PLAYER := 10
 const EXP_PER_PLAYER := 10
 var num_lasers := PROJ_PER_PLAYER
 var num_explosions := EXP_PER_PLAYER
-const num_enemies := 8
+const num_enemies := 12
 #const num_laser_audio := 8
 #const num_grapple_sounds := 6
 
@@ -117,13 +117,18 @@ func _physics_process(delta: float) -> void:
 
 				# Look at target, but not looking up
 				e.look_at(e.target.global_transform.origin, Vector3.UP)
-				e.rotation.x = 0
+				if !e.flying:
+					e.rotation.x = 0
 			
-			e.acc = e.transform.basis.z * e.speed 
+			e.acc = e.transform.basis.z * e.speed
+			if e.flying:
+				e.vel = e.vel * .99 + e.acc  * .75
+			else:
 			#* int(e.global_transform.origin.distance_squared_to(e.target.global_transform.origin) > 1)
-			e.vel.z = e.vel.z * .8 + e.acc.z
-			e.vel.x = e.vel.x * .8 + e.acc.x
-			e.vel += Vector3.DOWN * e.grav
+				e.vel.z = e.vel.z * .8 + e.acc.z
+				e.vel.x = e.vel.x * .8 + e.acc.x
+
+				e.vel += Vector3.DOWN * e.grav
 #			e.vel -= players[0].transform.basis.y * e.grav # adjust to be player velocity
 			
 			e.vel = e.move_and_slide(e.vel , Vector3.UP, false, 1, .75, false)
