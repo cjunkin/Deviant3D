@@ -16,4 +16,8 @@ shape = SubResource( 1 )
 mesh = SubResource( 2 )
 material/0 = null
 
+[node name="Timer" type="Timer" parent="."]
+wait_time = 15.0
+one_shot = true
+
 [connection signal="body_entered" from="." to="." method="_on_Area_body_entered"]
