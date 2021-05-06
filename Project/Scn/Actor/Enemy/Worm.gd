@@ -69,18 +69,18 @@ func _physics_process(delta: float):
 func die() -> void:
 	# TODO don't make new timer each time we die
 	add_child(timer)
-	timer.start()
 	for child in get_children():
 		if child != Head && child != timer:
-			yield(timer, "timeout")
-			# Particle
-			G.game.exp_i = (G.game.exp_i + 1) % G.game.num_explosions
-			var e : Particles = G.game.explosions[G.game.exp_i]
-			e.translation = child.translation
-			e.emitting = true
-			e.scale = Vector3(5, 5, 5)
-			child.get_parent().remove_child(child)
-			timer.start()
+			if is_instance_valid(child):
+				# Particle
+				G.game.exp_i = (G.game.exp_i + 1) % G.game.num_explosions
+				var e : Particles = G.game.explosions[G.game.exp_i]
+				e.translation = child.translation
+				e.emitting = true
+				e.scale = Vector3(5, 5, 5)
+				child.get_parent().remove_child(child)
+				timer.start()
+				yield(timer, "timeout")
 
 #func get_class() -> String:
 #	return "Worm"
