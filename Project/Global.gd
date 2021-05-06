@@ -2,6 +2,7 @@ extends Node
 
 # Groups
 const ENEMY := "EN"
+const BASIC_ENEMY := "BE"
 const LASER := "L"
 const EXPL := "E"
 const WORM_BODY := "WB"

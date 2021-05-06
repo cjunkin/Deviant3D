@@ -72,3 +72,5 @@ remote func s(master_translation: Vector3, velocity: Vector3) -> void:
 	translation = master_translation
 	vel = velocity
 
+func get_class() -> String:
+	return G.BASIC_ENEMY
