@@ -26,7 +26,7 @@ remotesync func d() -> void:
 			remove_child(child)
 			child.player.call(child.name)
 	
-	get_parent().get_parent().remove_child(get_parent())
+	get_parent().remove_child(self)
 
 puppetsync func t(transl: Vector3) -> void:
 	translation = transl

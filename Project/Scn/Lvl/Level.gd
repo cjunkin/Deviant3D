@@ -5,7 +5,7 @@ extends Spatial
 const PROJ_PER_PLAYER := 10
 const EXP_PER_PLAYER := 10
 var num_lasers := PROJ_PER_PLAYER
-var num_explosions := EXP_PER_PLAYER
+var num_explosions := EXP_PER_PLAYER + 46
 const num_enemies := 12
 #const num_laser_audio := 8
 #const num_grapple_sounds := 6
