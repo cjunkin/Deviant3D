@@ -202,6 +202,7 @@ layer = 2
 [node name="ViewportContainer" type="ViewportContainer" parent="All"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
