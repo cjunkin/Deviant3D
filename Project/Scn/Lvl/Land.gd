@@ -53,56 +53,56 @@ func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 32, SPACING := 32.0) -> void:
 			)
 			should_offset = !should_offset
 	
+	# Setup noise, vertices, normals
 	var noise := OpenSimplexNoise.new()
 	noise.seed = s
 	noise.octaves = 4
 	noise.period = 20
 	noise.persistence = .8
-	
 	var vertices := PoolVector2Array([Vector2.ZERO, Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
 	var ignored_normals := PoolIntArray([
 			8, 10, 12, 14, # right
-			9, 11, 13, 15 # left
+			9, 11, 13, 15  # left
 	])
 
 	# var top_bot := [16, 18, 20, 22, 17, 19, 21, 23]
 	for y in range(NUM_PTS - 1):
 		for x in range(NUM_PTS - 1):
-			var rand_height := noise.get_noise_2d(x + rng.randf() - .5, y + rng.randf() - .5) + .9
-#			print(rand_height)
+			var rand_height_offset := noise.get_noise_2d(x + rng.randf() - .5, y + rng.randf() - .5) + .9
 			var mat: Material
-			if rand_height < .85:
-				continue
+			if rand_height_offset < .85:
 #				mat = water_mat
-#				rand_height -= 3
+#				rand_height_offset -= 3
+				continue
 			# Dirt
-			elif rand_height < 1.0:
+			elif rand_height_offset < 1.0:
 				mat = land_mat
-				
-#			elif rand_height < 6:
-#				mat = land_mat
 			# Grass
 			else:
 				mat = grass_mat
-				rand_height += .1
-				
-			rand_height *= 6.0
+				rand_height_offset += .1
+			
+			# Create the cube
+			rand_height_offset = rand_height_offset * 6.0 + 5.5 # scale height
 			vertices[0] = pts[x + y * NUM_PTS]
 			vertices[1] = pts[x + 1 + y * NUM_PTS]
 			vertices[2] = pts[x + (y + 1) * NUM_PTS]
 			vertices[3] = pts[x + 1 + (y + 1) * NUM_PTS]
-			var rand_bottom := rng.randf() * 5
+			var rand_bottom_offset := rng.randf() * 5
 			create_cube_from(
 				vertices,
 				points,
-				rand_bottom,
-				rand_height + 5.5,
+				rand_bottom_offset,
+				rand_height_offset,
 				mat,
 				ignored_normals
 			)
+			# Height of terrain is rand_height_offset + START, 
+			# TODO: SPAWN POWERUPS HERE
 
-const START := -8.0
-func create_cube_from(vertices: PoolVector2Array, points: PoolIntArray, bottom := 0.0, height := 5.0, mat = null, ignored_normals := PoolIntArray([])) -> void:
+const START := -8.0 
+# Create a cube with the bottom face being vertices, starting from height START - bottom_offset to START + top_offset, with material MAT
+func create_cube_from(vertices: PoolVector2Array, points: PoolIntArray, bottom_offset := 0.0, top_offset := 5.0, mat = null, ignored_normals := PoolIntArray([])) -> void:
 	
 	var cube_mesh := CubeMesh.new()
 	var cube_arrays := cube_mesh.get_mesh_arrays()
@@ -120,17 +120,17 @@ func create_cube_from(vertices: PoolVector2Array, points: PoolIntArray, bottom :
 	for pt in [a,b,c,d]:
 		for i in range(3):
 			var index := points[i + j]
-			arrays[ArrayMesh.ARRAY_VERTEX][index] = pt - Vector3(0, bottom, 0)
+			# Make our bottom vertex
+			arrays[ArrayMesh.ARRAY_VERTEX][index] = pt - Vector3(0, bottom_offset, 0)
 			index = points[i + j + 3]
-			arrays[ArrayMesh.ARRAY_VERTEX][index] = pt + Vector3(0, height, 0)
+			# Make point right above bottom vertex
+			arrays[ArrayMesh.ARRAY_VERTEX][index] = pt + Vector3(0, top_offset, 0)
 			# TODO: random slants + Vector3(0, rng.randf(), 0)
 		j += 6
 
-
 	arrays[ArrayMesh.ARRAY_NORMAL] = cube_arrays[ArrayMesh.ARRAY_NORMAL]
 
-
-
+	# Flip normals if incorrect
 	for i in range(arrays[ArrayMesh.ARRAY_NORMAL].size()):
 		if !(i in ignored_normals):
 			arrays[ArrayMesh.ARRAY_NORMAL][i] *= -1
