@@ -99,6 +99,37 @@ func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 32, SPACING := 32.0) -> void:
 			)
 			# Height of terrain is rand_height_offset + START, 
 			# TODO: SPAWN POWERUPS HERE
+			# Rafael's Code:
+			var powerup_check := rng.randi_range(0, 100)
+			var powerup_height_offset := rng.randf_range(10, 25)
+			
+			if powerup_check < 101:
+				var power_up_height := rand_height_offset + START + powerup_height_offset
+				#var prefab : Resource
+				if powerup_check < 30:
+					var prefab := preload("res://TODO_PHYSICS/Rafael/Low_friction_powerup_2.tscn")
+					var powerup := prefab.instance()
+					powerup.translation = Vector3(x, power_up_height, y)
+					get_tree().get_root().add_child(powerup)
+					powerup.queue_free()
+				elif powerup_check < 60:
+					var prefab := preload("res://TODO_PHYSICS/Rafael/High_friction.tscn")
+					var powerup := prefab.instance()
+					powerup.translation = Vector3(x, power_up_height, y)
+					get_tree().get_root().add_child(powerup)
+					powerup.queue_free()
+				else:
+					var prefab := preload("res://TODO_PHYSICS/Sambodh/Low_grav_powerup.tscn")
+					var powerup := prefab.instance()
+					powerup.translation = Vector3(x, power_up_height, y)
+					get_tree().get_root().add_child(powerup)
+					powerup.queue_free()
+					
+				#Raf's code ends here
+			
+				
+				
+			
 
 const START := -8.0 
 # Create a cube with the bottom face being vertices, starting from height START - bottom_offset to START + top_offset, with material MAT
