@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Scn/Unused/StaticBox.tscn" type="PackedScene" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://WorldEnv.tres" type="Environment" id=11]
 [ext_resource path="res://Scn/Lvl/Land.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Gfx/2D/Reticule.svg" type="Texture" id=13]
+[ext_resource path="res://TODO_PHYSICS/Sambodh/Low_grav_powerup.tscn" type="PackedScene" id=14]
 [ext_resource path="res://Gfx/Font/Typori-Regular.ttf" type="DynamicFontData" id=15]
 [ext_resource path="res://Gfx/2D/Hitmark.svg" type="Texture" id=16]
 [ext_resource path="res://Gfx/Model/Unused/food/banana.glb" type="PackedScene" id=17]
@@ -526,5 +527,8 @@ multimesh = SubResource( 11 )
 transform = Transform( 3, 0, 0, 0, 1, 0, 0, 0, 3, 0, -5, 0 )
 mesh = SubResource( 12 )
 material/0 = null
+
+[node name="LowGrav" parent="." instance=ExtResource( 14 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 27.7628, 133.845 )
 
 [connection signal="timeout" from="EnemySpawnTime" to="." method="_on_EnemySpawnTime_timeout"]

@@ -227,7 +227,8 @@ func _on_ViewSlider_value_changed(value: float) -> void:
 		max_shadow_dist = 160
 	elif shadows == MED:
 		max_shadow_dist = 288
-	game.get_node("Sunlight").directional_shadow_max_distance = min(value, max_shadow_dist)
+	if is_instance_valid(game):
+		game.get_node("Sunlight").directional_shadow_max_distance = min(value, max_shadow_dist)
 
 
 

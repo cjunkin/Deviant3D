@@ -100,17 +100,18 @@ func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 32, SPACING := 32.0) -> void:
 			# Height of terrain is rand_height_offset + START, 
 			# TODO: TWEAK SPAWN FREQUENCY, MAKE POWERUPS GLOW, HAVE BETTER MATERIAL
 			# Rafael's Code, spawns powerup: ---------------------------------
-			var powerup_check := rng.randi_range(0, 100)
-			var powerup_height_offset := rng.randf_range(5, 20)
+			var powerup_check := rng.randf() # random number btwn 0 and 1
+			var powerup_height_offset := rng.randf_range(5, 700)
 			
-			if powerup_check < 15:
+			var prob := .025
+			if powerup_check < prob:
 				var power_up_height := rand_height_offset + START + powerup_height_offset
-				if powerup_check < 5:
+				if powerup_check < prob / 3:
 					var prefab := preload("res://TODO_PHYSICS/Rafael/Low_friction_powerup_2.tscn")
 					var powerup := prefab.instance()
 					powerup.translation = Vector3(vertices[0][0], power_up_height, vertices[0][1])
 					get_tree().get_root().add_child(powerup)
-				elif powerup_check < 10:
+				elif powerup_check < prob * 2 / 3:
 					var prefab := preload("res://TODO_PHYSICS/Rafael/High_friction.tscn")
 					var powerup := prefab.instance()
 					powerup.translation = Vector3(vertices[0][0], power_up_height, vertices[0][1])
@@ -157,6 +158,7 @@ func create_cube_from(vertices: PoolVector2Array, points: PoolIntArray, bottom_o
 	for i in range(arrays[ArrayMesh.ARRAY_NORMAL].size()):
 		if !(i in ignored_normals):
 			arrays[ArrayMesh.ARRAY_NORMAL][i] *= -1
+			# TODO: I KNOW NORMALS ARE INCORRECT FOR SIDES, NEED TO TAKE CROSS PRODUCT and recompute normals
 
 	arrays[ArrayMesh.ARRAY_INDEX] = cube_arrays[ArrayMesh.ARRAY_INDEX]
 

@@ -55,6 +55,7 @@ func _ready() -> void:
 	# Only turn off adjustments if set to potato
 	if !all_off:
 		environment.adjustment_enabled = true
+	G._on_ViewSlider_value_changed(G.ViewSlider.value)
 
 func _physics_process(delta: float) -> void:
 	environment.background_sky_rotation = environment.background_sky_rotation.linear_interpolate(G.current_player.rotation, delta * 4)
