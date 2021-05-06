@@ -109,21 +109,21 @@ func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 32, SPACING := 32.0) -> void:
 				if powerup_check < 30:
 					var prefab := preload("res://TODO_PHYSICS/Rafael/Low_friction_powerup_2.tscn")
 					var powerup := prefab.instance()
-					powerup.translation = Vector3(x, power_up_height, y)
+					powerup.translation = Vector3(vertices[0][0], power_up_height, vertices[0][1])
 					get_tree().get_root().add_child(powerup)
-					powerup.queue_free()
+					
 				elif powerup_check < 60:
 					var prefab := preload("res://TODO_PHYSICS/Rafael/High_friction.tscn")
 					var powerup := prefab.instance()
 					powerup.translation = Vector3(x, power_up_height, y)
 					get_tree().get_root().add_child(powerup)
-					powerup.queue_free()
+					
 				else:
 					var prefab := preload("res://TODO_PHYSICS/Sambodh/Low_grav_powerup.tscn")
 					var powerup := prefab.instance()
 					powerup.translation = Vector3(x, power_up_height, y)
 					get_tree().get_root().add_child(powerup)
-					powerup.queue_free()
+					
 					
 				#Raf's code ends here
 			
