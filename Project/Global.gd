@@ -223,7 +223,7 @@ func _on_Gfx_pressed() -> void:
 func _on_ViewSlider_value_changed(value: float) -> void:
 	if is_instance_valid(current_player):
 		current_player.Cam.far = value
-	var max_shadow_dist := 776
+	var max_shadow_dist := 576
 	if shadows == LOW:
 		max_shadow_dist = 160
 	elif shadows == MED:
