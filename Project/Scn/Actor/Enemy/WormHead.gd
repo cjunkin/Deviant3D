@@ -16,7 +16,9 @@ remotesync func d() -> void:
 	var e : Particles = G.game.explosions[G.game.exp_i]
 	e.translation = translation
 	e.emitting = true
-	e.scale = Vector3(5, 5, 5)
+	e.scale = Vector3(6, 6, 6)
+	
+	get_parent().die()
 	
 	# Remove grappling hooks safely
 	for child in get_children():

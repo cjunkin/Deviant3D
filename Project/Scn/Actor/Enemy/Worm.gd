@@ -56,7 +56,15 @@ func _physics_process(delta):
 			child.global_transform.origin = look_pt + child.global_transform.basis.z * HALF_RADIUS
 			prev = child
 
-
+func die() -> void:
+	for child in get_children():
+		if child != Head:
+			# Particle
+			G.game.exp_i = (G.game.exp_i + 1) % G.game.num_explosions
+			var e : Particles = G.game.explosions[G.game.exp_i]
+			e.translation = child.translation
+			e.emitting = true
+			e.scale = Vector3(5, 5, 5)
 
 #func get_class() -> String:
 #	return "Worm"
