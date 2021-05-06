@@ -13,7 +13,6 @@ var shake : float = 0.0
 var n := OpenSimplexNoise.new()
 var camera_rotation_reset := Vector3()
 
-# TODO: Add in some sort of rotation reset. Also disable physics process when not shaking
 func _physics_process(delta: float) -> void:
 #	if stress > 0:
 #		rotation_degrees = Vector3(randf(), randf(), randf()) * stress * 3
@@ -21,6 +20,7 @@ func _physics_process(delta: float) -> void:
 	
 	if stress == 0.0:
 		camera_rotation_reset = rotation_degrees
+#		set_physics_process(false)
 	rotation_degrees = process_shake(camera_rotation_reset, delta)
 
 func process_shake(angle_center : Vector3, delta : float) -> Vector3:
@@ -41,5 +41,6 @@ func get_noise(noise_seed : int, time : float) -> float:
 	return n.get_noise_1d(time)
 
 func add_stress(amount : float) -> void:
+#	set_physics_process(true)
 	stress += amount
 	stress = clamp(stress, 0.0, 1.0)
