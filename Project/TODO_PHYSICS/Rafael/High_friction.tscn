@@ -5,9 +5,9 @@
 [sub_resource type="CapsuleShape" id=1]
 
 [sub_resource type="SpatialMaterial" id=3]
-albedo_color = Color( 0.623529, 0.380392, 0.129412, 1 )
+albedo_color = Color( 0.996078, 0.866667, 0, 1 )
 
-[sub_resource type="CylinderMesh" id=4]
+[sub_resource type="CapsuleMesh" id=4]
 
 [node name="Area" type="Area"]
 script = ExtResource( 1 )
@@ -16,7 +16,7 @@ script = ExtResource( 1 )
 shape = SubResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="CollisionShape"]
-transform = Transform( 1, 0, 0, 0, 0.00239105, -0.999997, 0, 0.999997, 0.00239105, 0.640427, 0.26363, -0.513979 )
+transform = Transform( 0.814926, 0.00138577, -0.579564, -0.579566, 0.00194853, -0.814923, 0, 0.999997, 0.00239105, 0.640427, 0.26363, -0.513979 )
 material_override = SubResource( 3 )
 mesh = SubResource( 4 )
 material/0 = null
