@@ -1,10 +1,13 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://TODO_PHYSICS/Rafael/Low_friction_powerup_2.gd" type="Script" id=1]
 
 [sub_resource type="CapsuleShape" id=1]
 
 [sub_resource type="CubeMesh" id=2]
+
+[sub_resource type="SpatialMaterial" id=3]
+albedo_color = Color( 0.701961, 0.992157, 1, 1 )
 
 [node name="Area" type="Area"]
 script = ExtResource( 1 )
@@ -15,11 +18,16 @@ shape = SubResource( 1 )
 [node name="MeshInstance" type="MeshInstance" parent="CollisionShape"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.341073, 0.414829, -0.444564 )
 mesh = SubResource( 2 )
-material/0 = null
+material/0 = SubResource( 3 )
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 15.0
 one_shot = true
 
+[node name="Availability" type="Timer" parent="."]
+wait_time = 60.0
+one_shot = true
+
 [connection signal="body_entered" from="." to="." method="_on_Area_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+[connection signal="timeout" from="Availability" to="." method="_on_Availability_timeout"]

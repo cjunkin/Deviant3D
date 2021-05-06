@@ -1,10 +1,14 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://TODO_PHYSICS/Sambodh/Low_grav_powerup.gd" type="Script" id=1]
 
 [sub_resource type="CapsuleShape" id=1]
 
-[sub_resource type="CubeMesh" id=2]
+[sub_resource type="SpatialMaterial" id=2]
+albedo_color = Color( 0.694118, 0.490196, 0.890196, 1 )
+
+[sub_resource type="PrismMesh" id=3]
+material = SubResource( 2 )
 
 [node name="Area" type="Area"]
 collision_mask = 3
@@ -14,8 +18,8 @@ script = ExtResource( 1 )
 shape = SubResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="CollisionShape"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.640427, 0.26363, -0.513979 )
-mesh = SubResource( 2 )
+transform = Transform( -1, 0.000192078, 0, -0.000192078, -1, 0, 0, 0, 1, 0.640427, 0.26363, -0.513979 )
+mesh = SubResource( 3 )
 material/0 = null
 
 [node name="Timer" type="Timer" parent="."]
@@ -23,5 +27,10 @@ process_mode = 0
 wait_time = 15.0
 one_shot = true
 
+[node name="Availability" type="Timer" parent="."]
+wait_time = 120.0
+one_shot = true
+
 [connection signal="body_entered" from="." to="." method="_on_Area_body_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+[connection signal="timeout" from="Availability" to="." method="_on_Availability_timeout"]

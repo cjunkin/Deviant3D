@@ -27,6 +27,7 @@ func _on_Area_body_entered(body):
 			$Availability.start()
 			available = false
 		else:
+			print("Not yet available!")
 			print($Availability.get_time_left())
 
 
