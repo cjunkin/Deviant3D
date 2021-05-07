@@ -10,7 +10,7 @@ var grav := 1
 var acc := Vector3()
 export var friction := .125
 var hp := 1
-var flying := randf() > .4
+var flying := randf() > .4 # TODO: Sync flying
 
 func _ready() -> void:
 	add_to_group(G.ENEMY)

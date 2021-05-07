@@ -243,9 +243,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -630.0
+margin_left = -602.0
 margin_top = -341.5
-margin_right = 630.0
+margin_right = 602.0
 margin_bottom = 341.5
 mouse_filter = 1
 size_flags_horizontal = 3
@@ -256,23 +256,23 @@ __meta__ = {
 }
 
 [node name="Menu" type="VBoxContainer" parent="All/Margin"]
-margin_right = 1260.0
+margin_right = 1204.0
 margin_bottom = 683.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Title" type="CenterContainer" parent="All/Margin/Menu"]
-margin_right = 1260.0
+margin_right = 1204.0
 margin_bottom = 243.0
 hint_tooltip = "So, you decided to hover over me? I wonder what else you can hover over ;P"
 mouse_default_cursor_shape = 16
 size_flags_vertical = 3
 
 [node name="VBox" type="VBoxContainer" parent="All/Margin/Menu/Title"]
-margin_left = 467.0
+margin_left = 439.0
 margin_top = 67.0
-margin_right = 793.0
+margin_right = 765.0
 margin_bottom = 176.0
 
 [node name="Txt" type="Label" parent="All/Margin/Menu/Title/VBox"]
@@ -299,7 +299,7 @@ __meta__ = {
 
 [node name="PlayMargin" type="MarginContainer" parent="All/Margin/Menu"]
 margin_top = 247.0
-margin_right = 1260.0
+margin_right = 1204.0
 margin_bottom = 441.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -308,7 +308,7 @@ size_flags_stretch_ratio = 0.8
 [node name="Play" type="HBoxContainer" parent="All/Margin/Menu/PlayMargin"]
 modulate = Color( 0.709804, 0.827451, 1, 1 )
 margin_top = 53.0
-margin_right = 1260.0
+margin_right = 1204.0
 margin_bottom = 141.0
 rect_min_size = Vector2( 0, 88 )
 size_flags_vertical = 4
@@ -318,7 +318,7 @@ __meta__ = {
 
 [node name="Host" type="Button" parent="All/Margin/Menu/PlayMargin/Play"]
 modulate = Color( 0.968627, 0.905882, 1, 1 )
-margin_right = 406.0
+margin_right = 388.0
 margin_bottom = 88.0
 hint_tooltip = "Press then look for the invite link to send to friends!"
 mouse_default_cursor_shape = 2
@@ -329,8 +329,8 @@ __meta__ = {
 }
 
 [node name="SpinCenter" type="CenterContainer" parent="All/Margin/Menu/PlayMargin/Play"]
-margin_left = 410.0
-margin_right = 849.0
+margin_left = 392.0
+margin_right = 811.0
 margin_bottom = 88.0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.08
@@ -341,9 +341,9 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 181.0
+margin_left = 171.0
 margin_top = 6.0
-margin_right = 257.0
+margin_right = 247.0
 margin_bottom = 82.0
 rect_min_size = Vector2( 76, 76 )
 rect_scale = Vector2( 1, 1 )
@@ -353,8 +353,8 @@ stretch_mode = 6
 
 [node name="Join" type="Button" parent="All/Margin/Menu/PlayMargin/Play"]
 modulate = Color( 0.901961, 1, 0.941176, 1 )
-margin_left = 853.0
-margin_right = 1260.0
+margin_left = 815.0
+margin_right = 1204.0
 margin_bottom = 88.0
 hint_tooltip = "Press this if you've joined using the link from the host"
 mouse_default_cursor_shape = 2
@@ -366,16 +366,16 @@ __meta__ = {
 
 [node name="Center" type="CenterContainer" parent="All/Margin/Menu"]
 margin_top = 445.0
-margin_right = 1260.0
+margin_right = 1204.0
 margin_bottom = 640.0
 rect_min_size = Vector2( 0, 88 )
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.8
 
 [node name="VBox" type="HBoxContainer" parent="All/Margin/Menu/Center"]
-margin_left = 372.0
+margin_left = 344.0
 margin_top = 53.0
-margin_right = 888.0
+margin_right = 860.0
 margin_bottom = 141.0
 
 [node name="How2Play" type="Button" parent="All/Margin/Menu/Center/VBox"]
@@ -399,7 +399,7 @@ text = "Graphics"
 
 [node name="Status" type="Label" parent="All/Margin/Menu"]
 margin_top = 644.0
-margin_right = 1260.0
+margin_right = 1204.0
 margin_bottom = 683.0
 align = 1
 
@@ -407,7 +407,7 @@ align = 1
 visible = false
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 1260.0
+margin_right = 1204.0
 margin_bottom = 683.0
 original = NodePath("../Menu")
 

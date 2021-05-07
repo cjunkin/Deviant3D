@@ -8,6 +8,7 @@ var fps := false
 # Sensitivity
 var SENS_Y := -.002
 var SENS_X := -.002
+var mouse_moving := false
 
 # Physics
 puppetsync var g := true # gravity on/off
@@ -42,6 +43,8 @@ export(String, FILE) var flippers_path
 
 # Cached Nodes
 #export(NodePath) var flash
+onready var MeleePivot := $MeleePivot
+onready var Melee := MeleePivot.get_node("Melee")
 onready var CamSpring : SpringArm
 onready var Cam : ShakyCam
 onready var CamX := $CamX
@@ -107,6 +110,8 @@ func _ready() -> void:
 #			Cam = CamSpring.get_node("ViewportContainer/Viewport/Cam")
 	forward = CamSpring.get_node("Forward")
 	forward.add_exception(self)
+	
+	Melee.visible = false
 
 	# TODO: implement wall climb (maybe not)
 #	Engine.time_scale = .1
@@ -250,6 +255,12 @@ func _input(event: InputEvent) -> void:
 			rpc("respawn")
 			RespawnTime.start()
 		
+		# Melee
+		if event.is_action_pressed("melee"):
+			rpc("m")
+		elif event.is_action_released("melee"):
+			rpc("m", false)
+		
 		# TODO: throw stuff around lmao
 #		if event.is_action_pressed("throw"):
 #			var proj : RigidBody = throwable_s.instance()
@@ -273,6 +284,7 @@ func _input(event: InputEvent) -> void:
 				-PI/2, 
 				PI/2
 				) # Up down
+			mouse_moving = true
 			
 		# This was me playing around with rotation that wrapped around, rather than 
 		# capping up/down as 90 degrees and -90 degrees
@@ -499,6 +511,18 @@ func _physics_process(delta: float) -> void:
 				), 
 			16 * delta
 			)
+	
+	if Melee.visible && mouse_moving:
+		Melee.rotation = Melee.rotation.linear_interpolate(Vector3(-PI/2, 0, PI/2), .1)
+#				Melee.global_transform = Melee.global_transform.interpolate_with(
+#					Melee.global_transform.looking_at(FrontCast.get_collision_point(), transform.basis.y), 
+#					.1
+#				)
+	else:
+		Melee.rotation = Melee.rotation.linear_interpolate(Vector3.ZERO, .1)
+	MeleePivot.rotation.y = lerp_angle(MeleePivot.rotation.y, CamX.rotation.y, .25)
+	MeleePivot.rotation.x = lerp_angle(MeleePivot.rotation.x, CamY.rotation.x, .25)
+	mouse_moving = false
 #	Attempt at rotating camera with mesh, kinda bad: 
 #	CamHolder.rotation.z = MeshHelp.rotation.z
 
@@ -609,6 +633,10 @@ puppetsync func f() -> void:
 # Jump
 puppetsync func j() -> void:
 	vel += jump * transform.basis.y
+
+puppetsync func m(melee_on := true) -> void:
+	Gun.visible = !melee_on
+	Melee.visible = melee_on
 
 # Sync position/orientation
 puppet func s(trans: Vector3, y: float, x: float, velocity: Vector3, norm := newest_normal) -> void:

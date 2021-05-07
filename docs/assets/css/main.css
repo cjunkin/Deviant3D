@@ -85,6 +85,8 @@ input, select, textarea {
 	body {
 		background: #fff;
 		font-family: 'Source Sans Pro', sans-serif;
+		/* font-family: 'Varela Round', sans-serif; */
+		/* font-family: 'Dosis', sans-serif; */
 		font-size: 19pt;
 		font-weight: 300;
 		line-height: 1.75em;
@@ -209,20 +211,20 @@ input, select, textarea {
 
 	#cover {
 		-webkit-text-stroke-width: 2.5px;
-		-webkit-text-stroke-color: rgb(18, 22, 36);
+		-webkit-text-stroke-color: rgb(61, 75, 126);
 	}
 
 	#cover > h1 {
 		-webkit-text-stroke-width: 4px;
 		font-weight: 600;
 		font-size: 6em;
-		letter-spacing: -1px;
+		letter-spacing: -6px;
 	}
 
 	#cover > h2 {
 		font-weight: 600;
 		font-size: 2.5em;
-		letter-spacing: -1px;
+		letter-spacing: -3px;
 	}
 
 
@@ -2308,7 +2310,7 @@ mark.light_red {
 
 			#main > section.one {
 				background-color: #50758f;
-				background-image: url("../../asset/grapple.png");
+				background-image: url("../../asset/menu_05_blur.jpg");
 				background-size: cover;
 			}
 

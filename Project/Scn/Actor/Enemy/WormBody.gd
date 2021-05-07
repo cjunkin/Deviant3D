@@ -15,18 +15,18 @@ func dmg(_hitpoint := Vector3.ZERO, dmg := 1) -> void:
 
 # Die
 remotesync func d() -> void:
+	# Remove grappling hooks safely
+	for child in get_children():
+		if child is Hook:
+			remove_child(child)
+			child.player.call(child.name)
+	
 	# Particle
 	G.game.exp_i = (G.game.exp_i + 1) % G.game.num_explosions
 	var e : Particles = G.game.explosions[G.game.exp_i]
 	e.translation = translation
 	e.emitting = true
 	e.scale = Vector3(5, 5, 5)
-	
-	# Remove grappling hooks safely
-	for child in get_children():
-		if child is Hook:
-			remove_child(child)
-			child.player.call(child.name)
 	
 	# Die
 	get_parent().remove_child(self)
