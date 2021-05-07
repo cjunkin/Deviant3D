@@ -61,7 +61,7 @@ as well as the worm and other stuff.
 So lets get into the technical details!
 FEATURES:
 Responsive UI
-Flying enemies
+Flying enemies, player - verlet integration
 Procedural terrain (land and asteroids), 
 worm, 
 Flip-dee-doo

@@ -79,10 +79,10 @@ func die() -> void:
 				e.emitting = true
 				e.scale = Vector3(5, 5, 5)
 				# Remove grappling hooks safely
-				for child in get_children():
-					if child is Hook:
-						remove_child(child)
-						child.player.call(child.name)
+				for c in get_children():
+					if c is Hook:
+						remove_child(c)
+						c.player.call(c.name)
 				child.get_parent().remove_child(child)
 				timer.start()
 				yield(timer, "timeout")
