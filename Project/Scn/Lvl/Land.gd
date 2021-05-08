@@ -142,9 +142,15 @@ func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 32, SPACING := 32.0) -> void:
 					)
 				# Rotate to point up
 				t = t.rotated(Vector3.RIGHT, PI/2)
+				t = t.rotated(Vector3.UP, rng.randf() * PI * 2)
 				# Offset from origin FIXME: average 4 vertex values instead of using corner
 				t.origin += (Vector3(tx, ty, tz))
 				mm.set_instance_transform(i, t)
+				mm.set_instance_color(i, Color(
+					rng.randf() / 2.0 + .75, 
+					rng.randf() / 2.0 + .75, 
+					rng.randf() / 2.0 + .75) 
+					)
 				i += 1
 				
 				# Create hitbox for the mesh

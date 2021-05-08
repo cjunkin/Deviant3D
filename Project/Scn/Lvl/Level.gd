@@ -194,6 +194,11 @@ func gen_asteroids(my_seed: int) -> void:
 				# Offset from origin
 				t.origin += (Vector3(x, 64 + rng.randf() * 640, z))
 				mm.set_instance_transform(i, t)
+				mm.set_instance_color(i, Color(
+					rng.randf() / 3.0 + .85, 
+					rng.randf() / 3.0 + .85, 
+					rng.randf() / 3.0 + .85) 
+					)
 				i += 1
 				
 				# Create hitbox for the mesh
