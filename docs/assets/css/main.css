@@ -2324,7 +2324,7 @@ mark.light_red {
 			}
 
 			#main > section.two {
-				background-color: #12181d;
+				background-color: #111416;
 			}
 
 			#main > section.three {
@@ -2340,7 +2340,11 @@ mark.light_red {
 			}
 
 			#main > section.six {
-				background-color: #0d151d;
+				background-color: #0d131a;
+			}
+
+			#main > section.seven {
+				background-color: #141a20;
 			}
 
 /* Wide */
