@@ -43,7 +43,7 @@ var combo_msgs : PoolStringArray = [
 	"DesTroiD",
 	"360 noSCope?"
 ]
-var water_level: float = -6.5
+var sea_level: float = -6.5
 
 # Theme
 var primary_color := Color("b4d2ff")

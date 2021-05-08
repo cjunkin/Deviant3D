@@ -10,6 +10,11 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "KinematicBody",
+"class": "AI",
+"language": "GDScript",
+"path": "res://Scn/Actor/AI.gd"
+}, {
+"base": "KinematicBody",
 "class": "Box",
 "language": "GDScript",
 "path": "res://TODO_PHYSICS/Box.gd"
@@ -24,7 +29,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://TODO_PHYSICS/EXAMPLES_BY_CALVIN/NewPowerup.gd"
 }, {
-"base": "KinematicBody",
+"base": "AI",
 "class": "Enemy",
 "language": "GDScript",
 "path": "res://Scn/Actor/Enemy/Enemy.gd"
@@ -104,7 +109,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scn/Actor/Enemy/Worm.gd"
 }, {
-"base": "KinematicBody",
+"base": "AI",
 "class": "WormBody",
 "language": "GDScript",
 "path": "res://Scn/Actor/Enemy/WormBody.gd"
@@ -113,8 +118,14 @@ _global_script_classes=[ {
 "class": "WormGOPRO",
 "language": "GDScript",
 "path": "res://Unused/GOPRO_WORM/WormGO_PRO_MODE.gd"
+}, {
+"base": "AI",
+"class": "WormHead",
+"language": "GDScript",
+"path": "res://Scn/Actor/Enemy/WormHead.gd"
 } ]
 _global_script_class_icons={
+"AI": "",
 "Box": "",
 "ColorTile": "",
 "Deleteme": "",
@@ -135,7 +146,8 @@ _global_script_class_icons={
 "Text": "",
 "Worm": "",
 "WormBody": "",
-"WormGOPRO": ""
+"WormGOPRO": "",
+"WormHead": ""
 }
 
 [application]

@@ -37,8 +37,8 @@ func _physics_process(delta: float) -> void:
 
 # Short for "damage", called when laser hits it, 
 # hitpt is point of collision, in global coordinates
-# don't worry about dmg
-func dmg(hitpt: Vector3, _amt := 1) -> void:
+# don't worry about amt (AMount)
+func dmg(hitpt: Vector3, surface_normal : Vector3, amt := 1) -> void:
 
 	# Remove grappling hooks safely (if we decide to remove the box, hooks aren't stuck in)
 	for child in get_children():

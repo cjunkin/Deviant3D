@@ -348,7 +348,7 @@ func _physics_process(delta: float) -> void:
 					rpc("t", new_normal, translation)
 		
 		# Underwater tint
-		if Cam.global_transform.origin.y < G.water_level:
+		if Cam.global_transform.origin.y < G.sea_level:
 			G.game.Water.visible = true
 		else:
 			G.game.Water.visible = false
@@ -420,10 +420,10 @@ func _physics_process(delta: float) -> void:
 	vel -= int(g) * (int(not_grappling)) * (int(L_not_grapplin)) * grav * delta * transform.basis.y
 	# If underwater
 	# FIXME: NETWORK UNDERWATER
-	if global_transform.origin.y < G.water_level:
+	if global_transform.origin.y < G.sea_level:
 		if Input.is_action_pressed("forward"):
 			vel -= CamY.global_transform.basis.z * (int(Input.get_action_strength("sprint")) + 1)
-		vel = vel * .98 + Vector3.UP * min(G.water_level - global_transform.origin.y + 1, 1) * grav * delta
+		vel = vel * .98 + Vector3.UP * min(G.sea_level - global_transform.origin.y + 1, 1) * grav * delta
 		if Input.is_action_pressed("jump"):
 			vel += global_transform.basis.y * grav * delta
 

@@ -71,7 +71,7 @@ func _ready()->void:
 		explosions.append(e)
 		add_child(e)
 	
-	$Water.translation.y = G.water_level
+	$Water.translation.y = G.sea_level
 	set_water_gfx()
 
 #	for __ in range(num_grapple_sounds):
@@ -133,7 +133,7 @@ func _physics_process(delta: float) -> void:
 			
 			e.vel = e.move_and_slide(e.vel , Vector3.UP, false, 1, .75, false)
 			# If fallen too low, die
-			if e.translation.y < -7:
+			if e.translation.y < G.sea_level:
 				e.rpc("d")
 
 	# Grappling Hooks
