@@ -21,7 +21,12 @@ func _on_Laser_body_entered(body) -> void:
 		# Update score GUI
 		if player == G.current_player:
 			G.game.score()
-
+	
+	elif body is CSGBox or body is StaticBody:
+		# Disable self
+		set_deferred("monitoring", false)
+		visible = false
+	
 	elif body is RigidBody:
 		# Disable self
 		set_deferred("monitoring", false)
@@ -30,10 +35,7 @@ func _on_Laser_body_entered(body) -> void:
 		# Push body
 		body.apply_impulse(global_transform.origin - body.global_transform.origin, -50 * transform.basis.z)
 
-	elif body is CSGBox or body is StaticBody:
-		# Disable self
-		set_deferred("monitoring", false)
-		visible = false
+
 	
 	# RAFAEL ----
 	
