@@ -1,12 +1,22 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scn/Lvl/Land.gd" type="Script" id=1]
 [ext_resource path="res://Gfx/Material/land.material" type="Material" id=2]
 [ext_resource path="res://Gfx/Model/Island/Material_009.material" type="Material" id=3]
 [ext_resource path="res://Gfx/Material/grass.material" type="Material" id=4]
+[ext_resource path="res://Gfx/Model/Tree/Tree1.mesh" type="ArrayMesh" id=5]
+
+[sub_resource type="MultiMesh" id=1]
+transform_format = 1
+instance_count = 1
+mesh = ExtResource( 5 )
+transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="Land" type="Spatial"]
 script = ExtResource( 1 )
 land_mat = ExtResource( 2 )
 grass_mat = ExtResource( 4 )
 water_mat = ExtResource( 3 )
+
+[node name="Trees" type="MultiMeshInstance" parent="."]
+multimesh = SubResource( 1 )

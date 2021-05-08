@@ -65,7 +65,11 @@ func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 32, SPACING := 32.0) -> void:
 			9, 11, 13, 15  # left
 	])
 
+	var i := 0
+	var mm: MultiMesh = $Trees.multimesh
+	var tree_hitbox_s := preload("res://Scn/Env/Tree.tscn")
 	# var top_bot := [16, 18, 20, 22, 17, 19, 21, 23]
+	mm.instance_count = NUM_PTS * (NUM_PTS - 1)
 	for y in range(NUM_PTS - 1):
 		for x in range(NUM_PTS - 1):
 			var rand_height_offset := noise.get_noise_2d(x + rng.randf() - .5, y + rng.randf() - .5) + .9
@@ -122,6 +126,33 @@ func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 32, SPACING := 32.0) -> void:
 					powerup.translation = Vector3(vertices[0][0], power_up_height, vertices[0][1])
 					get_tree().get_root().add_child(powerup)
 			# End Raf's code ---------------------------------
+			
+			if powerup_check < prob * 2:
+				# Spawn tree
+				var tx := vertices[0][0]
+				var ty := rand_height_offset + START
+				var tz := vertices[0][1]
+				# Scale
+				var size := rng.randf_range(12, 24)
+				# Sets position to origin, scale to size
+				var t := Transform(
+					Vector3(size, 0, 0),
+					Vector3(0, size, 0),
+					Vector3(0, 0, size),
+					Vector3.ZERO
+					)
+				# Rotate to point up
+				t = t.rotated(Vector3.RIGHT, PI/2)
+				# Offset from origin
+				t.origin += (Vector3(tx, ty, tz))
+				mm.set_instance_transform(i, t)
+				i += 1
+				
+				# Create hitbox for the mesh
+				var b : Spatial = tree_hitbox_s.instance()
+				b.transform = t
+				add_child(b)
+	mm.visible_instance_count = i
 
 const START := -8.0 # Base height of terrain
 
@@ -174,5 +205,8 @@ func create_cube_from(vertices: PoolVector2Array, points: PoolIntArray, bottom_o
 		if child is StaticBody:
 			child.set_collision_mask_bit(1, true)
 			child.set_collision_mask_bit(2, true)
+	
+#func spawn_tree(x: float, y: float, z: float) -> void:
+#
 
 
