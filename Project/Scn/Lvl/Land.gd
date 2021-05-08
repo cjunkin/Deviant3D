@@ -84,10 +84,10 @@ func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 32, SPACING := 32.0) -> void:
 			# Grass
 			else:
 				mat = grass_mat
-				rand_height_offset += .1
+				rand_height_offset += .025
 			
 			# Create the cube
-			rand_height_offset = rand_height_offset * 6.0 + 5.5 # scale height
+			rand_height_offset = rand_height_offset * 10.0 + 5.5 # scale height
 			vertices[0] = pts[x + y * NUM_PTS]
 			vertices[1] = pts[x + 1 + y * NUM_PTS]
 			vertices[2] = pts[x + (y + 1) * NUM_PTS]
