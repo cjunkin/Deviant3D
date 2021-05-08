@@ -162,8 +162,8 @@ tracks/12/keys = {
 }
 
 [sub_resource type="DynamicFont" id=3]
-size = 24
-outline_size = 4
+size = 12
+outline_size = 2
 outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 15 )
 
@@ -388,7 +388,7 @@ __meta__ = {
 
 [node name="BossStats" type="HBoxContainer" parent="HUD"]
 margin_left = 46.0
-margin_top = 27.0
+margin_top = 38.0
 margin_right = 307.0
 margin_bottom = 56.0
 theme = ExtResource( 19 )
@@ -398,8 +398,9 @@ __meta__ = {
 }
 
 [node name="Worm" type="Label" parent="HUD/BossStats"]
-margin_right = 66.0
-margin_bottom = 29.0
+margin_top = 1.0
+margin_right = 32.0
+margin_bottom = 16.0
 custom_fonts/font = SubResource( 3 )
 text = "Worm"
 align = 1
@@ -407,9 +408,9 @@ valign = 1
 
 [node name="BossHP" type="ProgressBar" parent="HUD/BossStats"]
 modulate = Color( 1, 0.788235, 0.788235, 1 )
-margin_left = 82.0
+margin_left = 48.0
 margin_right = 261.0
-margin_bottom = 29.0
+margin_bottom = 18.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
 custom_fonts/font = ExtResource( 20 )
