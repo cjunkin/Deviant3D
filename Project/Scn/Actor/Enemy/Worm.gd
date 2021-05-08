@@ -67,6 +67,7 @@ func _physics_process(delta: float):
 
 
 func die() -> void:
+	G.game.hide_boss_stats()
 	# TODO don't make new timer each time we die
 	add_child(timer)
 	for child in get_children():

@@ -12,7 +12,7 @@ func _ready() -> void:
 		for anim_name in get_animation_list():
 			if anim_name in ignored:
 				continue
-			print(anim_name)
+			print("Making " + anim_name + " Animation Sinusoidal, under " + get_parent().name)
 			var anim : Animation = get_animation(anim_name)
 			for track_i in anim.get_track_count():
 #				var track_name : String = anim.track_get_path(track_i)

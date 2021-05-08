@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Scn/Unused/StaticBox.tscn" type="PackedScene" id=2]
@@ -18,6 +18,8 @@
 [ext_resource path="res://Gfx/2D/Hitmark.svg" type="Texture" id=16]
 [ext_resource path="res://Gfx/Model/Unused/food/banana.glb" type="PackedScene" id=17]
 [ext_resource path="res://Gfx/Material/Rock1.tres" type="Material" id=18]
+[ext_resource path="res://Theme/main_theme.tres" type="Theme" id=19]
+[ext_resource path="res://Gfx/Font/Typori_Paragraph.tres" type="DynamicFont" id=20]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -158,6 +160,12 @@ tracks/12/keys = {
 "update": 1,
 "values": [ true, false ]
 }
+
+[sub_resource type="DynamicFont" id=11]
+size = 24
+outline_size = 4
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 15 )
 
 [sub_resource type="Animation" id=3]
 length = 10.0
@@ -375,6 +383,40 @@ visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0, 0.529412, 1, 0.364706 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BossStats" type="HBoxContainer" parent="HUD"]
+margin_left = 46.0
+margin_top = 27.0
+margin_right = 307.0
+margin_bottom = 56.0
+theme = ExtResource( 19 )
+custom_constants/separation = 16
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Worm" type="Label" parent="HUD/BossStats"]
+margin_right = 66.0
+margin_bottom = 29.0
+custom_fonts/font = SubResource( 11 )
+text = "Worm"
+align = 1
+valign = 1
+
+[node name="BossHP" type="ProgressBar" parent="HUD/BossStats"]
+modulate = Color( 1, 0.788235, 0.788235, 1 )
+margin_left = 82.0
+margin_right = 261.0
+margin_bottom = 29.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+custom_fonts/font = ExtResource( 20 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+max_value = 10.0
+value = 10.0
 __meta__ = {
 "_edit_use_anchors_": false
 }

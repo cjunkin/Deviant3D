@@ -20,6 +20,11 @@ func _ready() -> void:
 	bg_img._set_size(bg_img.rect_size * screen)
 	bg_img.rect_position = bg_img.rect_size / -2
 
+func _unhandled_key_input(event: InputEventKey) -> void:
+	# Fullscreen
+	if event.is_action_pressed("fullscreen"):
+		OS.window_fullscreen = !OS.window_fullscreen
+
 func start() -> void:
 #	OS.set_low_processor_usage_mode(false)
 	$All/Margin/Menu/Status.text = "Connecting..."

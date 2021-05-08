@@ -1,12 +1,14 @@
 extends KinematicBody
 
-var hp := 10
+var hp := 20
 
 func _ready() -> void:
 	add_to_group(G.ENEMY)
+	G.game.update_boss_hp(hp)
 
 func dmg(_pos: Vector3, amt := 1) -> void:
 	hp -= 1
+	G.game.update_boss_hp(hp)
 	if hp <= 0:
 		rpc("d")
 

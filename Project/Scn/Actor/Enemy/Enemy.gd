@@ -16,8 +16,8 @@ func _ready() -> void:
 	add_to_group(G.ENEMY)
 	if flying:
 		$Mesh.material_override = load("res://Gfx/Material/Grid.tres")
-	else:
-		$Mesh.material_override = load("res://Gfx/Material/metal.tres")
+#	else:
+#		$Mesh.material_override = load()
 
 func set_target(t) -> void:
 	target = t

@@ -1,8 +1,12 @@
 class_name Game
 extends Level
 
+onready var BossHP := $HUD/BossStats/BossHP
+var tween := Tween.new()
 
 func _ready():
+	add_child(tween)
+	
 	# Enemies
 #	enemies.resize(num_enemies)
 	var enemy_s := load(enemy_path)
@@ -32,7 +36,16 @@ func _ready():
 		worm.set_target(players[0]) # FIXME SYNC UP PROPERLY WORM
 		bosses.append(worm)
 		worm.set_network_master(get_tree().get_network_unique_id())
+		BossHP.max_value = worm.Head.hp
 	# Else send a network request to get host's data
 	else:
 		request_current_data()
 	G._on_ViewSlider_value_changed(G.ViewSlider.value)
+
+func update_boss_hp(hp: int) -> void:
+#	BossHP.value = hp
+	tween.interpolate_property(BossHP, "value", BossHP.value, hp, .25, Tween.TRANS_CIRC)
+	tween.start()
+
+func hide_boss_stats() -> void:
+	$HUD/BossStats.hide()
