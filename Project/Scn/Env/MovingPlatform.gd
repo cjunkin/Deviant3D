@@ -9,6 +9,9 @@ export (NodePath) var patrol_path
 #var patrol_points: PoolVector3Array
 #var patrol_index := 0
 
+# FIXME: Sync multiplayer starting position, 
+# FIXME: Stop moving when paused
+
 #func _ready():
 #	if patrol_path:
 #		var path: Path = get_node(patrol_path)

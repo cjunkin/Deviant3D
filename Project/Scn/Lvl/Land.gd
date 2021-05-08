@@ -142,7 +142,7 @@ func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 32, SPACING := 32.0) -> void:
 					)
 				# Rotate to point up
 				t = t.rotated(Vector3.RIGHT, PI/2)
-				# Offset from origin
+				# Offset from origin FIXME: average 4 vertex values instead of using corner
 				t.origin += (Vector3(tx, ty, tz))
 				mm.set_instance_transform(i, t)
 				i += 1
