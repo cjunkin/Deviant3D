@@ -365,6 +365,7 @@ melee={
 3d_physics/layer_4="AllyHarm"
 3d_physics/layer_5="FoeHarm"
 3d_physics/layer_6="Powerup"
+3d_physics/layer_7="NonFlipEnv"
 
 [physics]
 
