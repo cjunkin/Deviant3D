@@ -147,13 +147,18 @@ input, select, textarea {
 			margin: 1em 0 0 0;
 		}
 
+		header > h2 {
+			font-weight: 600;
+			font-size: 1.5em;
+		}
+
 	footer {
 		margin: 2em 0 0 0;
 	}
 
 	strong, b {
-		font-weight: 300;
-		color: #666;
+		font-weight: 600;
+		/* color: #666; */
 	}
 
 	em, i {
@@ -1838,6 +1843,10 @@ input, select, textarea {
 	section > div > div > ol {
 		text-align: left;
 	}
+
+	/* section > div > b {
+		font-weight: 400;
+	} */
 
 /* Icons */
 
