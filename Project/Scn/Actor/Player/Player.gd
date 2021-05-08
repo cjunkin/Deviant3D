@@ -419,7 +419,7 @@ func _physics_process(delta: float) -> void:
 	# apply gravity, g is whether gravity is on or off, we turn off gravity if we're grappling
 	vel -= int(g) * (int(not_grappling)) * (int(L_not_grapplin)) * grav * delta * transform.basis.y
 	# If underwater
-	# TODO: NETWORK UNDERWATER
+	# FIXME: NETWORK UNDERWATER
 	if global_transform.origin.y < G.water_level:
 		if Input.is_action_pressed("forward"):
 			vel -= CamY.global_transform.basis.z * (int(Input.get_action_strength("sprint")) + 1)
@@ -728,7 +728,6 @@ puppetsync func y() -> void:
 			CamSpring, "spring_length", CamSpring.spring_length, 0, .25, Tween.TRANS_CUBIC
 			)
 		tween.start()
-		# TODO: hide PMesh
 		yield(tween, "tween_all_completed")
 		PMesh.visible = false
 	fps = !fps

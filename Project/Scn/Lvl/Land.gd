@@ -102,7 +102,6 @@ func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 32, SPACING := 32.0) -> void:
 				ignored_normals
 			)
 			# Height of terrain is rand_height_offset + START, 
-			# TODO: TWEAK SPAWN FREQUENCY, MAKE POWERUPS GLOW, HAVE BETTER MATERIAL
 			# Rafael's Code, spawns powerup: ---------------------------------
 			var powerup_check := rng.randf() # random number btwn 0 and 1
 			var powerup_height_offset := rng.randf_range(5, 700)
@@ -189,7 +188,7 @@ func create_cube_from(vertices: PoolVector2Array, points: PoolIntArray, bottom_o
 	for i in range(arrays[ArrayMesh.ARRAY_NORMAL].size()):
 		if !(i in ignored_normals):
 			arrays[ArrayMesh.ARRAY_NORMAL][i] *= -1
-			# TODO: I KNOW NORMALS ARE INCORRECT FOR SIDES, NEED TO TAKE CROSS PRODUCT and recompute normals
+			# FIXME: I KNOW NORMALS ARE INCORRECT FOR SIDES, NEED TO TAKE CROSS PRODUCT and recompute normals
 
 	arrays[ArrayMesh.ARRAY_INDEX] = cube_arrays[ArrayMesh.ARRAY_INDEX]
 
@@ -205,6 +204,8 @@ func create_cube_from(vertices: PoolVector2Array, points: PoolIntArray, bottom_o
 		if child is StaticBody:
 			child.set_collision_mask_bit(1, true)
 			child.set_collision_mask_bit(2, true)
+			
+	# TODO: make land spikier around center of mass, like iceberg
 	
 #func spawn_tree(x: float, y: float, z: float) -> void:
 #

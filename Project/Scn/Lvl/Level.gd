@@ -299,7 +299,7 @@ puppet func b(master_translation: Vector3, master_rot: Vector3, target_i : int) 
 	boss.Head.rotation = master_rot
 
 	bosses.append(boss)
-	boss.set_target(get_node(str(target_i))) # TODO: sync up properly worm
+	boss.set_target(get_node(str(target_i))) # FIXME: sync up properly worm
 	boss.set_network_master(1)
 
 # Recieve current seeds, should only be called on non-host

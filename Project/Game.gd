@@ -29,7 +29,7 @@ func _ready():
 		add_child(worm)
 		worm.Head.translation = Vector3(0, 360, -850)
 		worm.Head.rotation.y = -PI
-		worm.set_target(players[0]) # TODO SYNC UP PROPERLY WORM
+		worm.set_target(players[0]) # FIXME SYNC UP PROPERLY WORM
 		bosses.append(worm)
 		worm.set_network_master(get_tree().get_network_unique_id())
 	# Else send a network request to get host's data
