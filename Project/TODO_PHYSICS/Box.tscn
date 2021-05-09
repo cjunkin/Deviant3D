@@ -22,3 +22,4 @@ mesh = SubResource( 2 )
 material/0 = SubResource( 3 )
 
 [node name="Tween" type="Tween" parent="."]
+playback_process_mode = 0
