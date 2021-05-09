@@ -20,3 +20,5 @@ shape = SubResource( 1 )
 transform = Transform( 1.98532, 0, 0, 0, 1.98113, -0.0774725, 0, 0.0773886, 1.98328, 0.293324, 7.77624, -0.287799 )
 mesh = ExtResource( 1 )
 material/0 = SubResource( 2 )
+
+[connection signal="body_entered" from="." to="." method="_on_Area_body_entered"]
