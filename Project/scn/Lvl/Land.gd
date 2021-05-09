@@ -1,7 +1,7 @@
 class_name Land
 extends Spatial
 
-export var grid_mat : Material = preload("res://Gfx/Material/Grid.tres")
+export var grid_mat : Material = preload("res://Gfx/Material/grid.material")
 export (Material) var land_mat : Material
 export (Material) var grass_mat : Material
 export (Material) var water_mat : Material
@@ -128,9 +128,9 @@ func gen_terrain(s := G.TERRAIN_SEED, NUM_PTS := 32, SPACING := 32.0) -> void:
 			
 			if powerup_check < prob * 2:
 				# Spawn tree
-				var tx := vertices[0][0]
+				var tx := (vertices[0][0] + vertices[1][0] + vertices[2][0] + vertices[3][0]) / 4.0
 				var ty := rand_height_offset + START
-				var tz := vertices[0][1]
+				var tz := (vertices[0][1] + vertices[1][1] + vertices[2][1] + vertices[3][1]) / 4.0
 				# Scale
 				var size := rng.randf_range(12, 24)
 				# Sets position to origin, scale to size

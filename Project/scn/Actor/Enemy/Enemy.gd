@@ -13,7 +13,10 @@ export var friction := .125
 func _ready() -> void:
 	add_to_group(G.ENEMY)
 	if flying:
-		$Mesh.material_override = load("res://Gfx/Material/Grid.tres")
+		var mat := load("res://Gfx/Material/grid.material")
+		$Mesh.material_override = mat
+		mat = load("res://Gfx/Material/laser.material")
+		Dust.material_override = mat
 #	else:
 #		$Mesh.material_override = load()
 

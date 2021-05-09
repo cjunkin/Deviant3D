@@ -2,7 +2,7 @@
 
 [ext_resource path="res://scn/projectile/laser/laser.gd" type="Script" id=1]
 [ext_resource path="res://scn/projectile/base/projectile.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Gfx/Material/laser.tres" type="Material" id=3]
+[ext_resource path="res://Gfx/Material/laser.material" type="Material" id=3]
 
 [sub_resource type="RayShape" id=1]
 margin = 0.1
