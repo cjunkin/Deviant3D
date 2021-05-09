@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scn/Unused/Test.gd" type="Script" id=1]
+
+[node name="MeshInstance" type="MeshInstance"]
+script = ExtResource( 1 )
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( -0.387581, -0.242769, 0.889294, -0.0969942, 0.970084, 0.22255, -0.916719, 0, -0.399534, 10.8774, 2.61327, -1.77126 )
+current = true

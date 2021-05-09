@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://Scn/Lvl/Level.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scn/Lvl/Level.tscn" type="PackedScene" id=1]
 [ext_resource path="res://TODO_PHYSICS/TestScene.gd" type="Script" id=2]
 [ext_resource path="res://TODO_PHYSICS/Box.tscn" type="PackedScene" id=3]
 [ext_resource path="res://TODO_PHYSICS/Sambodh/Low_grav_powerup.tscn" type="PackedScene" id=4]
@@ -10,26 +10,25 @@
 
 [node name="Game" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
-enemy_spawn_time = NodePath("")
 
-[node name="LowGravPowerup" parent="." index="0" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.378, 0 )
-
-[node name="SpawnZone" parent="." index="5"]
+[node name="SpawnZone" parent="." index="4"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 26.1683, 0 )
 visible = true
 
-[node name="Box" parent="." index="7" instance=ExtResource( 3 )]
+[node name="Box" parent="." index="6" instance=ExtResource( 3 )]
 transform = Transform( 0.890479, -0.36024, 0.277982, 0.454193, 0.740604, -0.495192, -0.0274866, 0.567216, 0.82311, 21.32, 12.186, -27.439 )
 
-[node name="Water" parent="." index="8"]
+[node name="Water" parent="." index="7"]
 visible = false
 
+[node name="LowGravPowerup" parent="." index="8" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 120.684, -58.832 )
+
 [node name="Area" parent="." index="9" instance=ExtResource( 5 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 54.1897, 12.1706 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 143.444, -46.6614 )
 
 [node name="LowFriction" parent="." index="10" instance=ExtResource( 6 )]
-transform = Transform( 3.04993, 0, 0, 0, 7.03002, 0, 0, 0, 1.94075, -13.3002, 3.2953, -14.7421 )
+transform = Transform( 3.04993, 0, 0, 0, 7.03002, 0, 0, 0, 1.94075, -13.3002, 92.55, -73.5741 )
 
 [node name="HighFriction" parent="." index="11" instance=ExtResource( 7 )]
-transform = Transform( 0.405295, -0.88526, 0.228147, 4.62363, 2.33853, 0.860304, -0.246581, 0.134453, 0.95975, -17.9824, 2.84857, -1.06479 )
+transform = Transform( 0.405295, -0.88526, 0.228147, 4.62363, 2.33853, 0.860304, -0.246581, 0.134453, 0.95975, -17.9824, 92.1032, -59.8968 )

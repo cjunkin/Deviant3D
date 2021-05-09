@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/seagulls_daniel-simion.mp3-c0ea5478d2420c97e49cbef7a9d75040.mp3str"
+
+[deps]
+
+source_file="res://Sfx/seagulls_daniel-simion.mp3"
+dest_files=[ "res://.import/seagulls_daniel-simion.mp3-c0ea5478d2420c97e49cbef7a9d75040.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -2,11 +2,11 @@
 
 [ext_resource path="res://Gfx/Shader/BlurShader.shader" type="Shader" id=1]
 [ext_resource path="res://Global.gd" type="Script" id=2]
-[ext_resource path="res://Scn/UI/CenteredPanel.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Scn/UI/Blur.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Scn/UI/Graphics.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scn/UI/CenteredPanel.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scn/UI/Blur.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scn/UI/Graphics.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Theme/main_theme.tres" type="Theme" id=6]
-[ext_resource path="res://Scn/UI/Controls/Controls.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scn/UI/Controls/Controls.tscn" type="PackedScene" id=7]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 1 )
