@@ -2,12 +2,12 @@
 
 importer="mp3"
 type="AudioStreamMP3"
-path="res://.import/Fart Meme Sound.mp3-4dbd0e0b62b552b6e3e2cc2833135de7.mp3str"
+path="res://.import/Fart Meme Sound.mp3-0ba56fae68f6f27622b4e4dd18b98ccb.mp3str"
 
 [deps]
 
-source_file="res://scn/Unused/Fart Meme Sound.mp3"
-dest_files=[ "res://.import/Fart Meme Sound.mp3-4dbd0e0b62b552b6e3e2cc2833135de7.mp3str" ]
+source_file="res://Scn/Unused/Fart Meme Sound.mp3"
+dest_files=[ "res://.import/Fart Meme Sound.mp3-0ba56fae68f6f27622b4e4dd18b98ccb.mp3str" ]
 
 [params]
 
