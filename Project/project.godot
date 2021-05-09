@@ -59,7 +59,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Scn/Lvl/Level.gd"
 }, {
-"base": "Reference",
+"base": "ImmediateGeometry",
 "class": "Line",
 "language": "GDScript",
 "path": "res://addons/LineRenderer/Line.gd"
