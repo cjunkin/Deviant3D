@@ -1,11 +1,12 @@
 class_name AI
 extends KinematicBody
 
-
-var hp := 1
+export var MAX_HP := 1
+var hp := MAX_HP
 onready var Dust : Particles = get_node_or_null("Dust")
 
 func _ready() -> void:
+	hp = MAX_HP
 	toggle_particles()
 
 func toggle_particles(on := G.particles != G.OFF) -> void:
@@ -14,7 +15,7 @@ func toggle_particles(on := G.particles != G.OFF) -> void:
 		Dust.emitting = on
 
 # Damage
-func dmg(proj: Projectile, amt := 1) -> void:
+func dmg(amt := 1, proj: Projectile = null) -> void:
 	hp -= amt
 	if hp <= 0:
 		rpc("d")

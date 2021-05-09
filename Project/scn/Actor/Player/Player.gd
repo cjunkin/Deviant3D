@@ -279,7 +279,7 @@ func _input(event: InputEvent) -> void:
 			elif event.button_index == BUTTON_WHEEL_DOWN && event.is_pressed():
 #				rset("b", b + .025)
 				rpc("sw") # switch weapons
-		# Look
+		# Look/Aim
 		if event is InputEventMouseMotion:
 			CamX.rotate_y(event.relative.x * SENS_X) # Side to side // (transform.basis.y, 
 			CamY.rotation.x = clamp(
@@ -356,8 +356,11 @@ func _physics_process(delta: float) -> void:
 		else:
 			G.game.Water.visible = false
 
-	# Point at center
-	if forward.is_colliding():
+	# Point at center if we aren't pointing almost straight up/down
+#	print(abs(CamY.rotation.x) < PI * 5.0 / 12.0)
+#	print(abs(CamY.rotation.x))
+#	print(" ")
+	if forward.is_colliding() && (fps || CamY.rotation.x > PI * -1.0 / 4.0):
 		GunHolder.global_transform = GunHolder.global_transform.interpolate_with(
 			GunHolder.global_transform.looking_at(
 				forward.get_collision_point(), transform.basis.y
@@ -365,6 +368,7 @@ func _physics_process(delta: float) -> void:
 			delta * 10
 		)
 	else:
+		
 		GunHolder.rotation = GunHolder.rotation.linear_interpolate(
 			Vector3.ZERO,
 			delta * 10

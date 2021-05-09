@@ -31,19 +31,19 @@ void fragment() {
 	ALPHA = smoothstep(dissolve_amount - burn_size, dissolve_amount, sample);
 }"
 
-[sub_resource type="OpenSimplexNoise" id=4]
+[sub_resource type="OpenSimplexNoise" id=3]
 
-[sub_resource type="NoiseTexture" id=5]
-noise = SubResource( 4 )
+[sub_resource type="NoiseTexture" id=4]
+noise = SubResource( 3 )
 
-[sub_resource type="ShaderMaterial" id=3]
+[sub_resource type="ShaderMaterial" id=5]
 shader = SubResource( 2 )
 shader_param/albedo = Color( 1.5, 1.02, 0, 0.62 )
 shader_param/emission_color = Color( 1.37, 0.12, 0.12, 1 )
 shader_param/emission_amount = 1.0
 shader_param/burn_size = 0.373
 shader_param/dissolve_amount = 1.0
-shader_param/dissolve_texture = SubResource( 5 )
+shader_param/dissolve_texture = SubResource( 4 )
 
 [sub_resource type="Animation" id=6]
 resource_name = "Explode"
@@ -70,7 +70,7 @@ script = ExtResource( 1 )
 shape = SubResource( 1 )
 
 [node name="CSGSphere" type="CSGSphere" parent="."]
-material_override = SubResource( 3 )
+material_override = SubResource( 5 )
 radius = 16.0
 
 [node name="Anim" type="AnimationPlayer" parent="."]

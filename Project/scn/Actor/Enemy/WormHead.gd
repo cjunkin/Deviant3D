@@ -2,13 +2,12 @@ class_name WormHead
 extends AI
 
 func _ready() -> void:
-	hp = 20
 	add_to_group(G.WORM)
 	add_to_group(G.ENEMY)
 	G.game.update_boss_hp(hp)
 
-func dmg(proj: Projectile, amt := 1) -> void:
-	.dmg(proj, amt)
+func dmg(amt := 1, proj: Projectile = null) -> void:
+	.dmg(amt, proj)
 	G.game.update_boss_hp(hp)
 
 remotesync func d(particle_scale := 7.0) -> void:

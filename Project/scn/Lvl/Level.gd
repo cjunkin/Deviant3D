@@ -232,6 +232,7 @@ func gen_asteroids(my_seed: int) -> void:
 func spawn_enemy(transl := Vector3.INF, velocity := Vector3.INF, target_name := "") -> void:
 	var enemy: Enemy = enemies[enemy_i]
 	enemy_i = (enemy_i + 1) % num_enemies
+	enemy.hp = enemy.MAX_HP
 	# If enemy isn't already spawned in
 	if !enemy.is_inside_tree():
 		# Not syncing

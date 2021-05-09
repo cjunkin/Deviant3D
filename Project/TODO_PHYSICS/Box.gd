@@ -39,7 +39,7 @@ func _physics_process(delta: float) -> void:
 # Short for "damage", called when laser hits it, 
 # hitpt is point of collision, in global coordinates
 # don't worry about amt (AMount)
-func dmg(proj: Projectile, amt := 1) -> void:
+func dmg(amt := 1, proj: Projectile = null) -> void:
 	var hitpt: Vector3 = proj.Ray.get_collision_point()
 	var surface_normal : Vector3 = proj.Ray.get_collision_normal()
 	var force: Vector3 = proj.get_vel()
