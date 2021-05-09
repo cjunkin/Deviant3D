@@ -19,5 +19,5 @@ var currPlayer : Player
 func _on_Area_body_entered(body):
 	if body.is_in_group(G.PLAYER):
 #		#input here
-		if get_tree().change_scene(G.GAME_SCENE) != OK:
+		if get_tree().change_scene("res://TODO_PHYSICS/TestScene.tscn") != OK:
 			print("ERROR: COULDN'T LOAD GAME")
