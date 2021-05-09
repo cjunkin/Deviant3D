@@ -69,22 +69,21 @@ func dmg(proj: Projectile, amt := 1) -> void:
 	var torque : Vector3 = hitvec.length() * force * sintheta
 	
 	#TODO: Apply the stuff to make this happen slower instead of all at once
-	#rotation += torque
+	rotation += torque
 	#var rotated := rotation + torque
-	
-	t.interpolate_property(self, "rot", rotation, rotation + torque, 1.0, t.TRANS_CUBIC)
-	#rotation = rotated
-	t.start()
 	vel += force / 5
 	
-	acc += grav
-	vel += acc
+	#t.interpolate_property(self, "rot", rotation, rotation + torque, 1.0, t.TRANS_CUBIC)
+	#t.start()
 	
-	 
-	vel = move_and_slide(vel, Vector3.UP)
 	
-	if is_on_floor():
-		vel = Vector3.ZERO
+	#acc += grav
+	#vel += acc
+	
+	
+	
+	#if is_on_floor():
+	#	vel = Vector3.ZERO
 	
 	#rotation_degrees = Vector3(0,0,0)
 	var in_degrees = Vector3(rad2deg(rotation.x), rad2deg(rotation.y), rad2deg(rotation.z))
