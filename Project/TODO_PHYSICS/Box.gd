@@ -70,7 +70,15 @@ func dmg(proj: Projectile, amt := 1) -> void:
 	rotation += torque
 	vel += force / 5
 	
-	rotation = Vector3(0,0,0)
+	acc += grav
+	vel += acc
+	 
+	vel = move_and_slide(vel, Vector3.UP)
+	
+	if is_on_floor():
+		vel = Vector3.ZERO
+	
+	#rotation = Vector3(0,0,0)
 	
 	"""TODO: YOUR CODE HERE --------------------------------- get pushed around physics all that"""
 	print("Hit at: ", hitpt) # where it gets hit (global space)
