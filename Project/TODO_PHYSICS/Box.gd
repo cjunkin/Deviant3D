@@ -99,10 +99,10 @@ func dmg(proj: Projectile, amt := 1) -> void:
 	
 	
 	#TODO: Do the thingy that makes the rotation not happen all at once
-	var to_ground : Vector3 = Vector3(to_x, to_y, to_z)
-	var grounded := rotation_degrees - to_ground
+	var to_ground : Vector3 = Vector3(deg2rad(to_x), deg2rad(to_y), deg2rad(to_z))
+	var grounded := rotation - to_ground
 	
-	t.interpolate_property(self, "rot", rotation_degrees, grounded, 0.5, t.TRANS_CUBIC)
+	t.interpolate_property(self, "rotation", rotation, grounded, 0.25, t.TRANS_CUBIC)
 	t.start()
 	
 	
