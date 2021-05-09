@@ -4,9 +4,11 @@ extends Spatial
 # Num Cached     TODO: make caches in C++ for efficiency
 const PROJ_PER_PLAYER := 10
 const EXP_PER_PLAYER := 10
-var num_lasers := PROJ_PER_PLAYER
-var num_explosions := EXP_PER_PLAYER + 46
+const num_lasers := PROJ_PER_PLAYER
+const num_rockets := PROJ_PER_PLAYER / 2
+const num_explosions := EXP_PER_PLAYER + 46
 const num_enemies := 20
+
 #const num_laser_audio := 8
 #const num_grapple_sounds := 6
 
@@ -66,7 +68,7 @@ func _ready()->void:
 		p.name = G.LASER + str(i)
 		lasers.append(p)
 	
-	for i in range(num_lasers):
+	for i in range(num_rockets):
 		var p : Rocket = rocket_s.instance()
 		p.name = G.ROCKET + str(i)
 		rockets.append(p)

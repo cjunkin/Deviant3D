@@ -608,7 +608,7 @@ puppetsync func L() -> void:
 puppetsync func f() -> void:
 	var p : Projectile
 	if rocket_on:
-		G.game.rocket_i = (G.game.rocket_i + 1) % G.game.num_lasers
+		G.game.rocket_i = (G.game.rocket_i + 1) % G.game.num_rockets
 		p = G.game.rockets[G.game.rocket_i]
 	else:
 		G.game.laser_i = (G.game.laser_i + 1) % G.game.num_lasers
@@ -647,8 +647,11 @@ puppetsync func m(melee_on := true) -> void:
 	Melee.visible = melee_on
 
 puppetsync func sw() -> void:
-	print(rocket_on)
 	rocket_on = !rocket_on
+	if rocket_on:
+		ROF.wait_time = .5
+	else:
+		ROF.wait_time = .15
 
 # Sync position/orientation
 puppet func s(trans: Vector3, y: float, x: float, velocity: Vector3, norm := newest_normal) -> void:
