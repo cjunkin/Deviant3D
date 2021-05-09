@@ -20,3 +20,5 @@ shape = SubResource( 1 )
 [node name="Mesh" type="MeshInstance" parent="."]
 mesh = SubResource( 2 )
 material/0 = SubResource( 3 )
+
+[node name="Tween" type="Tween" parent="."]

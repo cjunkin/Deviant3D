@@ -7,6 +7,7 @@ var speed : float = 0.0 	# declares "speed" as a float
 var vel := Vector3.ZERO 	# walrus := auto-types it because it's pretty obvious what the type is
 export var acc := Vector3(0, 0, 0) # export allows you to edit it in the editor inspector (to your right)
 export var grav := Vector3.DOWN
+onready var t := $Tween
 
 # Initialization, called when object enters scene tree (the right panel, "scene" is a scene tree) for the first time.
 func _ready() -> void:
@@ -68,11 +69,17 @@ func dmg(proj: Projectile, amt := 1) -> void:
 	var torque : Vector3 = hitvec.length() * force * sintheta
 	
 	#TODO: Apply the stuff to make this happen slower instead of all at once
-	rotation += torque
+	#rotation += torque
+	#var rotated := rotation + torque
+	
+	t.interpolate_property(self, "rot", rotation, rotation + torque, 1.0, t.TRANS_CUBIC)
+	#rotation = rotated
+	t.start()
 	vel += force / 5
 	
 	acc += grav
 	vel += acc
+	
 	 
 	vel = move_and_slide(vel, Vector3.UP)
 	
@@ -94,7 +101,10 @@ func dmg(proj: Projectile, amt := 1) -> void:
 	
 	#TODO: Do the thingy that makes the rotation not happen all at once
 	var to_ground : Vector3 = Vector3(to_x, to_y, to_z)
-	rotation_degrees -= to_ground
+	var grounded := rotation_degrees - to_ground
+	
+	t.interpolate_property(self, "rot", rotation_degrees, grounded, 0.5, t.TRANS_CUBIC)
+	t.start()
 	
 	
 	
