@@ -3,15 +3,23 @@ extends KinematicBody
 
 
 var hp := 1
+onready var Dust : Particles = get_node_or_null("Dust")
 
+func _ready() -> void:
+	toggle_particles()
 
-# MULTIPLAYER STUFF --------------------------------------------
+func toggle_particles(on := G.particles != G.OFF) -> void:
+	if Dust:
+		Dust.visible = on
+		Dust.emitting = on
 
 # Damage
 func dmg(proj: Projectile, amt := 1) -> void:
 	hp -= amt
 	if hp <= 0:
 		rpc("d")
+
+# MULTIPLAYER STUFF --------------------------------------------
 
 # Die
 remotesync func d(particle_scale := 1.0) -> void:

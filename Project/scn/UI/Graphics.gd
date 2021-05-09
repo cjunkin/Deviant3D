@@ -8,13 +8,19 @@ onready var glow : OptionButton = $Panel/Buttons/Options/glow/Button
 onready var bloom : OptionButton = $Panel/Buttons/Options/bloom/Button
 onready var ssao : OptionButton = $Panel/Buttons/Options/ssao/Button
 onready var water : OptionButton = $Panel/Buttons/Options/water/Button
+onready var particles : OptionButton = $Panel/Buttons/Options/particles/Button
 
 # Setting constants
 const STANDARD := PoolStringArray(["Off", "Low", "Medium", "High"])
 const BINARY := PoolStringArray(["Off", "On"])
-const ALL_GFX_OPTIONS := PoolStringArray(["shadows", "glow", "bloom", "water", "ssao"]) # TODO: more graphics settings
+const ALL_GFX_OPTIONS := PoolStringArray(["shadows", "glow", "bloom", "water", "ssao", "particles"]) # TODO: more graphics settings
 
 func _ready() -> void:
+	# TO ADD A NEW GRAPHICS OPTION, MAKE THE OptionButton
+	# ADD name TO ALL_GFX_OPTIONS,
+	# SETUP add_options_to_button, THEN
+	# MAKE A VARIABLE IN Global.gd
+	
 	# Add options
 	add_options_to_button(overall, PoolStringArray(["Potato", "Low", "Medium", "High"]))
 	add_options_to_button(shadows, STANDARD)
@@ -22,6 +28,7 @@ func _ready() -> void:
 	add_options_to_button(bloom, BINARY)
 	add_options_to_button(ssao, STANDARD)
 	add_options_to_button(water, STANDARD)
+	add_options_to_button(particles, BINARY)
 
 	# Setup signals
 	setup_graphics_options_signals($Panel/Buttons/Options, "gfx_changed")
@@ -59,6 +66,9 @@ func set_setting(setting: String, index: int) -> void:
 		G.game.get_node("Env")._ready()
 		if setting == "water":
 			G.game.set_water_gfx()
+		elif setting == "particles":
+			for ai in get_tree().get_nodes_in_group(G.ENEMY):
+				ai.toggle_particles()
 
 # Sets overall's text to "custom" unless we match a preset
 func update_overall_ui() -> void:
@@ -80,8 +90,8 @@ func add_options_to_button(button: OptionButton, options: PoolStringArray) -> vo
 		button.add_item(option, i)
 		i += 1
 
-# If setup_graphics_options_signals connects BUTTON to this, sets SETTING
-# anytime the BUTTON's option is changed.
+# If setup_graphics_options_signals connects BUTTON to this, 
+# sets SETTING anytime the BUTTON's option is changed.
 func gfx_changed(index: int, setting: String) -> void: #, button: OptionButton
 	# Overall setting
 	if setting == "Overall":

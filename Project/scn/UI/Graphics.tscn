@@ -4,13 +4,16 @@
 [ext_resource path="res://scn/UI/Graphics.gd" type="Script" id=2]
 
 [node name="Graphics" instance=ExtResource( 1 )]
-margin_top = -262.5
-margin_bottom = 262.5
+margin_left = -347.0
+margin_top = -303.5
+margin_right = 347.0
+margin_bottom = 303.5
 rect_min_size = Vector2( 600, 525 )
 script = ExtResource( 2 )
 
 [node name="Panel" parent="." index="0"]
-margin_bottom = 525.0
+margin_right = 694.0
+margin_bottom = 607.0
 
 [node name="Buttons" type="VBoxContainer" parent="Panel" index="0"]
 anchor_right = 1.0
@@ -23,9 +26,9 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="Panel/Buttons" index="0"]
-margin_top = 21.0
-margin_right = 600.0
-margin_bottom = 60.0
+margin_top = 26.0
+margin_right = 694.0
+margin_bottom = 65.0
 hint_tooltip = "Choose how to set your eyeballs on fire"
 mouse_filter = 1
 mouse_default_cursor_shape = 16
@@ -34,20 +37,20 @@ text = "Graphics Settings:"
 align = 1
 
 [node name="Options" type="VBoxContainer" parent="Panel/Buttons" index="1"]
-margin_top = 81.0
-margin_right = 600.0
-margin_bottom = 443.0
+margin_top = 91.0
+margin_right = 694.0
+margin_bottom = 516.0
 size_flags_vertical = 3
 custom_constants/separation = 16
 
 [node name="Overall" type="HBoxContainer" parent="Panel/Buttons/Options" index="0"]
 modulate = Color( 0.592157, 0.898039, 1, 1 )
-margin_right = 600.0
+margin_right = 694.0
 margin_bottom = 47.0
 size_flags_horizontal = 3
 
 [node name="Txt" type="Label" parent="Panel/Buttons/Options/Overall" index="0"]
-margin_right = 198.0
+margin_right = 230.0
 margin_bottom = 47.0
 hint_tooltip = "Set all graphics, at once. Truly, a pro gamer move."
 mouse_filter = 0
@@ -59,8 +62,8 @@ text = "Overall "
 align = 1
 
 [node name="Button" type="OptionButton" parent="Panel/Buttons/Options/Overall" index="1"]
-margin_left = 202.0
-margin_right = 600.0
+margin_left = 234.0
+margin_right = 694.0
 margin_bottom = 47.0
 rect_min_size = Vector2( 0, 42 )
 hint_tooltip = "Set all graphics, at once. Truly, a pro gamer move."
@@ -70,12 +73,12 @@ size_flags_horizontal = 3
 [node name="shadows" type="HBoxContainer" parent="Panel/Buttons/Options" index="1"]
 modulate = Color( 0.933333, 0.72549, 0.482353, 1 )
 margin_top = 63.0
-margin_right = 600.0
+margin_right = 694.0
 margin_bottom = 110.0
 size_flags_horizontal = 3
 
 [node name="Txt" type="Label" parent="Panel/Buttons/Options/shadows" index="0"]
-margin_right = 198.0
+margin_right = 230.0
 margin_bottom = 47.0
 hint_tooltip = "Turning this to high will NOT make you edgy"
 mouse_filter = 0
@@ -87,8 +90,8 @@ text = "Shadows "
 align = 1
 
 [node name="Button" type="OptionButton" parent="Panel/Buttons/Options/shadows" index="1"]
-margin_left = 202.0
-margin_right = 600.0
+margin_left = 234.0
+margin_right = 694.0
 margin_bottom = 47.0
 rect_min_size = Vector2( 0, 42 )
 hint_tooltip = "Turning this to high will NOT make you edgy"
@@ -98,12 +101,12 @@ size_flags_horizontal = 3
 [node name="glow" type="HBoxContainer" parent="Panel/Buttons/Options" index="2"]
 modulate = Color( 0.494118, 0.807843, 0.568627, 1 )
 margin_top = 126.0
-margin_right = 600.0
+margin_right = 694.0
 margin_bottom = 173.0
 size_flags_horizontal = 3
 
 [node name="Txt" type="Label" parent="Panel/Buttons/Options/glow" index="0"]
-margin_right = 198.0
+margin_right = 230.0
 margin_bottom = 47.0
 hint_tooltip = "Did you know fireflies are beetles?"
 mouse_filter = 0
@@ -115,8 +118,8 @@ text = "Glow "
 align = 1
 
 [node name="Button" type="OptionButton" parent="Panel/Buttons/Options/glow" index="1"]
-margin_left = 202.0
-margin_right = 600.0
+margin_left = 234.0
+margin_right = 694.0
 margin_bottom = 47.0
 rect_min_size = Vector2( 0, 42 )
 hint_tooltip = "Did you know fireflies are beetles?"
@@ -126,12 +129,12 @@ size_flags_horizontal = 3
 [node name="bloom" type="HBoxContainer" parent="Panel/Buttons/Options" index="3"]
 modulate = Color( 0.811765, 0.890196, 0.560784, 1 )
 margin_top = 189.0
-margin_right = 600.0
+margin_right = 694.0
 margin_bottom = 236.0
 size_flags_horizontal = 3
 
 [node name="Txt" type="Label" parent="Panel/Buttons/Options/bloom" index="0"]
-margin_right = 198.0
+margin_right = 230.0
 margin_bottom = 47.0
 hint_tooltip = "Makes everything brighter. Say no to derpreshun!"
 mouse_filter = 0
@@ -143,8 +146,8 @@ text = "Bloom "
 align = 1
 
 [node name="Button" type="OptionButton" parent="Panel/Buttons/Options/bloom" index="1"]
-margin_left = 202.0
-margin_right = 600.0
+margin_left = 234.0
+margin_right = 694.0
 margin_bottom = 47.0
 rect_min_size = Vector2( 0, 42 )
 hint_tooltip = "Makes everything brighter. Say no to derpreshun!"
@@ -154,12 +157,12 @@ size_flags_horizontal = 3
 [node name="water" type="HBoxContainer" parent="Panel/Buttons/Options" index="4"]
 modulate = Color( 0.545098, 0.8, 0.984314, 1 )
 margin_top = 252.0
-margin_right = 600.0
+margin_right = 694.0
 margin_bottom = 299.0
 size_flags_horizontal = 3
 
 [node name="Txt" type="Label" parent="Panel/Buttons/Options/water" index="0"]
-margin_right = 198.0
+margin_right = 230.0
 margin_bottom = 47.0
 hint_tooltip = "You can turn water OFF??? Haha, jk, I jest. Unless?"
 mouse_filter = 0
@@ -171,8 +174,8 @@ text = "Water"
 align = 1
 
 [node name="Button" type="OptionButton" parent="Panel/Buttons/Options/water" index="1"]
-margin_left = 202.0
-margin_right = 600.0
+margin_left = 234.0
+margin_right = 694.0
 margin_bottom = 47.0
 rect_min_size = Vector2( 0, 42 )
 hint_tooltip = "You can turn water OFF??? Haha, jk, I jest. Unless?"
@@ -182,12 +185,12 @@ size_flags_horizontal = 3
 [node name="ssao" type="HBoxContainer" parent="Panel/Buttons/Options" index="5"]
 modulate = Color( 0.945098, 0.827451, 0.47451, 1 )
 margin_top = 315.0
-margin_right = 600.0
+margin_right = 694.0
 margin_bottom = 362.0
 size_flags_horizontal = 3
 
 [node name="Txt" type="Label" parent="Panel/Buttons/Options/ssao" index="0"]
-margin_right = 198.0
+margin_right = 230.0
 margin_bottom = 47.0
 hint_tooltip = "Make corners darker, also this super bad for potato PCs"
 mouse_filter = 0
@@ -199,8 +202,36 @@ text = "SSAO"
 align = 1
 
 [node name="Button" type="OptionButton" parent="Panel/Buttons/Options/ssao" index="1"]
-margin_left = 202.0
-margin_right = 600.0
+margin_left = 234.0
+margin_right = 694.0
+margin_bottom = 47.0
+rect_min_size = Vector2( 0, 42 )
+hint_tooltip = "Make corners darker, also this super bad for potato PCs"
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 3
+
+[node name="particles" type="HBoxContainer" parent="Panel/Buttons/Options" index="6"]
+modulate = Color( 0.815686, 0.709804, 0.956863, 1 )
+margin_top = 378.0
+margin_right = 694.0
+margin_bottom = 425.0
+size_flags_horizontal = 3
+
+[node name="Txt" type="Label" parent="Panel/Buttons/Options/particles" index="0"]
+margin_right = 230.0
+margin_bottom = 47.0
+hint_tooltip = "Make corners darker, also this super bad for potato PCs"
+mouse_filter = 0
+mouse_default_cursor_shape = 16
+size_flags_horizontal = 3
+size_flags_vertical = 5
+size_flags_stretch_ratio = 0.5
+text = "Particles"
+align = 1
+
+[node name="Button" type="OptionButton" parent="Panel/Buttons/Options/particles" index="1"]
+margin_left = 234.0
+margin_right = 694.0
 margin_bottom = 47.0
 rect_min_size = Vector2( 0, 42 )
 hint_tooltip = "Make corners darker, also this super bad for potato PCs"
@@ -208,9 +239,9 @@ mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
 [node name="Done" type="CenterContainer" parent="Panel/Buttons" index="2"]
-margin_top = 443.0
-margin_right = 600.0
-margin_bottom = 525.0
+margin_top = 516.0
+margin_right = 694.0
+margin_bottom = 607.0
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
@@ -218,10 +249,10 @@ __meta__ = {
 
 [node name="DoneButton" type="Button" parent="Panel/Buttons/Done" index="0"]
 modulate = Color( 1, 0.737255, 0.737255, 1 )
-margin_left = 236.0
-margin_top = 17.0
-margin_right = 364.0
-margin_bottom = 64.0
+margin_left = 283.0
+margin_top = 22.0
+margin_right = 411.0
+margin_bottom = 69.0
 rect_min_size = Vector2( 128, 42 )
 hint_tooltip = "Finish searing those eyeballs"
 mouse_default_cursor_shape = 2

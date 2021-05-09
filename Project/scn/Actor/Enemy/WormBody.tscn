@@ -2,6 +2,7 @@
 
 [ext_resource path="res://Gfx/Material/WormBody.tres" type="Material" id=1]
 [ext_resource path="res://scn/Actor/Enemy/WormBody.gd" type="Script" id=2]
+[ext_resource path="res://Gfx/Material/Particle.tres" type="Material" id=3]
 
 [sub_resource type="SphereMesh" id=9]
 radius = 10.0
@@ -15,11 +16,11 @@ radius = 10.0
 [sub_resource type="SphereShape" id=11]
 radius = 9.0
 
-[sub_resource type="Gradient" id=7]
-colors = PoolColorArray( 0.99, 0.65, 0.46, 1, 1.03, 0.9, 0.52, 1 )
+[sub_resource type="Gradient" id=13]
+colors = PoolColorArray( 1.42, 0.87, 0.68, 1, 1.17, 0.95, 0.58, 1 )
 
 [sub_resource type="GradientTexture" id=8]
-gradient = SubResource( 7 )
+gradient = SubResource( 13 )
 
 [sub_resource type="Curve" id=2]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
@@ -38,18 +39,10 @@ scale_random = 0.5
 scale_curve = SubResource( 3 )
 color_ramp = SubResource( 8 )
 
-[sub_resource type="SpatialMaterial" id=5]
-flags_unshaded = true
-flags_vertex_lighting = true
-flags_do_not_receive_shadows = true
-flags_disable_ambient_light = true
-vertex_color_use_as_albedo = true
-albedo_color = Color( 0.88, 0.88, 0.88, 1 )
-
-[sub_resource type="SphereMesh" id=6]
-material = SubResource( 5 )
-radial_segments = 4
-rings = 1
+[sub_resource type="SphereMesh" id=14]
+material = ExtResource( 3 )
+radial_segments = 16
+rings = 8
 
 [node name="WormBody" type="KinematicBody"]
 collision_layer = 4
@@ -76,9 +69,9 @@ shape = SubResource( 11 )
 emitting = false
 amount = 24
 explosiveness = 0.75
-fixed_fps = 60
+local_coords = false
 process_material = SubResource( 4 )
-draw_pass_1 = SubResource( 6 )
+draw_pass_1 = SubResource( 14 )
 
 [connection signal="body_entered" from="ShakeDetect" to="." method="_on_ShakeDetect_body_entered"]
 [connection signal="body_exited" from="ShakeDetect" to="." method="_on_ShakeDetect_body_exited"]

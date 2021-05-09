@@ -86,4 +86,3 @@ func die() -> void:
 
 #func get_class() -> String:
 #	return "Worm"
-

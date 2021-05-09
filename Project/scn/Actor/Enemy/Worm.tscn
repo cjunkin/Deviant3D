@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scn/Actor/Enemy/Worm.gd" type="Script" id=1]
 [ext_resource path="res://scn/Actor/Enemy/WormBody.tscn" type="PackedScene" id=2]
@@ -8,11 +8,11 @@
 [sub_resource type="SphereShape" id=1]
 radius = 8.0
 
-[sub_resource type="Gradient" id=7]
-colors = PoolColorArray( 0.99, 0.65, 0.46, 1, 1.03, 0.9, 0.52, 1 )
+[sub_resource type="Gradient" id=13]
+colors = PoolColorArray( 1.42, 0.87, 0.68, 1, 1.17, 0.95, 0.58, 1 )
 
 [sub_resource type="GradientTexture" id=8]
-gradient = SubResource( 7 )
+gradient = SubResource( 13 )
 
 [sub_resource type="Curve" id=2]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
@@ -31,16 +31,7 @@ scale_random = 0.5
 scale_curve = SubResource( 3 )
 color_ramp = SubResource( 8 )
 
-[sub_resource type="SpatialMaterial" id=5]
-flags_unshaded = true
-flags_vertex_lighting = true
-flags_do_not_receive_shadows = true
-flags_disable_ambient_light = true
-vertex_color_use_as_albedo = true
-albedo_color = Color( 0.88, 0.88, 0.88, 1 )
-
 [sub_resource type="SphereMesh" id=6]
-material = SubResource( 5 )
 radial_segments = 4
 rings = 1
 
@@ -79,7 +70,7 @@ shape = SubResource( 1 )
 emitting = false
 amount = 24
 explosiveness = 0.75
-fixed_fps = 60
+local_coords = false
 process_material = SubResource( 4 )
 draw_pass_1 = SubResource( 6 )
 
