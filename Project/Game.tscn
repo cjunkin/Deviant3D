@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://scn/Unused/StaticBox.tscn" type="PackedScene" id=2]
@@ -21,7 +21,6 @@
 [ext_resource path="res://Theme/main_theme.tres" type="Theme" id=19]
 [ext_resource path="res://Gfx/Font/Typori_Paragraph.tres" type="DynamicFont" id=20]
 [ext_resource path="res://Sfx/seagulls_daniel-simion.mp3" type="AudioStream" id=21]
-[ext_resource path="res://scn/projectile/rocket/rocket.tscn" type="PackedScene" id=22]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -316,7 +315,6 @@ subdivide_depth = 512
 [node name="Game" type="Spatial"]
 script = ExtResource( 1 )
 enemy_spawn_time = NodePath("EnemySpawnTime")
-laser_s = ExtResource( 22 )
 
 [node name="EnemySpawnTime" type="Timer" parent="."]
 process_mode = 0

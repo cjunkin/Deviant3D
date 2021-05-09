@@ -4,6 +4,7 @@ extends Node
 const ENEMY := "EN"
 const BASIC_ENEMY := "BE"
 const LASER := "L"
+const ROCKET := "R"
 const EXPL := "E"
 const WORM := "W"
 const PLAYER := "P"

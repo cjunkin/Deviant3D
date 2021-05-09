@@ -23,6 +23,7 @@ const CROUCH_TIME := .05
 var newest_normal := Vector3.UP
 const AIR_DAMPING := .9985
 const DAMP_NEAR_HOOK := .95
+var rocket_on := false # FIXME: sync this
 
 # Shooting
 puppetsync var b : float = 0.0 # Bendiness of bullet
@@ -272,10 +273,12 @@ func _input(event: InputEvent) -> void:
 	else:
 		# Scroll
 		if event is InputEventMouseButton: # and event.is_pressed():
-			if event.button_index == BUTTON_WHEEL_UP:
-				rset("b", b - .025)
-			elif event.button_index == BUTTON_WHEEL_DOWN:
-				rset("b", b + .025)
+			if event.button_index == BUTTON_WHEEL_UP && event.is_pressed():
+#				rset("b", b - .025) # set projectile curvature
+				rpc("sw") # switch weapons
+			elif event.button_index == BUTTON_WHEEL_DOWN && event.is_pressed():
+#				rset("b", b + .025)
+				rpc("sw") # switch weapons
 		# Look
 		if event is InputEventMouseMotion:
 			CamX.rotate_y(event.relative.x * SENS_X) # Side to side // (transform.basis.y, 
@@ -603,8 +606,13 @@ puppetsync func L() -> void:
 
 # Fire bullet at current orientation
 puppetsync func f() -> void:
-	G.game.laser_i = (G.game.laser_i + 1) % G.game.num_lasers
-	var p : Projectile = G.game.projectiles[G.game.laser_i]
+	var p : Projectile
+	if rocket_on:
+		G.game.rocket_i = (G.game.rocket_i + 1) % G.game.num_lasers
+		p = G.game.rockets[G.game.rocket_i]
+	else:
+		G.game.laser_i = (G.game.laser_i + 1) % G.game.num_lasers
+		p = G.game.lasers[G.game.laser_i]
 	G.game.add_child(p)
 	p.global_transform = Muzzle.global_transform
 	
@@ -637,6 +645,10 @@ puppetsync func j() -> void:
 puppetsync func m(melee_on := true) -> void:
 	Gun.visible = !melee_on
 	Melee.visible = melee_on
+
+puppetsync func sw() -> void:
+	print(rocket_on)
+	rocket_on = !rocket_on
 
 # Sync position/orientation
 puppet func s(trans: Vector3, y: float, x: float, velocity: Vector3, norm := newest_normal) -> void:

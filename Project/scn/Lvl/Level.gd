@@ -11,8 +11,10 @@ const num_enemies := 20
 #const num_grapple_sounds := 6
 
 # Cached Arrays
-var projectiles := []
+var lasers := []
 var laser_i : int = 0
+var rockets := []
+var rocket_i : int = 0
 var explosions := []
 var exp_i : int = 0
 var enemies := []
@@ -31,7 +33,8 @@ export(NodePath) var enemy_spawn_time
 
 # Packed Scenes
 export (PackedScene) var player_s := preload("res://scn/Actor/Player/Player.tscn")
-export (PackedScene) var laser_s
+export (PackedScene) var laser_s := preload("res://scn/projectile/laser/laser.tscn")
+export (PackedScene) var rocket_s := preload("res://scn/projectile/rocket/rocket.tscn")
 export (PackedScene) var exp_s := preload("res://scn/Fx/Explosion.tscn")
 
 # Gameplay
@@ -49,7 +52,7 @@ signal received_data
 var latency: float
 #var enemy_spawn_time_left : float
 
-# Here is where we'll cache enemies, projectiles, etc.
+# Here is where we'll cache enemies, lasers, etc.
 func _ready()->void:
 	G.game = self
 	set_network_master(1, false)
@@ -57,11 +60,16 @@ func _ready()->void:
 		Network.register(get_tree().get_network_unique_id())
 
 	# Projectiles
-#	projectiles.resize(num_lasers)
+#	lasers.resize(num_lasers)
 	for i in range(num_lasers):
-		var p : Projectile = laser_s.instance()
+		var p : Laser = laser_s.instance()
 		p.name = G.LASER + str(i)
-		projectiles.append(p)
+		lasers.append(p)
+	
+	for i in range(num_lasers):
+		var p : Rocket = rocket_s.instance()
+		p.name = G.ROCKET + str(i)
+		rockets.append(p)
 
 	# Explosions
 #	explosions.resize(num_explosions)
@@ -104,7 +112,12 @@ func set_water_gfx() -> void:
 # Here is where we'll move things Unity DOTS style (for speedup)
 func _physics_process(delta: float) -> void:
 	# Projectiles
-	for p in projectiles:
+	for p in lasers:
+		if p.is_inside_tree():
+			p.translation -= p.speed * p.transform.basis.z * delta
+			p.rotation.x -= delta * p.rot\
+	
+	for p in rockets:
 		if p.is_inside_tree():
 			p.translation -= p.speed * p.transform.basis.z * delta
 			p.rotation.x -= delta * p.rot
@@ -343,7 +356,7 @@ remote func spawn(id: int) -> void:
 	# Projectiles
 	for __ in range(PROJ_PER_PLAYER):
 		var p : Projectile = laser_s.instance()
-		projectiles.append(p)
+		lasers.append(p)
 	num_lasers += PROJ_PER_PLAYER
 
 	# Explosions
