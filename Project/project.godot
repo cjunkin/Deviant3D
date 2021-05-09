@@ -69,7 +69,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scn/Lvl/Level.gd"
 }, {
-"base": "Reference",
+"base": "ImmediateGeometry",
 "class": "Line",
 "language": "GDScript",
 "path": "res://addons/LineRenderer/Line.gd"
@@ -173,6 +173,7 @@ _global_script_class_icons={
 config/name="Deviant3D"
 run/main_scene="res://scn/MainMenu.tscn"
 config/icon="res://icon.png"
+<<<<<<<HEADrun/main_scene="res://Scne/MainMenu.tscn"
 
 [autoload]
 
