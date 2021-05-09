@@ -67,6 +67,7 @@ func dmg(proj: Projectile, amt := 1) -> void:
 	
 	var torque : Vector3 = hitvec.length() * force * sintheta
 	
+	#TODO: Apply the stuff to make this happen slower instead of all at once
 	rotation += torque
 	vel += force / 5
 	
@@ -78,7 +79,24 @@ func dmg(proj: Projectile, amt := 1) -> void:
 	if is_on_floor():
 		vel = Vector3.ZERO
 	
-	#rotation = Vector3(0,0,0)
+	#rotation_degrees = Vector3(0,0,0)
+	var in_degrees = Vector3(rad2deg(rotation.x), rad2deg(rotation.y), rad2deg(rotation.z))
+	var to_x : float = fmod(in_degrees.x, 90.0)
+	if to_x > 45.0:
+		to_x = -1 * (90.0 - to_x)
+	var to_y : float = fmod(in_degrees.y, 90.0)
+	if to_y > 45.0:
+		to_y = -1 * (90.0 - to_y)
+	var to_z : float = fmod(in_degrees.z, 90.0)
+	if to_z > 45.0:
+		to_z = -1 * (90.0 - to_z)
+	
+	
+	#TODO: Do the thingy that makes the rotation not happen all at once
+	var to_ground : Vector3 = Vector3(to_x, to_y, to_z)
+	rotation_degrees -= to_ground
+	
+	
 	
 	"""TODO: YOUR CODE HERE --------------------------------- get pushed around physics all that"""
 	print("Hit at: ", hitpt) # where it gets hit (global space)
