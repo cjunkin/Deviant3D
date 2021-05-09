@@ -171,7 +171,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Deviant3D"
-run/main_scene="res://Scn/MainMenu.tscn"
+run/main_scene="res://scn/MainMenu.tscn"
 config/icon="res://icon.png"
 
 [autoload]
