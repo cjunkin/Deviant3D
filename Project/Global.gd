@@ -5,12 +5,12 @@ const ENEMY := "EN"
 const BASIC_ENEMY := "BE"
 const LASER := "L"
 const EXPL := "E"
-const WORM_BODY := "WB"
+const WORM := "W"
 const PLAYER := "P"
 
 # Paths
-const MENU_SCENE := "res://Scn/MainMenu.tscn"
-#const GAME_SCENE := "res://Scn/Lvl/Level.tscn"
+const MENU_SCENE := "res://scn/MainMenu.tscn"
+#const GAME_SCENE := "res://scn/Lvl/Level.tscn"
 const GAME_SCENE := "res://Game.tscn"
 var TERRAIN_SEED : int
 

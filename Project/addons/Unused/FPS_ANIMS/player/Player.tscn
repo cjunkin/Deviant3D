@@ -7,7 +7,7 @@
 [ext_resource path="res://addons/Unused/FPS_ANIMS/player/abilities/grab/Grab.tscn" type="PackedScene" id=5]
 [ext_resource path="res://addons/Unused/FPS_ANIMS/player/abilities/footstep_sound/FootstepSound.tscn" type="PackedScene" id=6]
 [ext_resource path="res://addons/Unused/FPS_ANIMS/player/abilities/grenade/ThrowGrenade.tscn" type="PackedScene" id=7]
-[ext_resource path="res://addons/Unused/FPS_ANIMS/player/abilities/laser/Laser.tscn" type="PackedScene" id=9]
+[ext_resource path="res://addons/Unused/FPS_ANIMS/player/abilities/laser/BADLASER.tscn" type="PackedScene" id=9]
 [ext_resource path="res://addons/Unused/FPS_ANIMS/player/abilities/feedback_hit/FeedbackHit.tscn" type="PackedScene" id=10]
 
 [sub_resource type="CapsuleShape" id=1]

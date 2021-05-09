@@ -2,7 +2,7 @@
 
 [ext_resource path="res://Unused/GOPRO_WORM/WormGO_PRO_MODE.gd" type="Script" id=1]
 [ext_resource path="res://Gfx/Material/WormBody.tres" type="Material" id=2]
-[ext_resource path="res://Scn/Actor/Enemy/WormBody.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scn/Actor/Enemy/WormBody.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Unused/GOPRO_WORM/BalloonSqueaky.wav" type="AudioStream" id=4]
 [ext_resource path="res://Gfx/Model/Unused/food/banana.glb" type="PackedScene" id=5]
 

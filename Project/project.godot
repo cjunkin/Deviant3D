@@ -12,7 +12,7 @@ _global_script_classes=[ {
 "base": "KinematicBody",
 "class": "AI",
 "language": "GDScript",
-"path": "res://Scn/Actor/AI.gd"
+"path": "res://scn/Actor/AI.gd"
 }, {
 "base": "KinematicBody",
 "class": "Box",
@@ -32,7 +32,12 @@ _global_script_classes=[ {
 "base": "AI",
 "class": "Enemy",
 "language": "GDScript",
-"path": "res://Scn/Actor/Enemy/Enemy.gd"
+"path": "res://scn/Actor/Enemy/Enemy.gd"
+}, {
+"base": "Area",
+"class": "Explosion",
+"language": "GDScript",
+"path": "res://scn/projectile/explosion/explosion.gd"
 }, {
 "base": "Container",
 "class": "FlexGridContainer",
@@ -47,17 +52,22 @@ _global_script_classes=[ {
 "base": "RayCast",
 "class": "Hook",
 "language": "GDScript",
-"path": "res://Scn/Projectile/Hook.gd"
+"path": "res://scn/projectile/hook/hook.gd"
 }, {
 "base": "Spatial",
 "class": "Land",
 "language": "GDScript",
-"path": "res://Scn/Lvl/Land.gd"
+"path": "res://scn/Lvl/Land.gd"
+}, {
+"base": "Projectile",
+"class": "Laser",
+"language": "GDScript",
+"path": "res://scn/projectile/laser/laser.gd"
 }, {
 "base": "Spatial",
 "class": "Level",
 "language": "GDScript",
-"path": "res://Scn/Lvl/Level.gd"
+"path": "res://scn/Lvl/Level.gd"
 }, {
 "base": "Reference",
 "class": "Line",
@@ -82,7 +92,7 @@ _global_script_classes=[ {
 "base": "KinematicBody",
 "class": "Player",
 "language": "GDScript",
-"path": "res://Scn/Actor/Player/Player.gd"
+"path": "res://scn/Actor/Player/Player.gd"
 }, {
 "base": "Area",
 "class": "Powerup",
@@ -92,27 +102,32 @@ _global_script_classes=[ {
 "base": "Area",
 "class": "Projectile",
 "language": "GDScript",
-"path": "res://Scn/Projectile/Projectile.gd"
+"path": "res://scn/projectile/base/projectile.gd"
+}, {
+"base": "Laser",
+"class": "Rocket",
+"language": "GDScript",
+"path": "res://scn/projectile/rocket/rocket.gd"
 }, {
 "base": "Camera",
 "class": "ShakyCam",
 "language": "GDScript",
-"path": "res://Scn/Cam/ShakyCam.gd"
+"path": "res://scn/Cam/ShakyCam.gd"
 }, {
 "base": "Spatial",
 "class": "Text",
 "language": "GDScript",
-"path": "res://Scn/UI/Text/Text3D.gd"
+"path": "res://scn/UI/Text/Text3D.gd"
 }, {
 "base": "Spatial",
 "class": "Worm",
 "language": "GDScript",
-"path": "res://Scn/Actor/Enemy/Worm.gd"
+"path": "res://scn/Actor/Enemy/Worm.gd"
 }, {
 "base": "AI",
 "class": "WormBody",
 "language": "GDScript",
-"path": "res://Scn/Actor/Enemy/WormBody.gd"
+"path": "res://scn/Actor/Enemy/WormBody.gd"
 }, {
 "base": "Spatial",
 "class": "WormGOPRO",
@@ -122,7 +137,7 @@ _global_script_classes=[ {
 "base": "AI",
 "class": "WormHead",
 "language": "GDScript",
-"path": "res://Scn/Actor/Enemy/WormHead.gd"
+"path": "res://scn/Actor/Enemy/WormHead.gd"
 } ]
 _global_script_class_icons={
 "AI": "",
@@ -130,10 +145,12 @@ _global_script_class_icons={
 "ColorTile": "",
 "Deleteme": "",
 "Enemy": "",
+"Explosion": "",
 "FlexGridContainer": "res://addons/color-palette/utilities/FlexGridContainerIcon.png",
 "Game": "",
 "Hook": "",
 "Land": "",
+"Laser": "",
 "Level": "",
 "Line": "",
 "LowFrictionPower": "",
@@ -142,6 +159,7 @@ _global_script_class_icons={
 "Player": "",
 "Powerup": "",
 "Projectile": "",
+"Rocket": "",
 "ShakyCam": "",
 "Text": "",
 "Worm": "",
@@ -153,7 +171,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Deviant3D"
-run/main_scene="res://Scn/MainMenu.tscn"
+run/main_scene="res://scn/MainMenu.tscn"
 config/icon="res://icon.png"
 
 [autoload]

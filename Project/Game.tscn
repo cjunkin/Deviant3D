@@ -1,17 +1,17 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
-[ext_resource path="res://Scn/Unused/StaticBox.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Scn/UI/Text/Text3D.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scn/Unused/StaticBox.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scn/UI/Text/Text3D.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Gfx/2D/tile.svg" type="Texture" id=4]
-[ext_resource path="res://Scn/Env/Sunlight.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Scn/Env/Env.gd" type="Script" id=6]
+[ext_resource path="res://scn/Env/Sunlight.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scn/Env/Env.gd" type="Script" id=6]
 [ext_resource path="res://Gfx/Material/Grid.tres" type="Material" id=7]
-[ext_resource path="res://Scn/Env/Island1.tscn" type="PackedScene" id=8]
-[ext_resource path="res://Scn/Env/MovingPlatform.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scn/Env/Island1.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scn/Env/MovingPlatform.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Gfx/Model/Rock1.tres" type="ArrayMesh" id=10]
 [ext_resource path="res://WorldEnv.tres" type="Environment" id=11]
-[ext_resource path="res://Scn/Lvl/Land.tscn" type="PackedScene" id=12]
+[ext_resource path="res://scn/Lvl/Land.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Gfx/2D/Reticule.svg" type="Texture" id=13]
 [ext_resource path="res://TODO_PHYSICS/Sambodh/Low_grav_powerup.tscn" type="PackedScene" id=14]
 [ext_resource path="res://Gfx/Font/Typori-Regular.ttf" type="DynamicFontData" id=15]
@@ -20,6 +20,8 @@
 [ext_resource path="res://Gfx/Material/Rock1.tres" type="Material" id=18]
 [ext_resource path="res://Theme/main_theme.tres" type="Theme" id=19]
 [ext_resource path="res://Gfx/Font/Typori_Paragraph.tres" type="DynamicFont" id=20]
+[ext_resource path="res://Sfx/seagulls_daniel-simion.mp3" type="AudioStream" id=21]
+[ext_resource path="res://scn/projectile/rocket/rocket.tscn" type="PackedScene" id=22]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -314,6 +316,7 @@ subdivide_depth = 512
 [node name="Game" type="Spatial"]
 script = ExtResource( 1 )
 enemy_spawn_time = NodePath("EnemySpawnTime")
+laser_s = ExtResource( 22 )
 
 [node name="EnemySpawnTime" type="Timer" parent="."]
 process_mode = 0
@@ -539,5 +542,10 @@ material/0 = null
 
 [node name="LowGrav" parent="." instance=ExtResource( 14 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 27.7628, 133.845 )
+
+[node name="Ambient" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 21 )
+volume_db = -20.17
+autoplay = true
 
 [connection signal="timeout" from="EnemySpawnTime" to="." method="_on_EnemySpawnTime_timeout"]

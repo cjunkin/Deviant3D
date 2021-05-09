@@ -7,7 +7,7 @@ const speed := 128
 const HALF_RADIUS := 6
 const NUM_BODY_SEGS := 64
 
-var cam : SpringArm= load("res://Scn/Actor/ShakyCam.tscn").instance()
+var cam : SpringArm= load("res://scn/Actor/ShakyCam.tscn").instance()
 
 func _ready():
 	for i in range(NUM_BODY_SEGS):
@@ -56,7 +56,7 @@ func _physics_process(delta):
 		$AudioStreamPlayer.volume_db += delta * 3
 		cam.get_child(0).fov -= delta * 3
 		if Input.is_action_just_pressed("fire"):
-			$AudioStreamPlayer.stream = load("res://Scn/Actor/Enemy/FartMemeSound.wav")
+			$AudioStreamPlayer.stream = load("res://scn/Actor/Enemy/FartMemeSound.wav")
 		elif Input.is_action_pressed("fire") and time.is_stopped():
 			time.start()
 			var ban = banana.instance()
