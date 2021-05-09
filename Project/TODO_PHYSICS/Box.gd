@@ -70,6 +70,8 @@ func dmg(proj: Projectile, amt := 1) -> void:
 	rotation += torque
 	vel += force / 5
 	
+	rotation = Vector3(0,0,0)
+	
 	"""TODO: YOUR CODE HERE --------------------------------- get pushed around physics all that"""
 	print("Hit at: ", hitpt) # where it gets hit (global space)
 	print("I am centered at: ", global_transform.origin) # gives you global coordinates for this box
