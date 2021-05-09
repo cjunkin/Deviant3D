@@ -118,7 +118,7 @@ func _physics_process(delta: float) -> void:
 	for p in lasers:
 		if p.is_inside_tree():
 			p.translation -= p.speed * p.transform.basis.z * delta
-			p.rotation.x -= delta * p.rot\
+			p.rotation.x -= delta * p.rot
 	
 	for p in rockets:
 		if p.is_inside_tree():

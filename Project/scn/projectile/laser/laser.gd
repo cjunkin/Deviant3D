@@ -1,13 +1,13 @@
 class_name Laser
 extends Projectile
 
-var rot := .05
+var rot := 0.0
 onready var Ray := $Hitbox/Ray
 
 func _on_Laser_body_entered(body: Spatial) -> void:
 	if body.is_in_group(G.ENEMY):
 		# Damage enemy TODO: only enable ray when we collide
-		body.dmg(Ray.get_collision_point(), Ray.get_collision_normal())
+		body.dmg(self)
 		
 #		# Get a particle going
 #		G.game.exp_i = (G.game.exp_i + 1) % G.game.num_explosions

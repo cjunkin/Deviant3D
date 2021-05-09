@@ -9,3 +9,5 @@ var player
 func _on_Timer_timeout() -> void:
 	get_parent().remove_child(self)
 
+func get_vel() -> Vector3:
+	return -transform.basis.z * speed

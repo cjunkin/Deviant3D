@@ -8,7 +8,7 @@ var hp := 1
 # MULTIPLAYER STUFF --------------------------------------------
 
 # Damage
-func dmg(_hitpoint: Vector3, surface_normal : Vector3, amt := 1) -> void:
+func dmg(proj: Projectile, amt := 1) -> void:
 	hp -= amt
 	if hp <= 0:
 		rpc("d")

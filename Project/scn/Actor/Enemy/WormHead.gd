@@ -7,8 +7,8 @@ func _ready() -> void:
 	add_to_group(G.ENEMY)
 	G.game.update_boss_hp(hp)
 
-func dmg(_pos: Vector3, surface_normal : Vector3, amt := 1) -> void:
-	.dmg(_pos, surface_normal, amt)
+func dmg(proj: Projectile, amt := 1) -> void:
+	.dmg(proj, amt)
 	G.game.update_boss_hp(hp)
 
 remotesync func d(particle_scale := 7.0) -> void:
