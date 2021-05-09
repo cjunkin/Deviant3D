@@ -75,5 +75,12 @@ func disconnect_from_server() -> void:
 		get_tree().network_peer.close_connection()
 	if get_tree().change_scene(G.MENU_SCENE) != OK:
 		print("ERROR: Couldn't go back to main menu")
-	
-	
+
+# Disconnect server # BIG TODO: generalize this to multiplayer
+func shutdown_server_singleplayer() -> void:
+	if get_tree().disconnect("network_peer_connected", self, "player_connected") != OK:
+		print("WTF couldn't disconnect")
+	players.clear()
+	if get_tree().network_peer:
+		get_tree().network_peer.close_connection()
+

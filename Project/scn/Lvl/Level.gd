@@ -3,10 +3,11 @@ extends Spatial
 
 # Num Cached     TODO: make caches in C++ for efficiency
 const PROJ_PER_PLAYER := 10
+const ROCKET_PER_PLAYER := int(PROJ_PER_PLAYER / 2)
 const EXP_PER_PLAYER := 10
-const num_lasers := PROJ_PER_PLAYER
-const num_rockets := PROJ_PER_PLAYER / 2
-const num_explosions := EXP_PER_PLAYER + 46
+var num_lasers := PROJ_PER_PLAYER
+var num_rockets := ROCKET_PER_PLAYER
+var num_explosions := EXP_PER_PLAYER + 46
 const num_enemies := 20
 
 #const num_laser_audio := 8
@@ -360,6 +361,12 @@ remote func spawn(id: int) -> void:
 		var p : Projectile = laser_s.instance()
 		lasers.append(p)
 	num_lasers += PROJ_PER_PLAYER
+	
+	# Rockets
+	for __ in range(ROCKET_PER_PLAYER):
+		var p : Projectile = rocket_s.instance()
+		rockets.append(p)
+	num_rockets += ROCKET_PER_PLAYER
 
 	# Explosions
 	for __ in range(EXP_PER_PLAYER):

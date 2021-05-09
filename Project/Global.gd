@@ -240,6 +240,14 @@ func _on_Quit_pressed() -> void:
 	set_process_input(false)
 	Network.disconnect_from_server()
 
+# BIG TODO: generalize this to multiplayer
+func singleplayer_change_scene(scn: String) -> void:
+	get_tree().paused = false
+#	Menu.hide()
+#	set_process_input(false)
+	Network.shutdown_server_singleplayer()
+	if get_tree().change_scene(scn) != OK:
+		print("ERROR: Couldn't go back to main menu")
 
 func _on_How2Play_pressed() -> void:
 	$Menu/Instructions.show()
