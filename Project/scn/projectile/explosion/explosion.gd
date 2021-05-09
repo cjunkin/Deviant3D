@@ -1,14 +1,13 @@
 class_name Explosion
 extends Area
 
-export var dmg : int = 3
-
 func _on_Expl_body_entered(body: Spatial):
 	if body.is_in_group(G.WORM):
 		return
 	if body.is_in_group(G.ENEMY):
 		# Damage enemy TODO: only enable ray when we collide
-		body.dmg(dmg, self)
+		# FIXME: don't hardcode expl_dmg
+		body.dmg(G.expl_dmg, self)
 		
 #		# Get a particle going
 #		G.game.exp_i = (G.game.exp_i + 1) % G.game.num_explosions

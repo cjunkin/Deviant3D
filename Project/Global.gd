@@ -45,6 +45,8 @@ var combo_msgs : PoolStringArray = [
 	"DesTroiD",
 	"360 noSCope?"
 ]
+var laser_dmg := 1
+var expl_dmg := 2
 var sea_level: float = -6.5
 
 # Theme
