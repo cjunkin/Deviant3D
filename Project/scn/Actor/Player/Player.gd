@@ -273,10 +273,10 @@ func _input(event: InputEvent) -> void:
 	else:
 		# Scroll
 		if event is InputEventMouseButton: # and event.is_pressed():
-			if event.button_index == BUTTON_WHEEL_UP:
+			if event.button_index == BUTTON_WHEEL_UP && event.is_pressed():
 #				rset("b", b - .025) # set projectile curvature
 				rpc("sw") # switch weapons
-			elif event.button_index == BUTTON_WHEEL_DOWN:
+			elif event.button_index == BUTTON_WHEEL_DOWN && event.is_pressed():
 #				rset("b", b + .025)
 				rpc("sw") # switch weapons
 		# Look
@@ -611,7 +611,6 @@ puppetsync func f() -> void:
 		G.game.rocket_i = (G.game.rocket_i + 1) % G.game.num_lasers
 		p = G.game.rockets[G.game.rocket_i]
 	else:
-		print("Lasers")
 		G.game.laser_i = (G.game.laser_i + 1) % G.game.num_lasers
 		p = G.game.lasers[G.game.laser_i]
 	G.game.add_child(p)
@@ -648,6 +647,7 @@ puppetsync func m(melee_on := true) -> void:
 	Melee.visible = melee_on
 
 puppetsync func sw() -> void:
+	print(rocket_on)
 	rocket_on = !rocket_on
 
 # Sync position/orientation
