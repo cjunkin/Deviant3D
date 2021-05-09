@@ -57,8 +57,29 @@ func dmg(proj: Projectile, amt := 1) -> void:
 
 	# Remove self if hp <= 0
 #	get_parent().remove_child(self)
-	vel += Vector3.UP * 100 # apply velocity
-	rotation += Vector3(3, 4, 5) # torque
+	#vel += Vector3.UP * 100 # apply velocity
+	#rotation += Vector3(3, 4, 5) # torque
+	
+	var normalvec : Vector3 = surface_normal - global_transform.origin
+	var hitvec : Vector3 = hitpt - global_transform.origin
+	
+	var sintheta : float = (normalvec.cross(hitvec).length()) / (hitvec.length() * normalvec.length())
+	
+	var torque : Vector3 = hitvec.length() * force * sintheta
+	
+	rotation += torque
+	vel += force / 5
+	
+	acc += grav
+	vel += acc
+	 
+	vel = move_and_slide(vel, Vector3.UP)
+	
+	if is_on_floor():
+		vel = Vector3.ZERO
+	
+	#rotation = Vector3(0,0,0)
+	
 	"""TODO: YOUR CODE HERE --------------------------------- get pushed around physics all that"""
 	print("Hit at: ", hitpt) # where it gets hit (global space)
 	print("I am centered at: ", global_transform.origin) # gives you global coordinates for this box

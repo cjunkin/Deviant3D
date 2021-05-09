@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://TODO_PHYSICS/Rafael/star.obj" type="ArrayMesh" id=1]
 [ext_resource path="res://TODO_PHYSICS/Rafael/Objective.gd" type="Script" id=2]
@@ -7,7 +7,10 @@
 radius = 7.0
 
 [sub_resource type="SpatialMaterial" id=2]
-albedo_color = Color( 0.607843, 0.419608, 0.576471, 1 )
+albedo_color = Color( 0.686275, 0.54902, 0.717647, 1 )
+
+[sub_resource type="SpatialMaterial" id=3]
+albedo_color = Color( 0.419608, 0.184314, 0.380392, 1 )
 metallic_specular = 0.0
 
 [node name="Area" type="Area"]
@@ -18,7 +21,8 @@ shape = SubResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="CollisionShape"]
 transform = Transform( 1.98532, 0, 0, 0, 1.98113, -0.0774725, 0, 0.0773886, 1.98328, 0.293324, 7.77624, -0.287799 )
+material_override = SubResource( 2 )
 mesh = ExtResource( 1 )
-material/0 = SubResource( 2 )
+material/0 = SubResource( 3 )
 
 [connection signal="body_entered" from="." to="." method="_on_Area_body_entered"]
