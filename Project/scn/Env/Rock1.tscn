@@ -12,7 +12,8 @@ data = PoolVector3Array( 0.8006, 0.805, 0.0908, 0.5763, -0.2643, 1, 0.0634, 0.19
 visible = false
 material/0 = ExtResource( 2 )
 
-[node name="Cube001_col" type="StaticBody" parent="." index="1"]
+[node name="Collide" type="StaticBody" parent="." index="1"]
+collision_mask = 7
 
-[node name="Hitbox" type="CollisionShape" parent="Cube001_col" index="0"]
+[node name="Hitbox" type="CollisionShape" parent="Collide" index="0"]
 shape = SubResource( 1 )

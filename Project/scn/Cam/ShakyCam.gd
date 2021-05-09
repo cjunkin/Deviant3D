@@ -40,7 +40,7 @@ func get_noise(noise_seed : int, time : float) -> float:
 	n.persistence = 0.8
 	return n.get_noise_1d(time)
 
-func add_stress(amount : float) -> void:
+func add_stress(amount : float, max_amt := 1.0) -> void:
 #	set_physics_process(true)
 	stress += amount
-	stress = clamp(stress, 0.0, 1.0)
+	stress = clamp(stress, 0.0, max_amt)
