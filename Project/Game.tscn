@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://scn/Unused/StaticBox.tscn" type="PackedScene" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://WorldEnv.tres" type="Environment" id=11]
 [ext_resource path="res://scn/Lvl/Land.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Gfx/2D/Reticule.svg" type="Texture" id=13]
+[ext_resource path="res://TODO_PHYSICS/Chris/ScreenShader.tres" type="Material" id=14]
 [ext_resource path="res://Gfx/Font/Typori-Regular.ttf" type="DynamicFontData" id=15]
 [ext_resource path="res://Gfx/2D/Hitmark.svg" type="Texture" id=16]
 [ext_resource path="res://Gfx/Model/Unused/food/banana.glb" type="PackedScene" id=17]
@@ -340,6 +341,7 @@ __meta__ = {
 }
 
 [node name="Hitmark" type="TextureRect" parent="HUD/Reticule"]
+visible = false
 self_modulate = Color( 1, 0, 0, 0.686275 )
 anchor_left = 0.5
 anchor_top = 0.5
@@ -357,13 +359,14 @@ __meta__ = {
 }
 
 [node name="Msg" type="Label" parent="HUD"]
+modulate = Color( 1, 1, 1, 0 )
 anchor_top = 0.025
 anchor_right = 1.0
 anchor_bottom = 0.025
 margin_bottom = 39.0
 custom_fonts/font = SubResource( 1 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color = Color( 1, 0.956863, 0.635294, 1 )
+custom_colors/font_outline_modulate = Color( 0.0196078, 0.054902, 0.211765, 1 )
 text = "Nice shot!"
 align = 1
 valign = 1
@@ -381,6 +384,14 @@ visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0, 0.529412, 1, 0.364706 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Shader" type="ColorRect" parent="HUD"]
+material = ExtResource( 14 )
+anchor_right = 1.0
+anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }

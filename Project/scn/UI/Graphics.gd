@@ -68,7 +68,8 @@ func set_setting(setting: String, index: int) -> void:
 			G.game.set_water_gfx()
 		elif setting == "particles":
 			for ai in get_tree().get_nodes_in_group(G.ENEMY):
-				ai.toggle_particles()
+				if ai.has_method("toggle_particles"):
+					ai.toggle_particles()
 
 # Sets overall's text to "custom" unless we match a preset
 func update_overall_ui() -> void:
