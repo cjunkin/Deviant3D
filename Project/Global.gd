@@ -30,6 +30,7 @@ var bloom := OFF
 var ssao := OFF
 var water := OFF
 var particles := OFF
+var toon_shader := OFF
 
 # Pause Settings
 var sens_changed := false

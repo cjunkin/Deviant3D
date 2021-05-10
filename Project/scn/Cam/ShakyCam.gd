@@ -44,3 +44,6 @@ func add_stress(amount : float, max_amt := 1.0) -> void:
 #	set_physics_process(true)
 	stress += amount
 	stress = clamp(stress, 0.0, max_amt)
+
+func enable_toon(on := G.toon_shader != G.OFF) -> void:
+	$CanvasLayer/Shader.visible = on

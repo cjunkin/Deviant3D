@@ -6,9 +6,10 @@ uniform vec2 resolution = vec2(1280.0, 720.0);
 void fragment(){
     float width = resolution.x;
     float height = resolution.y;
+	float thickness = 1.0; // (sin(TIME) + .75)
 	 // Change numerator to adjust edge line thickness 
-	float w = 1.0 / width;  
-	float h = 1.0 / height;  
+	float w = thickness / width;  
+	float h = thickness / height;  
 
 	vec4 n0 = texture(SCREEN_TEXTURE, SCREEN_UV + vec2( -w, -h));
 	vec4 n1 = texture(SCREEN_TEXTURE, SCREEN_UV + vec2(0.0, -h));
@@ -23,10 +24,11 @@ void fragment(){
 	vec4 sobel_edge_h = n2 + (2.0*n5) + n8 - (n0 + (2.0*n3) + n6);
   	vec4 sobel_edge_v = n0 + (2.0*n1) + n2 - (n6 + (2.0*n7) + n8);
 	vec4 sobel = sqrt((sobel_edge_h * sobel_edge_h) + (sobel_edge_v * sobel_edge_v));
-    float alpha = sobel.r;
-    alpha += sobel.g;
-    alpha +=  sobel.b;
-    alpha /= 3.0;
+//	float alpha = sobel.r;
+//	alpha += sobel.g;
+//	alpha +=  sobel.b;
+//	alpha /= 3.0;
+	float alpha = (sobel.r + sobel.g + sobel.b) / 3.0;
 	COLOR = vec4( edge_color.rgb, alpha );
 }
 

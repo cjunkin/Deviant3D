@@ -267,10 +267,10 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 340.0
-margin_top = 60.0
+margin_top = 22.0
 margin_right = 940.0
-margin_bottom = 660.0
-rect_min_size = Vector2( 600, 600 )
+margin_bottom = 697.0
+rect_min_size = Vector2( 600, 675 )
 size_flags_horizontal = 5
 size_flags_vertical = 5
 

@@ -23,10 +23,10 @@ func _on_Expl_body_entered(body: Spatial):
 #		if body == G.current_player:
 #			G.game.score()
 
-
-	var vec_btwn := body.global_transform.origin - global_transform.origin
-	var distance := vec_btwn.length_squared()
-	body.vel += vec_btwn / distance * 448.0
+	if body.is_inside_tree():
+		var vec_btwn := body.global_transform.origin - global_transform.origin
+		var distance := vec_btwn.length_squared()
+		body.vel += vec_btwn / distance * 448.0
 
 func play() -> void:
 	$Anim.play("Explode")

@@ -9,11 +9,12 @@ onready var bloom : OptionButton = $Panel/Buttons/Options/bloom/Button
 onready var ssao : OptionButton = $Panel/Buttons/Options/ssao/Button
 onready var water : OptionButton = $Panel/Buttons/Options/water/Button
 onready var particles : OptionButton = $Panel/Buttons/Options/particles/Button
+onready var toon_shader := $Panel/Buttons/Options/toon_shader/Button
 
 # Setting constants
 const STANDARD := PoolStringArray(["Off", "Low", "Medium", "High"])
 const BINARY := PoolStringArray(["Off", "On"])
-const ALL_GFX_OPTIONS := PoolStringArray(["shadows", "glow", "bloom", "water", "ssao", "particles"]) # TODO: more graphics settings
+const ALL_GFX_OPTIONS := PoolStringArray(["shadows", "glow", "bloom", "water", "ssao", "particles", "toon_shader"]) # TODO: more graphics settings
 
 func _ready() -> void:
 	# TO ADD A NEW GRAPHICS OPTION, MAKE THE OptionButton
@@ -29,9 +30,12 @@ func _ready() -> void:
 	add_options_to_button(ssao, STANDARD)
 	add_options_to_button(water, STANDARD)
 	add_options_to_button(particles, BINARY)
+	add_options_to_button(toon_shader, BINARY)
 
 	# Setup signals
 	setup_graphics_options_signals($Panel/Buttons/Options, "gfx_changed")
+	toon_shader.select(1)
+	overall.text = "Potato + Cartoon"
 
 
 # Connects all OptionButtons under parent GFX_CONTROL to FUNCTION_NAME
@@ -70,6 +74,8 @@ func set_setting(setting: String, index: int) -> void:
 			for ai in get_tree().get_nodes_in_group(G.ENEMY):
 				if ai.has_method("toggle_particles"):
 					ai.toggle_particles()
+		elif setting == "toon_shader" && is_instance_valid(G.current_player):
+			G.current_player.Cam.enable_toon()
 
 # Sets overall's text to "custom" unless we match a preset
 func update_overall_ui() -> void:

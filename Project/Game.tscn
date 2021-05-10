@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://scn/Unused/StaticBox.tscn" type="PackedScene" id=2]
@@ -13,7 +13,6 @@
 [ext_resource path="res://WorldEnv.tres" type="Environment" id=11]
 [ext_resource path="res://scn/Lvl/Land.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Gfx/2D/Reticule.svg" type="Texture" id=13]
-[ext_resource path="res://TODO_PHYSICS/Chris/ScreenShader.tres" type="Material" id=14]
 [ext_resource path="res://Gfx/Font/Typori-Regular.ttf" type="DynamicFontData" id=15]
 [ext_resource path="res://Gfx/2D/Hitmark.svg" type="Texture" id=16]
 [ext_resource path="res://Gfx/Model/Unused/food/banana.glb" type="PackedScene" id=17]
@@ -384,14 +383,6 @@ visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0, 0.529412, 1, 0.364706 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Shader" type="ColorRect" parent="HUD"]
-material = ExtResource( 14 )
-anchor_right = 1.0
-anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
