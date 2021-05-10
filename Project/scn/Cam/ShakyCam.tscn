@@ -70,10 +70,8 @@ material/0 = null
 
 [node name="Shader" type="ColorRect" parent="HUD"]
 material = ExtResource( 2 )
-margin_left = 1194.0
-margin_top = 671.0
-margin_right = 1260.0
-margin_bottom = 700.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false

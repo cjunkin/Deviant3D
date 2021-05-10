@@ -390,13 +390,13 @@ material = ExtResource( 11 )
 [node name="CamX" type="Spatial" parent="."]
 
 [node name="CamY" type="Spatial" parent="CamX"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00878946, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6.01077e-05, 0 )
 
 [node name="GunHolder" type="Spatial" parent="CamX/CamY"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0.6, -1 )
 
 [node name="Gun" parent="CamX/CamY/GunHolder" instance=ExtResource( 2 )]
-transform = Transform( 0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, -0.608789, 0.25 )
+transform = Transform( 0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, -0.60006, 0.25 )
 
 [node name="Muzzle" type="Position3D" parent="CamX/CamY/GunHolder/Gun"]
 transform = Transform( 1.33333, -7.39705e-16, -1.59872e-14, 2.14688e-15, 1.33333, 1.98952e-13, 1.59872e-14, -1.98952e-13, 1.33333, 0.000968695, 0.820632, -2.52995 )
