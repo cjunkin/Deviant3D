@@ -15,7 +15,7 @@ func toggle_particles(on := G.particles != G.OFF) -> void:
 		Dust.emitting = on
 
 # Damage
-func dmg(amt := 1, proj: Projectile = null) -> void:
+func dmg(amt := 1, _proj: Projectile = null) -> void:
 	hp -= amt
 	if hp <= 0:
 		rpc("d")
