@@ -48,5 +48,16 @@ func add_stress(amount : float, max_amt := 1.0) -> void:
 func enable_toon(on := G.toon_shader != G.OFF) -> void:
 	$HUD/Shader.visible = on
 
+export (StreamTexture) var laser := preload("res://Gfx/2D/laser.png")
+export (StreamTexture) var rocket := preload("res://Gfx/2D/rocket.png")
+
 func set_weapon_txt(weapon: String) -> void:
-	$HUD/AspectRatio/Weapon.text = weapon
+	match weapon:
+		G.LASER:
+			$HUD/Margin/Icon.texture = laser
+			$HUD/Margin.modulate = Color("bf15ffff")
+#			$HUD/Margin/Weapon.text = "Laser"
+		G.ROCKET:
+			$HUD/Margin/Icon.texture = rocket
+			$HUD/Margin.modulate = Color("bfffc20d")
+#			$HUD/Margin/Weapon.text = "Rocket"

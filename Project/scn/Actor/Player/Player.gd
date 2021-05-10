@@ -111,8 +111,6 @@ func _ready() -> void:
 #			Cam = CamSpring.get_node("ViewportContainer/Viewport/Cam")
 	forward = CamSpring.get_node("Forward")
 	forward.add_exception(self)
-	
-	Melee.visible = false
 
 	# TODO: implement wall climb (maybe not)
 #	Engine.time_scale = .1
@@ -165,6 +163,9 @@ func _ready() -> void:
 		set_process_input(false)
 		# Request sync from master
 		rpc_id(get_network_master(), "req_syn")
+	
+	Melee.visible = false
+	toggle_particles()
 
 func _input(event: InputEvent) -> void:
 	# Ground Movement
@@ -237,6 +238,7 @@ func _input(event: InputEvent) -> void:
 		# Reload
 		if event.is_action_pressed("reload"):
 			AnimTree.set("parameters/Reloading/blend_amount", 1)
+			AnimTree.set("parameters/SwitchFireMode/blend_amount", 0)
 			AnimTree.set("parameters/Firing/active", true)
 
 		# Slowdown time, like superhot
@@ -276,16 +278,16 @@ func _input(event: InputEvent) -> void:
 			if event.button_index == BUTTON_WHEEL_UP && event.is_pressed():
 #				rset("b", b - .025) # set projectile curvature
 				if rocket_on:
-					Cam.set_weapon_txt("Laser")# switching to laser
+					Cam.set_weapon_txt(G.LASER)# switching to laser
 				else:
-					Cam.set_weapon_txt("Rocket")
+					Cam.set_weapon_txt(G.ROCKET)
 				rpc("sw") # switch weapons
 			elif event.button_index == BUTTON_WHEEL_DOWN && event.is_pressed():
 #				rset("b", b + .025)
 				if rocket_on:
-					Cam.set_weapon_txt("Laser")
+					Cam.set_weapon_txt(G.LASER)# switching to laser
 				else:
-					Cam.set_weapon_txt("Rocket")
+					Cam.set_weapon_txt(G.ROCKET)
 				rpc("sw") # switch weapons
 		# Look/Aim
 		if event is InputEventMouseMotion:
@@ -545,6 +547,9 @@ func reparent_sound(sfx: AudioStreamPlayer3D) -> void:
 	Cam.add_child(sfx)
 	sfx.translation = Vector3.ZERO
 
+func toggle_particles(on := G.particles != G.OFF):
+	$CamX/CamY/GunHolder/Gun/Muzzle/Dust.visible = on
+
 # Turn flipping on/off based on ENABLED
 func toggle_flippers(enabled: bool) -> void:
 	for raycast in Flippers:
@@ -658,8 +663,10 @@ puppetsync func f() -> void:
 	p.rot = b
 	p.player = self
 
+	# TODO: make this work with ROF smaller than animation time
 #	AnimTree.set("parameters/Firing/active", false)
 	AnimTree.set("parameters/Reloading/blend_amount", 0)
+	AnimTree.set("parameters/SwitchFireMode/blend_amount", 0)
 	AnimTree.set("parameters/Firing/active", true)
 
 	# Audio
@@ -682,12 +689,17 @@ puppetsync func m(melee_on := true) -> void:
 
 puppetsync func sw() -> void:
 	rocket_on = !rocket_on
+	var particles := $CamX/CamY/GunHolder/Gun/Muzzle/Dust
 	if rocket_on:
 		RECOIL = .75
 		ROF.wait_time = .5
+		particles.material_override = load("res://Gfx/Material/rocket.material")
 	else:
 		RECOIL = 0.5
 		ROF.wait_time = .15
+		particles.material_override = load("res://Gfx/Material/laser.material")
+	AnimTree.set("parameters/SwitchFireMode/blend_amount", 1)
+	AnimTree.set("parameters/Firing/active", true)
 
 # Sync position/orientation
 puppet func s(trans: Vector3, y: float, x: float, velocity: Vector3, norm := newest_normal) -> void:

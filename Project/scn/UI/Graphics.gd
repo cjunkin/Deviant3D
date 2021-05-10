@@ -74,6 +74,8 @@ func set_setting(setting: String, index: int) -> void:
 			for ai in get_tree().get_nodes_in_group(G.ENEMY):
 				if ai.has_method("toggle_particles"):
 					ai.toggle_particles()
+			if is_instance_valid(G.current_player):
+				G.current_player.toggle_particles()
 		elif setting == "toon_shader" && is_instance_valid(G.current_player):
 			G.current_player.Cam.enable_toon()
 
