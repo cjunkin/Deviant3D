@@ -4,6 +4,5 @@
 
 [resource]
 shader = ExtResource( 1 )
-shader_param/brightness = 0.8
-shader_param/contrast = 1.5
-shader_param/saturation = 1.8
+shader_param/edge_color = Color( 0, 0, 0, 1 )
+shader_param/resolution = Vector2( 1280, 720 )
