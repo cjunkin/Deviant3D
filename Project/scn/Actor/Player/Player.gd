@@ -344,6 +344,7 @@ func _physics_process(delta: float) -> void:
 		# Shooting
 		if Input.is_action_pressed("fire") and ROF.is_stopped():
 			# TODO: Muzzle flash
+			_sync_timeout()
 			rpc("f") # fire
 			Cam.stress = 0.25
 			
@@ -588,9 +589,10 @@ puppetsync func a() -> void:
 		final = 55.0
 		gun_pos = Vector3(0, .74, -1.25)
 		$Anim.get_animation("Fire").bezier_track_set_key_value(0, 1, RECOIL * 3.0 / 5.0)
-	tween.interpolate_property(
-		Cam, "fov", Cam.fov, final, .25, Tween.TRANS_CUBIC
-	)
+	if is_network_master():
+		tween.interpolate_property(
+			Cam, "fov", Cam.fov, final, .25, Tween.TRANS_CUBIC
+		)
 	tween.interpolate_property(
 		GunHolder, "translation", GunHolder.translation, gun_pos, .25, Tween.TRANS_CUBIC
 	)
@@ -792,7 +794,8 @@ puppetsync func y() -> void:
 			)
 		tween.start()
 		yield(tween, "tween_all_completed")
-		PMesh.visible = false
+		if is_network_master():
+			PMesh.visible = false
 	fps = !fps
 
 # Shift camera position left/right

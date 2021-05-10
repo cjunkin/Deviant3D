@@ -53,11 +53,6 @@ visible = false
 radius = 8.0
 material = ExtResource( 3 )
 
-[node name="Timer" type="Timer" parent="Head"]
-process_mode = 0
-wait_time = 10.0
-autostart = true
-
 [node name="ShakeDetect" type="Area" parent="Head"]
 input_ray_pickable = false
 monitorable = false
@@ -75,6 +70,5 @@ local_coords = false
 process_material = SubResource( 6 )
 draw_pass_1 = SubResource( 7 )
 
-[connection signal="timeout" from="Head/Timer" to="Head" method="_on_Timer_timeout"]
 [connection signal="body_entered" from="Head/ShakeDetect" to="Head" method="_on_ShakeDetect_body_entered"]
 [connection signal="body_exited" from="Head/ShakeDetect" to="Head" method="_on_ShakeDetect_body_exited"]

@@ -14,12 +14,6 @@ remotesync func d(particle_scale := 7.0) -> void:
 	get_parent().die()
 	.d(particle_scale)
 
-puppetsync func t(transl: Vector3) -> void:
-	translation = transl
-
-func _on_Timer_timeout():
-	rpc("t", translation)
-
 func _on_ShakeDetect_body_entered(_body: Spatial) -> void:
 	Dust.emitting = true
 	var player_dist := G.current_player.global_transform.origin.distance_to(global_transform.origin)

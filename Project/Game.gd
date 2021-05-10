@@ -12,8 +12,9 @@ func _ready():
 	var enemy_s := load(enemy_path)
 	for i in range(num_enemies):
 		var e : Enemy = enemy_s.instance()
-		e.name = "E" + str(i)
+		e.set_network_master(1)
 		enemies.append(e)
+		e.name = G.ENEMY + str(i)
 
 	# If we pressed Host
 	if is_network_master():

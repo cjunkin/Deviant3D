@@ -3,9 +3,20 @@ extends KinematicBody
 
 export var MAX_HP := 1
 var hp := MAX_HP
+var sync_timer: Timer
 onready var Dust : Particles = get_node_or_null("Dust")
 
 func _ready() -> void:
+	if G.game.is_network_master():
+#		print("Syncing")
+		sync_timer = Timer.new()
+		sync_timer.connect("timeout", self, "sync_self")
+		sync_timer.wait_time = 10.0
+		sync_timer.one_shot = false
+		add_child(sync_timer)
+		sync_timer.start()
+	else:
+		rpc_id(1, "req_syn")
 	hp = MAX_HP
 	toggle_particles()
 
@@ -19,6 +30,10 @@ func dmg(amt := 1, _proj: Projectile = null) -> void:
 	hp -= amt
 	if hp <= 0:
 		rpc("d")
+
+func sync_self() -> void:
+	rpc("t", translation)
+
 
 # MULTIPLAYER STUFF --------------------------------------------
 
@@ -43,5 +58,9 @@ remotesync func d(particle_scale := 1.0) -> void:
 	get_parent().remove_child(self)
 
 
+puppet func t(transl: Vector3) -> void:
+	translation = transl
 
+master func req_syn() -> void:
+	sync_self()
 

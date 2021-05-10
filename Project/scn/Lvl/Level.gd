@@ -8,7 +8,7 @@ const EXP_PER_PLAYER := 10
 var num_lasers := PROJ_PER_PLAYER
 var num_rockets := ROCKET_PER_PLAYER
 var num_explosions := EXP_PER_PLAYER + 46
-const num_enemies := 20
+const num_enemies := 2
 
 #const num_laser_audio := 8
 #const num_grapple_sounds := 6
@@ -88,10 +88,6 @@ func _ready()->void:
 #	for __ in range(num_grapple_sounds):
 #		var grapple_sfx := load("res://Sfx/Slap.wav")
 #		var 
-#	$Enemy.set_target(players[0])
-#	$Enemy2.set_target(players[0])
-#	$Enemy3.set_target(players[0])
-#	$Enemy4.set_target(players[0])
 #	$Worm.set_target(players[0])
 
 #onready var TimeLeft := $Label
@@ -231,6 +227,8 @@ func gen_asteroids(my_seed: int) -> void:
 # Spawn an enemy at position TRANSL with VELOCITY, targeting Node named TARGET_NAME
 func spawn_enemy(transl := Vector3.INF, velocity := Vector3.INF, target_name := "") -> void:
 	var enemy: Enemy = enemies[enemy_i]
+	print(enemy.name)
+	enemy.name = G.ENEMY + str(enemy_i)
 	enemy_i = (enemy_i + 1) % num_enemies
 	enemy.hp = enemy.MAX_HP
 	# If enemy isn't already spawned in
@@ -304,7 +302,7 @@ master func sen_time() -> void:
 		if enemy.is_inside_tree() and is_instance_valid(enemy.target):
 			rpc_id(sender, "s", enemy.translation, enemy.vel, enemy.target.get_network_master())
 	for boss in bosses:
-		if is_instance_valid(boss) && boss.is_inside_tree():
+		if is_instance_valid(boss) && boss.Head.is_inside_tree():
 			rpc_id(sender, "b", boss.Head.translation, boss.Head.rotation, boss.target.get_network_master()) #, get_class())
 	enemy_i = 0
 

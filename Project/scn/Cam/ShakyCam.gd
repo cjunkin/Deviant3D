@@ -13,6 +13,9 @@ var shake : float = 0.0
 var n := OpenSimplexNoise.new()
 var camera_rotation_reset := Vector3()
 
+func _ready() -> void:
+	enable_toon()
+
 func _physics_process(delta: float) -> void:
 #	if stress > 0:
 #		rotation_degrees = Vector3(randf(), randf(), randf()) * stress * 3

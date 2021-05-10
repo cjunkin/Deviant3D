@@ -90,9 +90,10 @@ func _ready() -> void:
 					c.connect("mouse_exited", self, "mouse_exit", [c])
 
 func pause(enabled := true) -> void:
-	current_player.set_process_input(!enabled)
+	if is_instance_valid(current_player):
+		current_player.set_process_input(!enabled)
+		current_player.set_physics_process(!enabled)
 	game.set_physics_process(!enabled)
-	current_player.set_physics_process(!enabled)
 	for boss in game.bosses:
 		if is_instance_valid(boss):
 			boss.set_physics_process(!enabled)
