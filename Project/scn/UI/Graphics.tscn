@@ -94,7 +94,7 @@ margin_left = 234.0
 margin_right = 694.0
 margin_bottom = 47.0
 rect_min_size = Vector2( 0, 42 )
-hint_tooltip = "Turning this to high will NOT make you edgy"
+hint_tooltip = "So, you want to go back to your childhood?"
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
@@ -234,7 +234,7 @@ margin_left = 234.0
 margin_right = 694.0
 margin_bottom = 47.0
 rect_min_size = Vector2( 0, 42 )
-hint_tooltip = "Make corners darker, also this super bad for potato PCs"
+hint_tooltip = "Everything tries to shed, like a cat. Lovely."
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 
