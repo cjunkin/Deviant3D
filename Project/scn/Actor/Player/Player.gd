@@ -275,9 +275,17 @@ func _input(event: InputEvent) -> void:
 		if event is InputEventMouseButton: # and event.is_pressed():
 			if event.button_index == BUTTON_WHEEL_UP && event.is_pressed():
 #				rset("b", b - .025) # set projectile curvature
+				if rocket_on:
+					Cam.set_weapon_txt("Laser")# switching to laser
+				else:
+					Cam.set_weapon_txt("Rocket")
 				rpc("sw") # switch weapons
 			elif event.button_index == BUTTON_WHEEL_DOWN && event.is_pressed():
 #				rset("b", b + .025)
+				if rocket_on:
+					Cam.set_weapon_txt("Laser")
+				else:
+					Cam.set_weapon_txt("Rocket")
 				rpc("sw") # switch weapons
 		# Look/Aim
 		if event is InputEventMouseMotion:

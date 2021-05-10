@@ -1,7 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scn/Cam/ShakyCam.gd" type="Script" id=1]
 [ext_resource path="res://TODO_PHYSICS/Chris/ScreenShader.tres" type="Material" id=2]
+[ext_resource path="res://Theme/main_theme.tres" type="Theme" id=3]
+[ext_resource path="res://Gfx/Font/Typori_Outline.tres" type="DynamicFont" id=4]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type spatial;
@@ -63,12 +65,39 @@ visible = false
 mesh = SubResource( 5 )
 material/0 = null
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="HUD" type="CanvasLayer" parent="."]
 
-[node name="Shader" type="ColorRect" parent="CanvasLayer"]
+[node name="Shader" type="ColorRect" parent="HUD"]
 material = ExtResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AspectRatio" type="MarginContainer" parent="HUD"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -79.0
+custom_constants/margin_right = 20
+custom_constants/margin_top = 20
+custom_constants/margin_left = 20
+custom_constants/margin_bottom = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Weapon" type="Label" parent="HUD/AspectRatio"]
+margin_left = 20.0
+margin_top = 36.0
+margin_right = 1260.0
+margin_bottom = 51.0
+theme = ExtResource( 3 )
+custom_fonts/font = ExtResource( 4 )
+text = "Laser"
+align = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }

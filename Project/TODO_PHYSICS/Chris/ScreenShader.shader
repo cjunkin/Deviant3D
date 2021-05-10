@@ -6,7 +6,7 @@ uniform vec2 resolution = vec2(1280.0, 720.0);
 void fragment(){
     float width = resolution.x;
     float height = resolution.y;
-	float thickness = 1.0; // (sin(TIME) + .75)
+	float thickness = .75; // (sin(TIME) + .75)
 	 // Change numerator to adjust edge line thickness 
 	float w = thickness / width;  
 	float h = thickness / height;  
