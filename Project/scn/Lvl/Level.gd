@@ -8,7 +8,7 @@ const EXP_PER_PLAYER := 10
 var num_lasers := PROJ_PER_PLAYER
 var num_rockets := ROCKET_PER_PLAYER
 var num_explosions := EXP_PER_PLAYER + 46
-const num_enemies := 2
+const num_enemies := 16
 
 #const num_laser_audio := 8
 #const num_grapple_sounds := 6
@@ -132,7 +132,7 @@ func _physics_process(delta: float) -> void:
 				if !e.flying:
 					e.rotation.x = 0
 			
-			e.acc = e.transform.basis.z * e.speed
+			e.acc = e.transform.basis.z * -e.speed
 			if e.flying:
 				e.vel = e.vel * .99 + e.acc  * .75
 			else:
@@ -227,7 +227,7 @@ func gen_asteroids(my_seed: int) -> void:
 # Spawn an enemy at position TRANSL with VELOCITY, targeting Node named TARGET_NAME
 func spawn_enemy(transl := Vector3.INF, velocity := Vector3.INF, target_name := "") -> void:
 	var enemy: Enemy = enemies[enemy_i]
-	print(enemy.name)
+#	print(enemy.name)
 	enemy.name = G.ENEMY + str(enemy_i)
 	enemy_i = (enemy_i + 1) % num_enemies
 	enemy.hp = enemy.MAX_HP

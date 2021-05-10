@@ -5,7 +5,7 @@ var target: Player
 var flying : bool # FIXME: Sync flying
 # Physics
 var vel := Vector3()
-var speed := -2
+var speed := 2
 var grav := 1
 var acc := Vector3()
 export var friction := .125
@@ -19,8 +19,7 @@ func _ready() -> void:
 #	else:
 #		$Mesh.material_override = load()
 
-puppetsync func set_flying(on := true) -> void:
-	print(flying)
+puppet func set_flying(on := true) -> void:
 	flying = on
 	if on:
 		var mat := load("res://Gfx/Material/grid.material")
@@ -46,6 +45,5 @@ remote func s(master_translation: Vector3, velocity: Vector3) -> void:
 
 master func req_syn() -> void:
 	sync_self()
-	print(flying)
 	rpc("set_flying", flying)
 
