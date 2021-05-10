@@ -305,10 +305,7 @@ func _input(event: InputEvent) -> void:
 		
 		# Zoom/Aim
 		if event.is_action_pressed("aim"):
-			tween.interpolate_property(
-				Cam, "fov", Cam.fov, int(Cam.fov) % 70 + 35, .25, Tween.TRANS_CUBIC
-				)
-			tween.start()
+			rpc("a")
 
 var time_elapsed := 0.0
 func _physics_process(delta: float) -> void:
@@ -561,7 +558,32 @@ func hook(hook_name: String) -> void:
 # Multiplayer Functions (single letters to save network usage)
 # =-----------------------------------------------------------=
 
-# Aim
+var RECOIL := .5
+
+# Zoom/Aim Down Sights
+puppetsync func a() -> void:
+	# TODO sync gun_pos
+	var final: float
+	var gun_pos: Vector3
+	# Zoom out
+	if GunHolder.translation.x < .5:
+		final = 70.0
+		gun_pos = Vector3(.75, .6, -1)
+		$Anim.get_animation("Fire").bezier_track_set_key_value(0, 1, RECOIL)
+	# Zoom in
+	else:
+		final = 55.0
+		gun_pos = Vector3(0, .74, -1.25)
+		$Anim.get_animation("Fire").bezier_track_set_key_value(0, 1, RECOIL * 3.0 / 5.0)
+	tween.interpolate_property(
+		Cam, "fov", Cam.fov, final, .25, Tween.TRANS_CUBIC
+	)
+	tween.interpolate_property(
+		GunHolder, "translation", GunHolder.translation, gun_pos, .25, Tween.TRANS_CUBIC
+	)
+	tween.start()
+
+# Look
 puppet func A(rot: Vector2) -> void:
 	CamX.rotate_y(rot.x * SENS_X) # Side to side // (transform.basis.y, 
 	CamY.rotation.x = clamp(CamY.rotation.x + (rot.y * SENS_Y), -PI/2, PI/2) # Up down
@@ -653,8 +675,10 @@ puppetsync func m(melee_on := true) -> void:
 puppetsync func sw() -> void:
 	rocket_on = !rocket_on
 	if rocket_on:
+		RECOIL = .75
 		ROF.wait_time = .5
 	else:
+		RECOIL = 0.5
 		ROF.wait_time = .15
 
 # Sync position/orientation

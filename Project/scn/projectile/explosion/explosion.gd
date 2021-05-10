@@ -32,6 +32,6 @@ func play() -> void:
 	$Anim.play("Explode")
 
 
-func _on_Anim_animation_finished(anim_name):
+func _on_Anim_animation_finished(_anim_name):
 	visible = false
 	get_parent().remove_child(self)

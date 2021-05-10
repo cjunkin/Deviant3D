@@ -14,6 +14,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scn/Actor/AI.gd"
 }, {
+"base": "Area",
+"class": "Attack_Buff",
+"language": "GDScript",
+"path": "res://TODO_PHYSICS/Sambodh/Attack_Buff.gd"
+}, {
 "base": "KinematicBody",
 "class": "Box",
 "language": "GDScript",
@@ -141,6 +146,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "AI": "",
+"Attack_Buff": "",
 "Box": "",
 "ColorTile": "",
 "Deleteme": "",

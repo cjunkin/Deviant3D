@@ -13,7 +13,6 @@
 [ext_resource path="res://WorldEnv.tres" type="Environment" id=11]
 [ext_resource path="res://scn/Lvl/Land.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Gfx/2D/Reticule.svg" type="Texture" id=13]
-[ext_resource path="res://TODO_PHYSICS/Sambodh/Low_grav_powerup.tscn" type="PackedScene" id=14]
 [ext_resource path="res://Gfx/Font/Typori-Regular.ttf" type="DynamicFontData" id=15]
 [ext_resource path="res://Gfx/2D/Hitmark.svg" type="Texture" id=16]
 [ext_resource path="res://Gfx/Model/Unused/food/banana.glb" type="PackedScene" id=17]
@@ -21,6 +20,7 @@
 [ext_resource path="res://Theme/main_theme.tres" type="Theme" id=19]
 [ext_resource path="res://Gfx/Font/Typori_Paragraph.tres" type="DynamicFont" id=20]
 [ext_resource path="res://Sfx/seagulls_daniel-simion.mp3" type="AudioStream" id=21]
+[ext_resource path="res://TODO_PHYSICS/Sambodh/Attack_Buff.tscn" type="PackedScene" id=22]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -532,16 +532,16 @@ material_override = ExtResource( 18 )
 multimesh = SubResource( 10 )
 
 [node name="Water" type="MeshInstance" parent="."]
-transform = Transform( 3, 0, 0, 0, 1, 0, 0, 0, 3, 0, -5, 0 )
+transform = Transform( 3, 0, 0, 0, 1, 0, 0, 0, 3, -2.42005, -4.8119, 2.22429 )
 mesh = SubResource( 11 )
 material/0 = null
-
-[node name="LowGrav" parent="." instance=ExtResource( 14 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 27.7628, 133.845 )
 
 [node name="Ambient" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 21 )
 volume_db = -20.17
 autoplay = true
+
+[node name="AttackBuff" parent="." instance=ExtResource( 22 )]
+transform = Transform( 0.929223, -0.36952, 0, 0.36952, 0.929223, 0, 0, 0, 1, 0, 15.8433, 107.994 )
 
 [connection signal="timeout" from="EnemySpawnTime" to="." method="_on_EnemySpawnTime_timeout"]

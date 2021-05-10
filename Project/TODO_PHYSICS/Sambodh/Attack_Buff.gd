@@ -1,4 +1,4 @@
-class_name Low_Grav
+class_name Attack_Buff
 extends Area
 
 #onready var Availability: Timer = $Availability
@@ -17,11 +17,10 @@ extends Area
 var currPlayer : Player
 func _on_Area_body_entered(body):
 	if body.is_in_group(G.PLAYER):
-
-		currPlayer = body # Cast
-		currPlayer.grav /= 2
-		print("Your Gravity is now cut in half!")
-		G.game.announce("Your Gravity is now cut in half!")
+		G.laser_dmg *= 2
+		G.expl_dmg *= 2
+		print("Your Damage has now been doubled!")
+		G.game.announce("Your Damage has now doubled!")
 		$Timer.start()
 		$Availability.start()
 		visible = false
@@ -39,8 +38,10 @@ func _on_Area_body_entered(body):
 
 func _on_Timer_timeout():
 	if is_instance_valid(currPlayer):
-		currPlayer.grav *= 2
-		print("Your Gravity has now reset!")
+		G.laser_dmg /= 2
+		G.expl_dmg /= 2
+		print("Your Damage has reset!")
+		G.game.announce("Your Damage has now reset!")
 
 
 
