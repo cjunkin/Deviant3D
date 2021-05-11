@@ -15,6 +15,13 @@
 	<!-- <link rel="preconnect" href="https://fonts.gstatic.com"> -->
 	<!-- <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet"> -->
 	<!-- <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500&display=swap" rel="stylesheet"> -->
+
+	<!--MathJax LaTeX-->
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script type="text/javascript" id="MathJax-script" async
+			src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+	</script>
+
 </head>
 
 <body class="is-preload">
@@ -116,11 +123,11 @@
 					</p>
 					<p>
 						Our final result was a nicely polished multiplayer game (we even threw in a sobel edge detection
-						shader for
-						the low price of $0.00 and our sanity).
+						shader for the low price of $0.00 and our sanity).
 						We developed varying enemy types, powerups to aid combat, procedurally
 						generated terrain, and many stylistic improvements. From post-processing shaders to
-						offering both third-person and first-person perspectives, our game shaped up to be a nice looking
+						offering both third-person and first-person perspectives, our game shaped up to be a nice
+						looking
 						pile of fun!
 					</p>
 				</header>
@@ -166,17 +173,39 @@
 				<header>
 					<h2>Technical Details</h2>
 				</header>
-
-				<p>Deviant3D was created using Godot, an open-source game engine, which made collision testing and basic
-					rendering trivial, but we also encountered a variety of problems as well, such as Godot's inbuilt
-					physics being nondeterministic, forcing development of a deterministic physics system. </p>
-
-
 				<!-- <a href="#" class="image featured"> -->
 
 				<!-- </a> -->
+				<p>So, you wanna know how this was made?</p>
 
-				<p>Creation of world + procedural generation
+				<p>Deviant3D was created using Godot, an open-source game engine, which made collision testing and basic
+					rendering trivial.</p>
+
+				<p>
+					However, Godot's inbuilt
+					physics being nondeterministic, forcing development of a deterministic physics system.
+				</p>
+				<p>
+					For physics, it went like this (we did not incorporate mass yet, so everything is treated as mass 1):
+				</p>
+				<p>
+					
+					
+					\begin{array}{l}
+					\vec{F} = gravity + inputs + jump + hook \\
+					\vec{V} += \vec{F} * dt \\
+					\vec{P} += \vec{V} * dt \\
+
+					\end{array}
+				</p>
+				<pre>
+					<code>
+					  if on ground:
+						V *= (1 - friction)
+					</code>
+				  </pre>
+				<p>
+					Creation of world + procedural generation
 					Creation of characters/enemies + how gravity works
 					Creation of 3D movement + Hooke’s Law
 					Creation of Powerups
