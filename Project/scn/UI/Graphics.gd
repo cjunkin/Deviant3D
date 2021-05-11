@@ -35,6 +35,7 @@ func _ready() -> void:
 	# Setup signals
 	setup_graphics_options_signals($Panel/Buttons/Options, "gfx_changed")
 	toon_shader.select(1)
+	set_setting("toon_shader", 1)
 	overall.text = "Potato + Cartoon"
 
 

@@ -1,7 +1,6 @@
-[gd_scene load_steps=33 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://Game.gd" type="Script" id=1]
-[ext_resource path="res://scn/Unused/StaticBox.tscn" type="PackedScene" id=2]
 [ext_resource path="res://scn/UI/Text/Text3D.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Gfx/2D/tile.svg" type="Texture" id=4]
 [ext_resource path="res://scn/Env/Sunlight.tscn" type="PackedScene" id=5]
@@ -15,7 +14,6 @@
 [ext_resource path="res://Gfx/2D/Reticule.svg" type="Texture" id=13]
 [ext_resource path="res://Gfx/Font/Typori-Regular.ttf" type="DynamicFontData" id=15]
 [ext_resource path="res://Gfx/2D/Hitmark.svg" type="Texture" id=16]
-[ext_resource path="res://Gfx/Model/Unused/food/banana.glb" type="PackedScene" id=17]
 [ext_resource path="res://Gfx/Material/Rock1.tres" type="Material" id=18]
 [ext_resource path="res://Theme/main_theme.tres" type="Theme" id=19]
 [ext_resource path="res://Gfx/Font/Typori_Paragraph.tres" type="DynamicFont" id=20]
@@ -462,8 +460,13 @@ height = 6.0
 depth = 6.0
 material = ExtResource( 7 )
 
-[node name="Wall10" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -41.7829, 91.7115, -14.1639 )
+[node name="Stairs3" type="CSGBox" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 96, -22 )
+use_in_baked_light = true
+use_collision = true
+width = 80.0
+height = 4.0
+depth = 80.0
 material = ExtResource( 7 )
 
 [node name="RoomCEIL" type="CSGBox" parent="."]
@@ -524,9 +527,6 @@ transform = Transform( -10.3113, 0, 12.2342, 0, 16, 0, -12.2342, 0, -10.3113, 50
 [node name="Text" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9717, 3.47361, -42.4121 )
 
-[node name="banana" parent="." instance=ExtResource( 17 )]
-transform = Transform( 7.22438, -14.2534, -0.805737, 12.8748, 6.1147, 7.26974, -6.16823, -3.93082, 14.2303, 38.4704, -12.8663, -252.978 )
-
 [node name="Land" parent="." instance=ExtResource( 12 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -64 )
 
@@ -541,8 +541,9 @@ material/0 = null
 
 [node name="Ambient" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 21 )
-volume_db = -20.17
+volume_db = -20.0
 autoplay = true
+bus = "Sfx"
 
 [node name="AttackBuff" parent="." instance=ExtResource( 22 )]
 transform = Transform( 0.929223, -0.36952, 0, 0.36952, 0.929223, 0, 0, 0, 1, 0, 15.8433, 107.994 )
