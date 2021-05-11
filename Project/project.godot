@@ -14,6 +14,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scn/Actor/AI.gd"
 }, {
+"base": "Enemy",
+"class": "Arrowhead",
+"language": "GDScript",
+"path": "res://scn/Actor/Enemy/Arrowhead.gd"
+}, {
 "base": "Area",
 "class": "Attack_Buff",
 "language": "GDScript",
@@ -151,6 +156,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "AI": "",
+"Arrowhead": "",
 "Attack_Buff": "",
 "Box": "",
 "Bull": "",

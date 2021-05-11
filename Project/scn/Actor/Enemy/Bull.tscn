@@ -18,6 +18,7 @@ material_override = SubResource( 1 )
 mesh = ExtResource( 3 )
 
 [node name="Timer" type="Timer" parent="." index="3"]
+process_mode = 0
 wait_time = 7.664
 autostart = true
 

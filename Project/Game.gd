@@ -17,6 +17,7 @@ func _ready():
 		e.name = G.ENEMY + str(i)
 		
 	spawn_bull(0)
+	spawn_arrowhead(0)
 		
 	
 
@@ -68,3 +69,18 @@ func spawn_bull(num : int) -> void:
 	b.name = G.ENEMY + str(num_enemies)
 	add_child(b)
 	b.set_target(G.current_player)
+	
+func spawn_arrowhead(num: int) -> void:
+	var arrow_s := load("res://scn/Actor/Enemy/Arrowhead.tscn")
+	var a : Arrowhead = arrow_s.instance()
+	if num == 0:
+		a.speed = 0
+		a.translation = Vector3(0, 100, 0)
+	else:
+		a.translation = Vector3(0, 50, 0)
+	a.set_network_master(1)
+	enemies.append(a)
+	a.name = G.ENEMY + str(num_enemies + 1)
+	add_child(a)
+	a.set_target(G.current_player)
+	
