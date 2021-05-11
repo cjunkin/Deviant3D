@@ -29,7 +29,7 @@
 				<span class="image avatar48"><img src="asset/icon.png" alt="" /></span>
 				<h1 id="title">Deviant 3D</h1>
 				<!--<p>
-								<mark class="light_blue">Calvin Wong,</mark> 
+								<mark class="light_blue">Calvin Wong,</mark>
 								<mark class="light_orange">Rafael Ostrea,</mark>
 								<br>
 								<mark class="light_green">Sambodh Mitra,</mark>
@@ -100,18 +100,18 @@
 					<h2 class="alt">Summary</h2>
 					<p>
 						Deviant3D is a 3D, multiplayer shooter game utilizing a wide variety of the graphical tools and skills learned over the course of CS 184.
-						The base platform utilized to create Deviant3D is Godot, an open-source game engine. Topics such as geometry processing, lighting, 
+						The base platform utilized to create Deviant3D is Godot, an open-source game engine. Topics such as geometry processing, lighting,
 						animation, and physical simulation were all employed to create the world, characters, and varying interactable objects.
 					</p>
 					<p>
 						A wide variety of obstacles were also encountered. Initially, three of our team members were completely unfamiliar with Godot, and thus needed
-						to learn how to create via a game engine from scratch. In addition, several technical complications also arose, such as Godot's inbuilt physics engine 
-						not supporting multiplayer play. These issues were usually remedied by either creating new systems in-house, such as development of a deterministic 
+						to learn how to create via a game engine from scratch. In addition, several technical complications also arose, such as Godot's inbuilt physics engine
+						not supporting multiplayer play. These issues were usually remedied by either creating new systems in-house, such as development of a deterministic
 						physics system, or reading the resources linked at the bottom of the website.
 					</p>
 					<p>
-						Our final result was a polished game that successfully allowed for cohesive multiplayer gameplay. The interactable objects included varying enemy types, 
-						powerups to aid combat, as well as procedurally generated terrain. Many stylistic improvements were also added over the course of development, including, 
+						Our final result was a polished game that successfully allowed for cohesive multiplayer gameplay. The interactable objects included varying enemy types,
+						powerups to aid combat, as well as procedurally generated terrain. Many stylistic improvements were also added over the course of development, including,
 						but not limited to, character and world shaders, improved unit models, as well as varying field-of-views offering both third-person as well as first-person perspectives.
 					</p>
 				</header>
@@ -176,7 +176,7 @@
 					Lots of other simplex noise applications, terrain generation, water shader
 
 					EXplain non-linear tweening/interpolation
-					
+
 					Blend Trees
 
 				</p>
@@ -362,15 +362,27 @@
 				<br>
 				<div>
 					<ol>
-						<li>Fill in</li>
+						<li>Integrated powerups with the procedural terrain generation</li>
 						<li>
-							Sublist title
+							Powerups developed:
 							<ol>
-								<li>Another</li>
-								<li>Lol</li>
+								<li>Friction Increase</li>
+								<li>Friction Decrease</li>
 							</ol>
 						</li>
-						<li>Fill in</li>
+						<li>Implemented physics when shooting objects
+								<ol>
+									<li>Rotating object with respect to surface normal depending on point of impact</li>
+									<li>Handling effect of gravity on object after aforementioned rotation</li>
+									<li>Moving object in accordance with Law of Conservation of Momentum</li>
+									<li>Animated above object movements</li>
+								</ol>
+						</li>
+						<li>Added objective object that generates new game upon player contact</li>
+						<li>Developed new enemy and corresponding spawning methods
+							<ol>
+								<li>Wolf enemy: Grounded but faster than typical enemies
+							</ol>
 					</ol>
 				</div>
 				<br>
