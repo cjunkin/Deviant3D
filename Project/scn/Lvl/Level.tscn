@@ -157,6 +157,7 @@ subdivide_depth = 512
 
 [node name="Game" type="Spatial"]
 script = ExtResource( 8 )
+rock_path = "res://scn/Env/RockCollision.tscn"
 enemy_spawn_time = NodePath("EnemySpawnTime")
 
 [node name="EnemySpawnTime" type="Timer" parent="."]

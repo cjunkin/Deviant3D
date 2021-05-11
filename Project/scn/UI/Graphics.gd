@@ -77,6 +77,9 @@ func set_setting(setting: String, index: int) -> void:
 					ai.toggle_particles()
 			if is_instance_valid(G.current_player):
 				G.current_player.toggle_particles()
+#				for particle in G.game.particles:
+#					particle.visible = G.particles != G.OFF
+				
 		elif setting == "toon_shader" && is_instance_valid(G.current_player):
 			G.current_player.Cam.enable_toon()
 

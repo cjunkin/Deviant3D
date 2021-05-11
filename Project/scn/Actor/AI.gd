@@ -1,7 +1,7 @@
 class_name AI
 extends KinematicBody
 
-export var MAX_HP := 1
+export var MAX_HP := 3
 var hp := MAX_HP
 var sync_timer: Timer
 onready var Dust : Particles = get_node_or_null("Dust")
@@ -26,10 +26,17 @@ func toggle_particles(on := G.particles != G.OFF) -> void:
 		Dust.emitting = on
 
 # Damage
-func dmg(amt := 1, _proj: Projectile = null) -> void:
+func dmg(amt := 1, proj: Projectile = null) -> void:
 	hp -= amt
 	if hp <= 0:
 		rpc("d")
+	else:
+		# Particle
+		G.game.exp_i = (G.game.exp_i + 1) % G.game.num_particles
+		var e : Particles = G.game.particles[G.game.exp_i]
+		e.translation = proj.Ray.get_collision_point()
+		e.scale = Vector3.ONE * .75
+		e.emitting = true
 
 func sync_self() -> void:
 	rpc("t", translation)
@@ -48,8 +55,8 @@ remotesync func d(particle_scale := 1.0) -> void:
 			child.player.call(child.name)
 
 	# Particle
-	G.game.exp_i = (G.game.exp_i + 1) % G.game.num_explosions
-	var e : Particles = G.game.explosions[G.game.exp_i]
+	G.game.exp_i = (G.game.exp_i + 1) % G.game.num_particles
+	var e : Particles = G.game.particles[G.game.exp_i]
 	e.translation = translation
 	e.scale = Vector3.ONE * particle_scale
 	e.emitting = true

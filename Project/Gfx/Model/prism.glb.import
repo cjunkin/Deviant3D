@@ -2,12 +2,12 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/Rock1.glb-c2a7154349230632110617e967092193.scn"
+path="res://.import/prism.glb-fc58745c286d2d49633cf8c4ec1a699c.scn"
 
 [deps]
 
-source_file="res://Gfx/Model/Rock1.glb"
-dest_files=[ "res://.import/Rock1.glb-c2a7154349230632110617e967092193.scn" ]
+source_file="res://Gfx/Model/prism.glb"
+dest_files=[ "res://.import/prism.glb-fc58745c286d2d49633cf8c4ec1a699c.scn" ]
 
 [params]
 
@@ -16,7 +16,7 @@ nodes/root_name="Scene Root"
 nodes/root_scale=1.0
 nodes/custom_script=""
 nodes/storage=0
-nodes/use_legacy_names=true
+nodes/use_legacy_names=false
 materials/location=1
 materials/storage=1
 materials/keep_on_reimport=true

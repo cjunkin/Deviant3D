@@ -73,12 +73,6 @@ func die() -> void:
 	for child in get_children():
 		if child != Head && child != timer:
 			if is_instance_valid(child) && child.is_inside_tree():
-				# Particle
-				G.game.exp_i = (G.game.exp_i + 1) % G.game.num_explosions
-				var e : Particles = G.game.explosions[G.game.exp_i]
-				e.translation = child.translation
-				e.emitting = true
-				e.scale = Vector3(5, 5, 5)
 				# Kill segment
 				child.rpc("d")
 				timer.start()

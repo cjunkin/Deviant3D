@@ -12,11 +12,23 @@ export (NodePath) var patrol_path
 # FIXME: Sync multiplayer starting position, 
 # FIXME: Stop moving when paused
 
-#func _ready():
+func _ready() -> void:
+	set_network_master(G.game.get_network_master())
+	if is_network_master():
+		rpc("req_syn")
 #	if patrol_path:
 #		var path: Path = get_node(patrol_path)
 #		patrol_points = path.curve.get_baked_points()
 ##		print(patrol_points)
+
+master func req_syn() -> void:
+	rpc("t", translation, dist_traveled, flipped)
+
+puppet func t(transl: Vector3, dt : float, fl: bool) -> void:
+	translation = transl
+	dist_traveled = dt
+	flipped = fl
+
 func _physics_process(delta: float) -> void:
 	translation.x += delta * (int(flipped) * 2 - 1) * SPEED
 	dist_traveled += delta * SPEED

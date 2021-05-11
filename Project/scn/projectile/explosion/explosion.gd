@@ -10,8 +10,8 @@ func _on_Expl_body_entered(body: Spatial):
 		body.dmg(G.expl_dmg, self)
 		
 #		# Get a particle going
-#		G.game.exp_i = (G.game.exp_i + 1) % G.game.num_explosions
-#		var e : Particles = G.game.explosions[G.game.exp_i]
+#		G.game.exp_i = (G.game.exp_i + 1) % G.game.num_particles
+#		var e : Particles = G.game.particles[G.game.exp_i]
 #		e.translation = translation
 #		e.emitting = true
 		

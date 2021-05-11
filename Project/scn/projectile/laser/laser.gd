@@ -11,8 +11,8 @@ func _on_Laser_body_entered(body: Spatial) -> void:
 		body.dmg(G.laser_dmg, self)
 		
 #		# Get a particle going
-#		G.game.exp_i = (G.game.exp_i + 1) % G.game.num_explosions
-#		var e : Particles = G.game.explosions[G.game.exp_i]
+#		G.game.exp_i = (G.game.exp_i + 1) % G.game.num_particles
+#		var e : Particles = G.game.particles[G.game.exp_i]
 #		e.translation = translation
 #		e.emitting = true
 		

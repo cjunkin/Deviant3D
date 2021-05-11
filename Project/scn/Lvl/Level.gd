@@ -7,8 +7,8 @@ const ROCKET_PER_PLAYER := int(PROJ_PER_PLAYER / 2)
 const EXP_PER_PLAYER := 10
 var num_lasers := PROJ_PER_PLAYER
 var num_rockets := ROCKET_PER_PLAYER
-var num_explosions := EXP_PER_PLAYER + 46
-const num_enemies := 16
+var num_particles := EXP_PER_PLAYER + 46
+export var num_enemies := 20
 
 #const num_laser_audio := 8
 #const num_grapple_sounds := 6
@@ -18,7 +18,7 @@ var lasers := []
 var laser_i : int = 0
 var rockets := []
 var rocket_i : int = 0
-var explosions := []
+var particles := []
 var exp_i : int = 0
 var enemies := []
 var enemy_i : int = 0
@@ -27,7 +27,7 @@ var hooks := []
 var bosses := []
 
 # File Paths
-export(String, FILE) var rock_path = "res://scn/Env/Rock1.tscn"
+export(String, FILE) var rock_path
 export(String, FILE) var enemy_path = "res://scn/Actor/Enemy/Enemy.tscn"
 export(String, FILE) var worm_path = "res://scn/Actor/Enemy/Worm.tscn"
 
@@ -74,13 +74,14 @@ func _ready()->void:
 		p.name = G.ROCKET + str(i)
 		rockets.append(p)
 
-	# Explosions
-#	explosions.resize(num_explosions)
-	for i in range(num_explosions):
+	# particles
+#	particles.resize(num_particles)
+	for i in range(num_particles):
 		var e : Particles = exp_s.instance()
 		e.name = G.EXPL + str(i)
-		explosions.append(e)
+		particles.append(e)
 		add_child(e)
+#		e.visible = G.particles != G.OFF
 	
 	$Water.translation.y = G.sea_level
 	set_water_gfx()
@@ -125,8 +126,7 @@ func _physics_process(delta: float) -> void:
 	for e in enemies:
 		if e.is_inside_tree():
 			if is_instance_valid(e.target):
-				#	vel = translation.direction_to(target.global_transform.origin)
-
+				# vel = translation.direction_to(target.global_transform.origin)
 				# Look at target, but not looking up
 				e.look_at(e.target.global_transform.origin, Vector3.UP)
 				if !e.flying:
@@ -134,7 +134,7 @@ func _physics_process(delta: float) -> void:
 			
 			e.acc = e.transform.basis.z * -e.speed
 			if e.flying:
-				e.vel = e.vel * .99 + e.acc  * .75
+				e.vel = e.vel * .99 + e.acc * e.friction
 			else:
 			#* int(e.global_transform.origin.distance_squared_to(e.target.global_transform.origin) > 1)
 				e.vel.z = e.vel.z * .8 + e.acc.z
@@ -367,10 +367,10 @@ remote func spawn(id: int) -> void:
 		rockets.append(p)
 	num_rockets += ROCKET_PER_PLAYER
 
-	# Explosions
+	# Particles
 	for __ in range(EXP_PER_PLAYER):
 		var e : Particles = exp_s.instance()
-		explosions.append(e)
+		particles.append(e)
 		add_child(e)
-	num_explosions += EXP_PER_PLAYER
+	num_particles += EXP_PER_PLAYER
 

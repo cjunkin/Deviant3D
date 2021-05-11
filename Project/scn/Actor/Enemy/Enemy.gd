@@ -5,10 +5,10 @@ var target: Player
 export var flying : bool # FIXME: Sync flying
 # Physics
 var vel := Vector3()
-export var speed := 2
+export var speed := 2.0
 var grav := 1
 var acc := Vector3()
-export var friction := .125
+export var friction := .75
 
 func _ready() -> void:
 	add_to_group(G.ENEMY)
@@ -19,14 +19,6 @@ func _ready() -> void:
 #	else:
 #		$Mesh.material_override = load()
 
-puppet func set_flying(on := true) -> void:
-	flying = on
-	if on:
-		var mat := load("res://Gfx/Material/grid.material")
-		$Mesh.material_override = mat
-		mat = load("res://Gfx/Material/laser.material")
-		Dust.material_override = mat
-
 func set_target(t) -> void:
 	target = t
 
@@ -34,6 +26,16 @@ func get_class() -> String:
 	return G.BASIC_ENEMY
 
 # MULTIPLAYER STUFF --------------------------------------------
+
+puppet func set_flying(on := true) -> void:
+	flying = on
+	if on:
+		MAX_HP = 1
+		hp = 1
+		var mat := load("res://Gfx/Material/grid.material")
+		$Mesh.material_override = mat
+		mat = load("res://Gfx/Material/laser.material")
+		Dust.material_override = mat
 
 func sync_self() -> void:
 	rpc("s", translation, vel)
