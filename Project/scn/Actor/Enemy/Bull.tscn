@@ -2,21 +2,20 @@
 
 [ext_resource path="res://scn/Actor/Enemy/Enemy.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scn/Actor/Enemy/Bull.gd" type="Script" id=2]
+[ext_resource path="res://scn/Actor/Enemy/loboopen.obj" type="ArrayMesh" id=3]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 0.627451, 0, 0, 1 )
 
-[sub_resource type="CapsuleMesh" id=2]
-
 [node name="Bull" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
 flying = true
-speed = 4
+speed = 7
 
 [node name="Mesh" parent="." index="1"]
-transform = Transform( 0.79632, 0, 0, 0, 1.26192, 0, 0, 0, 2.07807, 0, 0, 0 )
+transform = Transform( 0.00241827, 1.26191, -0.00395326, 0, -0.00084709, -0.733258, -0.796316, 0.00383221, -1.20054e-05, 0, -1.19209e-07, 0 )
 material_override = SubResource( 1 )
-mesh = SubResource( 2 )
+mesh = ExtResource( 3 )
 
 [node name="Timer" type="Timer" parent="." index="3"]
 wait_time = 7.664
