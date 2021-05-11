@@ -14,6 +14,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scn/Actor/AI.gd"
 }, {
+"base": "Enemy",
+"class": "Arrowhead",
+"language": "GDScript",
+"path": "res://scn/Actor/Enemy/Arrowhead.gd"
+}, {
 "base": "Area",
 "class": "Attack_Buff",
 "language": "GDScript",
@@ -23,6 +28,11 @@ _global_script_classes=[ {
 "class": "Box",
 "language": "GDScript",
 "path": "res://TODO_PHYSICS/Box.gd"
+}, {
+"base": "Enemy",
+"class": "Bull",
+"language": "GDScript",
+"path": "res://scn/Actor/Enemy/Bull.gd"
 }, {
 "base": "ColorRect",
 "class": "ColorTile",
@@ -74,7 +84,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scn/Lvl/Level.gd"
 }, {
-"base": "Reference",
+"base": "ImmediateGeometry",
 "class": "Line",
 "language": "GDScript",
 "path": "res://addons/LineRenderer/Line.gd"
@@ -83,6 +93,11 @@ _global_script_classes=[ {
 "class": "LowFrictionPower",
 "language": "GDScript",
 "path": "res://TODO_PHYSICS/Rafael/Low_friction_powerup_2.gd"
+}, {
+"base": "Area",
+"class": "Low_Grav",
+"language": "GDScript",
+"path": "res://TODO_PHYSICS/Sambodh/Low_grav_powerup.gd"
 }, {
 "base": "Reference",
 "class": "Palette",
@@ -98,11 +113,6 @@ _global_script_classes=[ {
 "class": "Player",
 "language": "GDScript",
 "path": "res://scn/Actor/Player/Player.gd"
-}, {
-"base": "Area",
-"class": "Powerup",
-"language": "GDScript",
-"path": "res://TODO_PHYSICS/Sambodh/Low_grav_powerup.gd"
 }, {
 "base": "Area",
 "class": "Projectile",
@@ -146,8 +156,10 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "AI": "",
+"Arrowhead": "",
 "Attack_Buff": "",
 "Box": "",
+"Bull": "",
 "ColorTile": "",
 "Deleteme": "",
 "Enemy": "",
@@ -160,10 +172,10 @@ _global_script_class_icons={
 "Level": "",
 "Line": "",
 "LowFrictionPower": "",
+"Low_Grav": "",
 "Palette": "",
 "PaletteImporter": "",
 "Player": "",
-"Powerup": "",
 "Projectile": "",
 "Rocket": "",
 "ShakyCam": "",
