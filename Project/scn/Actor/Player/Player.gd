@@ -162,7 +162,8 @@ func _ready() -> void:
 		
 	else:
 		set_process_input(false)
-		# Request sync from master
+		# Request sync from master after sync timer ends
+		yield(Network, "game_start")
 		rpc_id(get_network_master(), "req_syn")
 	
 	Melee.visible = false

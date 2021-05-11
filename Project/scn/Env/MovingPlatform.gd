@@ -13,8 +13,9 @@ export (NodePath) var patrol_path
 # FIXME: Stop moving when paused
 
 func _ready() -> void:
-	set_network_master(G.game.get_network_master())
-	if is_network_master():
+	set_network_master(get_tree().get_root().get_network_master())
+	if !is_network_master():
+		yield(Network, "game_start")
 		rpc("req_syn")
 #	if patrol_path:
 #		var path: Path = get_node(patrol_path)
@@ -22,10 +23,10 @@ func _ready() -> void:
 ##		print(patrol_points)
 
 master func req_syn() -> void:
-	rpc("t", translation, dist_traveled, flipped)
+	rpc("t", translation.x, dist_traveled, flipped)
 
-puppet func t(transl: Vector3, dt : float, fl: bool) -> void:
-	translation = transl
+puppet func t(transl: float, dt : float, fl: bool) -> void:
+	translation.x = transl
 	dist_traveled = dt
 	flipped = fl
 

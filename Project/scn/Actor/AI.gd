@@ -7,6 +7,8 @@ var sync_timer: Timer
 onready var Dust : Particles = get_node_or_null("Dust")
 
 func _ready() -> void:
+	hp = MAX_HP
+	toggle_particles()
 	if G.game.is_network_master():
 #		print("Syncing")
 		sync_timer = Timer.new()
@@ -16,9 +18,9 @@ func _ready() -> void:
 		add_child(sync_timer)
 		sync_timer.start()
 	else:
+		yield(Network, "game_start")
 		rpc_id(1, "req_syn")
-	hp = MAX_HP
-	toggle_particles()
+
 
 func toggle_particles(on := G.particles != G.OFF) -> void:
 	if Dust:
