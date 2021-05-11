@@ -331,7 +331,6 @@ puppet func set_cur(terrain_seed: int, spawn_seed: int) -> void:
 		gen_asteroids(terrain_seed)
 		# Land
 		$Land.gen_terrain(terrain_seed)
-		Network.emit_signal("game_start")
 
 # Recieve current spawn_time, should only be called on non-host
 puppet func set_time(spawn_time_left: float) -> void:
@@ -346,6 +345,7 @@ puppet func set_time(spawn_time_left: float) -> void:
 		# Reset wait_time (since timer should go back to 4 seconds)
 		yield(enemy_spawn, "timeout")
 		enemy_spawn.start(spawn_time)
+		Network.emit_signal("game_start")
 
 
 # Spawn player with id PLAYER TODO: use get_rpc_sender_id to avoid hack
