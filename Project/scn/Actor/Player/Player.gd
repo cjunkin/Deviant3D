@@ -75,6 +75,7 @@ onready var GearR := $CamX/MeshHelp/GearR
 onready var GearL := $CamX/MeshHelp/GearL
 onready var GearRMuzzle := GearR.get_node("Muzzle")
 onready var GearLMuzzle := GearL.get_node("Muzzle")
+onready var Sparks := $Sparks
 #var dmg := 1
 #onready var Flash : OmniLight = get_node(flash)
 #onready var CamHolder :Spatial = CamY.get_node("CamHolder")
@@ -381,7 +382,7 @@ func _physics_process(delta: float) -> void:
 			Vector3.ZERO,
 			delta * 10
 		)
-
+	Sparks.emitting = false
 	# Grounded
 	if is_on_floor():
 		# Apply hard friction, unless grappling (then softer friction)
@@ -411,6 +412,7 @@ func _physics_process(delta: float) -> void:
 				Vector3(GEAR_REST_ROT, 0, 0), 
 				4 * delta
 			)
+		Sparks.emitting = vel.length_squared() > 4096
 		
 		# Walking Anims
 		AnimTree.set("parameters/Move/blend_amount", vel_speed)
@@ -430,6 +432,7 @@ func _physics_process(delta: float) -> void:
 			Vector3(GEAR_REST_ROT, 0, 0), 
 			4 * delta
 		)
+		
 
 	# apply gravity, g is whether gravity is on or off, we turn off gravity if we're grappling
 	vel -= int(g) * (int(not_grappling)) * (int(L_not_grapplin)) * grav * delta * transform.basis.y
@@ -550,6 +553,7 @@ func reparent_sound(sfx: AudioStreamPlayer3D) -> void:
 
 func toggle_particles(on := G.particles != G.OFF):
 	$CamX/CamY/GunHolder/Gun/Muzzle/Dust.visible = on
+	Sparks.visible = on
 
 # Turn flipping on/off based on ENABLED
 func toggle_flippers(enabled: bool) -> void:
