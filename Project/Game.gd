@@ -15,6 +15,10 @@ func _ready():
 		e.set_network_master(1)
 		enemies.append(e)
 		e.name = G.ENEMY + str(i)
+		
+	spawn_bull(0)
+		
+	
 
 	# If we pressed Host
 	if is_network_master():
@@ -50,3 +54,17 @@ func update_boss_hp(hp: int) -> void:
 
 func hide_boss_stats() -> void:
 	$HUD/BossStats.hide()
+	
+func spawn_bull(num : int) -> void:
+	var bull_s := load("res://scn/Actor/Enemy/Bull.tscn")
+	var b : Bull = bull_s.instance()
+	b.set_network_master(1)
+	enemies.append(b)
+	if num == 0:
+		b.speed = 0
+		b.translation = Vector3(0, 50, 110)
+	else:
+		b.translation = Vector3(0, 50, 100)
+	b.name = G.ENEMY + str(num_enemies)
+	add_child(b)
+	b.set_target(G.current_player)

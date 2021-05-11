@@ -2,10 +2,10 @@ class_name Enemy
 extends AI
 
 var target: Player
-var flying : bool # FIXME: Sync flying
+export var flying : bool # FIXME: Sync flying
 # Physics
 var vel := Vector3()
-var speed := 2
+export var speed := 2
 var grav := 1
 var acc := Vector3()
 export var friction := .125

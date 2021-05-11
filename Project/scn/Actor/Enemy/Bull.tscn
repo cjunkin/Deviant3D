@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://scn/Actor/Enemy/Enemy.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scn/Actor/Enemy/Bull.gd" type="Script" id=2]
+
+[sub_resource type="SpatialMaterial" id=1]
+albedo_color = Color( 0.627451, 0, 0, 1 )
+
+[sub_resource type="CapsuleMesh" id=2]
+
+[node name="Bull" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+flying = true
+speed = 4
+
+[node name="Mesh" parent="." index="1"]
+transform = Transform( 0.79632, 0, 0, 0, 1.26192, 0, 0, 0, 2.07807, 0, 0, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+
+[node name="Timer" type="Timer" parent="." index="3"]
+wait_time = 7.664
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
