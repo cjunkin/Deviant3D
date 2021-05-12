@@ -191,21 +191,27 @@
 				</p>
 
 				<p>
-					To solve 1, I used tweening, interpolation, and animation blend trees, and a custom follow the leader algorithm
+					To solve 1, I used tweening, interpolation, and animation blend trees, and a custom follow the
+					leader algorithm
 					for the worm.
-					For simpler things like changing the camera position when switching between third and first person, I 
-					used a similar approach to bezier curves, parameterizing as 
+					For simpler things like changing the camera position when switching between third and first person,
+					I
+					used a similar approach to bezier curves, parameterizing as
 				</p>
 				<p>
 					\(\vec{P}(t) = ((1 - t) * \vec{S}) + (t * \vec{E})\)
 				</p>
 				<p>
-					where \(\vec{P}\) is our position, \(\vec{S}\) is our starting position, and \(\vec{E}\) is our ending position. From there, as 
-					our time step increased, I used Godot's tweening to handle choosing the correct value of \(t\), since 
+					where \(\vec{P}\) is our position, \(\vec{S}\) is our starting position, and \(\vec{E}\) is our
+					ending position. From there, as
+					our time step increased, I used Godot's tweening to handle choosing the correct value of \(t\),
+					since
 					\(t\) could follow a linear increase from 0 to 1, or quadratic, or any other function.
 				</p>
-				<p>This was done for centering the gun, aiming the grappling hooks, aiming down sights, smoothly increasing enemy speed, and so forth.</p>
-				<p>For first person animations, I used Godot's built in Animation Trees to blend between animation states, such as shooting transitioning
+				<p>This was done for centering the gun, aiming the grappling hooks, aiming down sights, smoothly
+					increasing enemy speed, and so forth.</p>
+				<p>For first person animations, I used Godot's built in Animation Trees to blend between animation
+					states, such as shooting transitioning
 					to idle to walking and sprinting.
 				</p>
 
@@ -261,15 +267,30 @@
 				</pre> -->
 				<p>
 					To actually create the world, it was almost entirely procedurally generated. For
-					land, 
-					Creation of characters/enemies + how gravity works
-					Creation of Powerups
-
+					land, I created a 2D grid of squares of size \(s \times s\), then offset the vertices by a random
+					amount \(\vec{R}\)
+					such that \(\vec{R}\) was no more than \(\frac{s}{3}\) in distance away from its original position
+					(and thus, the new quadrilaterals
+					didn't intersect eachother).
+				</p>
+				<p>
+					Next was iterating over those and creating meshes for them. The vertices were the 2D grid positions except offset up and down by a random amount so each block was flat
+					overall but the grid overall was not flat.
+					In terms of the very nitty gritty, I used the Godot ArrayMesh API to create
+					24 vertices (since each edge touched had 2 points, and there were 12 edges) for
+					12 triangular faces (a cuboid has 6 in real life, but non-triangle rendering is messy so they get
+					split into
+					2 triangles) then calculated surface normals using the cross product between two edges on the face
+					(getting the
+					signs right were a pain).
 					
+
 
 
 				</p>
 				<p>
+					Creation of characters/enemies + how gravity works
+					Creation of Powerups
 					Camera shake using Simplex Noise
 					Lots of other simplex noise applications, terrain generation, water shader
 				</p>
