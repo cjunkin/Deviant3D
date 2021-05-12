@@ -23,7 +23,8 @@ section, summary, time, mark, audio, video {
 	border: 0;
 	font-size: 100%;
 	font: inherit;
-	vertical-align: baseline;}
+	vertical-align: baseline;
+}
 
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
@@ -33,13 +34,13 @@ body {
 	line-height: 1;
 }
 
-pre code {
-	background-color: rgb(0, 0, 0);
-	border: 1px solid rgb(97, 97, 97);
+pre {
+	background-color: #141619;
+	border: 1px solid #454c50;
 	display: block;
-	padding: 20px;
+	/* padding: -20px; */
 	text-align: left;
-  }
+}
 
 ol, ul {
 	list-style: none;

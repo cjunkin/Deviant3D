@@ -214,6 +214,26 @@
 					states, such as shooting transitioning
 					to idle to walking and sprinting.
 				</p>
+				<p>
+					For the worm, it rotated towards the player except I tried using a weird hack to get interpolation
+					to
+					rotate at a more constant rate towards the player without having to learn about quaternions. Here we
+					are trying to set \(\vec{T}_{t+1}\) to an interpolated transform that is looking towards the player:
+				</p>
+				<p>
+					\begin{array}{l}
+					\vec{T}_{t} := \textrm{Transform of worm at time t} \\
+					\vec{P} := \textrm{Transform of worm looking at player} \\
+					\theta := \textrm{Angle between worm and player's forward basis vectors} \\
+					\vec{T}_{t+1} = lerp(\vec{T}_{t}, \vec{P}, dt * 4 / \theta) \\
+					\end{array}
+				</p>
+				<p>It didn't always work, but the effect was nice enough where I simply recursively had the other worm
+					segments rotate towards the
+					next segment until we didn't have any segments left to rotate, and then kept the distance between
+					segments at a constant value
+					by directly setting the segment positions to move forward until they were at that distance.
+				</p>
 
 				<p>
 					To solve 2, nondeterministic physics, I used the built in collision detection and the Kinematic
@@ -254,24 +274,14 @@
 				<p>
 					The enemies also used a similar approach, using verlet integration with acceleration and velocity
 					so they wouldn't infinitely circle but would have some
-					momentum (having enemies that always move toward you aren't very satisfying)
+					momentum (having enemies that always move toward you aren't very satisfying).
 				</p>
-				<!-- <pre>
-					<code>
-						
-						if on ground:
-							V = V * .99 + (1 - ground_friction)
-						else:
-							V *= (1 - air_resistance)
-					</code>
-				</pre> -->
+
 				<p>
 					To actually create the world, it was almost entirely procedurally generated. For
 					land, I created a 2D grid of squares of size \(s \times s\), then offset the vertices by a random
-					amount \(\vec{R}\)
-					such that \(\vec{R}\) was no more than \(\frac{s}{3}\) in distance away from its original position
-					(and thus, the new quadrilaterals
-					didn't intersect eachother).
+					amount \(\vec{R}\) such that \(\vec{R}\) was no more than \(\frac{s}{3}\) in distance away from its
+					original position (and thus, the new quadrilaterals didn't intersect eachother).
 				</p>
 				<p>
 					Next was iterating over those and creating meshes for them. The vertices were the 2D grid positions
@@ -312,12 +322,10 @@
 
 				<p>
 					For 3, graphical problems, we used GPU accelerated shaders and customizable graphics settings to
-					solve this.
-					If you have an absolute potato pc you can turn everything off, so only basic lighting (no shadows)
-					will happen.
-					However, Chris's sobel edge detection shader is low cost (since it's a post processing effect that
-					only
-					processes the 2D screen image) and makes the game look very nice, even at low settings.
+					solve this. If you have an absolute potato pc you can turn everything off, so only basic lighting
+					(no shadows) will happen. However, Chris's sobel edge detection shader is low cost (since it's a
+					post processing effect that only processes the 2D screen image) and makes the game look very nice,
+					even at low settings.
 
 					Insert writeup of shader
 				</p>
@@ -329,18 +337,36 @@
 					very quickly, we should create the foam, otherwise only generate the noisy foam), and used
 					sine and cosine as functions of time to generate some nice waves using vertex displacement.
 					Lastly we kind of used the hack found online where you take the screen texture, offset and distort
-					it
-					to get the reflection, although this backfired (if you fly really high, you'll see why) so maybe
-					we'll fix
-					it at some point.
+					it to get the reflection, although this backfired (if you fly really high, you'll see why) so maybe
+					we'll fix it at some point.
 				</p>
+				<p>
+					To get the cartoony effect of the water, we clamped values between certain ranges to be one value
+					for
+					that range, ie:
+				</p>
+				<pre>
+
+						if (noise_sample > 0.0 && noise_sample < 0.4) albedo = 0.1;
+						if (noise_sample > 0.4 && noise_sample < 0.8) albedo = 0.0;
+						if (noise_sample > 0.8) albedo = 1f;
+
+						Which could be further optimized into no if elses:
+
+						float albedo = 0.1 * float(noise_sample > 0.0 && noise_sample <= 0.4) + 1.0 * float(noise_sample > 0.8);
+				</pre>
 				<p>
 					The menu blur shader used mipmaps and bilinear interpolation between the mipmaps (extremely fast on
 					the GPU).
 				</p>
 
 				<p>
-
+					For snapping to surfaces, I used raycasts to detect the surfaces that players were standing or
+					moving towards, then
+					reoriented the player's basis vectors such that the forward vector stayed the same, the up vector
+					became the normalized surface normal, and then the side vector
+					was just the cross product of the up and forward vectors. I then interpolated between the two to get
+					a smooth rotation.
 				</p>
 
 				<p>
@@ -349,6 +375,8 @@
 					player when it interacts with the powerup, and then choosing to either double or halve it. In
 					addition, the powerup will be rendered uninteractable for a set period of time. After a timer of 15
 					seconds expires, the gravity is then restored to what it originally was.
+				</p>
+				<p>
 
 					Alongside the Gravity powerups was an Attack Buff, which increases the players shots and explosion
 					damage by a factor of 2. This was done in a similar method to the Gravity powerups, where once the
