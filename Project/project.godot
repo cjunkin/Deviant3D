@@ -34,6 +34,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Unused/Wolf/Bull.gd"
 }, {
+"base": "MeshInstance",
+"class": "CloudDome",
+"language": "GDScript",
+"path": "res://addons/cloud/Cloud.gd"
+}, {
 "base": "ColorRect",
 "class": "ColorTile",
 "language": "GDScript",
@@ -84,7 +89,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://scn/Lvl/Level.gd"
 }, {
-"base": "Reference",
+"base": "ImmediateGeometry",
 "class": "Line",
 "language": "GDScript",
 "path": "res://addons/LineRenderer/Line.gd"
@@ -93,6 +98,11 @@ _global_script_classes=[ {
 "class": "LowFrictionPower",
 "language": "GDScript",
 "path": "res://TODO_PHYSICS/Rafael/Low_friction_powerup_2.gd"
+}, {
+"base": "Area",
+"class": "Low_Grav",
+"language": "GDScript",
+"path": "res://TODO_PHYSICS/Sambodh/Low_grav_powerup.gd"
 }, {
 "base": "Reference",
 "class": "Palette",
@@ -108,11 +118,6 @@ _global_script_classes=[ {
 "class": "Player",
 "language": "GDScript",
 "path": "res://scn/Actor/Player/Player.gd"
-}, {
-"base": "Area",
-"class": "Powerup",
-"language": "GDScript",
-"path": "res://TODO_PHYSICS/Sambodh/Low_grav_powerup.gd"
 }, {
 "base": "Area",
 "class": "Projectile",
@@ -160,6 +165,7 @@ _global_script_class_icons={
 "Attack_Buff": "",
 "Box": "",
 "Bull": "",
+"CloudDome": "",
 "ColorTile": "",
 "Deleteme": "",
 "Enemy": "",
@@ -172,10 +178,10 @@ _global_script_class_icons={
 "Level": "",
 "Line": "",
 "LowFrictionPower": "",
+"Low_Grav": "",
 "Palette": "",
 "PaletteImporter": "",
 "Player": "",
-"Powerup": "",
 "Projectile": "",
 "Rocket": "",
 "ShakyCam": "",
