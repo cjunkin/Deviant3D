@@ -216,7 +216,7 @@
 				</p>
 
 				<p>
-					So to solve 2, nondeterministic physics, I used the built in collision detection and the Kinematic
+					To solve 2, nondeterministic physics, I used the built in collision detection and the Kinematic
 					Body's
 					move_and_slide function, which handles bouncing and sliding given an input velocity (but not
 					rotating the player) to
@@ -274,25 +274,53 @@
 					didn't intersect eachother).
 				</p>
 				<p>
-					Next was iterating over those and creating meshes for them. The vertices were the 2D grid positions except offset up and down by a random amount so each block was flat
+					Next was iterating over those and creating meshes for them. The vertices were the 2D grid positions
+					except offset up and down by a random amount so each block was flat
 					overall but the grid overall was not flat.
-					In terms of the very nitty gritty, I used the Godot ArrayMesh API to create
-					24 vertices (since each edge touched had 2 points, and there were 12 edges) for
-					12 triangular faces (a cuboid has 6 in real life, but non-triangle rendering is messy so they get
-					split into
-					2 triangles) then calculated surface normals using the cross product between two edges on the face
-					(getting the
-					signs right were a pain).
-					
-
-
-
 				</p>
 				<p>
-					Creation of characters/enemies + how gravity works
-					Creation of Powerups
-					Camera shake using Simplex Noise
-					Lots of other simplex noise applications, terrain generation, water shader
+					In terms of the very nitty gritty for mesh generation, I used the Godot ArrayMesh API to create
+					24 vertices (since each edge touched had 2 points, and there were 12 edges) for
+					12 triangular faces (a cuboid has 6 in real life, but non-triangle rendering is messy so they get
+					split into 2 triangles) then calculated surface normals using the cross product between two edges on
+					the face (getting the signs right were a pain). 
+				</p>
+				<p>
+					I then used Open Simplex Noise using the x and z coordinates to generate a smooth height transition
+					between neighboring blocks, which resulted in the rather nice transitions between dirt, grass, and sea.
+				</p>
+				<p>
+					Of course, this generation can be optimized, since we actually only
+					need 8 vertices, and since the grid is connected, we can make it all a couple connected meshes to 
+					decrease the amount of draw calls.
+				</p>
+				<p>
+					For asteroids and trees, they both use similar approaches, where I go through
+					a grid and then using open simplex noise and x and z coordinates, I choose
+					whether there should be an asteroid there or not, and then give them random scaling values.
+
+				</p>
+				
+				<p>
+					In fact, I used Simplex Noise for the camera shake (if you can't tell by now, I
+					quite enjoyed the smoothness) by setting its rotation to random values based on time.
+					Normally, this would look very random and jittery, but with simplex noise it became a little
+					smoother. Stylistically, I don't think it looks nicer (that's subjective of course) but it certainly
+					should reduce motion sickness.
+				</p>
+
+				<p>
+					As a last touch on Open Simplex noise, I used that to generate the sea foam in the water shader.
+					For the foam around half submerged objects effect, I used the depth of the camera rays (if it hits the water then something else
+					very quickly, we should create the foam, otherwise only generate the noisy foam), and used
+					sine and cosine as functions of time to generate some nice waves using vertex displacement.
+					Lastly we kind of used the hack found online where you take the screen texture, offset and distort it
+					to get the reflection, although this backfired (if you fly really high, you'll see why) so maybe we'll fix
+					it at some point.
+				</p>
+
+				<p>
+
 				</p>
 
 				<p>
@@ -570,7 +598,7 @@
 								Inverse Kinematics</a> </li>
 						<li> <a href="http://web.mit.edu/cesium/Public/terrain.pdf" title=""> Realtime Terrain
 								Generation</a> </li>
-						<li> <a href="https://godotshaders.com/shader/stylized-water-shader/" title="">
+						<li> <a href="https://www.youtube.com/watch?v=PgcMXPdQrLI&t=1024s" title="">
 								Water Shader Reference</a> </li>
 						<li> <a href="https://godotshaders.com/shader/animated-sketchy-line/" title="">
 								Sketch Shader Reference</a> </li>
