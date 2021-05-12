@@ -323,12 +323,20 @@
 				<p>
 					For 3, graphical problems, we used GPU accelerated shaders and customizable graphics settings to
 					solve this. If you have an absolute potato pc you can turn everything off, so only basic lighting
-					(no shadows) will happen. However, Chris's sobel edge detection shader is low cost (since it's a
+					(no shadows) will happen. However, the Sobel Edge Detection shader is low cost (since it's a
 					post processing effect that only processes the 2D screen image) and makes the game look very nice,
 					even at low settings.
-
-					Insert writeup of shader
 				</p>
+
+				<p>
+					The Sobel filter was included as a part of the HUD and covers the entire
+					screen. The sobel edge detection algorithm that we learned in
+					class was done by sampling the screen texture, extracting the horizontal and vertical
+					gradients using the matrices defined in class, calculating \(G_x\) and \(G_y\), and then computing
+					the final result. We then colored the edges by using black with its alpha value being the final
+					result.
+				</p>
+
 				<p>
 					For other shaders, as a last touch on Open Simplex noise, I used that to generate the sea foam in
 					the water shader.
@@ -346,7 +354,6 @@
 					that range, ie:
 				</p>
 				<pre>
-
 						if (noise_sample > 0.0 && noise_sample < 0.4) albedo = 0.1;
 						if (noise_sample > 0.4 && noise_sample < 0.8) albedo = 0.0;
 						if (noise_sample > 0.8) albedo = 1f;
@@ -385,10 +392,7 @@
 					multiple usages.
 				</p>
 
-				<p>
-					Toon Shader (Sobel Edge Detection Shader):
-					To add a shader to the game without having to apply it to every 3D mesh that we have in the game, we used a 2D post-processing filter. The filter was included as a part of the HUD and covers the entire screen and the screen texture and screen UV coordinates were used to apply the shader in OpenGL. The cartoon-like shader was implemented using the sobel edge detection algorithm that we learned in class. This was done by sampling the screen texture, extracting the horizontal and vertical gradients using the matrices defined in class, calculating \(G_x\) and \(G_y\), and then computing the final result. The final cartoon-like result was done by using the RGB value of (0, 0, 0) to color the calculated edges black. 
-				</p>
+
 			</div>
 		</section>
 
@@ -668,6 +672,8 @@
 						<li> <a href="https://godotshaders.com/shader/3d-burn-dissolve/" title="">
 								Explosion Shader Reference</a> </li>
 
+						<li> <a href="https://gist.github.com/kzerot/b60cee18a62a80091b2f54a366f07411" title="">
+								Sobel Edge Detection Reference</a> </li>
 						<li> <a href="https://brokenvector.itch.io/low-poly-tree-pack" title="">
 								Low Poly Trees</a> </li>
 						<li> <a href="https://sketchfab.com/3d-models/low-poly-island-2f93bb8d331a4e70999d8c883302a7f4"
