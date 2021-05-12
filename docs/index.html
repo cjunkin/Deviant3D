@@ -283,15 +283,16 @@
 					24 vertices (since each edge touched had 2 points, and there were 12 edges) for
 					12 triangular faces (a cuboid has 6 in real life, but non-triangle rendering is messy so they get
 					split into 2 triangles) then calculated surface normals using the cross product between two edges on
-					the face (getting the signs right were a pain). 
+					the face (getting the signs right were a pain).
 				</p>
 				<p>
 					I then used Open Simplex Noise using the x and z coordinates to generate a smooth height transition
-					between neighboring blocks, which resulted in the rather nice transitions between dirt, grass, and sea.
+					between neighboring blocks, which resulted in the rather nice transitions between dirt, grass, and
+					sea.
 				</p>
 				<p>
 					Of course, this generation can be optimized, since we actually only
-					need 8 vertices, and since the grid is connected, we can make it all a couple connected meshes to 
+					need 8 vertices, and since the grid is connected, we can make it all a couple connected meshes to
 					decrease the amount of draw calls.
 				</p>
 				<p>
@@ -300,7 +301,7 @@
 					whether there should be an asteroid there or not, and then give them random scaling values.
 
 				</p>
-				
+
 				<p>
 					In fact, I used Simplex Noise for the camera shake (if you can't tell by now, I
 					quite enjoyed the smoothness) by setting its rotation to random values based on time.
@@ -310,24 +311,32 @@
 				</p>
 
 				<p>
-					For 3, graphical problems, we used GPU accelerated shaders and customizable graphics settings to solve this.
-					If you have an absolute potato pc you can turn everything off, so only basic lighting (no shadows) will happen.
-					However, Chris's sobel edge detection shader is low cost (since it's a post processing effect that only
+					For 3, graphical problems, we used GPU accelerated shaders and customizable graphics settings to
+					solve this.
+					If you have an absolute potato pc you can turn everything off, so only basic lighting (no shadows)
+					will happen.
+					However, Chris's sobel edge detection shader is low cost (since it's a post processing effect that
+					only
 					processes the 2D screen image) and makes the game look very nice, even at low settings.
 
 					Insert writeup of shader
 				</p>
 				<p>
-					For other shaders, as a last touch on Open Simplex noise, I used that to generate the sea foam in the water shader.
-					For the foam around half submerged objects effect, I used the depth of the camera rays (if it hits the water then something else
+					For other shaders, as a last touch on Open Simplex noise, I used that to generate the sea foam in
+					the water shader.
+					For the foam around half submerged objects effect, I used the depth of the camera rays (if it hits
+					the water then something else
 					very quickly, we should create the foam, otherwise only generate the noisy foam), and used
 					sine and cosine as functions of time to generate some nice waves using vertex displacement.
-					Lastly we kind of used the hack found online where you take the screen texture, offset and distort it
-					to get the reflection, although this backfired (if you fly really high, you'll see why) so maybe we'll fix
+					Lastly we kind of used the hack found online where you take the screen texture, offset and distort
+					it
+					to get the reflection, although this backfired (if you fly really high, you'll see why) so maybe
+					we'll fix
 					it at some point.
 				</p>
 				<p>
-					The menu blur shader used mipmaps and bilinear interpolation between the mipmaps (extremely fast on the GPU).
+					The menu blur shader used mipmaps and bilinear interpolation between the mipmaps (extremely fast on
+					the GPU).
 				</p>
 
 				<p>
@@ -574,13 +583,15 @@
 							Implemented the toon shader
 							<ol>
 								<li>Post-processed the 3D graphics with a 2D shader layer using OpenGL</li>
-								<li>Implemented using sobel edge detection algorithm to render edges around each 3D mesh, making the game look cartoon-like</li>
+								<li>Implemented using sobel edge detection algorithm to render edges around each 3D
+									mesh, making the game look cartoon-like</li>
 							</ol>
 						</li>
 						<li>
 							Worked on demo
 							<ol>
-								<li>Filmed scenes for the demo that shows off many of its features, including multiplayer features, fighting the worm, snapping to surfaces, etc. </li>
+								<li>Filmed scenes for the demo that shows off many of its features, including
+									multiplayer features, fighting the worm, snapping to surfaces, etc. </li>
 								<li>Organized and helped edit the final demo</li>
 							</ol>
 						</li>
@@ -623,8 +634,8 @@
 						<li> <a href="https://godotshaders.com/shader/animated-sketchy-line/" title="">
 								Sketch Shader Reference</a> </li>
 						<li> <a href="https://godotshaders.com/shader/3d-burn-dissolve/" title="">
-							Sketch Shader Reference</a> </li>
-								
+								Explosion Shader Reference</a> </li>
+
 						<li> <a href="https://brokenvector.itch.io/low-poly-tree-pack" title="">
 								Low Poly Trees</a> </li>
 						<li> <a href="https://sketchfab.com/3d-models/low-poly-island-2f93bb8d331a4e70999d8c883302a7f4"
