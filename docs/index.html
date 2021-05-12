@@ -178,7 +178,19 @@
 				<!-- </a> -->
 				<p>So, you wanna know how this was made? What are you, a nerd? Ok ok, I'll tell you.</p>
 
-				<p>Deviant3D was created using Godot, an open-source game engine, which made collision testing and basic
+				<p>But first, before you go all eyes glazed from all the details, the most important take aways (I
+					think) are that we actually got to apply a lot of the animation techniques that were glossed over,
+					like heirarchical transforms (had to deal with a lot of local vs global transforms), inverse
+					kinematics (or rather, the
+					"discount" version), physics, and lastly making nice nonrealistic shaders.
+				</p>
+				<p>
+					We also learned a lot
+					about keeping a larger codebase afloat (picking up a large solo project was, to say the least, tricky
+					to teach everyone and modularize everything).
+				</p>
+
+				<p>Alright, on with the technicals! Deviant3D was created using Godot, an open-source game engine, which made collision testing and basic
 					rendering trivial. However, there were 3 main issues:
 				<ol>
 					<li>Godot's inverse kinematics was not bug free.</li>
@@ -192,11 +204,8 @@
 
 				<p>
 					To solve 1, I used tweening, interpolation, and animation blend trees, and a custom follow the
-					leader algorithm
-					for the worm.
-					For simpler things like changing the camera position when switching between third and first person,
-					I
-					used a similar approach to bezier curves, parameterizing as
+					leader algorithm for the worm. For simpler things like changing the camera position when switching
+					between third and first person, I used a similar approach to bezier curves, parameterizing as
 				</p>
 				<p>
 					\(\vec{P}(t) = ((1 - t) * \vec{S}) + (t * \vec{E})\)
@@ -246,14 +255,15 @@
 				</p>
 				<p>
 					\begin{array}{l}
-					\vec{F} = gravity + inputs + jump + hook \\
+					\vec{F} = gravity + inputs + jump + hook + water \\
 					\vec{V} += \vec{F} * dt \\
 					\vec{P} += \vec{V} * dt \\
 					\end{array}
 				</p>
 				<p>
 					Of course, this is a massive oversimplification, I had lots of constants for air resistance,
-					friction, clamping our max velocity, yada yada yada.
+					friction, clamping our max velocity, yada yada yada. For water, we simply applied an upward force,
+					and allow the player to move along its local forward z axis in any direction.
 				</p>
 
 				<p>For the grappling hook, I decided that rather than using it like a stiff rope, I'd use it more like a
@@ -276,6 +286,12 @@
 					so they wouldn't infinitely circle but would have some
 					momentum (having enemies that always move toward you aren't very satisfying).
 				</p>
+
+				<p>For rocket jumping, I basically had when the bullet raycast detects something and detonates, I spawn
+					a sphere, and anything inside the sphere takes damage and gets an immediate impulse from the center
+					of the sphere to the object so that it's "pushed" away.
+				</p>
+				<br>
 
 				<p>
 					To actually create the world, it was almost entirely procedurally generated. For
@@ -355,7 +371,8 @@
 					we'll fix it at some point.
 				</p>
 				<p>
-					To get the cartoony effect of the water, we clamped values between certain ranges to be one value
+					To get the toon/flatter shading effect of the water, I clamped values between certain ranges to be
+					one value
 					for
 					that range, ie:
 				</p>
@@ -382,9 +399,20 @@
 				<p>
 					For snapping to surfaces, I used raycasts to detect the surfaces that players were standing or
 					moving towards, then
-					reoriented the player's basis vectors such that the forward vector stayed the same, the up vector
-					became the normalized surface normal, and then the side vector
-					was just the cross product of the up and forward vectors. I then interpolated between the two to get
+					reoriented the player's basis vectors like so:
+					
+				</p>
+				<p>
+					\begin{array}{l}
+					\vec{Z} := \textrm{Player's forward vector (normalized)}\\
+					\vec{N} := \textrm{Surface normal, normalized} \\
+					\textrm{Player's up vector = }\vec{N}\\
+					\textrm{Player's side vector = }\vec{N} \times \vec{Z}\\
+					\end{array}
+				</p>
+				<p>
+					with the forward vector staying the same. This made the player face the same direction but with their up oriented
+					towards the surface normal. I then interpolated between the two states to get
 					a smooth rotation.
 				</p>
 
