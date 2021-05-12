@@ -323,7 +323,9 @@
 				<p>
 					For 3, graphical problems, we used GPU accelerated shaders and customizable graphics settings to
 					solve this. If you have an absolute potato pc you can turn everything off, so only basic lighting
-					(no shadows) will happen. However, the Sobel Edge Detection shader is low cost (since it's a
+					(no shadows) will happen. However, the Sobel Edge Detection shader
+					<a href="https://gist.github.com/kzerot/b60cee18a62a80091b2f54a366f07411" title="">
+						(reference)</a> is low cost (since it's a
 					post processing effect that only processes the 2D screen image) and makes the game look very nice,
 					even at low settings.
 				</p>
@@ -331,15 +333,19 @@
 				<p>
 					The Sobel filter was included as a part of the HUD and covers the entire
 					screen. The sobel edge detection algorithm that we learned in
-					class was done by sampling the screen texture, extracting the horizontal and vertical
+					class was implemented by sampling the screen texture, extracting the horizontal and vertical
 					gradients using the matrices defined in class, calculating \(G_x\) and \(G_y\), and then computing
 					the final result. We then colored the edges by using black with its alpha value being the final
 					result.
 				</p>
 
+
+
+
 				<p>
 					For other shaders, as a last touch on Open Simplex noise, I used that to generate the sea foam in
-					the water shader.
+					the water shader <a href="https://www.youtube.com/watch?v=PgcMXPdQrLI&t=1024s" title="">
+						(reference)</a>.
 					For the foam around half submerged objects effect, I used the depth of the camera rays (if it hits
 					the water then something else
 					very quickly, we should create the foam, otherwise only generate the noisy foam), and used
@@ -354,6 +360,7 @@
 					that range, ie:
 				</p>
 				<pre>
+
 						if (noise_sample > 0.0 && noise_sample < 0.4) albedo = 0.1;
 						if (noise_sample > 0.4 && noise_sample < 0.8) albedo = 0.0;
 						if (noise_sample > 0.8) albedo = 1f;
@@ -362,6 +369,11 @@
 
 						float albedo = 0.1 * float(noise_sample > 0.0 && noise_sample <= 0.4) + 1.0 * float(noise_sample > 0.8);
 				</pre>
+				<p>
+					In terms of differences between our implementations and the references, we optimized the if elses
+					so it'd run faster, and made small tweaks to the parameters (such as using black edges instead of
+					the color in our reference, or using different noise parameters).
+				</p>
 				<p>
 					The menu blur shader used mipmaps and bilinear interpolation between the mipmaps (extremely fast on
 					the GPU).
