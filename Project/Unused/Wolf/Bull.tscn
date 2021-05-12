@@ -1,0 +1,24 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://scn/Actor/Enemy/Enemy.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Unused/Wolf/Bull.gd" type="Script" id=2]
+[ext_resource path="res://Unused/Wolf/wolf.obj" type="ArrayMesh" id=3]
+
+[sub_resource type="BoxShape" id=2]
+extents = Vector3( 2, 2.5, 7.5 )
+
+[sub_resource type="SpatialMaterial" id=1]
+albedo_color = Color( 0.627451, 0, 0, 1 )
+
+[node name="Bull" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+flying = true
+speed = 7
+
+[node name="Hitbox" parent="." index="0"]
+shape = SubResource( 2 )
+
+[node name="Mesh" parent="." index="1"]
+transform = Transform( 0.00241827, 1.26191, -3.2052e-08, 0, -5.51601e-08, -0.733269, -0.796316, 0.0038322, -9.73364e-11, -3, 1, 0 )
+material_override = SubResource( 1 )
+mesh = ExtResource( 3 )

@@ -15,6 +15,7 @@ func _ready() -> void:
 	if is_network_master():
 		set_flying(randf() > .4)
 	else:
+		yield(Network, "game_start")
 		rpc_id(1, "req_syn")
 #	else:
 #		$Mesh.material_override = load()

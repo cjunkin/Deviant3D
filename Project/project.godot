@@ -32,7 +32,7 @@ _global_script_classes=[ {
 "base": "Enemy",
 "class": "Bull",
 "language": "GDScript",
-"path": "res://scn/Actor/Enemy/Bull.gd"
+"path": "res://Unused/Wolf/Bull.gd"
 }, {
 "base": "MeshInstance",
 "class": "CloudDome",

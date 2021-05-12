@@ -15,6 +15,13 @@
 	<!-- <link rel="preconnect" href="https://fonts.gstatic.com"> -->
 	<!-- <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet"> -->
 	<!-- <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@500&display=swap" rel="stylesheet"> -->
+
+	<!--MathJax LaTeX-->
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script type="text/javascript" id="MathJax-script" async
+		src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+		</script>
+
 </head>
 
 <body class="is-preload">
@@ -99,28 +106,37 @@
 
 					<h2 class="alt">Summary</h2>
 					<p>
-						Deviant3D is a 3D, multiplayer shooter game utilizing a wide variety of the graphical tools and skills learned over the course of CS 184.
-						The base platform utilized to create Deviant3D is Godot, an open-source game engine. Topics such as geometry processing, lighting,
-						animation, and physical simulation were all employed to create the world, characters, and varying interactable objects.
+						Did someone say waiting hours for a render? That's a fat NO for us, so we made Deviant3D, a
+						multiplayer shooter game (in 3D, obviously). Deviant3D incorporates CS 184 topics such as
+						geometry processing, lighting, animation, and physical simulation to bring the world,
+						characters, and varying interactable objects to life.
 					</p>
 					<p>
-						A wide variety of obstacles were also encountered. Initially, three of our team members were completely unfamiliar with Godot, and thus needed
-						to learn how to create via a game engine from scratch. In addition, several technical complications also arose, such as Godot's inbuilt physics engine
-						not supporting multiplayer play. These issues were usually remedied by either creating new systems in-house, such as development of a deterministic
-						physics system, or reading the resources linked at the bottom of the website.
+						We used the open source Godot game engine to create this, and our problems were: Three of us
+						were completely unfamiliar with Godot, and thus needed
+						to learn the engine from scratch (sad face). Technical complications also arose, such
+						as Godot's built in physics engine being non-deterministic (hard to sync the multiplayer, and
+						also very funny glitches)
+						and the inverse kinematics not quite being fully functional. To
+						solve these two issues, we had to do a bit of reading (resources at bottom of
+						website) and implemented our own physics and procedural animations.
 					</p>
 					<p>
-						Our final result was a polished game that successfully allowed for cohesive multiplayer gameplay. The interactable objects included varying enemy types,
-						powerups to aid combat, as well as procedurally generated terrain. Many stylistic improvements were also added over the course of development, including,
-						but not limited to, character and world shaders, improved unit models, as well as varying field-of-views offering both third-person as well as first-person perspectives.
+						Our final result was a nicely polished multiplayer game (we even threw in a sobel edge detection
+						shader for the low price of $0.00 and our sanity).
+						We developed varying enemy types, powerups to aid combat, procedurally
+						generated terrain, and many stylistic improvements. From post-processing shaders to
+						offering both third-person and first-person perspectives, our game shaped up to be a nice
+						looking
+						pile of fun!
 					</p>
 				</header>
 
 				<!-- <img src="asset/grapple.png" alt="" /> -->
 
 				<!-- <footer>
-								<a href="#portfolio" class="button scrolly">Magna Aliquam</a>
-							</footer> -->
+					<a href="#portfolio" class="button scrolly">Magna Aliquam</a>
+				</footer> -->
 
 			</div>
 		</section>
@@ -157,28 +173,168 @@
 				<header>
 					<h2>Technical Details</h2>
 				</header>
-
-				<p>Deviant3D was created using Godot, an open-source game engine, which made collision testing and basic
-					rendering trivial, but we also encountered a variety of problems as well, such as Godot's inbuilt
-					physics being nondeterministic, forcing development of a deterministic physics system. </p>
-
-
 				<!-- <a href="#" class="image featured"> -->
 
 				<!-- </a> -->
+				<p>So, you wanna know how this was made? What are you, a nerd? Ok ok, I'll tell you.</p>
 
-				<p>Creation of world + procedural generation
-					Creation of characters/enemies + how gravity works
-					Creation of 3D movement + Hooke’s Law
-					Creation of Powerups
+				<p>Deviant3D was created using Godot, an open-source game engine, which made collision testing and basic
+					rendering trivial. However, there were 3 main issues:
+				<ol>
+					<li>Godot's inverse kinematics was not bug free.</li>
+					<li>
+						Godot's inbuilt physics was nondeterministic (so not multiplayer friendly).
+					</li>
+					<li>The default lighting was rather bland, and turning up settings caused performance issues, since
+						the folks at Godot are still working on performance.</li>
+				</ol>
+				</p>
 
-					Camera shake using Simplex Noise
-					Lots of other simplex noise applications, terrain generation, water shader
+				<p>
+					To solve 1, I used tweening, interpolation, and animation blend trees, and a custom follow the
+					leader algorithm
+					for the worm.
+					For simpler things like changing the camera position when switching between third and first person,
+					I
+					used a similar approach to bezier curves, parameterizing as
+				</p>
+				<p>
+					\(\vec{P}(t) = ((1 - t) * \vec{S}) + (t * \vec{E})\)
+				</p>
+				<p>
+					where \(\vec{P}\) is our position, \(\vec{S}\) is our starting position, and \(\vec{E}\) is our
+					ending position. From there, as
+					our time step increased, I used Godot's tweening to handle choosing the correct value of \(t\),
+					since
+					\(t\) could follow a linear increase from 0 to 1, or quadratic, or any other function.
+				</p>
+				<p>This was done for centering the gun, aiming the grappling hooks, aiming down sights, smoothly
+					increasing enemy speed, and so forth.</p>
+				<p>For first person animations, I used Godot's built in Animation Trees to blend between animation
+					states, such as shooting transitioning
+					to idle to walking and sprinting.
+				</p>
 
-					EXplain non-linear tweening/interpolation
+				<p>
+					To solve 2, nondeterministic physics, I used the built in collision detection and the Kinematic
+					Body's
+					move_and_slide function, which handles bouncing and sliding given an input velocity (but not
+					rotating the player) to
+					create our own deterministic physics
+					system. it went like this (I did not incorporate mass yet, so everything is treated as mass
+					1):
+				</p>
+				<p>
+					\begin{array}{l}
+					\vec{F} = gravity + inputs + jump + hook \\
+					\vec{V} += \vec{F} * dt \\
+					\vec{P} += \vec{V} * dt \\
+					\end{array}
+				</p>
+				<p>
+					Of course, this is a massive oversimplification, I had lots of constants for air resistance,
+					friction, clamping our max velocity, yada yada yada.
+				</p>
 
-					Blend Trees
+				<p>For the grappling hook, I decided that rather than using it like a stiff rope, I'd use it more like a
+					bungee chord to make it more fun. So, I experimented with the stiffness and set the rest length to
+					about a third
+					of the player's height, and also made the hook force have a max length so he didn't immediately fly
+					off into oblivion.</p>
+				<p>To solve the problem of infinite circling when grappling (similar to when the tangential force equals
+					the
+					outwards force of a planet, which causes it to stay in orbit, I dampened the current velocity when
+					I added our new velocity, like so:</p>
+				<p>
+					\(\vec{V}_{t+1} = (\vec{V}_{t} * (1 - damp)) + (\vec{F}_{t+1} * dt)\)
+				</p>
+				<p>After that our player would still circle, but slowly but surely reel in, which allowed for nice
+					circular maneuvers while still having the nice feeling of a bungee chord.
+				</p>
+				<p>
+					The enemies also used a similar approach, using verlet integration with acceleration and velocity
+					so they wouldn't infinitely circle but would have some
+					momentum (having enemies that always move toward you aren't very satisfying)
+				</p>
+				<!-- <pre>
+					<code>
+						
+						if on ground:
+							V = V * .99 + (1 - ground_friction)
+						else:
+							V *= (1 - air_resistance)
+					</code>
+				</pre> -->
+				<p>
+					To actually create the world, it was almost entirely procedurally generated. For
+					land, I created a 2D grid of squares of size \(s \times s\), then offset the vertices by a random
+					amount \(\vec{R}\)
+					such that \(\vec{R}\) was no more than \(\frac{s}{3}\) in distance away from its original position
+					(and thus, the new quadrilaterals
+					didn't intersect eachother).
+				</p>
+				<p>
+					Next was iterating over those and creating meshes for them. The vertices were the 2D grid positions
+					except offset up and down by a random amount so each block was flat
+					overall but the grid overall was not flat.
+				</p>
+				<p>
+					In terms of the very nitty gritty for mesh generation, I used the Godot ArrayMesh API to create
+					24 vertices (since each edge touched had 2 points, and there were 12 edges) for
+					12 triangular faces (a cuboid has 6 in real life, but non-triangle rendering is messy so they get
+					split into 2 triangles) then calculated surface normals using the cross product between two edges on
+					the face (getting the signs right were a pain). 
+				</p>
+				<p>
+					I then used Open Simplex Noise using the x and z coordinates to generate a smooth height transition
+					between neighboring blocks, which resulted in the rather nice transitions between dirt, grass, and sea.
+				</p>
+				<p>
+					Of course, this generation can be optimized, since we actually only
+					need 8 vertices, and since the grid is connected, we can make it all a couple connected meshes to 
+					decrease the amount of draw calls.
+				</p>
+				<p>
+					For asteroids and trees, they both use similar approaches, where I go through
+					a grid and then using open simplex noise and x and z coordinates, I choose
+					whether there should be an asteroid there or not, and then give them random scaling values.
 
+				</p>
+				
+				<p>
+					In fact, I used Simplex Noise for the camera shake (if you can't tell by now, I
+					quite enjoyed the smoothness) by setting its rotation to random values based on time.
+					Normally, this would look very random and jittery, but with simplex noise it became a little
+					smoother. Stylistically, I don't think it looks nicer (that's subjective of course) but it certainly
+					should reduce motion sickness.
+				</p>
+
+				<p>
+					As a last touch on Open Simplex noise, I used that to generate the sea foam in the water shader.
+					For the foam around half submerged objects effect, I used the depth of the camera rays (if it hits the water then something else
+					very quickly, we should create the foam, otherwise only generate the noisy foam), and used
+					sine and cosine as functions of time to generate some nice waves using vertex displacement.
+					Lastly we kind of used the hack found online where you take the screen texture, offset and distort it
+					to get the reflection, although this backfired (if you fly really high, you'll see why) so maybe we'll fix
+					it at some point.
+				</p>
+
+				<p>
+
+				</p>
+
+				<p>
+					Two powerups implemented were the Gravity powerups, each of which either increase or lower the
+					character's gravity by a factor of two. This was implemented by taking the gravity attribute of the
+					player when it interacts with the powerup, and then choosing to either double or halve it. In
+					addition, the powerup will be rendered uninteractable for a set period of time. After a timer of 15
+					seconds expires, the gravity is then restored to what it originally was.
+
+					Alongside the Gravity powerups was an Attack Buff, which increases the players shots and explosion
+					damage by a factor of 2. This was done in a similar method to the Gravity powerups, where once the
+					player interacts with the object, the player's global variables responsible to damage are doubled
+					for a set period of time. In addition, the powerup is once again rendered uninteractable to prevent
+					multiple usages.
 				</p>
 
 			</div>
@@ -230,7 +386,7 @@
 							</header>
 						</article>
 						<article class="item">
-							<a href="#" class="image fit"><img src="asset/5_4.png" alt="" /></a> 
+							<a href="#" class="image fit"><img src="asset/5_4.png" alt="" /></a>
 							<!-- images/pic07.jpg -->
 							<header>
 								<h3>Orci Convallis</h3>
@@ -329,7 +485,7 @@
 				<br>
 
 
-				<b>	Sambodh worked on: </b>
+				<b> Sambodh worked on: </b>
 				<br>
 				<div>
 					<ol>
@@ -357,7 +513,8 @@
 					</ol>
 				</div>
 				<br>
-				"Not going to lie, learning Godot proved that it's an impressive Game Engine, but Unity is still much better" — Sambodh
+				"Not going to lie, learning Godot proved that it's an impressive Game Engine, but Unity is still much
+				better" — Sambodh
 				<br>
 				<br>
 
@@ -375,12 +532,12 @@
 							</ol>
 						</li>
 						<li>Implemented physics when shooting objects
-								<ol>
-									<li>Rotating object with respect to surface normal depending on point of impact</li>
-									<li>Handling effect of gravity on object after aforementioned rotation</li>
-									<li>Moving object in accordance with Law of Conservation of Momentum</li>
-									<li>Animated above object movements</li>
-								</ol>
+							<ol>
+								<li>Rotating object with respect to surface normal depending on point of impact</li>
+								<li>Handling effect of gravity on object after aforementioned rotation</li>
+								<li>Moving object in accordance with Law of Conservation of Momentum</li>
+								<li>Animated above object movements</li>
+							</ol>
 						</li>
 						<li>Added objective object that generates new game upon player contact</li>
 						<li>
@@ -393,7 +550,8 @@
 					</ol>
 				</div>
 				<br>
-				"Not going to lie, editing this website gave me more headaches than the entire rest of the project." - Rafael
+				"Not going to lie, editing this website gave me more headaches than the entire rest of the project." -
+				Rafael
 				<br>
 				<br>
 
@@ -449,7 +607,7 @@
 								Inverse Kinematics</a> </li>
 						<li> <a href="http://web.mit.edu/cesium/Public/terrain.pdf" title=""> Realtime Terrain
 								Generation</a> </li>
-						<li> <a href="https://godotshaders.com/shader/stylized-water-shader/" title="">
+						<li> <a href="https://www.youtube.com/watch?v=PgcMXPdQrLI&t=1024s" title="">
 								Water Shader Reference</a> </li>
 						<li> <a href="https://godotshaders.com/shader/animated-sketchy-line/" title="">
 								Sketch Shader Reference</a> </li>

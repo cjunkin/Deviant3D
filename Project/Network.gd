@@ -4,6 +4,13 @@ const PORT := 8070
 
 const GAME_PATH := "/root/Game"
 var players := {}
+signal game_start
+#var sync_start_timer := Timer.new()
+
+#func _ready() -> void:
+#	sync_start_timer.autostart = false
+#	sync_start_timer.one_shot = true
+#	sync_start_timer.wait_time = .1
 
 func host(game_scene := G.GAME_SCENE) -> void:
 	
@@ -13,7 +20,6 @@ func host(game_scene := G.GAME_SCENE) -> void:
 	get_tree().set_network_peer(peer)
 
 	# Choose what to do on connect/disconnect
-
 	if !get_tree().is_connected("network_peer_connected", self, "player_connected") and \
 		get_tree().connect("network_peer_connected", self, "player_connected") != OK:
 		print("ERROR: CAN'T HANDLE OTHERS CONNECTING, CHECK NETWORK.GD")
@@ -41,6 +47,10 @@ func join() -> void:
 	yield(get_tree(), "connected_to_server")
 	if get_tree().change_scene(G.GAME_SCENE) != OK:
 		print("ERROR: COULDN'T LOAD GAME")
+	
+	# Syncing the start
+#	add_child(sync_start_timer)
+#	sync_start_timer.start()
 
 remotesync func register(id: int) -> void:
 	if not id in players:

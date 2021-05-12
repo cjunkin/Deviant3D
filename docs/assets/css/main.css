@@ -33,6 +33,14 @@ body {
 	line-height: 1;
 }
 
+pre code {
+	background-color: rgb(0, 0, 0);
+	border: 1px solid rgb(97, 97, 97);
+	display: block;
+	padding: 20px;
+	text-align: left;
+  }
+
 ol, ul {
 	list-style: none;
 }
@@ -1840,6 +1848,7 @@ input, select, textarea {
 	ol {
 		list-style: decimal;
 		padding-left: 1.25em;
+		text-align: left;
 	}
 
 		ol li {

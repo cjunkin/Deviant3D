@@ -261,3 +261,5 @@ func _on_How2Play_pressed() -> void:
 func _on_Back_pressed():
 	$Menu/Instructions.hide()
 	$Menu/GameOptions.show()
+
+

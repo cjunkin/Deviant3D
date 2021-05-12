@@ -345,6 +345,7 @@ puppet func set_time(spawn_time_left: float) -> void:
 		# Reset wait_time (since timer should go back to 4 seconds)
 		yield(enemy_spawn, "timeout")
 		enemy_spawn.start(spawn_time)
+		Network.emit_signal("game_start")
 
 
 # Spawn player with id PLAYER TODO: use get_rpc_sender_id to avoid hack
