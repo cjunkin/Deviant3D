@@ -310,13 +310,24 @@
 				</p>
 
 				<p>
-					As a last touch on Open Simplex noise, I used that to generate the sea foam in the water shader.
+					For 3, graphical problems, we used GPU accelerated shaders and customizable graphics settings to solve this.
+					If you have an absolute potato pc you can turn everything off, so only basic lighting (no shadows) will happen.
+					However, Chris's sobel edge detection shader is low cost (since it's a post processing effect that only
+					processes the 2D screen image) and makes the game look very nice, even at low settings.
+
+					Insert writeup of shader
+				</p>
+				<p>
+					For other shaders, as a last touch on Open Simplex noise, I used that to generate the sea foam in the water shader.
 					For the foam around half submerged objects effect, I used the depth of the camera rays (if it hits the water then something else
 					very quickly, we should create the foam, otherwise only generate the noisy foam), and used
 					sine and cosine as functions of time to generate some nice waves using vertex displacement.
 					Lastly we kind of used the hack found online where you take the screen texture, offset and distort it
 					to get the reflection, although this backfired (if you fly really high, you'll see why) so maybe we'll fix
 					it at some point.
+				</p>
+				<p>
+					The menu blur shader used mipmaps and bilinear interpolation between the mipmaps (extremely fast on the GPU).
 				</p>
 
 				<p>
@@ -602,6 +613,9 @@
 								Water Shader Reference</a> </li>
 						<li> <a href="https://godotshaders.com/shader/animated-sketchy-line/" title="">
 								Sketch Shader Reference</a> </li>
+						<li> <a href="https://godotshaders.com/shader/3d-burn-dissolve/" title="">
+							Sketch Shader Reference</a> </li>
+								
 						<li> <a href="https://brokenvector.itch.io/low-poly-tree-pack" title="">
 								Low Poly Trees</a> </li>
 						<li> <a href="https://sketchfab.com/3d-models/low-poly-island-2f93bb8d331a4e70999d8c883302a7f4"
