@@ -385,6 +385,10 @@
 					multiple usages.
 				</p>
 
+				<p>
+					Toon Shader (Sobel Edge Detection Shader):
+					To add a shader to the game without having to apply it to every 3D mesh that we have in the game, we used a 2D post-processing filter. The filter was included as a part of the HUD and covers the entire screen and the screen texture and screen UV coordinates were used to apply the shader in OpenGL. The cartoon-like shader was implemented using the sobel edge detection algorithm that we learned in class. This was done by sampling the screen texture, extracting the horizontal and vertical gradients using the matrices defined in class, calculating \(G_x\) and \(G_y\), and then computing the final result. The final cartoon-like result was done by using the RGB value of (0, 0, 0) to color the calculated edges black. 
+				</p>
 			</div>
 		</section>
 

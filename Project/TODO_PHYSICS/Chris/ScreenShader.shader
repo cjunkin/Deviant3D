@@ -1,5 +1,8 @@
 shader_type canvas_item;
 
+// Implemented based off of kzerot's Sobel Shader:
+// https://gist.github.com/kzerot/b60cee18a62a80091b2f54a366f07411
+
 uniform vec4 edge_color : hint_color = vec4(0.0, 0.0, 0.0, 1);
 uniform vec2 resolution = vec2(1280.0, 720.0);
 
