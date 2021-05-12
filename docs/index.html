@@ -19,8 +19,8 @@
 	<!--MathJax LaTeX-->
 	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 	<script type="text/javascript" id="MathJax-script" async
-			src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
-	</script>
+		src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+		</script>
 
 </head>
 
@@ -176,38 +176,70 @@
 				<!-- <a href="#" class="image featured"> -->
 
 				<!-- </a> -->
-				<p>So, you wanna know how this was made?</p>
+				<p>So, you wanna know how this was made? What are you, a nerd? Ok ok, I'll tell you.</p>
 
 				<p>Deviant3D was created using Godot, an open-source game engine, which made collision testing and basic
-					rendering trivial.</p>
+					rendering trivial. However, there were 3 main issues:
+				<ol>
+					<li>Godot's inverse kinematics was not bug free.</li>
+					<li>
+						Godot's inbuilt physics was nondeterministic (so not multiplayer friendly).
+					</li>
+					<li>The default lighting was rather bland, and turning up settings caused performance issues, since
+						the folks at Godot are still working on performance.</li>
+				</ol>
+				</p>
+
 
 				<p>
-					However, Godot's inbuilt
-					physics being nondeterministic, forcing development of a deterministic physics system.
+					So to solve 2, nondeterministic physics, we used the built in collision detection and the Kinematic
+					Body's
+					move_and_slide function, which handles bouncing and sliding given an input velocity (but not
+					rotating the player) to
+					create our own deterministic physics
+					system. it went like this (I did not incorporate mass yet, so everything is treated as mass
+					1):
 				</p>
 				<p>
-					For physics, it went like this (we did not incorporate mass yet, so everything is treated as mass 1):
-				</p>
-				<p>
-					
-					
 					\begin{array}{l}
 					\vec{F} = gravity + inputs + jump + hook \\
 					\vec{V} += \vec{F} * dt \\
 					\vec{P} += \vec{V} * dt \\
-
 					\end{array}
 				</p>
-				<pre>
+				<p>
+					Of course, this is a massive oversimplification, I had lots of constants for air resistance,
+					friction,
+					clamping our max velocity, yada yada yada. For example, I had
+				</p>
+
+				<p>For the grappling hook, I decided that rather than using it like a stiff rope, I'd use it more like a
+					bungee chord to make it more fun. So, I experimented with the stiffness and set the rest length to
+					about a third
+					of the player's height, and also made the hook force have a max length so he didn't immediately fly
+					off into oblivion.</p>
+				<p>To solve the problem of infinite circling when grappling (similar to when the tangential force equals
+					the
+					outwards force of a planet, which causes it to stay in orbit, I dampened the current velocity when
+					we added our new velocity, like so:</p>
+				<p>
+					\(\vec{V}_{t+1} = (\vec{V}_{t} * damp) + (\vec{F}_{t+1} * dt)\)
+				</p>
+				<p>After that our player would still circle, but slowly but surely reel in, which allowed for nice
+					circular maneuvers while still having the nice feeling of a bungee chord.
+				</p>
+				<!-- <pre>
 					<code>
-					  if on ground:
-						V *= (1 - friction)
+						
+						if on ground:
+							V = V * .99 + (1 - ground_friction)
+						else:
+							V *= (1 - air_resistance)
 					</code>
-				  </pre>
+				</pre> -->
 				<p>
 					Creation of world + procedural generation
 					Creation of characters/enemies + how gravity works
-					Creation of 3D movement + Hooke’s Law
 					Creation of Powerups
 
 					Camera shake using Simplex Noise
@@ -217,6 +249,20 @@
 
 					Blend Trees
 
+				</p>
+
+				<p>
+					Two powerups implemented were the Gravity powerups, each of which either increase or lower the
+					character's gravity by a factor of two. This was implemented by taking the gravity attribute of the
+					player when it interacts with the powerup, and then choosing to either double or halve it. In
+					addition, the powerup will be rendered uninteractable for a set period of time. After a timer of 15
+					seconds expires, the gravity is then restored to what it originally was.
+
+					Alongside the Gravity powerups was an Attack Buff, which increases the players shots and explosion
+					damage by a factor of 2. This was done in a similar method to the Gravity powerups, where once the
+					player interacts with the object, the player's global variables responsible to damage are doubled
+					for a set period of time. In addition, the powerup is once again rendered uninteractable to prevent
+					multiple usages.
 				</p>
 
 			</div>
